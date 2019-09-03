@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<com.google.android.material.appbar.AppBarLayout-->
+        <!--android:id="@+id/subscribe_list_bar"-->
+        <!--style="@style/comic_style_app_bar"-->
+        <!--android:background="@android:color/white">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center_vertical">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/subscribe_list_back"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:padding="@dimen/dp_12"-->
+                <!--android:text="返回"-->
+                <!--android:textColor="@color/comic_333333"-->
+                <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/subscribe_list_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:padding="@dimen/dp_12"-->
+                <!--android:text="章节订阅"-->
+                <!--android:textColor="@color/comic_333333"-->
+                <!--android:textSize="@dimen/dp_18" />-->
+
+
+            <!--<ImageView-->
+                <!--android:id="@+id/subscribe_list_home"-->
+                <!--style="@style/comic_style_home_size"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:src="@drawable/home" />-->
+
+        <!--</RelativeLayout>-->
+    <!--</com.google.android.material.appbar.AppBarLayout>-->
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp_2"-->
+        <!--android:background="@drawable/comic_dashed"-->
+        <!--android:layerType="software"></View>-->
+
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="@dimen/dp_5">-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/subscribe_chapter"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="@dimen/dp_10"-->
+                <!--android:paddingLeft="@dimen/dp_15"-->
+                <!--android:paddingTop="@dimen/dp_10"-->
+                <!--android:textColor="@color/comic_9d9ea3"-->
+                <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/subscribe_coin"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="@dimen/dp_10"-->
+                <!--android:paddingLeft="@dimen/dp_15"-->
+                <!--android:paddingTop="@dimen/dp_10"-->
+                <!--android:textColor="@color/comic_9d9ea3"-->
+                <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="@dimen/dp_10"-->
+                <!--android:paddingLeft="@dimen/dp_15"-->
+                <!--android:paddingTop="@dimen/dp_10"-->
+                <!--android:text="该章节需要收费，购买本书之后方可阅读"-->
+                <!--android:textColor="@color/comic_9d9ea3"-->
+                <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/subscribe_user"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="@dimen/dp_10"-->
+                <!--android:paddingLeft="@dimen/dp_15"-->
+                <!--android:paddingTop="@dimen/dp_10"-->
+                <!--android:textColor="@color/comic_9d9ea3"-->
+                <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--<View-->
+                <!--android:id="@+id/subscribe_user_line"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_marginLeft="@dimen/dp_15"-->
+                    <!--android:src="@drawable/right" />-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center_vertical"-->
+                    <!--android:layout_marginLeft="@dimen/dp_8"-->
+                    <!--android:paddingBottom="@dimen/dp_15"-->
+                    <!--android:paddingTop="@dimen/dp_15"-->
+                    <!--android:text="自动订阅"-->
+                    <!--android:textColor="@color/comic_9d9ea3"-->
+                    <!--android:textSize="@dimen/dp_16" />-->
+
+            <!--</LinearLayout>-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<Button-->
+                <!--android:id="@+id/subscribe_button"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/dp_40"-->
+                <!--android:layout_marginRight="@dimen/dp_40"-->
+                <!--android:layout_marginTop="@dimen/dp_30"-->
+                <!--android:background="@drawable/comic_subscribe_bg"-->
+                <!--android:text="我要订阅"-->
+                <!--android:textColor="@color/base_color_363636"-->
+                <!--android:textSize="@dimen/dp_18" />-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/dp_10"-->
+                <!--android:layout_marginLeft="@dimen/dp_10"-->
+                <!--android:layout_marginTop="@dimen/dp_80"-->
+                <!--android:text="温馨提示"-->
+                <!--android:textColor="@color/comic_ff6e00"-->
+                <!--android:textSize="@dimen/dp_14" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="@dimen/dp_10"-->
+                <!--android:text="自动订阅功能是为了给您更好的阅读体验，阅读本作品VIP章节将自动使用问鼎币或问鼎券完成订阅，不会再有订阅确认信息。订阅详情可以在消费记录中查看。"-->
+                <!--android:textColor="@color/comic_9d9ea3"-->
+                <!--android:textSize="@dimen/dp_12" />-->
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dp_2"-->
+                <!--android:layout_marginTop="@dimen/dp_80"-->
+                <!--android:background="@drawable/comic_dashed"-->
+                <!--android:layerType="software"></View>-->
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
+</LinearLayout>

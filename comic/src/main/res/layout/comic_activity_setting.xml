@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:id="@+id/bind_phone_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_setting_text"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_6"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_read_with_mobile_remind" />
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_des"
+                android:text="@string/comic_read_with_mobile_hint" />
+        </LinearLayout>
+
+        <com.jj.comics.widget.SwitchButton
+            android:id="@+id/setting_gprs_remind"
+            style="@style/comic_style_sb_setting"
+            app:comic_sb_checked="true"
+            app:comic_sb_checked_color="@color/base_yellow_ffd850"
+            app:comic_sb_checkline_width="0dp"
+            app:comic_sb_show_indicator="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_6"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_delete_comment_no_remind" />
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_des"
+                android:text="@string/comic_delete_comment_no_remind_hint" />
+        </LinearLayout>
+
+        <com.jj.comics.widget.SwitchButton
+            android:id="@+id/setting_gprs_comment"
+            style="@style/comic_style_sb_setting"
+            app:comic_sb_checked_color="@color/base_yellow_ffd850"
+            app:comic_sb_checkline_width="0dp"
+            app:comic_sb_show_indicator="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/setting_redeem_code"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_coupon_text" />
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_des"
+                android:text="@string/comic_coupon_text_hint" />
+        </LinearLayout>
+
+        <ImageView style="@style/comic_style_iv_setting_right" />
+    </LinearLayout>
+
+    <View style="@style/comic_style_view_setting_fgx" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_receive_propelling_notification" />
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_des"
+                android:text="@string/comic_receive_propelling_notification_hint" />
+        </LinearLayout>
+
+        <com.jj.comics.widget.SwitchButton
+            android:id="@+id/setting_accept_notification"
+            style="@style/comic_style_sb_setting"
+            app:comic_sb_checked="true"
+            app:comic_sb_checked_color="@color/base_yellow_ffd850"
+            app:comic_sb_checkline_width="0dp"
+            app:comic_sb_show_indicator="false" />
+    </LinearLayout>
+
+    <View style="@style/comic_style_view_setting_fgx" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_turn_page_with_volume" />
+        </LinearLayout>
+
+        <com.jj.comics.widget.SwitchButton
+            android:id="@+id/setting_volume_page"
+            style="@style/comic_style_sb_setting"
+            app:comic_sb_checked_color="@color/base_yellow_ffd850"
+            app:comic_sb_checkline_width="0dp"
+            app:comic_sb_show_indicator="false" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/setting_bind_phone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_bind_phone"
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_bind_phone_text" />
+        </LinearLayout>
+
+        <ImageView style="@style/comic_style_iv_setting_right" />
+    </LinearLayout>
+
+    <View style="@style/comic_style_view_setting_fgx" />
+
+    <LinearLayout
+        android:id="@+id/setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_about_app" />
+        </LinearLayout>
+
+        <ImageView style="@style/comic_style_iv_setting_right" />
+    </LinearLayout>
+
+    <View style="@style/comic_style_view_setting_fgx" />
+
+    <LinearLayout
+        android:id="@+id/setting_check_update"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/comic_style_tv_setting_item_title"
+                android:text="@string/comic_check_update" />
+        </LinearLayout>
+
+        <ImageView style="@style/comic_style_iv_setting_right" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/setting_exit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/comic_ffffff"
+        android:gravity="center"
+        android:text="@string/comic_logout_text"
+        android:textColor="@color/comic_999999" />
+</LinearLayout>

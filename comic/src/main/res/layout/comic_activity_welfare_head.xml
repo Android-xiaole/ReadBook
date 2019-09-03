@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_310"
+            android:scaleType="centerCrop"
+            android:src="@drawable/comic_welfare_bg" />
+
+        <LinearLayout
+            android:id="@+id/comic_welfare_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_90"
+            android:layout_marginRight="@dimen/dp_50"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/comic_welfare_coins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/comic_ff2e2e"
+                android:textSize="@dimen/dp_26" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:src="@drawable/comic_welfare_jinbi" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/comic_welfare_sign_in"
+            android:layout_width="@dimen/dp_102"
+            android:layout_height="@dimen/dp_42"
+            android:layout_below="@id/comic_welfare_ll"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_45"
+            android:src="@drawable/comic_welfare_qiandao_normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_100"
+            android:layout_below="@id/comic_welfare_sign_in"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:background="@drawable/comic_welfare_sign_in_list_bg"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="@string/comic_welfare_get_more_coin_text"
+                android:textColor="@color/comic_666666"
+                android:textSize="@dimen/dp_14"
+                android:textStyle="bold" />
+
+            <com.jj.comics.widget.NestedRecyclerView
+                android:id="@+id/welfare_coins_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></com.jj.comics.widget.NestedRecyclerView>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/comic_half_dp"
+        android:layout_marginTop="@dimen/dp_1"
+        android:background="@color/comic_e3e3e3" />
+</LinearLayout>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/comic_detail_rootView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/comic_detail_appbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/comic_detail_collapsing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleGravity="center"
+                app:collapsedTitleTextAppearance="@style/comic_style_collapsedTitleText"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleTextAppearance="@style/comic_style_expandedTitleText"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7">
+
+                    <ImageView
+                        android:id="@+id/comic_detail_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_263"
+                        android:layout_below="@id/rl_toolbar"
+                        android:scaleType="centerCrop" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_48">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="@string/comic_detail_text"
+                            android:textColor="@color/comic_ffffff"
+                            android:textSize="@dimen/dp_20" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/comic_shape_detail_des_bg"
+                        android:padding="@dimen/dp_8">
+
+                        <TextView
+                            android:id="@+id/comic_detail_title"
+                            android:layout_width="200dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/comic_ffffff"
+                            android:textSize="@dimen/dp_18"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            tools:text="漫画名称11111111111111"/>
+
+                        <TextView
+                            android:id="@+id/comic_detail_count"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/comic_detail_title"
+                            android:layout_alignBaseline="@id/comic_detail_title"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"
+                            android:textColor="@color/comic_ffffff"
+                            android:textSize="@dimen/dp_14"
+                            tools:text="连载-更新至100话" />
+
+                        <LinearLayout
+                            android:id="@+id/comic_detail_tag"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/comic_detail_title"
+                            android:layout_marginTop="@dimen/dp_4"
+                            android:layout_toLeftOf="@+id/comic_detail_count"
+                            android:orientation="horizontal" />
+
+                    </RelativeLayout>
+                </FrameLayout>
+
+                <!--android:background="@color/comic_top_bg_88ffffff"-->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/comic_detail_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    android:fitsSystemWindows="true"
+                    app:contentInsetEndWithActions="0dp"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/icon_back_white"
+                    app:title=""
+                    app:titleMarginEnd="@dimen/dp_3">
+
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/comic_detail_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="center"
+                app:tabIndicatorColor="@color/comic_ff9226"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/comic_ff9226"
+                app:tabTextAppearance="@style/comic_tab_style"
+                app:tabTextColor="@color/comic_363636" />
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/comic_detail_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_55"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="@color/comic_f5f5f5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/comic_detail_add_shelf"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/comic_detail_star"
+                        android:layout_width="@dimen/dp_22"
+                        android:layout_height="@dimen/dp_22"
+                        android:src="@drawable/icon_comic_read_uncollection_black" />
+
+                    <TextView
+                        android:id="@+id/comic_detail_star_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:text="@string/comic_collect_text"
+                        android:textColor="@color/comic_363636"
+                        android:textSize="@dimen/dp_14" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/comic_f5f5f5" />
+
+                <LinearLayout
+                    android:id="@+id/lin_comic_detail_favor"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp_4"
+                    android:paddingBottom="@dimen/dp_4">
+
+                    <ImageView
+                        android:id="@+id/iv_comic_detail_favor"
+                        android:layout_width="@dimen/dp_22"
+                        android:layout_height="@dimen/dp_22"
+                        android:src="@drawable/img_comic_read_reward_dianzan_false" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:text="@string/comic_favor_text"
+                        android:textColor="@color/comic_363636"
+                        android:textSize="@dimen/dp_14" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/comic_f5f5f5" />
+
+                <LinearLayout
+                    android:id="@+id/comic_detail_reward"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/comic_ffffff"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/dp_4"
+                    android:paddingBottom="@dimen/dp_4">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_22"
+                        android:layout_height="@dimen/dp_22"
+                        android:src="@drawable/img_comic_detail_gift" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:text="@string/comic_reward_text"
+                        android:textColor="@color/comic_363636"
+                        android:textSize="@dimen/dp_14" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/comic_detail_read"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:background="@color/comic_yellow_ffd850"
+            android:gravity="center"
+            android:text="@string/comic_read_now"
+            android:textColor="@color/comic_363636"
+            android:textSize="@dimen/dp_20" />
+    </LinearLayout>
+</LinearLayout>

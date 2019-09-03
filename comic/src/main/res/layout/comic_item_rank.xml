@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dp_10"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_rank_cover"
+        android:layout_width="@dimen/dp_90"
+        android:layout_height="@dimen/dp_130"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:src="@color/base_333333" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@id/iv_rank_cover"
+        android:layout_marginLeft="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_4"
+        android:background="@drawable/comic_bg_dotted_line"
+        android:layerType="software"></View>
+
+    <TextView
+        android:id="@+id/tv_rank_title"
+        android:layout_width="@dimen/dp_160"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:layout_marginTop="@dimen/dp_9"
+        android:layout_toRightOf="@id/iv_rank_cover"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/upsdk_black"
+        android:textSize="@dimen/dp_18" />
+
+    <TextView
+        android:id="@+id/tv_rank_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_rank_title"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:layout_marginTop="@dimen/dp_9"
+        android:layout_toRightOf="@id/iv_rank_cover"
+        android:maxLines="1"
+        android:textSize="@dimen/dp_13" />
+
+    <TextView
+        android:id="@+id/tv_rank_type_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/view_divider"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:layout_marginBottom="@dimen/dp_9"
+        android:layout_toRightOf="@id/iv_rank_cover"
+        android:background="@drawable/comic_catalog_shape"
+        android:textColor="@color/base_color_999999"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_3"
+        android:textSize="@dimen/dp_14" />
+
+    <TextView
+        android:id="@+id/tv_rank_type_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/view_divider"
+        android:layout_marginLeft="@dimen/dp_9"
+        android:layout_marginBottom="@dimen/dp_9"
+        android:textColor="@color/base_color_999999"
+        android:layout_toRightOf="@id/tv_rank_type_1"
+        android:background="@drawable/comic_catalog_shape"
+        android:paddingLeft="@dimen/dp_7"
+        android:paddingTop="@dimen/dp_3"
+        android:visibility="invisible"
+        android:paddingRight="@dimen/dp_7"
+        android:paddingBottom="@dimen/dp_3"
+        android:textSize="@dimen/dp_14" />
+
+
+    <ImageView
+        android:id="@+id/iv_rank_icon"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_70"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_25"
+        android:padding="@dimen/dp_10"
+        android:scaleType="centerCrop"
+        android:src="@color/base_color_6175c6" />
+
+
+    <RelativeLayout
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_25"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/rl_rank_iv_holder"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/dp_10"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/iv_rank_icon_common"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_comic_commomrank_xunzhang" />
+
+        <TextView
+            android:id="@+id/tv_rank_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_rank_icon_common"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="4"
+            android:textColor="@color/base_yellow_ffd850"
+            android:textSize="@dimen/dp_25"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_rank_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_rank_iv_holder"
+        android:hint="热度"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:textColor="@color/comic_282828"
+        android:textSize="@dimen/dp_13" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

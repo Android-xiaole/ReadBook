@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/comic_bg_dialog_shape"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="center"
+            android:text="试读及用户协议"
+            android:textColor="#744A04"
+            android:textSize="@dimen/dp_16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/comic_half_dp"
+            android:background="@android:color/darker_gray"></View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_210"
+            android:padding="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/tv_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:textColor="#744A04"
+                android:textSize="@dimen/dp_13" />
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/lin_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_5"
+            android:background="@drawable/comic_bg_button_normal"
+            android:gravity="center"
+            android:padding="@dimen/dp_5"
+            android:text="同意本协议"
+            android:textColor="#744A04"
+            android:textSize="@dimen/dp_15" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="@dimen/comic_half_dp"
+        android:layout_height="@dimen/dp_22"
+        android:layout_below="@id/content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/comic_f2f2f2">
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/btn_agree_close"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
+        android:layout_below="@id/content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_comic_pop_agree_close" />
+
+</RelativeLayout>

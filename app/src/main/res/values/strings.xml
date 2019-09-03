@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">猫爪漫画</string>
+
+    <!--更新APP 弹窗title-->
+    <string name="update_dialog_title">版本更新提醒</string>
+    <!--更新app 弹窗升级按钮-->
+    <string name="update_now">立刻升级</string>
+    <!--更新app 弹窗取消升级按钮-->
+    <string name="update_later">稍后再说</string>
+    <!--退出app提示语-->
+    <string name="exit_app_remind">再按一次退出应用</string>
+    <!--平台-->
+    <string name="platform">android</string>
+    <!--默认渠道号-->
+    <string name="default_channel">default channel</string>
+    <!--分享默认图片-->
+    <string name="share_default_img">http://static.biedese.cn/image2/product/default/761/740/3be9b6b5-7bd2-4ee8-ad0c-ea1becc7f04f.png</string>
+    <string name="tab_recommend">推荐</string>
+    <string name="tab_find_book">分类</string>
+    <string name="tab_search_book">发现</string>
+    <string name="tab_bookshelf">书架</string>
+    <string name="tab_mine">我的</string>
+</resources>

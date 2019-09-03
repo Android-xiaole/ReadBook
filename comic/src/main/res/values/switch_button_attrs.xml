@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Comic_SwitchButton">
+        <attr name="comic_sb_shadow_radius" format="reference|dimension"/>
+        <attr name="comic_sb_shadow_offset" format="reference|dimension"/>
+        <attr name="comic_sb_shadow_color" format="reference|color"/>
+        <attr name="comic_sb_uncheck_color" format="reference|color"/>
+        <attr name="comic_sb_checked_color" format="reference|color"/>
+
+        <attr name="comic_sb_border_width" format="reference|dimension"/>
+        <attr name="comic_sb_checkline_color" format="reference|color"/>
+        <attr name="comic_sb_checkline_width" format="reference|dimension"/>
+        <attr name="comic_sb_uncheckcircle_color" format="reference|color"/>
+        <attr name="comic_sb_uncheckcircle_width" format="reference|dimension"/>
+        <attr name="comic_sb_uncheckcircle_radius" format="reference|dimension"/>
+
+        <attr name="comic_sb_checked" format="reference|boolean"/>
+        <attr name="comic_sb_shadow_effect" format="reference|boolean"/>
+        <attr name="comic_sb_effect_duration" format="reference|integer"/>
+        <attr name="comic_sb_button_color" format="reference|color"/>
+        <attr name="comic_sb_show_indicator" format="reference|boolean"/>
+        <attr name="comic_sb_background" format="reference|color"/>
+        <attr name="comic_sb_enable_effect" format="reference|boolean"/>
+    </declare-styleable>
+</resources>

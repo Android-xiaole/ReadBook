@@ -1,0 +1,157 @@
+@startuml
+interface ImageDecoder<T>{
+    Bitmap decode(Context context, @NonNull Uri uri);
+}
+
+interface ImageRegionDecoder{
+    Point init(Context context, @NonNull Uri uri);
+    Bitmap decodeRegion(@NonNull Rect sRect, int sampleSize);
+    boolean isReady();
+    void recycler();
+}
+
+interface DecoderFactory<T>{
+    T make();
+}
+
+class CompatDecoderFactory<T>{
+__private__
+    + Class<? extends T> clazz;
+    + final Bitmap.Config bitmapConfig;
+__constructor__
+    +CompatDecoderFactory(@NonNull Class<? extends T> clazz);
+    +CompatDecoderFactory(@NonNull Class<? extends T> clazz, Bitmap.Config bitmapConfig);
+__Override__
+    T make();
+}
+
+class SkiaImageDecoder{
+__private__
+    +static final String FILE_PREFIX = "file://";
+    +static final String ASSET_PREFIX = FILE_PREFIX + "/android_asset/";
+    +static final String RESOURCE_PREFIX = ContentResolver.SCHEME_ANDROID_RESOURCE + "://";
+__constructor__
+    SkiaImageDecoder();
+    SkiaImageDecoder(Bitmap.Config bitmapConfig);
+
+__Override__
+    Bitmap decode(Context context, @NonNull Uri uri);
+}
+
+class SkiaImageRegionDecoder{
+__private__
+    +BitmapRegionDecode decode;
+    +final ReadWriteLock decoderLock = new ReentrantReadWriteLock(true);
+    static final String FILE_PREFIX = "file://";
+    static final String ASSET_PREFIX = FILE_PREFIX + "/android_asset/";
+    static final String RESOURCE_PREFIX = ContentResolver.SCHEME_ANDROID_RESOURCE + "://";
+    final Bitmap.Config bitmapConfig;
+__constructor__
+    SkiaImageRegionDecoder();
+    SkiaImageRegionDecoder(Bitmap.Config bitmapConfig);
+__Override__
+    Point init(Context context, Uri uri);
+    Bitmap decodeRegion(Rect sRect, int sampleSize);
+    synchronized boolean isReady();
+    synchronized void recycle();
+}
+
+class SkiaPooledImageRegionDecoder{
+__private__
+    +static boolean debug = false;
+    +DecoderPool decoderPool = new DecoderPool();
+    +final ReadWriteLock decoderLock = new ReentrantReadWriteLock(true);
+    +static final String FILE_PREFIX = "file://";
+    +static final String ASSET_PREFIX = FILE_PREFIX + "/android_asset/";
+    +static final String RESOURCE_PREFIX = ContentResolver.SCHEME_ANDROID_RESOURCE + "://";
+    +final Bitmap.Config bitmapConfig;
+    +Context context;
+    +Uri uri;
+    +long fileLength = Long.MAX_VALUE;
+    +final Point imageDimensions = new Point(0, 0);
+    +final AtomicBoolean lazyInited = new AtomicBoolean(false);
+__constructor__
+    SkiaPooledImageRegionDecoder();
+    SkiaPooledImageRegionDecoder(Bitmap.Config bitmapConfig);
+__Override__
+    init(final Context context, final Uri uri)
+    Bitmap decodeRegion(Rect sRect, int sampleSize);
+    synchronized boolean isReady();
+    synchronized void recycle();
+__Method__
+    static void setDebug(boolean debug)
+}
+
+class DecoderPool{
+__private__
+    +final Semaphore available = new Semaphore(0, true);
+    +final Map<BitmapRegionDecoder, Boolean> decoders = new ConcurrentHashMap<>();
+__Method__
+synchronized boolean isEmpty();
+synchronized int size();
+BitmapRegionDecoder acquire();
+void release(BitmapRegionDecoder decoder);
+synchronized void add(BitmapRegionDecoder decoder);
+synchronized void recycle();
+synchronized BitmapRegionDecoder getNextAvailable();
+synchronized boolean markAsUnused(BitmapRegionDecoder decoder);
+}
+
+class ImageSource{
+__private__
+    final Uri uri;
+    final Bitmap bitmap;
+    final Integer resource;
+    boolean tile;
+    int sWidth;
+    int sHeight;
+    Rect sRegion;
+    boolean cached;
+__static final__
+    String FILE_SCHEME = "file:///";
+    String ASSET_SCHEME = "file:///android_asset/";
+__constructor__
+    ImageSource(Bitmap bitmap, boolean cached);
+    ImageSource(Uri uri);
+    ImageSource(int resource);
+__instance__
+    static ImageSource asset(String assetName);
+    static ImageSource uri(String uri);
+    static ImageSource uri(Uri uri);
+    static ImageSource bitmap(Bitmap bitmap);
+    static ImageSource cachedBitmap(Bitmap bitmap)
+__public method__
+    ImageSource tilingEnabled();
+    ImageSource tilingDisabled();
+    ImageSource tiling(boolean tile);
+    ImageSource region(Rect sRegion);
+    ImageSource dimensions(int sWidth, int sHeight);
+__protect final__
+    Uri getUri()
+    Bitmap getBitmap()
+    Integer getResource()
+    boolean getTile()
+    int getSWidth()
+    int getSHeight()
+    Rect getSRegion()
+    boolean isCached();
+}
+class ImageViewState{
+__private final__
+    float scale;
+    float centerX;
+    float centerY;
+    int orientation;
+__constructor__
+ImageViewState(float scale,PointF center, int orientation);
+__method__
+getScale();
+PointF getCenter();
+int getOrientation()
+}
+DecoderPool<.. SkiaPooledImageRegionDecoder
+DecoderFactory <|.. CompatDecoderFactory
+ImageDecoder <|.. SkiaImageDecoder
+ImageRegionDecoder<|..SkiaImageRegionDecoder
+ImageRegionDecoder<|..SkiaPooledImageRegionDecoder
+@enduml

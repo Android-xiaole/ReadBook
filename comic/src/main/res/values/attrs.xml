@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="ComicView" tools:ignore="ResourceName">
+        <attr name="hideAnimStyle" format="reference"></attr>
+        <attr name="showAnimStyle" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="ComicToolBar" tools:ignore = "ResourceName">
+        <attr name="backgroundColor" format="color"/>
+        <attr name="shadowVisible" format="boolean"/>
+
+        <attr name="title" format="string"/>
+        <attr name="titleColor" format="color"/>
+
+        <attr name="leftIconRes" format="reference"/>
+        <attr name="rightIconRes" format="reference"/>
+        <attr name="leftIconVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="rightIconVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MineItemView" tools:ignore = "ResourceName">
+        <attr name="iconResource" format="reference"/>
+        <attr name="titleText" format="string"/>
+        <attr name="rightText" format="string"/>
+        <attr name="rightTextVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="switchVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="navigationVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+    </declare-styleable>
+</resources>

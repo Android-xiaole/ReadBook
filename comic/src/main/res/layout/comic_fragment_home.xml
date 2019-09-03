@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.recommend.HomeFragment">
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/fl_toolBar"/>
+
+    <FrameLayout
+        android:id="@+id/fl_toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_below="@id/fake_statusbar_view">
+
+        <View
+            android:id="@+id/view_toolbarBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/comic_ffffff"/>
+        <FrameLayout
+            android:id="@+id/home_tab"
+            android:layout_width="@dimen/dp_129"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/comic_tab_bg">
+
+            <TextView
+                android:id="@+id/home_recommend"
+                android:layout_width="@dimen/dp_73"
+                android:layout_height="@dimen/dp_32"
+                android:background="@drawable/comic_text_bg"
+                android:gravity="center"
+                android:tag="0"
+                android:text="@string/comic_recommend_title"
+                android:textColor="@drawable/comic_text_selector"
+                android:textSize="@dimen/dp_14" />
+
+            <TextView
+                android:id="@+id/home_recently"
+                android:layout_width="@dimen/dp_73"
+                android:layout_height="@dimen/dp_32"
+                android:background="@drawable/comic_text_bg"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:tag="1"
+                android:text="@string/comic_recommend_title2"
+                android:textColor="@drawable/comic_text_selector"
+                android:textSize="@dimen/dp_14" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:id="@+id/home_share"
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/dp_14"
+            android:background="@drawable/comic_select_recomment_share_bg"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_gravity="center"
+                android:src="@drawable/comic_select_recommend_shareicon" />
+        </FrameLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

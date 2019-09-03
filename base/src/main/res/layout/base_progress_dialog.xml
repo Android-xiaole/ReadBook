@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/base_shape_dialog_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/pb_load"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateTint="@color/base_yellow_ffd850"
+        android:indeterminateTintMode="src_atop" />
+
+</LinearLayout>

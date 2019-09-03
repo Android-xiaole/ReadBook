@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_myfeedback_text"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/tv_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:text="我要反馈"
+        android:textColor="@color/comic_333333"
+        android:textSize="@dimen/dp_18"
+        android:gravity="center"
+        android:background="@color/comic_yellow_ffd850"/>
+</LinearLayout>

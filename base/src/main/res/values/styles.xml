@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="base_dialogTransparent" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item> <!--边框-->
+        <item name="android:windowIsFloating">true</item> <!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">true</item> <!--半透明-->
+        <item name="android:windowNoTitle">true</item> <!--无标题-->
+        <item name="windowActionBar">false</item>
+        <item name="android:dialogTitle">false</item>
+        <item name="android:background">@android:color/transparent</item> <!--背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item> <!--背景透明-->
+        <item name="android:backgroundDimEnabled">true</item> <!--模糊-->
+        <item name="android:backgroundDimAmount">0.3</item>  <!--背景透明度-->
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="base_dialogTransparentNoTitle" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowFrame">@null</item> <!--边框-->
+        <item name="android:windowIsFloating">true</item> <!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">true</item> <!--半透明-->
+        <item name="android:windowNoTitle">true</item> <!--无标题-->
+        <item name="windowActionBar">false</item>
+        <item name="android:dialogTitle">false</item>
+        <item name="android:background">@android:color/transparent</item> <!--背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item> <!--背景透明-->
+        <item name="android:backgroundDimEnabled">true</item> <!--模糊-->
+        <item name="android:backgroundDimAmount">0.3</item>  <!--背景透明度-->
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="base_CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="base_style_app_bar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_55</item>
+        <item name="android:background">@color/base_yellow_ffd850</item>
+    </style>
+
+    <style name="base_MyCheckBoxStyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/base_button_checkbox</item>
+        <item name="android:paddingLeft">@dimen/dp_14</item>
+        <item name="android:maxHeight">@dimen/dp_10</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
+
+    <style name="base_style_checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="colorControlNormal">@color/base_color_999999</item>
+        <item name="colorControlActivated">@color/base_yellow_ffd850</item>
+        <item name="android:colorButtonNormal" tools:ignore="NewApi">@color/base_color_999999</item>
+    </style>
+    <!--CustomDialog-->
+    <style name="base_common_CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item><!--取消默认Dialog的windowFrame框-->
+        <item name="android:windowNoTitle">true</item><!--设置无标题Dialog-->
+        <item name="android:backgroundDimEnabled">true</item><!--是否四周变暗-->
+        <item name="android:windowIsFloating">true</item><!-- 是否悬浮在activity上 -->
+        <item name="android:windowContentOverlay">@null</item><!-- 取消默认ContentOverlay背景 -->
+        <item name="android:windowBackground">@android:color/transparent
+        </item><!--取消window默认背景 不然四角会有黑影-->
+    </style>
+</resources>

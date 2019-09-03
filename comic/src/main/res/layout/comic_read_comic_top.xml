@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/comic_style_app_bar"
+    android:background="@color/comic_read_bar_bg"
+    android:visibility="visible">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <!--<ImageView-->
+            <!--style="@style/comic_bottom_icon"-->
+            <!--android:src="@drawable/array_left"-->
+            <!--android:padding="@dimen/dp_9"/>-->
+
+        <ImageView
+            android:id="@+id/comic_read_back"
+            style="@style/comic_style_home_size"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_9"
+            android:src="@drawable/icon_back_white" />
+
+        <TextView
+            android:id="@id/comic_read_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginRight="@dimen/dp_12"
+            android:layout_toLeftOf="@+id/comic_read_share"
+            android:layout_toRightOf="@+id/comic_read_back"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="@dimen/dp_12"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dp_18" />
+
+
+        <ImageView
+            android:id="@+id/comic_read_share"
+            style="@style/comic_style_home_size"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_9"
+            android:src="@drawable/img_icon_share" />
+
+    </RelativeLayout>
+</RelativeLayout>

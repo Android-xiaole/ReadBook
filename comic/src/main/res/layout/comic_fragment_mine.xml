@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_comic_userinfo"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <ImageView
+        android:id="@+id/btn_settings_user"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_12"
+        android:fitsSystemWindows="true"
+        android:padding="@dimen/dp_12"
+        android:scaleType="centerInside"
+        android:src="@drawable/btn_settings_user" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_settings_user"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:scrollbars="none">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_settings_user"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/comic_mine_head_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+
+                <ImageView
+
+                    android:id="@+id/comic_mine_head"
+                    android:layout_width="@dimen/dp_77"
+                    android:layout_height="@dimen/dp_77"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:background="@drawable/comic_head_bg"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_user_avatar_default" />
+
+                <ImageView
+                    android:id="@+id/iv_user_sex"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_marginLeft="@dimen/dp_25_r"
+                    android:layout_toRightOf="@id/comic_mine_head"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_user_sex_man" />
+
+                <TextView
+                    android:id="@+id/btn_user_check_in"
+                    android:layout_width="@dimen/dp_70"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/dp_28"
+                    android:layout_marginRight="@dimen/dp_12"
+                    android:background="@drawable/comic_bg_btn_check_in"
+                    android:gravity="center"
+                    android:text="@string/comic_go_sign_in"
+                    android:textColor="@color/comic_ffffff"
+                    android:textSize="@dimen/dp_14"
+                    android:visibility="invisible" />
+
+                <RelativeLayout
+                    android:id="@+id/rl__"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_14"
+                    android:layout_toLeftOf="@id/btn_user_check_in"
+                    android:layout_toRightOf="@id/comic_mine_head"
+                    android:clickable="true"
+                    android:descendantFocusability="blocksDescendants"
+                    android:focusable="true">
+
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_12"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:maxLines="1"
+                        android:text="@string/comic_click_login_text"
+                        android:textColor="@color/comic_ffffff"
+                        android:textSize="@dimen/dp_18" />
+
+                    <TextView
+                        android:id="@+id/tv_user_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_user_name"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:layout_marginRight="@dimen/dp_12"
+                        android:clickable="true"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@string/comic_desc_not_login_text"
+                        android:textColor="@color/comic_ffffff"
+                        android:textSize="@dimen/dp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_user_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_user_desc"
+                        android:layout_marginLeft="@dimen/dp_12"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:maxLines="1"
+                        android:textIsSelectable="true"
+                        android:text="(ID:001)"
+                        android:textColor="@color/comic_ff9933"
+                        android:textSize="@dimen/dp_12" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/comic_mine_head"
+                    android:layout_marginTop="@dimen/dp_25"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/comic_mine_vip_bg"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/dp_12">
+
+                    <LinearLayout
+                        android:id="@+id/comic_mine_coin_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="@dimen/dp_40"
+                            android:layout_height="@dimen/dp_40"
+                            android:src="@drawable/icon_comic_mine_coin" />
+
+                        <TextView
+                            android:id="@+id/comic_mine_coin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/comic_no_balance"
+                            android:textColor="@color/comic_ff7800"
+                            android:textSize="@dimen/dp_15" />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="@dimen/dp_50"
+                        android:background="@color/comic_cccccc"/>
+                    <LinearLayout
+                        android:id="@+id/comic_mine_vip_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/comic_mine_vip"
+                            android:layout_width="@dimen/dp_40"
+                            android:layout_height="@dimen/dp_40"
+                            android:src="@drawable/img_comic_pay_vip_close" />
+
+                        <TextView
+                            android:id="@+id/comic_mine_vip_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/comic_click_open_vip_text"
+                            android:textColor="@color/comic_ff7800"
+                            android:textSize="@dimen/dp_15" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/comic_dddddd"
+                android:orientation="vertical">
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_recharge_center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:iconResource="@drawable/icon_comic_mine_recharge_center"
+                    app:titleText="@string/comic_recharge_center_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_vip_center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_huiyuan"
+                    app:titleText="@string/comic_vip_center_title" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_fuli_center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_fuli"
+                    app:titleText="@string/comic_coin_center_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_reward_center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_reward"
+                    app:titleText="@string/comic_my_reward_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_recharge_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_recharge_record"
+                    app:titleText="@string/comic_recharge_record_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_auto_buy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_pay_record"
+                    app:navigationVisible="gone"
+                    app:rightTextVisible="gone"
+                    app:switchVisible="visible"
+                    app:titleText="@string/comic_auto_pay_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_kefu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_kefu"
+                    app:titleText="@string/comic_find_kefu_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_fankui"
+                    app:titleText="@string/comic_feed_back_text" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_clear_cache"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0.5dp"
+                    app:iconResource="@drawable/icon_comic_mine_clearcache"
+                    app:navigationVisible="gone"
+                    app:rightText="0.0M"
+                    app:rightTextVisible="visible"
+                    app:switchVisible="gone"
+                    app:titleText="@string/comic_clear_cache" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

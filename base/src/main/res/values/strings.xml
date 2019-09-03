@@ -1,0 +1,38 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="base_app_name">base</string>
+    <!--时间格式-->
+    <string name="base_YMDHMS_date_format" >yyyy-MM-dd hh:mm:ss</string>
+    <!--无数据error-->
+    <string name="base_empty_data">当前无数据</string>
+    <!--网络错误error-->
+    <string name="base_connect_error">网络不通畅,请检查后再试</string>
+    <!--应用读取文件authority-->
+    <!--<string name="base_application_fileprovider">com.jj.comic.fileprovider</string>-->
+    <!--最大字符个数限制-->
+    <string name="base_max_length_text">最大输入%1$d个字符</string>
+    <!--默认ip-->
+    <string name="base_default_ip">223.5.5.5</string>
+    <!--sharedPreferences的名字-->
+    <string name="base_comic_name">comic</string>
+    <!--删除弹窗标题-->
+    <string name="base_delete_title">温馨提示</string>
+    <string name="base_cancel">取消</string>
+    <string name="base_confirm">确定</string>
+    <!--删除评论标题-->
+    <string name="base_delete_comment">删除评论</string>
+    <!--删除评论弹窗内容-->
+    <string name="base_delete_comment_content">您确定要删除这条评论吗？删除之后就不再显示了。</string>
+    <!--删除评论弹窗提示-->
+    <string name="base_delete_comment_no_more_remind">以后不再提示</string>
+    <string name="base_select_pay_type">请选择支付方式</string>
+    <string name="base_zfb">支付宝</string>
+    <string name="base_wx_pay">微信支付</string>
+    <string name="base_huifubao_pay">汇付宝</string>
+    <string name="base_remind">提示</string>
+    <string name="base_sign_des">当前消费仅显示阅读漫画消费记录</string>
+    <!--刷新提示-->
+    <string name="base_refresh_remind">没有数据？下拉刷新试试！</string>
+    <string name="base_wait">请稍后。。。</string>
+    <string name="base_go_collect">去收藏</string>
+    <string name="base_pay_confirm">支付确认</string>
+</resources>

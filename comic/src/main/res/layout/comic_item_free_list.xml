@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:layout_marginRight="@dimen/dp_12">
+
+
+    <ImageView
+        android:id="@+id/item_free_img"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_88"
+        android:scaleType="centerCrop"
+        android:src="@color/comic_dddddd" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_88"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_toRightOf="@id/item_free_img"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_free_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="top"
+            android:textColor="@color/comic_333333"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:id="@+id/item_free_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/comic_999999"
+            android:textSize="@dimen/dp_11" />
+
+        <TextView
+            android:id="@+id/item_free_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:textColor="@color/comic_999999"
+            android:textSize="@dimen/dp_11" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/item_free_read"
+        android:layout_width="@dimen/dp_61"
+        android:layout_height="@dimen/dp_26"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/comic_free_read"
+        android:gravity="center"
+        android:text="@string/comic_free_read"
+        android:textColor="@color/comic_ffffff"
+        android:textSize="@dimen/dp_14" />
+</RelativeLayout>

@@ -1,0 +1,152 @@
+apply plugin: 'com.android.application'
+// 依赖插件脚本
+apply from: 'tinker-support.gradle'
+apply plugin: 'com.jakewharton.butterknife'
+android {
+    compileSdkVersion Integer.parseInt(COMPILE_SDK_VERSION)
+    buildToolsVersion BUILDTOOLS_VERSION
+    defaultConfig {
+        multiDexEnabled true
+        applicationId "com.jj.maozhua"
+        minSdkVersion Integer.parseInt(MIN_SDK_VERSION)
+        targetSdkVersion Integer.parseInt(TARGET_SDK_VERSION)
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
+        flavorDimensions "versionCode"
+        multiDexKeepProguard file("tinker_multidexkeep.pro")
+        ndk {
+            // 设置支持的SO库架构
+//            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+        //butter knife
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+        //arouter
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+                arguments = [moduleName: project.getName()]
+            }
+        }
+
+        manifestPlaceholders = [value_isDebug: isDebug.toBoolean()]
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+    }
+
+    dexOptions {
+        jumboMode = true
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
+
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias 'maozhua'
+            keyPassword 'maozhua'
+            storeFile file('../maozhua.jks')
+            storePassword 'maozhua'
+            v2SigningEnabled true
+        }
+        release {
+            keyAlias 'maozhua'
+            keyPassword 'maozhua'
+            storeFile file('../maozhua.jks')
+            storePassword 'maozhua'
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled true
+            debuggable false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                def buildType = variant.buildType.name
+                // 只有Release包可以变更路径（因为AS会自动安装Debug包，故Debug包路径不能改变）
+                if (buildType == "release") {
+                    variant.getPackageApplication().outputDirectory = new File(project.rootDir.absolutePath + "/apk/${variant.productFlavors.get(0).getName()}")
+                }
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    // 同理，只有Release包可以变更名称
+                    if (outputFile != null && outputFile.name.endsWith(".apk") && buildType == "release") {
+                        //App_release_chile
+//                        def fileName = "App_${defaultConfig.versionName}_${releaseTime()} " +
+//                                "_release_" + variant.productFlavors.get(0).getName() + ".apk"
+                        def fileName = "App_" + buildType + "_" + variant.productFlavors.get(0).getName() + "_${releaseTime()}" + "_${defaultConfig.versionName}" + ".apk"
+                        // 将名字打印出来查看效果
+                        output.outputFileName = fileName
+                    }
+                }
+            }
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
+            manifestPlaceholders = [value_channel_id: "jjmh2-default",
+                                    value_isDebug   : true]
+            signingConfig signingConfigs.release
+        }
+    }
+    productFlavors {
+
+        "jjmh2-default" {
+            manifestPlaceholders = [value_channel_id: "jjmh2-default",
+                                    value_isDebug   : false]
+        }
+
+        "mzmh-default-0005" {
+            manifestPlaceholders = [value_channel_id: "mzmh-default-0005",
+                                    value_isDebug   : false]
+        }
+
+        "mzmh-default-0200" {
+            manifestPlaceholders = [value_channel_id: "mzmh-default-0200",
+                                    value_isDebug   : false]
+        }
+
+        "wap01-android" {
+            manifestPlaceholders = [value_channel_id: "mzmh-default-5957496754970624",
+                                    value_isDebug   : false]
+        }
+
+        "maozhua_testChannel" {
+            manifestPlaceholders = [value_channel_id: "mzmh-default-326154067993800704",
+                                    value_isDebug   : false]
+        }
+
+
+    }
+
+
+    repositories {
+        flatDir {
+            dirs 'libs','../sdk/libs'
+        }
+    }
+
+}
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    annotationProcessor "com.alibaba:arouter-compiler:${AROUTER_COMPLIER_VERSION}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${BUTTERKNIFE_VERSION}"
+    compile 'com.baidu.mobstat:mtj-sdk:latest.integration'
+    implementation project(':base')
+    implementation project(':sdk')
+    implementation project(':comic')
+}

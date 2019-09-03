@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.jj.base">
+    <application>
+        <activity
+            android:name=".ui.MipushTestActivity"
+            android:launchMode="singleTask"
+            android:exported="true" />
+
+    </application>
+</manifest>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_50"
+    android:padding="@dimen/dp_5">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_5">
+
+        <TextView
+            android:id="@+id/bookshelf_collection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="@string/comic_collect_text"
+            android:textColor="@drawable/comic_tab_selector"
+            android:textSize="@dimen/dp_16" />
+
+        <TextView
+            android:id="@+id/bookshelf_history"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_50"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="@string/comic_history"
+            android:textColor="@drawable/comic_tab_selector"
+            android:textSize="@dimen/dp_16" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/item_bookShelf_delete"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:padding="@dimen/dp_5"
+            android:src="@drawable/icon_comic_bookshelf_delete_head"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/item_bookShelf_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_5"
+            android:text="@string/comic_do_text"
+            android:textColor="@color/base_333333"
+            android:textSize="@dimen/dp_18"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</RelativeLayout>

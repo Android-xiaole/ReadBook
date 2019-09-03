@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dp_280"
+    android:layout_height="@dimen/dp_180"
+    android:background="@drawable/comic_coupon_dialog_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@string/comic_coupon_recharge_success_title"
+        android:textColor="@color/comic_ff4b13"
+        android:textSize="@dimen/dp_20"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_remind"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@string/comic_coupon_recharge_success_msg"
+        android:textColor="@color/comic_999999"
+        android:textSize="@dimen/dp_14" />
+
+
+    <TextView
+        android:id="@+id/dialog_coupon_confirm"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/comic_coupon_shape_tv_know_bg"
+        android:gravity="center"
+        android:text="@string/comic_know_text"
+        android:textColor="@color/comic_ffffff"
+        android:textSize="@dimen/dp_18" />
+
+</LinearLayout>

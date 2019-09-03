@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/comic_pay_wx_1" android:state_selected="false"></item>
+    <item android:drawable="@drawable/comic_pay_alipay" android:state_selected="true"></item>
+</selector>

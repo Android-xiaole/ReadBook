@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:id="@+id/findBook_search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_48"
+                android:layout_margin="@dimen/dp_2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/comic_classify_text"
+                    android:textColor="@color/comic_333333"
+                    android:textSize="@dimen/dp_18" />
+
+                <ImageView
+                    android:id="@+id/btn_search_find"
+                    android:layout_width="@dimen/dp_45"
+                    android:layout_height="@dimen/dp_45"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dp_10"
+                    android:visibility="gone"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_home_search" />
+            </RelativeLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentInsetStart="0dp"
+            app:layout_collapseMode="pin">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/findBook_recycler_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_26"
+                android:layout_marginLeft="@dimen/dp_26"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginBottom="@dimen/dp_8">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </androidx.appcompat.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/dp_13"
+            android:layout_marginRight="@dimen/dp_13"
+            android:background="@color/comic_eeeeee" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/findBook_recycler_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_26"
+            android:layout_marginLeft="@dimen/dp_26"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_26"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10">
+
+            <TextView
+                android:id="@+id/type_hot"
+                android:layout_width="wrap_content"
+                android:paddingRight="@dimen/dp_18"
+                android:paddingLeft="@dimen/dp_18"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="44dp"
+                android:background="@drawable/comic_selector_bg_tab"
+                android:textColor="@color/comic_666666"
+                android:gravity="center"
+                android:text="热门"
+                android:textSize="@dimen/dp_14" />
+
+            <TextView
+                android:id="@+id/type_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/dp_18"
+                android:paddingLeft="@dimen/dp_18"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="44dp"
+                android:background="@drawable/comic_selector_bg_tab"
+                android:textColor="@color/comic_666666"
+                android:gravity="center"
+                android:text="更新"
+                android:textSize="@dimen/dp_14" />
+
+            <TextView
+                android:id="@+id/type_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/dp_18"
+                android:paddingLeft="@dimen/dp_18"
+                android:layout_centerInParent="true"
+                android:background="@drawable/comic_selector_bg_tab"
+                android:textColor="@color/comic_666666"
+                android:gravity="center"
+                android:text="新上架"
+                android:textSize="@dimen/dp_14" />
+        </LinearLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/findBook_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/findBook_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/comic_ffffff"
+            android:paddingBottom="@dimen/dp_30">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/type_load_fail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/dp_180"
+            android:layout_height="@dimen/dp_180"
+            android:layout_gravity="center"
+            android:src="@drawable/img_unsearch" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="列表加载失败,点击重试!" />
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

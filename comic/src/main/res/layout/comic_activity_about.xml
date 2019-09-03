@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_about_us" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10">
+
+
+        <ImageView
+            android:id="@+id/iv_about_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_30"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_20"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/comic_666666"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:id="@+id/tv_version_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_8"
+            android:textColor="@color/base_yellow_ffd850"
+            android:textSize="@dimen/dp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_15"
+            android:text="@string/comic_introduction1"
+            android:textColor="@color/comic_666666"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/comic_introduction2"
+            android:textColor="@color/comic_666666"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_20"
+            android:text="@string/comic_introduction3"
+            android:textColor="@color/comic_666666"
+            android:textSize="@dimen/dp_14" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_16"
+            android:background="@color/comic_eeeeee"></View>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:text="@string/comic_app_features"
+            android:textColor="@color/comic_666666" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_10"
+            android:text="@string/comic_app_features1"
+            android:textColor="@color/base_yellow_ffd850"
+            android:textSize="@dimen/dp_14"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comic_app_features2"
+            android:textColor="@color/comic_999999"
+            android:textSize="@dimen/dp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/comic_app_features3"
+            android:textColor="@color/comic_999999"
+            android:textSize="@dimen/dp_12" />
+
+    </LinearLayout>
+
+</LinearLayout>

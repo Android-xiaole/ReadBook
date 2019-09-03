@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home_recommend"
+        android:icon="@drawable/recommend"
+        android:title="@string/tab_recommend"/>
+
+    <item
+        android:id="@+id/menu_home_findbook"
+        android:icon="@drawable/find"
+        android:title="@string/tab_find_book"/>
+
+    <item
+        android:id="@+id/menu_home_searchbook"
+        android:icon="@drawable/search"
+        android:title="@string/tab_search_book"/>
+
+    <item
+        android:id="@+id/menu_home_bookshelf"
+        android:icon="@drawable/bookshelf"
+        android:title="@string/tab_bookshelf"/>
+
+    <item
+        android:id="@+id/menu_home_mine"
+        android:icon="@drawable/mine"
+        android:title="@string/tab_mine"/>
+</menu>

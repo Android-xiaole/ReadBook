@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_8">
+
+    <TextView
+        android:id="@+id/comic_detail_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="@string/comic_update_text"
+        android:textColor="@color/comic_999999"
+        android:textSize="@dimen/dp_16" />
+
+    <LinearLayout
+        android:id="@+id/comic_detail_sort_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/comic_detail_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/comic_asc"
+            android:textColor="@color/comic_999999"
+            android:textSize="@dimen/dp_16" />
+
+        <ImageView
+            android:id="@+id/comic_detail_sort_img"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_15"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:gravity="right"
+            android:src="@drawable/img_comic_catalog_sort" />
+    </LinearLayout>
+</LinearLayout>

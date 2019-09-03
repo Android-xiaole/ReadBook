@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/comic_ffffff"
+    android:orientation="vertical">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_find_kefu_text"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_bg_kefu" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_go"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/img_bt_kefu" />
+
+        <TextView
+            android:id="@+id/tv_qqNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/comic_qq_num"
+            android:textColor="@color/comic_ffffff"
+            android:textSize="@dimen/dp_15" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_vxNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/comic_17"
+        android:text="微信号："
+        android:textColor="@color/comic_ff502e" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/comic_17"
+        android:text="@string/comic_kefu_work_time"
+        android:textColor="@color/comic_ff502e" />
+
+
+</LinearLayout>

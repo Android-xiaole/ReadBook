@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_comic_dialog_pay">
+
+    <ImageView
+        android:id="@+id/btn_alert_pay_close"
+        android:layout_width="@dimen/dp_35"
+        android:layout_height="@dimen/dp_35"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_35"
+        android:layout_marginRight="@dimen/dp_25"
+        android:src="@drawable/icon_comic_dialog_pay_close" />
+
+    <ImageView
+        android:id="@+id/btn_alert_pay_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_32"
+        android:paddingLeft="@dimen/dp_30"
+        android:paddingRight="@dimen/dp_30"
+        android:scaleType="fitCenter"
+        android:src="@drawable/btn_comic_subscribe_pay_now" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_alert_pay_now"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_80"
+        android:layout_marginBottom="@dimen/dp_140"
+        android:src="@drawable/img_alert_pay_comic" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_alert_desc_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_alert_pay_now"
+        android:layout_marginLeft="@dimen/dp_23"
+        android:layout_marginRight="@dimen/dp_23"
+        android:layout_marginBottom="@dimen/dp_30">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_175"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_comic_dialog_pay_desc_container" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_55">
+
+            <TextView
+                android:id="@+id/tv_alert_pay_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/comic_alert_pay_title"
+                android:textColor="@color/comic_ff7b23"
+                android:textSize="@dimen/dp_14" />
+
+            <TextView
+                android:id="@+id/tv_alert_pay_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_alert_pay_title"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/dp_12"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/comic_alert_pay_desc"
+                android:textColor="@color/comic_45372e"
+                android:textSize="@dimen/dp_13" />
+
+            <TextView
+                android:id="@+id/tv_alert_pay_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_alert_pay_desc"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/dp_3"
+                android:gravity="center"
+                android:maxLines="1"
+                android:visibility="gone"
+                android:text="@string/comic_alert_pay_vip"
+                android:textColor="@color/comic_999999"
+                android:textSize="@dimen/dp_13" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_alert_pay_desc"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/dp_32"
+                android:layout_marginTop="@dimen/dp_23"
+                android:layout_marginRight="@dimen/dp_32">
+
+                <TextView
+                    android:id="@+id/tv_alert_pay_remaining"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/comic_balance"
+                    android:textSize="@dimen/dp_12" />
+
+                <RelativeLayout
+                    android:id="@+id/btn_alert_pay_auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
+
+                    <TextView
+                        android:id="@+id/tv_auto_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/comic_auto_pay_text"
+                        android:textColor="@color/comic_ff5c2c"
+                        android:textSize="@dimen/dp_12" />
+
+                    <ImageView
+                        android:id="@+id/iv_alert_pay_auto"
+                        android:layout_width="@dimen/dp_25"
+                        android:layout_height="@dimen/dp_25"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/tv_auto_desc"
+                        android:src="@drawable/comic_selector_btn_round_orange" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
