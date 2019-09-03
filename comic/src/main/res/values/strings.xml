@@ -111,7 +111,7 @@
     <string name="comic_wb_login_cancel">weibo login cancel</string>
     <string name="comic_wb_login_fail_msg">授权失败 Obtained the code:</string>
     <string name="comic_login_not_install_wx">您还未安装微信客户端</string>
-    <string name="comic_agreement_check_text">同意《猫爪漫画服务协议》</string>
+    <string name="comic_agreement_check_text">同意《金桔小说服务协议》</string>
     <string name="comic_login_tab_text">登录 / 注册</string>
     <string name="comic_wx_login_cancel">wx login cancel</string>
     <string name="comic_wx_login_denied">AUTH_DENIED</string>
@@ -228,7 +228,7 @@
     <string name="comic_login_by_wx">微信登录</string>
     <string name="comic_login_by_qq">QQ登录</string>
     <string name="comic_login_by_wb">微博登录</string>
-    <string name="comic_agree_app_ment">同意猫爪漫画服务协议</string>
+    <string name="comic_agree_app_ment">同意金桔小说服务协议</string>
     <string name="comic_recharge_center_text">充值中心</string>
     <string name="comic_rank_text">必看榜单</string>
     <string name="comic_my_reward_text">我的打赏</string>
@@ -250,7 +250,7 @@
     <string name="comic_receive_propelling_notification">接受推送通知</string>
     <string name="comic_receive_propelling_notification_hint">作品更新及时通知</string>
     <string name="comic_turn_page_with_volume">使用音量键翻页</string>
-    <string name="comic_about_app">关于猫爪漫画</string>
+    <string name="comic_about_app">关于金桔小说</string>
     <string name="comic_check_update">检查版本更新</string>
     <string name="comic_logout_text">退出登录</string>
     <string name="comic_user_agreement_title">用户服务协议</string>

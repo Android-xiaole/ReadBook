@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">猫爪漫画</string>
+    <string name="app_name">金桔小说</string>
 
     <!--更新APP 弹窗title-->
     <string name="update_dialog_title">版本更新提醒</string>

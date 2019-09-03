@@ -425,7 +425,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
     @Override
     public CharSequence getAgreementText() {
-        String text = "同意《猫爪漫画服务协议》";
+        String text = "同意《金桔小说服务协议》";
         SpannableString agreement = new SpannableString(text);
         agreement.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff6d50)), 2, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return agreement;

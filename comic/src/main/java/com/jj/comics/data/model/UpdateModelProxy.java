@@ -12,11 +12,11 @@ public class UpdateModelProxy implements IModel {
 
     /**
 <<<<<<< .working
-     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 ||||||| .merge-left.r3326
-     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 =======
-     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+     * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 >>>>>>> .merge-right.r3328
      */
 
@@ -52,11 +52,11 @@ public class UpdateModelProxy implements IModel {
         private String isUpdate;
         /**
 <<<<<<< .working
-         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 ||||||| .merge-left.r3326
-         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用池乐正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 =======
-         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"猫爪漫画原生应用正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
+         * productChannelUpdate : {"productCode":"manhua","productDownUrl":"http://download.jjmh18.cn/apk/App_release_chile_2019-03-04_1.1.0.apk","productVersion":"2","productUpdateDesc":"金桔小说原生应用正式包下载渠道\r\nv1.1.1","isUpdate":"0"}
 >>>>>>> .merge-right.r3328
          */
 
