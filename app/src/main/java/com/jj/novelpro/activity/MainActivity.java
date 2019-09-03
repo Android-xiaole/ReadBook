@@ -256,13 +256,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_home_recommend:
+            case R.id.menu_home_featured:
                 getP().switchFragment(0, currentIndex, mInterceptor);
                 return true;
-            case R.id.menu_home_findbook:
+            case R.id.menu_home_classify:
                 getP().switchFragment(1, currentIndex, mInterceptor);
                 return true;
-            case R.id.menu_home_searchbook:
+            case R.id.menu_home_money:
                 getP().switchFragment(2, currentIndex, mInterceptor);
                 return true;
             case R.id.menu_home_bookshelf:
@@ -341,13 +341,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public void setCheck(int index) {
         switch (index) {
             case 0:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_recommend);
+                mBottomNavigationView.setSelectedItemId(R.id.menu_home_featured);
                 break;
             case 1:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_findbook);
+                mBottomNavigationView.setSelectedItemId(R.id.menu_home_classify);
                 break;
             case 2:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_searchbook);
+                mBottomNavigationView.setSelectedItemId(R.id.menu_home_money);
                 break;
             case 3:
                 mBottomNavigationView.setSelectedItemId(R.id.menu_home_bookshelf);

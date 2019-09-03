@@ -7,7 +7,7 @@ public class RouterMap {
     public static final String COMIC_DETAIL_ACTIVITY = "/ui/ComicDetailActivity";
     public static final String COMIC_MAIN_ACTIVITY = "/app/activity/MainActivity";
     public static final String COMIC_TYPELIST_ACTIVITY = "/ui/recommend_list/TypeListActivity";
-    public static final String COMIC_RICHMANRANK_ACTIVITY = "/ui/recommend/RichManRankActivity";
+    public static final String COMIC_RICHMANRANK_ACTIVITY = "/ui/featured/RichManRankActivity";
     public static final String COMIC_READ_COMIC_ACTIVITY = "/ui/ReadComicActivity";
     public static final String COMIC_LOGIN_ACTIVITY = "/ui/LoginActivity";
     public static final String COMIC_REGISTER_ACTIVITY = "/ui/RegisterActivity";
@@ -22,14 +22,14 @@ public class RouterMap {
     public static final String COMIC_PAY_ACTIVITY = "/ui/mine/PayActivity";
     public static final String COMIC_VIP_ACTIVITY = "/ui/mine/VIPActivity";
     public static final String COMIC_GOLD_CENTER_ACTIVITY = "/ui/mine/GoldCenterActivity";
-    public static final String COMIC_FREE_LIST_ACTIVITY = "/ui/recommend/FreeListActivity";
+    public static final String COMIC_FREE_LIST_ACTIVITY = "/ui/featured/FreeListActivity";
     public static final String COMIC_REWARD_ACTIVITY = "/ui/mine/rEWARDActivity";
     public static final String COMIC_SUBSCRIBE_ACTIVITY = "/ui/SubscribeActivity";
     public static final String COMIC_RECOMMEND_FRAGMENT = "/comic/recommend_list/RecommendFragment";
-    public static final String COMIC_RECOMMEND_LOADMORE = "/ui/recommend/RecommendLoadMoreActovity";
+    public static final String COMIC_RECOMMEND_LOADMORE = "/ui/featured/RecommendLoadMoreActovity";
     public static final String COMIC_HOME_FRAGMENT = "/comic/recommend_list/HomeFragment";
-    public static final String COMIC_FIND_FRAGMENT = "/comic/find/FindBookFragment";
-    public static final String COMIC_SEARCH_FRAGMENT = "/comic/search/SearchFragment";
+    public static final String COMIC_FIND_FRAGMENT = "/comic/classify/FindBookFragment";
+    public static final String COMIC_SEARCH_FRAGMENT = "/comic/money/SearchFragment";
     public static final String COMIC_BOOKSHELF_FRAGMENT = "/comic/bookshelf/BookShelfFragment";
     public static final String COMIC_MINE_FRAGMENT = "/comic/mine/MineFragment";
     public static final String COMIC_DETAIL_FRAGMENT = "/comic/detail/ComicDetailFragment";

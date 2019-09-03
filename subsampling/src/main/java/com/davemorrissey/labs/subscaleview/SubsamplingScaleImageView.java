@@ -2606,7 +2606,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     /**
-     * Call to find whether the view is initialised, has dimensions, and will display an image on
+     * Call to classify whether the view is initialised, has dimensions, and will display an image on
      * the next draw. If a preview has been provided, it may be the preview that will be displayed
      * and the full size image may still be loading. If no preview was provided, this is called once
      * the base layer tiles of the full size image are loaded.
@@ -2627,7 +2627,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     /**
-     * Call to find whether the main image (base layer tiles where relevant) have been loaded. Before
+     * Call to classify whether the main image (base layer tiles where relevant) have been loaded. Before
      * this event the view is blank unless a preview was provided.
      * @return true if the main image (not the preview) has been loaded and is ready to display.
      */

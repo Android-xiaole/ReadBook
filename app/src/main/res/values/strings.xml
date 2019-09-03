@@ -15,9 +15,9 @@
     <string name="default_channel">default channel</string>
     <!--分享默认图片-->
     <string name="share_default_img">http://static.biedese.cn/image2/product/default/761/740/3be9b6b5-7bd2-4ee8-ad0c-ea1becc7f04f.png</string>
-    <string name="tab_recommend">推荐</string>
-    <string name="tab_find_book">分类</string>
-    <string name="tab_search_book">发现</string>
+    <string name="tab_featured">精选</string>
+    <string name="tab_classify">分类</string>
+    <string name="tab_money">赚</string>
     <string name="tab_bookshelf">书架</string>
     <string name="tab_mine">我的</string>
 </resources>

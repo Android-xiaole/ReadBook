@@ -39,7 +39,7 @@
             <!--android:layout_height="match_parent"-->
             <!--android:layout_weight="1"-->
             <!--android:button="@null"-->
-            <!--android:drawableTop="@drawable/recommend"-->
+            <!--android:drawableTop="@drawable/featured"-->
             <!--android:gravity="center"-->
             <!--android:padding="@dimen/dp_5"-->
             <!--android:text="@string/tab_recommend"-->
@@ -51,7 +51,7 @@
             <!--android:layout_height="match_parent"-->
             <!--android:layout_weight="1"-->
             <!--android:button="@null"-->
-            <!--android:drawableTop="@drawable/find"-->
+            <!--android:drawableTop="@drawable/classify"-->
             <!--android:gravity="center"-->
             <!--android:padding="@dimen/dp_5"-->
             <!--android:text="@string/tab_find_book"-->
