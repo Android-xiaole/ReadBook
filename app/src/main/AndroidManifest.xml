@@ -77,7 +77,7 @@
         <!-- 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 -->
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
-            android:value="aebb6a0d52" />
+            android:value="e38878ac2a" />
 
         <!-- 是否开启错误日志统计，默认为false -->
         <meta-data
