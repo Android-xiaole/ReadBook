@@ -1,16 +1,13 @@
 package com.jj.comics.adapter.mine;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.jj.comics.ui.dialog.BottomPayDialog;
 import com.jj.comics.R;
 import com.jj.comics.data.model.GoodsPriceModel;
 import com.jj.comics.ui.mine.VIPPresenter;
-import com.jj.comics.ui.mine.VIPActivity;
 
 import java.util.List;
 

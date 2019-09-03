@@ -1,7 +1,6 @@
 package com.jj.comics.ui.mine;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -16,7 +15,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.Utils;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
@@ -24,7 +22,6 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.EditTextFilterUtil;
-import com.jj.comics.util.LoginHelper;
 
 import butterknife.BindView;
 

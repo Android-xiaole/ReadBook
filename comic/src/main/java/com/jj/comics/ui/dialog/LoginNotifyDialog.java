@@ -12,7 +12,6 @@ import com.jj.comics.R;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import static android.view.KeyEvent.KEYCODE_BACK;

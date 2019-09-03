@@ -2,13 +2,8 @@ package com.jj.comics.ui.mine;
 
 import android.app.Activity;
 
-import com.jj.base.mvp.IPresenter;
 import com.jj.base.mvp.IView;
 import com.jj.base.net.NetError;
-import com.jj.comics.data.model.GoodsPriceModel;
-import com.jj.comics.data.model.ProductPayTypeEnum;
-import com.jj.comics.data.model.SelectionWithGood;
-import com.jj.comics.data.model.Tasks;
 import com.jj.comics.data.model.VIPListResponse;
 
 import java.util.List;

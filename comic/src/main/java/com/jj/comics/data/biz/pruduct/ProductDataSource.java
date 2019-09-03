@@ -8,8 +8,6 @@ import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.UpdateModelProxy;
 
 import io.reactivex.Observable;
-import io.reactivex.Observable;
-import okhttp3.ResponseBody;
 
 public interface ProductDataSource {
 

@@ -32,7 +32,6 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.uber.autodispose.AutoDispose;

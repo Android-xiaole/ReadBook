@@ -23,7 +23,6 @@ import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.UpdateAutoBuyStatusEvent;
-import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;

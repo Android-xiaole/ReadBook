@@ -5,8 +5,6 @@ import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
 import com.jj.comics.data.model.RechargeRecordModel;
 
-import java.math.BigDecimal;
-
 public class NewRechargeRecordAdapter extends SimpleBaseAdapter<RechargeRecordModel> {
     public NewRechargeRecordAdapter(int layoutResId) {
         super(layoutResId);

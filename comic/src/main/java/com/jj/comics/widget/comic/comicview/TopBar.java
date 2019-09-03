@@ -1,6 +1,5 @@
 package com.jj.comics.widget.comic.comicview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.view.animation.TranslateAnimation;
 import com.jj.base.utils.CommonUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.data.model.ShareMessageModel;
-import com.jj.comics.ui.dialog.ShareDialog;
 
 import butterknife.OnClick;
 

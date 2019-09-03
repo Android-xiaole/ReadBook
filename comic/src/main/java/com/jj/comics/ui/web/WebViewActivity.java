@@ -1,6 +1,5 @@
 package com.jj.comics.ui.web;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;

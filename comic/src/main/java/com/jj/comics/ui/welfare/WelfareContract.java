@@ -1,13 +1,9 @@
 package com.jj.comics.ui.welfare;
 
 import com.jj.base.mvp.IView;
-import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.SignAutoResponse;
-import com.jj.comics.data.model.SignInDayModel;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
-import com.jj.comics.data.model.TaskGroups;
-import com.jj.comics.data.model.Tasks;
 
 public interface WelfareContract {
 

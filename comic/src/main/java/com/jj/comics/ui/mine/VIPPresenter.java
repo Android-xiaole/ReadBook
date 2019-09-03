@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.alipay.sdk.app.PayTask;
-import com.heepay.plugin.api.HPlugin;
 import com.jj.base.BaseApplication;
 import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;

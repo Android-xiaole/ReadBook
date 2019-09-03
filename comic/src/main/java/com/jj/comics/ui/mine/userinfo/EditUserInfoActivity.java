@@ -38,14 +38,12 @@ import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.EditTextFilterUtil;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.IntentUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import anet.channel.util.StringUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 

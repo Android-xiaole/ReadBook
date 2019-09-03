@@ -54,7 +54,6 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
-import retrofit2.HttpException;
 
 public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendContract.IRecommendView> implements RecommendContract.IRecommendPresenter {
 

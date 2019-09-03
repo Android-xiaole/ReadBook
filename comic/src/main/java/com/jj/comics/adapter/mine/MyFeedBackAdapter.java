@@ -5,7 +5,6 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
-import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackModel;
 
 public class MyFeedBackAdapter extends SimpleBaseAdapter<FeedbackModel> {

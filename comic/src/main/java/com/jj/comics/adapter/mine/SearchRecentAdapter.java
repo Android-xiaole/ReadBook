@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
-import com.jj.comics.data.model.SearchModel;
 
 public class SearchRecentAdapter extends SimpleBaseAdapter<SearchHotKeywordsResponse.DataBean> {
     public SearchRecentAdapter(int layoutResId) {

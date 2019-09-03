@@ -1,8 +1,6 @@
 package com.jj.comics.common.net.gsonconvert;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 
 import java.io.IOException;

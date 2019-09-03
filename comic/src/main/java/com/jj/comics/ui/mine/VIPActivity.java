@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -25,17 +24,11 @@ import com.jj.comics.adapter.mine.VIPAdapter;
 import com.jj.comics.adapter.mine.VIPWelfareItemAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.VIPListResponse;
-import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.common.constants.RequestCode;
-import com.jj.comics.data.model.GoodsPriceModel;
-import com.jj.comics.data.model.SelectionWithGood;
 import com.jj.comics.data.model.TaskModel;
-import com.jj.comics.data.model.Tasks;
-import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.util.eventbus.events.WxPayEvent;
-import com.jj.comics.ui.dialog.PayFailDialog;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.umeng.analytics.MobclickAgent;
 
@@ -49,7 +42,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * 会员中心页面

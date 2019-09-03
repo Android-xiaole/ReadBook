@@ -8,7 +8,6 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.StatusBarUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.ViewPagerAdapter;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * 充值记录和消费记录

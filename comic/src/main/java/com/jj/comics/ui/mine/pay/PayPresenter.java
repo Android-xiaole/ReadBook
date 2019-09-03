@@ -9,23 +9,16 @@ import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alipay.sdk.app.PayTask;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.heepay.plugin.api.HPlugin;
 import com.jj.base.BaseApplication;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
-import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.NetError;
-import com.jj.base.net.RetryFunction2;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.Utils;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
@@ -33,20 +26,12 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.goods.GoodsRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.PayCenterInfoResponse;
-import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.PrePayOrderResponseAli;
-import com.jj.comics.data.model.RechargeCoinResponse;
-import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.PayUtils;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.umeng.analytics.MobclickAgent;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -172,11 +157,11 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
         // agentId 商户号
         // agentBillId 商户订单号
         // pay_type 支付方式
-        String tokenId = "H19081209998381R_7594e95733325d162a653a7f249f41fa";
-        int agentId = 2121489;
-        String agentBillId = "NZ_201908121934277791";
-        int pay_type = 30;
-        HPlugin.pay(activity, tokenId + "," + agentId + "," + agentBillId + "," + pay_type);
+//        String tokenId = "H19081209998381R_7594e95733325d162a653a7f249f41fa";
+//        int agentId = 2121489;
+//        String agentBillId = "NZ_201908121934277791";
+//        int pay_type = 30;
+//        HPlugin.pay(activity, tokenId + "," + agentId + "," + agentBillId + "," + pay_type);
     }
 
     /**

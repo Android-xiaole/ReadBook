@@ -8,12 +8,8 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.behavior.BehaviorRepository;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
 import com.jj.comics.util.LoginHelper;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.Map;
 import java.util.UUID;

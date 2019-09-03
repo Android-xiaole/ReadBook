@@ -2,7 +2,6 @@ package com.jj.comics.ui.read;
 
 import android.util.Log;
 
-import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;

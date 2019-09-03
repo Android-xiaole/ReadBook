@@ -1,10 +1,8 @@
 package com.jj.comics.data.model;
 
-import com.jj.base.BaseApplication;
 import com.jj.base.mvp.IModel;
 import com.jj.base.net.NetError;
 import com.jj.base.utils.PackageUtil;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.util.RegularUtil;
 

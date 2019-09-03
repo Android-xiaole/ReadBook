@@ -2,7 +2,6 @@ package com.jj.comics.ui.detail.subdetail;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
-import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;

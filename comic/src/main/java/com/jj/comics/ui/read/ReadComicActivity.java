@@ -13,11 +13,9 @@ import android.view.View;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jj.base.BaseApplication;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.NetWorkUtil;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.UiUtil;
@@ -44,7 +42,6 @@ import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicFavorStatusEvent;
-import com.jj.comics.util.reporter.TaskReporter;
 import com.jj.comics.widget.comic.comicview.ComicView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -54,8 +51,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

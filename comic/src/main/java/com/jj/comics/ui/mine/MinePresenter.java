@@ -2,14 +2,11 @@ package com.jj.comics.ui.mine;
 
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
-import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
-import com.jj.base.net.ApiSubscriber;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.utils.FileUtil;
@@ -35,11 +32,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
 
