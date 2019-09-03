@@ -1,8 +1,7 @@
-package com.jj.maozhua.wxapi;
+package com.jj.novelpro.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseActivity;
@@ -15,7 +14,6 @@ import com.jj.comics.util.reporter.ActionReporter;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.modelpay.PayResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.umeng.analytics.MobclickAgent;

@@ -1,4 +1,4 @@
-package com.jj.maozhua.app;
+package com.jj.novelpro.app;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -21,7 +21,6 @@ import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.NetError;
 import com.jj.base.net.NetProvider;
 import com.jj.base.net.RequestHandler;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.base.utils.SharedPref;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.HttpUrlInterceptor;
@@ -30,7 +29,7 @@ import com.jj.comics.data.biz.pruduct.ProductRepository;
 import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusHelper;
-import com.jj.maozhua.R;
+import com.jj.novelpro.R;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;

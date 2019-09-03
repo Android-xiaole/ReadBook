@@ -1,4 +1,4 @@
-package com.jj.maozhua.present;
+package com.jj.novelpro.present;
 
 import com.jj.base.mvp.IView;
 

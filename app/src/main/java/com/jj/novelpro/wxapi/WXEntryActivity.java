@@ -1,4 +1,4 @@
-package com.jj.maozhua.wxapi;
+package com.jj.novelpro.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;

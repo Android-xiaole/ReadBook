@@ -1,4 +1,4 @@
-package com.jj.maozhua.activity;
+package com.jj.novelpro.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
@@ -25,10 +24,10 @@ import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
 import com.jj.comics.util.LoginHelper;
-import com.jj.maozhua.R;
-import com.jj.maozhua.R2;
-import com.jj.maozhua.present.MainContract;
-import com.jj.maozhua.present.MainPresenter;
+import com.jj.novelpro.R;
+import com.jj.novelpro.R2;
+import com.jj.novelpro.present.MainContract;
+import com.jj.novelpro.present.MainPresenter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.common.constants.RequestCode;

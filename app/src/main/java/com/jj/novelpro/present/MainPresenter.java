@@ -1,4 +1,4 @@
-package com.jj.maozhua.present;
+package com.jj.novelpro.present;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -32,8 +32,8 @@ import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.util.FRouterHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.TencentHelper;
-import com.jj.maozhua.R;
-import com.jj.maozhua.activity.MainActivity;
+import com.jj.novelpro.R;
+import com.jj.novelpro.activity.MainActivity;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.umeng.analytics.MobclickAgent;
 
@@ -52,7 +52,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
-import retrofit2.HttpException;
 
 public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IMainView> implements MainContract.IMainPresenter {
     private String fragmentPath[] = new String[]{RouterMap.COMIC_HOME_FRAGMENT,

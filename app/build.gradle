@@ -7,7 +7,7 @@ android {
     buildToolsVersion BUILDTOOLS_VERSION
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.jj.maozhua"
+        applicationId "com.jj.novelpro"
         minSdkVersion Integer.parseInt(MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(TARGET_SDK_VERSION)
         versionCode Integer.parseInt(VERSION_CODE)
@@ -48,17 +48,17 @@ android {
 
     signingConfigs {
         debug {
-            keyAlias 'maozhua'
-            keyPassword 'maozhua'
-            storeFile file('../maozhua.jks')
-            storePassword 'maozhua'
+            keyAlias 'novelpro'
+            keyPassword 'novelpro'
+            storeFile file('../novelpro.jks')
+            storePassword 'novelpro'
             v2SigningEnabled true
         }
         release {
-            keyAlias 'maozhua'
-            keyPassword 'maozhua'
-            storeFile file('../maozhua.jks')
-            storePassword 'maozhua'
+            keyAlias 'novelpro'
+            keyPassword 'novelpro'
+            storeFile file('../novelpro.jks')
+            storePassword 'novelpro'
             v2SigningEnabled true
         }
     }

@@ -1,4 +1,4 @@
-package com.jj.maozhua.activity;
+package com.jj.novelpro.activity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,13 +14,12 @@ import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.DialogUtil;
 import com.jj.base.utils.PackageUtil;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.maozhua.R;
-import com.jj.maozhua.R2;
-import com.jj.maozhua.present.SplashContract;
-import com.jj.maozhua.present.SplashPresenter;
+import com.jj.novelpro.R;
+import com.jj.novelpro.R2;
+import com.jj.novelpro.present.SplashContract;
+import com.jj.novelpro.present.SplashPresenter;
 import com.jj.comics.adapter.ImagePagerAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.youth.banner.listener.OnBannerListener;
