@@ -9,22 +9,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jj.base.BaseApplication;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.NetWorkUtil;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.UiUtil;
 import com.jj.base.utils.Utils;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
@@ -43,19 +42,15 @@ import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.RewardDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicFavorStatusEvent;
-import com.jj.comics.util.reporter.TaskReporter;
 import com.jj.comics.widget.bookreadview.PageLoader;
 import com.jj.comics.widget.bookreadview.PageView;
 import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.bean.BookChapterBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
-import com.jj.comics.widget.bookreadview.utils.BookRepository;
-import com.jj.comics.widget.comic.comicview.ComicView;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -65,19 +60,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import anet.channel.util.StringUtils;
 import butterknife.BindView;
+
+import static android.view.View.GONE;
 
 @Route(path = RouterMap.COMIC_READ_COMIC_ACTIVITY)
 public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implements ReadComicContract.IReadComicView, DialogInterface.OnDismissListener, DialogUtilForComic.OnDialogClick {
@@ -85,9 +78,15 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @BindView(R2.id.mPageView)
     PageView mPageView;//加载阅读文字的view
     @BindView(R2.id.drawerLayout)
-    DrawerLayout drawerLayout;//侧滑菜单根布局
+    DrawerLayout mCatalogMenu;//侧滑菜单根布局
     @BindView(R2.id.rv_catalogList)
     RecyclerView rv_catalogList;//章节列表
+    @BindView(R2.id.lin_topMenu)
+    LinearLayout mTopMenu;//上面的菜单
+    @BindView(R2.id.lin_bottomMenu)
+    LinearLayout mBottomMenu;//下面的菜单
+    @BindView(R2.id.lin_catalogBtn)
+    LinearLayout mCatalogBtn;//切换目录的菜单
 
     private ReadComicCatalogAdapter catalogAdapter;//章节列表的adapter
 
@@ -105,9 +104,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private long mTotalLeaveTime = 0;//总共停留时间
     private long mTimeRecord = 0;//用户可见记录时间
     private int currenPage = 1;//记录目录列表分页码
-    private boolean isCollect,isFavor;
+    private boolean isCollect, isFavor;
 
     private PageLoader mPageLoader;//页面加载器，用来设置数据，监听各种点击事件
+    private Animation mTopInAnim;
+    private Animation mTopOutAnim;
+    private Animation mBottomInAnim;
+    private Animation mBottomOutAnim;
 
     public boolean isCollect() {
         return isCollect;
@@ -118,7 +121,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     @SuppressLint("WrongConstant")
-    public static void toRead(Activity activity, BookModel bookModel,BookCatalogModel catalogModel) {
+    public static void toRead(Activity activity, BookModel bookModel, BookCatalogModel catalogModel) {
         ARouter.getInstance().build(RouterMap.COMIC_READ_COMIC_ACTIVITY)
                 .withSerializable(Constants.IntentKey.BOOK_MODEL, bookModel)
                 .withSerializable(Constants.IntentKey.BOOK_CATALOG_MODEL, catalogModel)
@@ -196,8 +199,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 //            @Override
 //            public void onCatalogClick() {
 ////                onShowCatalogList();
-//                if (!drawerLayout.isDrawerOpen(GravityCompat.START))
-//                    drawerLayout.openDrawer(GravityCompat.START);
+//                if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
+//                    mCatalogMenu.openDrawer(GravityCompat.START);
 //            }
 //
 //            @Override
@@ -258,7 +261,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         }
         //获取页面加载器
         CollBookBean collBookBean = new CollBookBean();
-        collBookBean.set_id(bookModel.getId()+"");
+        collBookBean.set_id(bookModel.getId() + "");
         collBookBean.setTitle(bookModel.getTitle());
         mPageLoader = mPageView.getPageLoader(collBookBean);
 
@@ -269,8 +272,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 //        //加载当前章节
 //        getP().loadData(bookModel,catalogModel.getId());
         //加载章节目录列表
-        getP().getCatalogList(bookModel.getId(),currenPage);
-        if (LoginHelper.getOnLineUser() != null){
+        getP().getCatalogList(bookModel.getId(), currenPage);
+        if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
             //获取内容点赞状态
@@ -281,7 +284,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     /**
      * 初始化各个控件的监听器
      */
-    private void initClickListener(){
+    private void initClickListener() {
         //侧滑目录控件的item点击事件
         catalogAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -289,7 +292,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 BookCatalogModel catalogModel = catalogAdapter.getData().get(position);
                 ReadComicActivity.this.catalogModel = catalogModel;
                 Utils.fixNotch(ReadComicActivity.this);
-                drawerLayout.closeDrawers();
+                mCatalogMenu.closeDrawers();
                 catalogAdapter.notifyItem(catalogModel.getId());
                 mPageLoader.skipToChapter(position);
             }
@@ -299,12 +302,12 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             @Override
             public void onLoadMoreRequested() {
                 currenPage++;
-                getP().getCatalogList(bookModel.getId(),currenPage);
+                getP().getCatalogList(bookModel.getId(), currenPage);
             }
-        },rv_catalogList);
+        }, rv_catalogList);
 
         //侧滑目录控件的滑动状态监听
-        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+        mCatalogMenu.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
 
@@ -312,7 +315,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-
+                hideAllMenu();
             }
 
             @Override
@@ -338,7 +341,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 /*
                    这里返回需要加载的章节，有些是需要预加载的
                  */
-                getP().loadData(bookModel,requestChapters);
+                getP().loadData(bookModel, requestChapters);
             }
 
             @Override
@@ -365,7 +368,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void center() {
-
+                toggleMenuStatus();
             }
 
             @Override
@@ -383,6 +386,52 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             }
         });
+        mCatalogBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
+                    mCatalogMenu.openDrawer(GravityCompat.START);
+            }
+        });
+    }
+
+    /**
+     * 切换菜单的显示状态，如果显示就隐藏，如果隐藏就显示
+     */
+    private void toggleMenuStatus() {
+        //初始化菜单动画
+        if (mTopInAnim == null) {
+            mTopInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_in);
+            mTopOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_top_out);
+            mBottomInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_in);
+            mBottomOutAnim = AnimationUtils.loadAnimation(this, R.anim.slide_bottom_out);
+            //退出的速度要快
+            mTopOutAnim.setDuration(200);
+            mBottomOutAnim.setDuration(200);
+        }
+        if (mTopMenu.getVisibility() == View.GONE) {
+            mTopMenu.setVisibility(View.VISIBLE);
+            mBottomMenu.setVisibility(View.VISIBLE);
+            mTopMenu.startAnimation(mTopInAnim);
+            mBottomMenu.startAnimation(mBottomInAnim);
+        } else {
+            mTopMenu.startAnimation(mTopOutAnim);
+            mBottomMenu.startAnimation(mBottomOutAnim);
+            mTopMenu.setVisibility(GONE);
+            mBottomMenu.setVisibility(GONE);
+        }
+    }
+
+    /**
+     * 隐藏上下菜单
+     */
+    private void hideAllMenu(){
+        if (mTopMenu.getVisibility() == View.VISIBLE) {
+            mTopMenu.startAnimation(mTopOutAnim);
+            mBottomMenu.startAnimation(mBottomOutAnim);
+            mTopMenu.setVisibility(GONE);
+            mBottomMenu.setVisibility(GONE);
+        }
     }
 
     // 接收电池信息和时间更新的广播
@@ -402,14 +451,14 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
 
     @Override
-    public void onAddOrRemoveShelfSuccess(boolean collectByCurrUser,boolean needFinish) {
+    public void onAddOrRemoveShelfSuccess(boolean collectByCurrUser, boolean needFinish) {
         isCollect = collectByCurrUser;
 //        //切换底部view收藏状态显示
 //        mComicView.mBottomBar.dealCollection(collectByCurrUser);
 //        //刷新item上的收藏显示
 //        mComicView.refreshComicDetail();
         EventBusManager.sendComicCollectionStatus(new RefreshComicCollectionStatusEvent(collectByCurrUser));
-        if (needFinish)finish();
+        if (needFinish) finish();
     }
 
     @Override
@@ -484,26 +533,26 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         List<BookChapterBean> catalogList = new ArrayList<>();
         for (BookCatalogModel model : catalogModels) {
             //刷新历史记录的章节列表到指定章节位置
-            if (catalogModel.getId() == model.getId()){
+            if (catalogModel.getId() == model.getId()) {
                 int currentChapterPos = catalogModels.indexOf(model);
                 mPageLoader.skipToChapter(currentChapterPos);
                 catalogAdapter.notifyItem(catalogModel.getId());
             }
             BookChapterBean bookChapterBean = new BookChapterBean();
-            bookChapterBean.setId(model.getId()+"");
-            bookChapterBean.setTitle(model.getChapterorder()+"");
+            bookChapterBean.setId(model.getId() + "");
+            bookChapterBean.setTitle(model.getChapterorder() + "");
             catalogList.add(bookChapterBean);
         }
-        if (currenPage == 1){
+        if (currenPage == 1) {
             mPageLoader.getCollBook().setBookChapters(catalogList);
             catalogAdapter.setNewData(catalogModels);
-        }else{
+        } else {
             mPageLoader.getCollBook().addBookChapters(catalogList);
             catalogAdapter.addData(catalogModels);
         }
-        if (catalogModels.size() != 0){
+        if (catalogModels.size() != 0) {
             catalogAdapter.loadMoreComplete();
-        }else{
+        } else {
             catalogAdapter.loadMoreEnd(true);
         }
         mPageLoader.refreshChapterList();
@@ -512,7 +561,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @Override
     public void onGetCatalogListFail() {
         catalogAdapter.loadMoreFail();
-        if (currenPage>=1){
+        if (currenPage >= 1) {
             currenPage--;
         }
     }
@@ -528,7 +577,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
 //    @SuppressLint("WrongConstant")
 //    private void onShowCatalogList() {
-//        if (!drawerLayout.isDrawerOpen(Gravity.START)) drawerLayout.openDrawer(Gravity.START);
+//        if (!mCatalogMenu.isDrawerOpen(Gravity.START)) mCatalogMenu.openDrawer(Gravity.START);
 //    }
 
     //打赏成功调用
@@ -546,7 +595,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(this);
             return;
         }
-        getP().addOrRemoveShelf(bookModel,isCollect,true);
+        getP().addOrRemoveShelf(bookModel, isCollect, true);
         if (bookModel != null)
             MobclickAgent.onEvent(this, Constants.UMEventId.COLLECT_READ_POP, bookModel.getId() + " : " + bookModel.getTitle());
     }
@@ -621,8 +670,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-            drawerLayout.closeDrawer(Gravity.START);
+        if (mCatalogMenu.isDrawerOpen(Gravity.START)) {
+            mCatalogMenu.closeDrawer(Gravity.START);
         } else if (!isCollect) {
             if (mShowCollectDialog) {
                 if (comicCollectionDialog == null)
@@ -652,8 +701,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 //        if (mComicView != null) mComicView.release();
         super.onDestroy();
         //上传阅读记录
-        if (bookModel!=null&&catalogModel!=null){
-            getP().uploadReadRecord(bookModel, catalogModel.getId(),catalogModel.getChapterorder());
+        if (bookModel != null && catalogModel != null) {
+            getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder());
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.annotation.ColorRes;
  */
 
 public enum PageStyle {
+    BG_DEFAULT(R.color.nb_read_font_0, R.color.nb_read_bg_0),
     BG_0(R.color.nb_read_font_1, R.color.nb_read_bg_1),
     BG_1(R.color.nb_read_font_2, R.color.nb_read_bg_2),
     BG_2(R.color.nb_read_font_3, R.color.nb_read_bg_3),

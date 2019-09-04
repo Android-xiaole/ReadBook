@@ -5,11 +5,169 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jj.comics.widget.bookreadview.PageView
-        android:id="@+id/mPageView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="gone"/>
+        android:layout_height="match_parent">
+
+        <com.jj.comics.widget.bookreadview.PageView
+            android:id="@+id/mPageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/lin_topMenu"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_64"
+            android:paddingTop="@dimen/dp_32"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:background="@color/comic_ffffff"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_read_return"
+                android:layout_marginLeft="10dp"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_read_buy"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_20"
+                android:src="@drawable/icon_read_collect"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_10"
+                android:src="@drawable/icon_read_share"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lin_bottomMenu"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_49"
+            android:layout_gravity="bottom"
+            android:background="@color/comic_ffffff">
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_read_money"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/comic_a8adb3"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="赚"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_catalogBtn"
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_read_catalog"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/comic_a8adb3"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="目录"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_read_text_setting"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/comic_a8adb3"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="字体"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_read_eye"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/comic_a8adb3"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="护眼"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0px"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_read_night"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/comic_a8adb3"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:text="夜间"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_catalogList"

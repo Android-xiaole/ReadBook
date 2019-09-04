@@ -61,6 +61,7 @@
     <color name="comic_aeaeae">#aeaeae</color>
     <color name="comic_44b549">#44b549</color>
     <color name="comic_8a8a8a">#8a8a8a</color>
+    <color name="comic_a8adb3">#A8ADB3</color>
     <color name="comic_383838">#383838</color>
     <color name="comic_fe4d5a">#fe4d5a</color>
     <color name="comic_fecc34">#fecc34</color>
@@ -121,6 +122,7 @@
 
 
     <!--read-->
+    <color name="nb.read.bg_0">#F4F6F9</color>
     <color name="nb.read.bg_1">#CEC29C</color>
     <color name="nb.read.bg_2">#CCEBCC</color>
     <color name="nb.read.bg_3">#AAAAAA</color>
@@ -128,6 +130,7 @@
     <color name="nb.read.bg_5">#001C27</color>
     <color name="nb.read.bg_6">#DDCEC29C</color>
 
+    <color name="nb.read.font_0">#353A40</color>
     <color name="nb.read.font_1">#2C2C2C</color>
     <color name="nb.read.font_2">#2F332D</color>
     <color name="nb.read.font_3">#92918C</color>
