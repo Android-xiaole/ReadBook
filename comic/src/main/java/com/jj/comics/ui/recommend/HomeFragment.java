@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jj.base.mvp.BasePresenter;
@@ -40,15 +42,15 @@ public class HomeFragment extends BaseCommonFragment implements HomeContract.IHo
     @Override
     public void initData(Bundle savedInstanceState) {
         //设置toolbar距离上端的高度
-        int statusBarHeight = ScreenUtils.getStatusBarHeight();
+//        int statusBarHeight = ScreenUtils.getStatusBarHeight();
 
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fl_toolBar.getLayoutParams();
-        lp.topMargin = statusBarHeight;
-        fl_toolBar.setLayoutParams(lp);
+//        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fl_toolBar.getLayoutParams();
+//        lp.topMargin = statusBarHeight;
+//        fl_toolBar.setLayoutParams(lp);
 
         mFRouterHelper = new FRouterHelper(fragmentPath, new LoginInterceptor());
         switchFragment(savedInstanceState == null ? 0 : savedInstanceState.getInt("index", 0));
-        home_share.setSelected(true);
+//        home_share.setSelected(true);
     }
 
     @Override

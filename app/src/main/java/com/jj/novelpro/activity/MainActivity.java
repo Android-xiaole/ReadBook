@@ -183,7 +183,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     private void updateStatusBar(int index) {
         switch (index) {
             case 0:
-//                ImmersionBar.with(MainActivity.this).init();
+                ImmersionBar.with(MainActivity.this)
+                        .reset()
+                        .statusBarDarkFont(true, 0.2f)
+                        .statusBarColor(R.color.base_color_ffffff)
+                        .init();
                 break;
             case 1:
                 ImmersionBar.with(MainActivity.this)

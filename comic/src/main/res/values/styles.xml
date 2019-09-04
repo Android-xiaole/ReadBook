@@ -4,7 +4,7 @@
     <style name="comic_style_app_bar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/dp_48</item>
-        <item name="android:background">@color/comic_yellow_ffd850</item>
+        <item name="android:background">@color/comic_ffffff</item>
     </style>
 
     <style name="comic_style_home_size">

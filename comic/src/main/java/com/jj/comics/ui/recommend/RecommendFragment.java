@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -26,6 +27,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.android.material.appbar.AppBarLayout;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.net.NetError;
@@ -64,12 +66,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.autosize.utils.ScreenUtils;
 
 @Route(path = RouterMap.COMIC_RECOMMEND_FRAGMENT)
 public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> implements RecommendContract.IRecommendView, SwipeRefreshLayout.OnRefreshListener,
@@ -80,6 +84,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     RecyclerView rv_recently;//加载底部的最近更新,这是主recyclerview
     @BindView(R2.id.recommend_float_btn)
     ImageView mToTop;
+    @BindView(R2.id.recommend_bar)
+    RelativeLayout mAppBarLayout;
 
     private RecentlyAdapter adapter_recently;//最近更新adapter
     private RecyclerView rv_content;//头部内容加载recyclerview
@@ -90,6 +96,15 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void initData(Bundle savedInstanceState) {
+
+        int statusBarHeight = ScreenUtils.getStatusBarHeight();
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) mAppBarLayout.getLayoutParams();
+        lp.topMargin = statusBarHeight;
+        mAppBarLayout.setLayoutParams(lp);
+
+        Fragment parentFragment = getParentFragment();
+        ((HomeFragment) parentFragment).setToolBarBgAlpha(1);
+
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
         mRefresh.setOnRefreshListener(this);
 
@@ -116,20 +131,20 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 //                LogUtil.e("Y轴移动距离："+dy);
-                moveY = moveY + dy;
-                float imageHei = Utils.dip2px(getActivity(), 290);
-                Fragment parentFragment = getParentFragment();
-                if (parentFragment instanceof HomeFragment) {
-                    if (moveY >= imageHei) {
-                        ((HomeFragment) parentFragment).setToolBarBgAlpha(1);
-                    } else {
-                        ((HomeFragment) parentFragment).setToolBarBgAlpha(moveY / imageHei);
-                    }
-                }
+//                moveY = moveY + dy;
+//                float imageHei = Utils.dip2px(getActivity(), 290);
+//                Fragment parentFragment = getParentFragment();
+//                if (parentFragment instanceof HomeFragment) {
+//                    if (moveY >= imageHei) {
+//                        ((HomeFragment) parentFragment).setToolBarBgAlpha(1);
+//                    } else {
+//                        ((HomeFragment) parentFragment).setToolBarBgAlpha(moveY / imageHei);
+//                    }
+//                }
             }
         });
         adapter_recently.addHeaderView(getBannerHeadView());
-        adapter_recently.addHeaderView(getHeaderViewBtns());
+//        adapter_recently.addHeaderView(getHeaderViewBtns());
         adapter_recently.addHeaderView(getContentHeadView());
         adapter_recently.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -268,18 +283,18 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-            //当前页面可见的时候需要重新设置状态栏属性
-            Fragment parentFragment = getParentFragment();
-            if (parentFragment instanceof HomeFragment) {
-                float imageHei = Utils.dip2px(getActivity(), 290);
-                if (moveY >= imageHei) {
-                    ((HomeFragment) parentFragment).setToolBarBgAlpha(1);
-                } else {
-                    ((HomeFragment) parentFragment).setToolBarBgAlpha(moveY / imageHei);
-                }
-            }
-        }
+//        if (!hidden) {
+//            //当前页面可见的时候需要重新设置状态栏属性
+//            Fragment parentFragment = getParentFragment();
+//            if (parentFragment instanceof HomeFragment) {
+//                float imageHei = Utils.dip2px(getActivity(), 290);
+//                if (moveY >= imageHei) {
+//                    ((HomeFragment) parentFragment).setToolBarBgAlpha(1);
+//                } else {
+//                    ((HomeFragment) parentFragment).setToolBarBgAlpha(moveY / imageHei);
+//                }
+//            }
+//        }
     }
 
     /**
