@@ -57,10 +57,10 @@
                 android:id="@+id/recommend_search"
                 android:layout_width="@dimen/dp_20"
                 android:layout_height="@dimen/dp_20"
-                android:layout_marginRight="@dimen/dp_16"
                 android:layout_alignParentRight="true"
-                android:scaleType="fitXY"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_16"
+                android:scaleType="fitXY"
                 android:src="@drawable/btn_home_search" />
 
         </RelativeLayout>
