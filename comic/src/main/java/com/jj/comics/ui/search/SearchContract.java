@@ -3,6 +3,7 @@ package com.jj.comics.ui.search;
 import com.jj.base.mvp.IView;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
+import com.jj.comics.data.model.SearchModel;
 
 import java.util.List;
 
@@ -13,20 +14,19 @@ public interface SearchContract {
         //填充热门搜索的数据
         void fillHotSearchKeywords(SearchHotKeywordsResponse response);
 
-        //填充大家都在看的数据
-        void fillWatchingComicData(List<BookModel> contentList);
-
         void onComplete();
 
+        //搜索历史
+        void fillKeyData(List<SearchModel> searchModels);
     }
 
     interface ISearchPresenter {
+        void loadRecentData();
 
         //获取热门搜索的数据
         void getHotSearchKeywords();
 
-        //获取大家都在看的数据
-        void getWatchingComicData();
-
+        //插入搜索记录
+        void dealKey(SearchModel model);
     }
 }

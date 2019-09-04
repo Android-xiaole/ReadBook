@@ -236,8 +236,9 @@
     <string name="comic_go_reward">去打赏</string>
     <string name="comic_guess_like">猜你喜欢</string>
     <string name="comic_rich_list">土豪榜</string>
-    <string name="comic_search_comic_hint">搜索漫画名、作者</string>
+    <string name="comic_search_comic_hint">请输入书名/作者名</string>
     <string name="comic_hot_search_text">热门搜索</string>
+    <string name="comic_hot_search_history">搜索历史</string>
     <string name="comic_report_comment">发表评论</string>
     <string name="comic_say_something_no_limit">说点什么</string>
     <string name="comic_send_text">发表</string>

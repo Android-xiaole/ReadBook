@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,13 +14,15 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.SearchRecentAdapter;
 import com.jj.comics.adapter.mine.CommonRecommendAdapter;
+import com.jj.comics.adapter.mine.RecentAdapter;
+import com.jj.comics.adapter.mine.SearchRecentAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
@@ -27,6 +30,9 @@ import com.jj.comics.data.model.SearchModel;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.library.flowlayout.FlowLayoutManager;
 import com.library.flowlayout.SpaceItemDecoration;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -40,32 +46,22 @@ import me.jessyan.autosize.utils.ScreenUtils;
 /**
  * 发现搜索页面
  */
-@Route(path = RouterMap.COMIC_SEARCH_FRAGMENT)
-public class SearchFragment extends BaseFragment<SearchPresenter> implements SearchContract.ISearchView {
+@Route(path = RouterMap.COMIC_SEARCH_ACTIVITY)
+public class SearchActivity extends BaseActivity<SearchPresenter> implements SearchContract.ISearchView {
 
-    @BindView(R2.id.lin_root)
-    LinearLayout lin_root;//根布局，调整距离上端的距离
     @BindView(R2.id.search_edit)
     EditText et_search;//搜索输入框
-    @BindView(R2.id.iv_search)
-    ImageView iv_search;//搜索图标
     @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R2.id.search_recycler)
     RecyclerView mRecycler;//主recyclerview，加载大家都在看的列表
-
+    private RecyclerView mRecentRecycler;
+    private RecentAdapter mRecentAdapter;
     RecyclerView mHotRecycler;//热门搜索的recyclerview
-
-    private CommonRecommendAdapter mAapter;//主adapter,加载大家都在看的数据
     private SearchRecentAdapter mHotAdapter;//热门搜索adapter
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        //设置toolbar距离上端的高度
-        int statusBarHeight = ScreenUtils.getStatusBarHeight();
-        CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) lin_root.getLayoutParams();
-        lp.topMargin = statusBarHeight;
-        lin_root.setLayoutParams(lp);
 
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
 
@@ -80,22 +76,12 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
                     if (TextUtils.isEmpty(key)) {
                         showToastShort(getString(R.string.comic_search_remind));
                     } else
-                        ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, key).navigation(getActivity());
+                        ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, key).navigation(SearchActivity.this);
                 }
                 return false;
             }
         });
-        //点击搜索图标的点击事件
-        iv_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String key = et_search.getText().toString().trim();
-                if (TextUtils.isEmpty(key)) {
-                    showToastShort(getString(R.string.comic_search_remind));
-                } else
-                    ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, key).navigation(getActivity());
-            }
-        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -103,25 +89,28 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
             }
         });
 
-        mRecycler.setLayoutManager(new GridLayoutManager(getContext(),3));
-        mAapter = new CommonRecommendAdapter(R.layout.comic_item_search_watchingcomicdata);
-        mAapter.addHeaderView(getHeadView());
-        mAapter.bindToRecyclerView(mRecycler,true);
-        mAapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mRecycler.setHasFixedSize(true);
+        mHotAdapter = new SearchRecentAdapter(R.layout.comic_item_search_recent);
+        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+        mRecycler.addItemDecoration(new SpaceItemDecoration(Utils.dip2px(SearchActivity.this, 5)));
+        mRecycler.setLayoutManager(flowLayoutManager);
+        mHotAdapter.addHeaderView(getRecentRecycler());
+        mHotAdapter.bindToRecyclerView(mRecycler);
+        mHotAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DetailActivityHelper.toDetail(getActivity(), mAapter.getData().get(position).getId()+"",
-                        "大家都在看");
+                ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, mHotAdapter.getData().get(position).getKeyword()).navigation(SearchActivity.this);
             }
         });
 
         showProgress();
         getP().getHotSearchKeywords();
+        getP().loadRecentData();
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.comic_fragment_search;
+        return R.layout.comic_activity_search;
     }
 
     @Override
@@ -139,27 +128,58 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
      * @return
      */
     private View getHeadView(){
-        View headView = View.inflate(getActivity(),R.layout.comic_head_searchfragment,null);
+        View headView = View.inflate(SearchActivity.this,R.layout.comic_head_searchfragment,null);
         mHotRecycler = headView.findViewById(R.id.rv_searchKeywords);
         mHotRecycler.setHasFixedSize(true);
         mHotAdapter = new SearchRecentAdapter(R.layout.comic_item_search_recent);
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
-        mHotRecycler.addItemDecoration(new SpaceItemDecoration(Utils.dip2px(getContext(), 5)));
+        mHotRecycler.addItemDecoration(new SpaceItemDecoration(Utils.dip2px(SearchActivity.this, 5)));
         mHotRecycler.setLayoutManager(flowLayoutManager);
         mHotAdapter.bindToRecyclerView(mHotRecycler);
         mHotAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, mHotAdapter.getData().get(position).getKeyword()).navigation(getActivity());
+                ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, mHotAdapter.getData().get(position).getKeyword()).navigation(SearchActivity.this);
             }
         });
         return headView;
     }
 
+    private View getRecentRecycler() {
+        View view = getLayoutInflater().inflate(R.layout.comic_search_recent_head, (ViewGroup) mRecycler.getParent(), false);
+        mRecentRecycler = view.findViewById(R.id.search_recent_recycler);
+        mRecentRecycler.setHasFixedSize(true);
+        mRecentAdapter = new RecentAdapter(R.layout.comic_item_search_recent);
+        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+        mRecentRecycler.addItemDecoration(new SpaceItemDecoration(Utils.dip2px(this, 5)));
+        mRecentRecycler.setLayoutManager(flowLayoutManager);
+        mRecentAdapter.bindToRecyclerView(mRecentRecycler);
+        mRecentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String key = mRecentAdapter.getData().get(position).getKey();
+                if (TextUtils.isEmpty(key)) {
+                    showToastShort(getString(R.string.comic_search_remind));
+                    return;
+                }
+                ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, key).navigation();
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void fillKeyData(List<SearchModel> searchModels) {
+        mRecentAdapter.setNewData(searchModels);
+//        if (mHotRecycler == null) mHotAdapter.addHeaderView(getRecentRecycler(), 1);
+    }
+
+
     @Override
     public void fillHotSearchKeywords(SearchHotKeywordsResponse response) {
         mHotAdapter.setNewData(response.getData());
     }
+
     @Override
     public void onComplete() {
         hideProgress();
@@ -168,9 +188,20 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
         }
     }
 
-    @Override
-    public void fillKeyData(List<SearchModel> searchModels) {
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void dealKey(SearchModel model) {
+        getP().dealKey(model);
+        if (mRecentAdapter == null) return;
+        List<SearchModel> data = mRecentAdapter.getData();
+        if (data.contains(model)) {
+            mRecentAdapter.remove(data.indexOf(model));
+        }
+        mRecentAdapter.addData(0, model);
+        mRecentAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean useEventBus() {
+        return true;
+    }
 }
