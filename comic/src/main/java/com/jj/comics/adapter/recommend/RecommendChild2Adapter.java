@@ -72,18 +72,18 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                             imageUrl,
                             new RequestOptions().transforms(new CenterCrop()/*, new RoundedCorners(12)*/)
                                     .error(R.drawable.img_loading)
-                                    .transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(BaseApplication.getApplication(),5)))
+                                    .transforms(new CenterCrop())
                                     .placeholder(R.drawable.img_loading));
 
                 } else {
                     ILFactory.getLoader().loadResource(header.<ImageView>findViewById(R.id.item_recommend_img),
                             R.drawable.img_loading,
-                            new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(BaseApplication.getApplication(),5))));
+                            new RequestOptions().transforms(new CenterCrop()));
                 }
                 header.<TextView>findViewById(R.id.item_recommend_name).setText(mainContent.getTitle());
+                header.<TextView>findViewById(R.id.item_recommend_desc).setText(mainContent.getIntro());
                 //旧接口返回int数字的格式化代码
 //                header.<TextView>findViewById(R.id.comic_recommend_hot).setText(Utils.convertUnit(Integer.parseInt(mainContent.getHot_const())));
-                header.<TextView>findViewById(R.id.comic_recommend_hot).setText(mainContent.getHot_const());
             } else {
                 realData.add(contentListBean);
             }
@@ -97,22 +97,16 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
         if (!TextUtils.isEmpty(imageUrl)) {
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.item_recommend_img),
                     imageUrl,
-                    new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(BaseApplication.getApplication(),5)))
+                    new RequestOptions().transforms(new CenterCrop())
                             .error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
 
         } else {
             ILFactory.getLoader().loadResource(helper.<ImageView>getView(R.id.item_recommend_img),
                     R.drawable.img_loading,
-                    new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(BaseApplication.getApplication(),5))));
+                    new RequestOptions().transforms(new CenterCrop()));
         }
         helper.setText(R.id.item_recommend_name, mainContent.getTitle());
-        try {
-            helper.setText(R.id.item_recommend_des, Html.fromHtml(mainContent.getIntro().replace("%",
-                    "%%")));
-        }catch (Exception e){
-            helper.setText(R.id.item_recommend_des, mainContent.getIntro());
-        }
         if (helper.getLayoutPosition() == getData().size()){
             helper.getView(R.id.view_fgt).setVisibility(View.GONE);
         }else{

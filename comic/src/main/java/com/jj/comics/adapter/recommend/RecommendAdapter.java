@@ -90,7 +90,8 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
         }
 
         if (!TextUtils.equals(style, TYPE_1_3)&&recyclerView.getItemDecorationCount() <= 0) {
-            recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.HORIZONTAL, Utils.dip2px(mContext, 6), Color.WHITE));
+            recyclerView.addItemDecoration(new RecycleViewDivider(mContext,
+                    LinearLayoutManager.HORIZONTAL, Utils.dip2px(mContext, 10), Color.WHITE));
             recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, Utils.dip2px(mContext, 10), Color.WHITE));
         }
 
