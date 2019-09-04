@@ -437,9 +437,13 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             mRefresh.setRefreshing(false);
     }
 
-    @OnClick(R2.id.recommend_float_btn)
+    @OnClick({R2.id.recommend_float_btn,R2.id.recommend_search})
     void onClick(View view) {
-        rv_recently.smoothScrollToPosition(0);
+        if (view.getId() == R.id.recommend_float_btn) {
+            rv_recently.smoothScrollToPosition(0);
+        }else if (view.getId()  == R.id.recommend_search) {
+            ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
+        }
     }
 
     @Override
