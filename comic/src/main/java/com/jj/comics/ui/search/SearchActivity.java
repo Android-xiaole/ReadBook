@@ -57,7 +57,6 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     RecyclerView mRecycler;//主recyclerview，加载大家都在看的列表
     private RecyclerView mRecentRecycler;
     private RecentAdapter mRecentAdapter;
-    RecyclerView mHotRecycler;//热门搜索的recyclerview
     private SearchRecentAdapter mHotAdapter;//热门搜索adapter
 
     @Override
@@ -116,33 +115,6 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public SearchPresenter setPresenter() {
         return new SearchPresenter();
-    }
-
-//    @Override
-//    public boolean useEventBus() {
-//        return true;
-//    }
-
-    /**
-     * 获取头布局，包含热门搜索关键词列表
-     * @return
-     */
-    private View getHeadView(){
-        View headView = View.inflate(SearchActivity.this,R.layout.comic_head_searchfragment,null);
-        mHotRecycler = headView.findViewById(R.id.rv_searchKeywords);
-        mHotRecycler.setHasFixedSize(true);
-        mHotAdapter = new SearchRecentAdapter(R.layout.comic_item_search_recent);
-        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
-        mHotRecycler.addItemDecoration(new SpaceItemDecoration(Utils.dip2px(SearchActivity.this, 5)));
-        mHotRecycler.setLayoutManager(flowLayoutManager);
-        mHotAdapter.bindToRecyclerView(mHotRecycler);
-        mHotAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ARouter.getInstance().build(RouterMap.COMIC_SEARCH_RESULT_ACTIVITY).withString(Constants.IntentKey.KEY, mHotAdapter.getData().get(position).getKeyword()).navigation(SearchActivity.this);
-            }
-        });
-        return headView;
     }
 
     private View getRecentRecycler() {
