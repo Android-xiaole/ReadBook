@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jj.comics.greendao.gen.DaoMaster;
+import com.jj.comics.greendao.gen.UserInfoDao;
 
 import org.greenrobot.greendao.database.Database;
 

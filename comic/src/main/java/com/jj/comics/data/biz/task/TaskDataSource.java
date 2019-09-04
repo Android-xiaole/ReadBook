@@ -3,9 +3,14 @@ package com.jj.comics.data.biz.task;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.SignAutoResponse;
+import com.jj.comics.data.model.SignInDayModel;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
+import com.jj.comics.data.model.TaskGroups;
+import com.jj.comics.data.model.Tasks;
+import com.jj.comics.data.model.UserInfo;
 
+import io.reactivex.Observable;
 import io.reactivex.Observable;
 
 public interface TaskDataSource {

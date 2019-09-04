@@ -1,10 +1,13 @@
 package com.jj.comics.ui.detail.comment;
 
+import com.jj.base.BaseApplication;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
+import com.jj.base.net.ApiSubscriber;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.utils.toast.ToastUtil;
+import com.jj.comics.R;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.CommentListResponse;

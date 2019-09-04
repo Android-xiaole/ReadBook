@@ -20,6 +20,7 @@ import com.jj.comics.data.model.UserCommentFavorData;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.dialog.CommentSendDialog;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.eventbus.EventBusManager;
 
 import java.util.List;
 

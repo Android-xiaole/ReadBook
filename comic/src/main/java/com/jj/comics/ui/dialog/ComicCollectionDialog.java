@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jj.base.dialog.BaseFragmentDialog;
+import com.jj.base.utils.Utils;
 import com.jj.comics.R;
+import com.jj.comics.ui.read.ReadComicActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

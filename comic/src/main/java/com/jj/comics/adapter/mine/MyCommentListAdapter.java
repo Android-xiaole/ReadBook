@@ -1,9 +1,16 @@
 package com.jj.comics.adapter.mine;
 
+import android.text.TextUtils;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.comics.R;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.CommentListResponse;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 漫画详情里面的评论列表

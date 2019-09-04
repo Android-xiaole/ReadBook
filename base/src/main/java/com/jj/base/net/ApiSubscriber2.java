@@ -59,11 +59,11 @@ public abstract class ApiSubscriber2<T> extends ResourceObserver<T> {
         onEnd();
     }
 
+    //网络请求失败回调
+    protected abstract void onFail(NetError error);
+
     @Override
     public void onComplete() {
         onEnd();
     }
-
-    //网络请求失败回调
-    protected abstract void onFail(NetError error);
 }

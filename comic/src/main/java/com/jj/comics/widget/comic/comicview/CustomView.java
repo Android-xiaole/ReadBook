@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.jj.base.mvp.BasePresenter;
+import com.jj.base.mvp.IView;
 import com.jj.base.ui.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;

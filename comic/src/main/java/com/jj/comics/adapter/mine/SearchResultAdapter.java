@@ -1,5 +1,7 @@
 package com.jj.comics.adapter.mine;
 
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -8,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
+import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.data.model.BookModel;
 

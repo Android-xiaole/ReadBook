@@ -1,14 +1,22 @@
 package com.jj.comics.adapter.mine;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.SignTaskResponse;
+import com.jj.comics.data.model.TaskGroup;
+import com.jj.comics.data.model.TaskModel;
+import com.jj.comics.ui.welfare.WelfareActivity;
 
 import java.util.List;
 

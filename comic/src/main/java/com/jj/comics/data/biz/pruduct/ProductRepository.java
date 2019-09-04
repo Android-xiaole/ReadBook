@@ -1,7 +1,9 @@
 package com.jj.comics.data.biz.pruduct;
 
+import com.jj.base.BaseApplication;
 import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.RetryFunction2;
+import com.jj.base.utils.ResourceUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;

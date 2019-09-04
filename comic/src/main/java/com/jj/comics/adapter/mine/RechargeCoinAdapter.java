@@ -12,17 +12,23 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.CommonUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.ProductPayTypeEnum;
+import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.util.reporter.ActionReporter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Collection;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

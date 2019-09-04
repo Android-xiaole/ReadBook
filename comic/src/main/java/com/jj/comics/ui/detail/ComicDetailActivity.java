@@ -22,9 +22,11 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
+import com.jj.base.utils.ResourceUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.Utils;
@@ -58,6 +60,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;

@@ -25,6 +25,10 @@ import io.reactivex.FlowableTransformer;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.SingleSource;
+import io.reactivex.SingleTransformer;
 import io.reactivex.functions.Function;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
@@ -281,6 +285,27 @@ public class ComicApiImpl {
                             return Observable.error(model.error());
                         } else {
                             return Observable.just(model);
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    public static <T extends IModel> SingleTransformer<T, T> getSingleApiTransformer() {
+
+        return new SingleTransformer<T, T>() {
+            @Override
+            public SingleSource<T> apply(Single<T> upstream) {
+                return upstream.flatMap(new Function<T, SingleSource<? extends T>>() {
+                    @Override
+                    public SingleSource<? extends T> apply(T model) throws Exception {
+                        if (model == null) {
+                            return Single.error(NetError.noDataError());
+                        } else if (model.error() != null) {
+                            return Single.error(model.error());
+                        } else {
+                            return Single.just(model);
                         }
                     }
                 });

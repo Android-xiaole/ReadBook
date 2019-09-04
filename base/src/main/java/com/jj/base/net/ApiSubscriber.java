@@ -17,6 +17,12 @@ import io.reactivex.subscribers.ResourceSubscriber;
 
 public abstract class ApiSubscriber<T> extends ResourceSubscriber<T> {
 
+    /*
+        网络请求结束的回调（不管成功还是失败都会回调，这里一般可以去做progress dismiss的操作）
+        这和onComplete不同，onComplete只会在onNext走完之后回调,该方法不需要可以不调用
+     */
+    protected void onEnd(){}
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -29,6 +35,7 @@ public abstract class ApiSubscriber<T> extends ResourceSubscriber<T> {
                     dispose();
                 }
                 onFail(NetError.noConnectError("netWork type :" + networkType.name()));
+                onEnd();
                 break;
             default:
                 break;
@@ -54,7 +61,7 @@ public abstract class ApiSubscriber<T> extends ResourceSubscriber<T> {
             }
             onFail(error);
         }
-
+        onEnd();
     }
 
     protected abstract void onFail(NetError error);

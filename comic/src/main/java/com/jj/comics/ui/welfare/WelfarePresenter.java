@@ -9,10 +9,14 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.data.biz.task.TaskRepository;
+import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.model.UserInfoResponse;
+import com.jj.comics.util.LoginHelper;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

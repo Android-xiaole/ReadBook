@@ -2,13 +2,16 @@ package com.jj.comics.ui.read;
 
 import android.util.Log;
 
+import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
+import com.jj.base.net.ApiSubscriber;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
@@ -22,21 +25,30 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
+import com.jj.comics.widget.bookreadview.TxtChapter;
+import com.jj.comics.widget.bookreadview.utils.BookRepository;
 
+import org.reactivestreams.Publisher;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 
 public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicContract.IReadComicView> implements ReadComicContract.IReadComicPresenter {
     private ApiSubscriber2<BookCatalogModel> subscriber;
     private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
 
-    @Override
-    public void loadData(BookModel bookModel, long chapterid) {
+    public void loadData(BookModel bookModel, List<TxtChapter> requestChapters) {
         getV().showProgress();
         /*
         这里加载的内容时候需要取消上一个subscriber事件，保证一时间只有一个章节内容加载
@@ -64,11 +76,52 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 getV().onLoadDataEnd();
             }
         };
+        List<Observable<BookCatalogModel>> requests = new ArrayList<>();
+        for (TxtChapter requestChapter : requestChapters) {
+            requests.add(ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId())));
+        }
+        Observable.concat(requests)
         //订阅漫画封装类
-        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, chapterid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogModel>bindLifecycle())
                 .subscribe(subscriber);
+    }
+
+    public void downloadFile(BookCatalogModel catalogModel){
+        ComicApi.getApi().downloadFile(catalogModel.getUrl()+Constants.IDENTIFICATION_IGNORE)
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<ResponseBody, Publisher<File>>() {
+                    @Override
+                    public Publisher<File> apply(ResponseBody responseBody) throws Exception {
+                        try {
+                            File file = BookRepository.getInstance().saveChapterFile(catalogModel.getBook_id() + "", catalogModel.getChapterorder() + "", responseBody.byteStream());
+                            return Flowable.just(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return Flowable.error(new NetError("IOException",NetError.OtherError));
+                        }
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new ApiSubscriber<File>() {
+                    @Override
+                    public void onNext(File file) {
+                        getV().onLoadChapterContent();
+                    }
+
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
+                    }
+                });
+
     }
 
 
@@ -168,6 +221,12 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     @Override
                     protected void onFail(NetError error) {
                         getV().onGetCatalogListFail();
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
                     }
                 });
 

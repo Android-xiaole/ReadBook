@@ -14,6 +14,9 @@ public interface ReadComicContract {
         //加载内容资源的回调
         void fillData(BookCatalogModel model);
 
+        //文件下载成功，加载资源的回调
+        void onLoadChapterContent();
+
         void onLoadDataEnd();
 
         //获取目录列表的回调
@@ -40,7 +43,7 @@ public interface ReadComicContract {
 
     interface IReadComicPresenter {
         //加载章节图片内容
-        void loadData(BookModel bookModel, long chapterid);
+//        void loadData(BookModel bookModel, long chapterid);
 
         //添加或取消收藏
         void addOrRemoveShelf(BookModel model, boolean collectByCurrUser, boolean needFinish);
