@@ -31,6 +31,9 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
     private static final String TYPE_3_0 = "3_0";//3+0
     private static final String TYPE_3_3 = "3_3";//3+3
 
+    private static final String X_TYPE_1_3 = "X_3_3";//3+3
+    private static final String X_TYPE_2_2 = "X_2_2";//3+3
+
     public RecommendAdapter(int layoutResId) {
         super(layoutResId);
     }
@@ -74,7 +77,18 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
             recyclerView.setLayoutManager(manager);
             adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
                     Integer.MAX_VALUE, false,true);
+        } else if (TextUtils.equals(style,X_TYPE_1_3)) {
+            manager.setSpanCount(3);
+            recyclerView.setLayoutManager(manager);
+            adapter = new RecommendChild2Adapter(Integer.MAX_VALUE, true, R.layout.comic_item_recommend_vertical_hight, value);
+            ((RecommendChild2Adapter) adapter).setOnClick(mOnClick);
+        } else if (TextUtils.equals(style,X_TYPE_2_2)) {
+            manager.setSpanCount(2);
+            recyclerView.setLayoutManager(manager);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
+                    Integer.MAX_VALUE, false,true);
         }
+
         if (!TextUtils.equals(style, TYPE_1_3)&&recyclerView.getItemDecorationCount() <= 0) {
             recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.HORIZONTAL, Utils.dip2px(mContext, 6), Color.WHITE));
             recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, Utils.dip2px(mContext, 10), Color.WHITE));

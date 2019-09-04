@@ -52,7 +52,7 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
         if (!TextUtils.isEmpty(imageUrl)) {
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.item_recommend_img),
                     imageUrl,
-                    new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(mContext,5)))
+                    new RequestOptions().transforms(new CenterCrop())
                             .error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
 
@@ -62,12 +62,13 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
                     new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(mContext,5))));
         }
         helper.setText(R.id.item_recommend_name, mainContent.getTitle());
-        try {
-            helper.setText(R.id.item_recommend_des, Html.fromHtml(mainContent.getIntro().replace("%",
-                    "%%")));
-        }catch (Exception e){
-            helper.setText(R.id.item_recommend_des, mainContent.getIntro());
-        }
+//        helper.setText(R.id.item_recommend_share_times, "100万次");
+//        try {
+//            helper.setText(R.id.item_recommend_des, Html.fromHtml(mainContent.getIntro().replace("%",
+//                    "%%")));
+//        }catch (Exception e){
+//            helper.setText(R.id.item_recommend_des, mainContent.getIntro());
+//        }
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            helper.setText(R.id.item_recommend_des, Html.fromHtml(mainContent.getDetail(), FROM_HTML_MODE_LEGACY));
 //        } else {
