@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <padding
-        android:bottom="@dimen/dp_7"
-        android:left="@dimen/dp_10"
-        android:right="@dimen/dp_10"
-        android:top="@dimen/dp_6"></padding>
+    <padding android:left="@dimen/dp_13" android:right="@dimen/dp_13"/>
+    <corners android:radius="@dimen/dp_13"></corners>
     <solid android:color="@color/comic_ffffff"></solid>
-    <corners android:radius="@dimen/dp_4"></corners>
     <stroke
         android:width="@dimen/dp_1"
-        android:color="@color/comic_999999" />
+        android:color="@color/comic_b5bcc6" />
 </shape>

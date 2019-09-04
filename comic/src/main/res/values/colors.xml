@@ -139,4 +139,7 @@
 
     <color name="nb.read.bg.night">#000000</color>
     <color name="nb.read.font_night">#99ffffff</color>
+    <color name="comic_f4f6f9">#F4F6F9</color>
+    <color name="comic_b5bcc6">#B5BCC6</color>
+    <color name="comic_676b71">#676B71</color>
 </resources>

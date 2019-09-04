@@ -7,25 +7,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_30"
-        android:layout_margin="@dimen/dp_10"
+        android:layout_height="@dimen/dp_48"
+        android:background="@color/comic_ffffff"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
 
         <ImageView
             android:id="@+id/search_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
             android:src="@drawable/icon_search_return" />
 
         <EditText
             android:id="@+id/search_edit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_32"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_15"
+            android:layout_weight="1"
             android:background="@drawable/comic_search_search_bg"
-            android:drawableLeft="@drawable/icon_search_search"
+            android:drawableRight="@drawable/icon_search_search"
             android:drawablePadding="@dimen/dp_10"
             android:hint="@string/comic_search_comic_hint"
             android:imeOptions="actionSearch"
@@ -35,94 +39,26 @@
             android:textColorHint="@color/comic_999999"
             android:textCursorDrawable="@android:color/black"
             android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_19"
+            android:text="取消"
+            android:textSize="@dimen/dp_16" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_recycler"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content">
 
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:fillViewport="true"-->
-    <!--android:focusableInTouchMode="true">-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:descendantFocusability="blocksDescendants"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginLeft="@dimen/dp_10"-->
-    <!--android:text="最近搜索"-->
-    <!--android:textColor="@color/comic_3f4040"-->
-    <!--android:textSize="@dimen/dp_14" />-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/search_delete"-->
-    <!--android:layout_width="@dimen/dp_25"-->
-    <!--android:layout_height="@dimen/dp_25"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginRight="@dimen/dp_10"-->
-    <!--android:padding="@dimen/dp_5"-->
-    <!--android:src="@drawable/delete_select" />-->
-    <!--</RelativeLayout>-->
-
-    <!--<View-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="@dimen/dp_1"-->
-    <!--android:layout_margin="@dimen/dp_5"-->
-    <!--android:background="@color/comic_f6f6f6"></View>-->
-
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/search_recent_recycler"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>-->
-
-    <!--<RelativeLayout-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="@dimen/dp_10">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginLeft="@dimen/dp_10"-->
-    <!--android:text="热门搜索"-->
-    <!--android:textColor="@color/comic_3f4040"-->
-    <!--android:textSize="@dimen/dp_14" />-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/search_refresh"-->
-    <!--android:layout_width="@dimen/dp_25"-->
-    <!--android:layout_height="@dimen/dp_25"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_marginRight="@dimen/dp_10"-->
-    <!--android:src="@drawable/refresh" />-->
-    <!--</RelativeLayout>-->
-
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/search_hot_recycler"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>-->
-
-    <!--<androidx.recyclerview.widget.RecyclerView-->
-    <!--android:id="@+id/search_recommend_recycler"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>-->
-    <!--</LinearLayout>-->
-    <!--</ScrollView>-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_30" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

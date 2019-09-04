@@ -136,7 +136,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         } else if (view.getId() == R.id.btn_settings_user) {
             SettingActivity.toPay(getBaseActivity());
         } else if (view.getId() == R.id.comic_mine_kefu) {//跳转到联系客服页面
-            ARouter.getInstance().build(RouterMap.COMIC_KEFU_ACTIVITY).navigation(getActivity());
+            ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.comic_mine_feedback) {//跳转到我的反馈页面
             navigationRoute(RouterMap.COMIC_MYFEEDBACK_ACTIVITY, RequestCode.MINE_REQUEST_CODE);
         } else if (view.getId() == R.id.comic_mine_head || view.getId() == R.id.rl__
