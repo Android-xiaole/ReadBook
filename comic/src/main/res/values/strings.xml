@@ -298,6 +298,14 @@
     <string name="comic_go_sign_in">去签到</string>
     <string name="comic_no_balance">0金币</string>
     <string name="comic_clear_cache">清除缓存</string>
+    <string name="comic_mine">我的</string>
+    <string name="comic_mine_money">我的返利</string>
+    <string name="comic_mine_coins">我的书币</string>
+    <string name="comic_mine_buy">我的购买</string>
+    <string name="comic_mine_history">阅读历史</string>
+    <string name="comic_mine_notification">消息公告</string>
+    <string name="comic_mine_recharge">充值中心</string>
+    <string name="comic_mine_help">帮助中心</string>
     <string name="comic_rich_list_title">土豪排行</string>
     <string name="comic_coin_text">金币</string>
     <string name="comic_daily_task_text">每日任务</string>
