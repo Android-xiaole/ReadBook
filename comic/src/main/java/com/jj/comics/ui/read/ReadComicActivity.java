@@ -9,12 +9,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -42,6 +45,7 @@ import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.RewardDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
@@ -51,6 +55,7 @@ import com.jj.comics.widget.bookreadview.PageView;
 import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.bean.BookChapterBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
+import com.jj.comics.widget.bookreadview.utils.ReadSettingManager;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -69,6 +74,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.view.View.GONE;
 
@@ -85,8 +91,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     LinearLayout mTopMenu;//上面的菜单
     @BindView(R2.id.lin_bottomMenu)
     LinearLayout mBottomMenu;//下面的菜单
-    @BindView(R2.id.lin_catalogBtn)
-    LinearLayout mCatalogBtn;//切换目录的菜单
+
+    @BindView(R2.id.lin_nightModel)
+    LinearLayout lin_nightModel;//切换夜间模式的点击事件布局
+    @BindView(R2.id.tv_nightModel)
+    TextView tv_nightModel;//切换夜间模式的文字
+    @BindView(R2.id.iv_collect)
+    ImageView iv_collect;//收藏按钮
 
     private ReadComicCatalogAdapter catalogAdapter;//章节列表的adapter
 
@@ -267,6 +278,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
         //初始化监听事件
         initClickListener();
+        toggleNightModel(ReadSettingManager.getInstance().isNightMode());
 
         showProgress(this);
 //        //加载当前章节
@@ -386,13 +398,80 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             }
         });
-        mCatalogBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
-                    mCatalogMenu.openDrawer(GravityCompat.START);
+    }
+
+    @OnClick({R2.id.iv_back, R2.id.iv_buy, R2.id.iv_collect, R2.id.iv_share,
+            R2.id.lin_makeMoney, R2.id.lin_catalogBtn, R2.id.lin_textStyle, R2.id.lin_eyeModel, R2.id.lin_nightModel})
+    public void onClick_ReadActivity(View view) {
+        int i = view.getId();
+        if (i == R.id.iv_back) {//返回
+            finish();
+        } else if (i == R.id.iv_buy){//购买
+            ToastUtil.showToastShort("未实现");
+        }else if (i == R.id.iv_collect){//收藏
+            ToastUtil.showToastShort("未实现");
+        }else if (i == R.id.iv_share) {//分享按钮
+            if (bookModel == null) return;
+            if (shareDialog == null) {
+                shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
             }
-        });
+            if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
+            shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
+            String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
+            shareMessageModel.setShareContent(shareContent);
+            shareMessageModel.setShareImgUrl(bookModel.getCover());
+            String channel_name = Constants.CHANNEL_ID;
+            String signCode = "";
+            if (channel_name.contains("-")) {
+                String[] code = channel_name.split("-");
+                signCode = code[code.length - 1];
+            } else {
+                signCode = channel_name;
+            }
+            String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
+            shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
+            shareMessageModel.setUmengPrarms(bookModel.getId() + " : " + bookModel.getTitle());
+            shareDialog.show(shareMessageModel);
+        }else if (i == R.id.lin_makeMoney){//赚钱
+            ToastUtil.showToastShort("未实现");
+        }else if (i == R.id.lin_catalogBtn){//目录
+            if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
+                mCatalogMenu.openDrawer(GravityCompat.START);
+        }else if (i == R.id.lin_textStyle){//字体
+            ToastUtil.showToastShort("未实现");
+        }else if (i == R.id.lin_eyeModel){//护眼
+            ToastUtil.showToastShort("未实现");
+        }else if (i == R.id.lin_nightModel){//夜间
+            toggleNightModel(!ReadSettingManager.getInstance().isNightMode());
+        }
+    }
+
+    /**
+     * 切换夜间模式
+     */
+    private void toggleNightModel(boolean isNightModel){
+        if (isNightModel){//切换成夜间模式
+            mTopMenu.setBackgroundColor(getResources().getColor(R.color.comic_23211f));
+            mBottomMenu.setBackgroundColor(getResources().getColor(R.color.comic_23211f));
+            tv_nightModel.setText("日间");
+            if(isCollect){
+                iv_collect.setImageResource(R.drawable.icon_read_night_collect_pre);
+            }else{
+                iv_collect.setImageResource(R.drawable.icon_read_night_collect);
+            }
+        }else{//切换成日间模式
+            mTopMenu.setBackgroundColor(getResources().getColor(R.color.comic_ffffff));
+            mBottomMenu.setBackgroundColor(getResources().getColor(R.color.comic_ffffff));
+            tv_nightModel.setText("夜间");
+            if(isCollect){
+                iv_collect.setImageResource(R.drawable.icon_read_collect_pre);
+            }else{
+                iv_collect.setImageResource(R.drawable.icon_read_collect);
+            }
+        }
+        mPageLoader.setNightMode(isNightModel);
+        mTopMenu.setSelected(isNightModel);
+        mBottomMenu.setSelected(isNightModel);
     }
 
     /**
@@ -425,7 +504,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     /**
      * 隐藏上下菜单
      */
-    private void hideAllMenu(){
+    private void hideAllMenu() {
         if (mTopMenu.getVisibility() == View.VISIBLE) {
             mTopMenu.startAnimation(mTopOutAnim);
             mBottomMenu.startAnimation(mBottomOutAnim);

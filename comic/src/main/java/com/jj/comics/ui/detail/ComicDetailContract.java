@@ -13,19 +13,9 @@ public interface ComicDetailContract {
         //加载漫画详情的回调
         void onLoadComicDetail(BookModel model, boolean umengUpload);
 
-        //处理Tag标签显示的逻辑
-        void fillTagView(int i, String tag);
-
-        void dealCollection(RefreshComicCollectionStatusEvent refreshComicCollectionStatusEvent);
-
-        //收藏操作的回调
-        void dealCollection(boolean collectByCurrUser);
-
-        void onFavorContentSuccess();
+        void onCollectionSuccess(boolean collectByCurrUser);
 
         void fillCollectStatus(CommonStatusResponse response);
-
-        void fillFavorStatus(CommonStatusResponse response);
     }
 
     interface IDetailPresenter {

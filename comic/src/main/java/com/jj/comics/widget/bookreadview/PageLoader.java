@@ -53,7 +53,7 @@ public abstract class PageLoader {
     public static final int STATUS_CATEGORY_EMPTY = 7;  // 获取到的目录为空
     // 默认的显示参数配置
     private static final int DEFAULT_MARGIN_HEIGHT = 28;
-    private static final int DEFAULT_MARGIN_WIDTH = 15;
+    private static final int DEFAULT_MARGIN_WIDTH = 17;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 4;
 
@@ -752,18 +752,18 @@ public abstract class PageLoader {
                 // 只有finish的时候采用页码
                 if (mStatus == STATUS_FINISH) {
                     String percent = (mCurPage.position + 1) + "/" + mCurPageList.size();
-                    canvas.drawText(percent, mMarginWidth, y, mTipPaint);
+                    canvas.drawText(percent, mDisplayWidth-ScreenUtils.dpToPx(16)-mTipPaint.measureText(percent), y, mTipPaint);
                 }
             }
         } else {
             //擦除区域
             mBgPaint.setColor(mBgColor);
-            canvas.drawRect(mDisplayWidth / 2, mDisplayHeight - mMarginHeight + ScreenUtils.dpToPx(2), mDisplayWidth, mDisplayHeight, mBgPaint);
+            canvas.drawRect(0, mDisplayHeight - mMarginHeight + ScreenUtils.dpToPx(2), mDisplayWidth/2, mDisplayHeight, mBgPaint);
         }
 
         /******绘制电池********/
 
-        int visibleRight = mDisplayWidth - mMarginWidth;
+        int visibleRight = mMarginWidth*2;
         int visibleBottom = mDisplayHeight - tipMarginHeight;
 
         int outFrameWidth = (int) mTipPaint.measureText("xxx");
@@ -796,7 +796,7 @@ public abstract class PageLoader {
         //内框的制作
         float innerWidth = (outFrame.width() - innerMargin * 2 - border) * (mBatteryLevel / 100.0f);
         RectF innerFrame = new RectF(outFrameLeft + border + innerMargin, outFrameTop + border + innerMargin,
-                outFrameLeft + border + innerMargin + innerWidth, outFrameBottom - border - innerMargin);
+                outFrameLeft + border  + innerWidth, outFrameBottom - border - innerMargin);
 
         mBatteryPaint.setStyle(Paint.Style.FILL);
         canvas.drawRect(innerFrame, mBatteryPaint);
@@ -805,7 +805,7 @@ public abstract class PageLoader {
         //底部的字显示的位置Y
         float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
         String time = StringUtils.dateConvert(System.currentTimeMillis(), Constant.FORMAT_TIME);
-        float x = outFrameLeft - mTipPaint.measureText(time) - ScreenUtils.dpToPx(4);
+        float x = visibleRight  + ScreenUtils.dpToPx(13);
         canvas.drawText(time, x, y, mTipPaint);
     }
 

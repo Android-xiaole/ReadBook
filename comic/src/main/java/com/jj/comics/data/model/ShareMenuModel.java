@@ -31,6 +31,7 @@ public class ShareMenuModel {
         WECHAT("微信"),WECHATMOMENT("朋友圈"),
         QQ("QQ"),QQZONE("QQ空间"),
         SINA("微博"),
+        PHOTO("图片分享"),
         COPYLINK("复制链接"),REPORT("举报");
 
         private String shareTypeValue;
