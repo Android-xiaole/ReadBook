@@ -2,9 +2,9 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#4C85FF</color>
-    <color name="bg_splash">#4C85FF</color>
+    <color name="colorAccent">#FFAD70</color>
+    <color name="bg_splash">#FFAD70</color>
     <color name="black_333333">#333333</color>
     <color name="black_A8ADB3">#A8ADB3</color>
-    <color name="blue_4C85FF">#4C85FF</color>
+    <color name="orange_FFAD70">#FFAD70</color>
 </resources>

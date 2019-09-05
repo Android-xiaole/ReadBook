@@ -59,8 +59,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         BottomNavigationView.OnNavigationItemSelectedListener {
     //    @BindView(R2.id.radioGroup)
 //    RadioGroup mRadioGroup;
-    @BindView(R2.id.bv_home_navigation)
-    BottomNavigationView mBottomNavigationView;
+//    @BindView(R2.id.bv_home_navigation)
+//    BottomNavigationView mBottomNavigationView;
     private int currentIndex = -1;
     private int preIndex = -1;
     private CusNavigationCallback mInterceptor;
@@ -118,9 +118,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void initData(Bundle savedInstanceState) {
         // 不使用图标默认变色
-        mBottomNavigationView.setItemIconTintList(null);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
-        mBottomMine = mBottomNavigationView.findViewById(R.id.menu_home_mine);
+//        mBottomNavigationView.setItemIconTintList(null);
+//        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+//        mBottomMine = mBottomNavigationView.findViewById(R.id.menu_home_mine);
         badge = new QBadgeView(context);
         ActionReporter.reportAction(ActionReporter.Event.START_APP, null, null, null);
         if (LoginHelper.getOnLineUser() != null) {
@@ -344,21 +344,21 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     //    @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCheck(int index) {
         switch (index) {
-            case 0:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_featured);
-                break;
-            case 1:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_classify);
-                break;
-            case 2:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_money);
-                break;
-            case 3:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_bookshelf);
-                break;
-            case 4:
-                mBottomNavigationView.setSelectedItemId(R.id.menu_home_mine);
-                break;
+//            case 0:
+//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_featured);
+//                break;
+//            case 1:
+//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_classify);
+//                break;
+//            case 2:
+//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_money);
+//                break;
+//            case 3:
+//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_bookshelf);
+//                break;
+//            case 4:
+//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_mine);
+//                break;
         }
 //        if (CommonUtil.checkValid(mRadioGroup.getChildCount(), index) && mRadioGroup.getChildAt(index) instanceof RadioButton) {
 //            ((RadioButton) mRadioGroup.getChildAt(index)).setChecked(true);
