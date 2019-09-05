@@ -55,6 +55,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -789,7 +790,7 @@ public interface ComicService {
      * cartoon-novel.jishusaice.cn 线上
      * cartoon_novel.langd88.cn 线上唯一,专门用来请求获取app配置
      */
-    @POST("http://"+Constants.HOST_APP_CONFIG+"/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
+    @POST("http://"+Constants.HOST_TEST+"/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfig(@Body RequestBody body);
 
     /**
@@ -820,5 +821,14 @@ public interface ComicService {
      */
     @POST("api/app_id_login")
     Observable<UidLoginResponse> uidLogin(@Body RequestBody requestBody);
+
+    /**
+     * 通用的下载文件
+     * @param url
+     * @return
+     */
+    @GET
+    @Streaming
+    Flowable<ResponseBody> downloadFile(@Url String url);
 
 }

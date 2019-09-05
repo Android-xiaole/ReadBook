@@ -23,6 +23,7 @@ import com.jj.comics.adapter.mine.CommonRecommendAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
+import com.jj.comics.data.model.SearchModel;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.library.flowlayout.FlowLayoutManager;
 import com.library.flowlayout.SpaceItemDecoration;
@@ -99,7 +100,6 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
             @Override
             public void onRefresh() {
                 getP().getHotSearchKeywords();
-                getP().getWatchingComicData();
             }
         });
 
@@ -117,7 +117,6 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
 
         showProgress();
         getP().getHotSearchKeywords();
-        getP().getWatchingComicData();
     }
 
     @Override
@@ -161,18 +160,17 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
     public void fillHotSearchKeywords(SearchHotKeywordsResponse response) {
         mHotAdapter.setNewData(response.getData());
     }
-
-    @Override
-    public void fillWatchingComicData(List<BookModel> contentList) {
-        mAapter.setNewData(contentList);
-    }
-
     @Override
     public void onComplete() {
         hideProgress();
         if (swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void fillKeyData(List<SearchModel> searchModels) {
+
     }
 
 }

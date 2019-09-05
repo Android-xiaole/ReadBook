@@ -6,6 +6,8 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.model.BookListResponse;
+import com.jj.comics.data.model.SearchModel;
+import com.jj.comics.util.eventbus.EventBusManager;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -14,7 +16,10 @@ public class SearchResultPresenter extends BasePresenter<BaseRepository, SearchR
 
     @Override
     public void getSearchComicListByKeywords(String keyWord) {
-        ContentRepository.getInstance().getSearchComicListByKeywords(keyWord,getV().getClass().getSimpleName())
+        SearchModel searchModel = new SearchModel();
+        searchModel.setKey(keyWord);
+        EventBusManager.sendInsertOrUpdateSearchKeyEvent(searchModel);
+        ContentRepository.getInstance().getSearchComicListByKeywords(keyWord, getV().getClass().getSimpleName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookListResponse>bindLifecycle())

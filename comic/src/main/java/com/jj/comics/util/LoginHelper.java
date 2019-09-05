@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.jj.base.BaseApplication;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.db.DaoHelper;

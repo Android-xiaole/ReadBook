@@ -25,6 +25,7 @@ import com.jj.comics.adapter.bookshelf.BookShelfAdapter;
 import com.jj.comics.adapter.bookshelf.BookShelfFooterAdapter;
 import com.jj.comics.common.callback.GlideOnScrollListener;
 import com.jj.comics.data.model.BookModel;
+import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.ui.bookshelf.BookShelfFragment;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.ui.dialog.DialogUtilForComic;

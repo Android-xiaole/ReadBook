@@ -15,7 +15,7 @@ buildscript {
         maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
@@ -37,6 +37,9 @@ allprojects {
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         google()
+        maven {
+            url 'https://dl.bintray.com/qichuan/maven/' //繁简转换
+        }
     }
 }
 

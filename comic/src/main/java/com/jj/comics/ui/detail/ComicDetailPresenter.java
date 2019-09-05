@@ -106,7 +106,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                     @Override
                     public void onNext(CommonStatusResponse response) {
                         if (response.getData().getStatus()) {
-                            getV().dealCollection(!collectByCurrUser);
+                            getV().onCollectionSuccess(!collectByCurrUser);
                         } else {
                             ToastUtil.showToastShort(response.getMessage());
                         }
@@ -146,6 +146,11 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                     @Override
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
                         getV().hideProgress();
                     }
                 });
@@ -271,7 +276,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                 .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
                     @Override
                     public void onNext(CommonStatusResponse response) {
-                        getV().fillFavorStatus(response);
+//                        getV().fillFavorStatus(response);
                     }
 
                     @Override
@@ -295,7 +300,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                     @Override
                     public void onNext(CommonStatusResponse response) {
                         if (response.getData().getStatus()) {
-                            getV().onFavorContentSuccess();
+//                            getV().onFavorContentSuccess();
                         } else {
                             onFail(new NetError(response.getMessage(), response.getCode()));
                         }

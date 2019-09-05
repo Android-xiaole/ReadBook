@@ -18,6 +18,7 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.SharedPref;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.user.UserRepository;

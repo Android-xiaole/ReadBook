@@ -2,6 +2,9 @@ package com.jj.comics.ui.mine.login;
 
 import com.jj.base.mvp.IView;
 import com.jj.base.ui.BaseActivity;
+import com.jj.comics.data.model.UserInfo;
+
+import io.reactivex.Flowable;
 
 public interface LoginContract {
 

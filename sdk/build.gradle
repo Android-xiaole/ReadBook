@@ -50,7 +50,7 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'androidx.viewpager:viewpager:1.0.0'
     api 'androidx.core:core:1.0.0'
-    api 'androidx.annotation:annotation:1.1.0'
+    api 'androidx.annotation:annotation:1.0.0'
     annotationProcessor "com.alibaba:arouter-compiler:${AROUTER_COMPLIER_VERSION}"
     annotationProcessor "com.github.bumptech.glide:compiler:${GLIDE_PROCESSOR_VERSION}"
     api("org.greenrobot:eventbus:${EVENT_BUS_VERSION}") {
@@ -270,8 +270,12 @@ dependencies {
     api 'com.tencent.mid:mid:4.06-Release'
     //气泡
     api 'q.rorbin:badgeview:1.1.3'
+    api(name:'HeepaySDK_4.0.1', ext:'aar')
     //动态切换域名配置
 //    api 'me.jessyan:retrofit-url-manager:1.4.0'
 //    debugApi 'com.didichuxing.doraemonkit:doraemonkit:1.2.1'
 //    releaseApi 'com.didichuxing.doraemonkit:doraemonkit-no-op:1.2.0'
+
+    // 繁简转换
+    api "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
 }

@@ -3,7 +3,10 @@ package com.jj.comics.ui.mine.pay;
 import android.app.Activity;
 
 import com.jj.base.mvp.IView;
+import com.jj.comics.data.model.GoodsPriceModel;
 import com.jj.comics.data.model.PayCenterInfoResponse;
+import com.jj.comics.data.model.ProductPayTypeEnum;
+import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.UserInfo;
 
 import java.util.List;

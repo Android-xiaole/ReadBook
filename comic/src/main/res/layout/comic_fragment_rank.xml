@@ -48,7 +48,6 @@
         android:id="@+id/tl_rank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabBackground="@drawable/btn_settings_user"
         app:tabGravity="fill"
         app:tabMode="fixed">
 

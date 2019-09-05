@@ -6,9 +6,9 @@ import com.jj.base.utils.SharedPref;
 
 public class Constants {
     public static final int SOURCE_ID = 3;
-    public static final String DB_NAME = "novelpro.db";
+    public static final String DB_NAME = "comic.db";
     public static final String MCH_ID = "11000";//商户号
-    public static final String PRODUCT_CODE = "jjxs_fanli";//新产品
+    public static final String PRODUCT_CODE = "jjmanhua2";//新产品
     public static String CHANNEL_ID = ResourceUtil.getAppRes(BaseApplication.getApplication(), "channel_id", "").toString();//老后台渠道号
 
     public static String CHANNEL_ID_PHP() {
@@ -39,7 +39,7 @@ public class Constants {
     }//wxc0bcd7b1f2639665
 
     //友盟相关参数
-    public static final String UMENG_APPKEY = "5d6ddc203fc19593b4000cd4";
+    public static final String UMENG_APPKEY = "5caeae7b570df330b1001159";
     public static final String UMENG_MESSAGE_SECRET = "7e609230d58fae2e255602b6b89a5163";
     //小米推送相关参数
     public static final String MI_APPID = "2882303761517940112";
@@ -102,7 +102,7 @@ public class Constants {
     public static final String COMPLETE_ALL_TASKS = "complete_all_tasks";
 
     //bugly appid和debug配置
-    public static final String BUGLY_APPID = "db3ecafadd";
+    public static final String BUGLY_APPID = "242baaf3a5";
     public static final boolean BUGLY_APPID_DEBUG = false;
 
     //activity间相互传值的key

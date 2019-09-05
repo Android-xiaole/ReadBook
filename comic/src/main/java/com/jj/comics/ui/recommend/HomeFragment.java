@@ -1,6 +1,9 @@
 package com.jj.comics.ui.recommend;
 
 
+import android.annotation.TargetApi;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;

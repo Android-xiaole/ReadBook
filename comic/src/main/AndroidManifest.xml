@@ -23,10 +23,10 @@
         <activity
             android:name=".ui.read.ReadComicActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
             android:resizeableActivity="false"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:theme="@style/Comic.AppTheme.Base">
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <meta-data
                 android:name="android.notch_support"
                 android:value="false" />
@@ -56,6 +56,89 @@
             android:name=".ui.mine.settings.AboutActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ui.mine.pay.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mine.VIPActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.welfare.WelfareActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mine.RewardActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.mine.settings.SettingActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity android:name=".ui.web.WebActivity" />
+
+        <activity android:name=".ui.web.WebViewActivity" />
+        <activity
+            android:name=".ui.search.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.mine.FeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+        <activity
+            android:name=".ui.mine.MyFeedBackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+        <activity
+            android:name=".ui.mine.KefuActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.userinfo.EditUserInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.mine.userinfo.CheckUserInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.settings.BindPhoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+        <activity
+            android:name=".ui.mine.settings.CouponCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.settings.UserAgreementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.recommend.RichManRankActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
         <receiver android:name=".broadcast.NetWorkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -75,86 +158,6 @@
                 <action android:name="android.intent.action.BATTERY_OKAY" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".ui.mine.pay.PayActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.mine.VIPActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.welfare.WelfareActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.mine.RewardActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.mine.settings.SettingActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name="com.alipay.sdk.app.H5AuthActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".ui.web.WebActivity" />
-        <activity android:name=".ui.web.WebViewActivity" />
-        <activity
-            android:name=".ui.search.SearchResultActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.mine.FeedbackActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.MyFeedBackActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-
-        <activity
-            android:name=".ui.mine.KefuActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.userinfo.EditUserInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-
-        <activity
-            android:name=".ui.mine.userinfo.CheckUserInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-
-        <activity
-            android:name=".ui.mine.settings.BindPhoneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-
-        <activity
-            android:name=".ui.mine.settings.CouponCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.settings.UserAgreementActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.recommend.RichManRankActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
 
     </application>
 

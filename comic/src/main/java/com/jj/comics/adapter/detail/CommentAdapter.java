@@ -13,7 +13,9 @@ import com.jj.comics.R;
 import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.UserCommentFavorData;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
+import com.jj.sdk.GlideApp;
 
 /**
  * 漫画详情里面的评论列表
@@ -27,8 +29,8 @@ public class CommentAdapter extends BaseQuickAdapter<CommentListResponse.DataBea
         super(layoutResId);
         daoHelper = new DaoHelper();
         options = new RequestOptions()
-                .placeholder(R.drawable.icon_user_avatar_default)
-                .error(R.drawable.icon_user_avatar_default);
+                .placeholder(R.drawable.icon)
+                .error(R.drawable.icon);
     }
 
     @Override

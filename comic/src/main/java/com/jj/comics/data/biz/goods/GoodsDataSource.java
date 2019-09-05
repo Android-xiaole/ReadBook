@@ -8,6 +8,7 @@ import com.jj.comics.data.model.RewardGiftsResponse;
 import com.jj.comics.data.model.VIPListResponse;
 
 import io.reactivex.Observable;
+import io.reactivex.Observable;
 
 public interface GoodsDataSource {
 

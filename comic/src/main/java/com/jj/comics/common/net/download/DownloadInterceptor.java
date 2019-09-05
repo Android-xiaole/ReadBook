@@ -1,9 +1,12 @@
 package com.jj.comics.common.net.download;
 
+import com.jj.base.utils.FileUtil;
+
 import java.io.File;
 import java.io.IOException;
 
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import okhttp3.Response;
 
 public class DownloadInterceptor implements Interceptor {

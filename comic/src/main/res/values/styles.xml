@@ -30,11 +30,13 @@
     </style>
 
     //收缩字体样式
+
     <style name="comic_style_collapsedTitleText">
         <item name="android:textSize">@dimen/dp_18</item>
         <item name="android:textColor">@color/comic_ffffff</item>
     </style>
     //展开字体样式
+
     <style name="comic_style_expandedTitleText">
         <item name="android:textSize">@dimen/dp_18</item>
         <item name="android:textColor">@color/comic_ffffff</item>

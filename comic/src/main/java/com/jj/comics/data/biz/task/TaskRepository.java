@@ -1,6 +1,7 @@
 package com.jj.comics.data.biz.task;
 
 import com.jj.base.net.ComicApiImpl;
+import com.jj.base.net.RetryFunction;
 import com.jj.base.net.RetryFunction2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
@@ -11,6 +12,7 @@ import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
 
+import io.reactivex.Observable;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
