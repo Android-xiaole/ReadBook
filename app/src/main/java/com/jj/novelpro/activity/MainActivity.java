@@ -11,6 +11,8 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -49,6 +51,7 @@ import java.io.File;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
+import butterknife.OnClick;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
@@ -61,6 +64,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //    RadioGroup mRadioGroup;
 //    @BindView(R2.id.bv_home_navigation)
 //    BottomNavigationView mBottomNavigationView;
+
+    @BindView(R2.id.iv_nav_featured)
+    ImageView mIvFeatured;
+    @BindView(R2.id.iv_nav_classify)
+    ImageView mIvClassify;
+    @BindView(R2.id.iv_nav_money)
+    ImageView mIvMoney;
+    @BindView(R2.id.iv_nav_shelf)
+    ImageView mIvShelf;
+    @BindView(R2.id.iv_nav_mine)
+    ImageView mIvMine;
+
     private int currentIndex = -1;
     private int preIndex = -1;
     private CusNavigationCallback mInterceptor;
@@ -256,6 +271,63 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //        }
 //
 //    }
+
+    @OnClick({R2.id.btn_nav_featured,R2.id.btn_nav_classify,R2.id.btn_nav_money,
+            R2.id.btn_nav_shelf,R2.id.btn_nav_mine})
+    void onClick(View v) {
+        if (v.getId() == R.id.btn_nav_featured) {
+            getP().switchFragment(0, currentIndex, mInterceptor);
+        }else if (v.getId() == R.id.btn_nav_classify) {
+            getP().switchFragment(1, currentIndex, mInterceptor);
+        }else if (v.getId() == R.id.btn_nav_money) {
+            getP().switchFragment(2, currentIndex, mInterceptor);
+        }else if (v.getId() == R.id.btn_nav_shelf) {
+            getP().switchFragment(3, currentIndex, mInterceptor);
+        }else if (v.getId() == R.id.btn_nav_mine) {
+            getP().switchFragment(4, currentIndex, mInterceptor);
+        }
+        switchBtns(v.getId());
+    }
+
+    private void switchBtns(int id) {
+        switch (id) {
+            case R.id.btn_nav_featured:
+                mIvFeatured.setSelected(true);
+                mIvClassify.setSelected(false);
+                mIvMoney.setSelected(false);
+                mIvShelf.setSelected(false);
+                mIvMine.setSelected(false);
+                break;
+            case R.id.btn_nav_classify:
+                mIvFeatured.setSelected(false);
+                mIvClassify.setSelected(true);
+                mIvMoney.setSelected(false);
+                mIvShelf.setSelected(false);
+                mIvMine.setSelected(false);
+                break;
+            case R.id.btn_nav_money:
+                mIvFeatured.setSelected(false);
+                mIvClassify.setSelected(false);
+                mIvMoney.setSelected(true);
+                mIvShelf.setSelected(false);
+                mIvMine.setSelected(false);
+                break;
+            case R.id.btn_nav_shelf:
+                mIvFeatured.setSelected(false);
+                mIvClassify.setSelected(false);
+                mIvMoney.setSelected(false);
+                mIvShelf.setSelected(true);
+                mIvMine.setSelected(false);
+                break;
+            case R.id.btn_nav_mine:
+                mIvFeatured.setSelected(false);
+                mIvClassify.setSelected(false);
+                mIvMoney.setSelected(false);
+                mIvShelf.setSelected(false);
+                mIvMine.setSelected(true);
+                break;
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

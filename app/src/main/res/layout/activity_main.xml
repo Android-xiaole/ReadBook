@@ -12,7 +12,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_71"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:clickable="true">
 
         <View
             android:layout_width="match_parent"
@@ -28,11 +29,14 @@
             android:src="@drawable/bg_navation"></ImageView>
 
         <RelativeLayout
-            android:layout_toLeftOf="@id/btn_nav_classify"
-            android:layout_marginRight="@dimen/dp_42"
             android:id="@+id/btn_nav_featured"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_22"
+            android:layout_toLeftOf="@id/btn_nav_classify"
+            android:clickable="true"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/tv_nav_featured"
@@ -53,15 +57,19 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/featured"></ImageView>
 
+
         </RelativeLayout>
 
 
         <RelativeLayout
-            android:layout_toLeftOf="@id/btn_nav_money"
-            android:layout_marginRight="@dimen/dp_42"
             android:id="@+id/btn_nav_classify"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_22"
+            android:layout_toLeftOf="@id/btn_nav_money"
+            android:clickable="true"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/tv_nav_classify"
@@ -89,7 +97,10 @@
             android:id="@+id/btn_nav_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/tv_nav_money"
@@ -113,11 +124,14 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_toRightOf="@id/btn_nav_money"
-            android:layout_marginLeft="@dimen/dp_42"
             android:id="@+id/btn_nav_shelf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_22"
+            android:layout_toRightOf="@id/btn_nav_money"
+            android:clickable="true"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/tv_nav_shelf"
@@ -141,11 +155,14 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_toRightOf="@id/btn_nav_shelf"
-            android:layout_marginLeft="@dimen/dp_49"
             android:id="@+id/btn_nav_mine"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_22"
+            android:layout_toRightOf="@id/btn_nav_shelf"
+            android:clickable="true"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
 
             <TextView
                 android:id="@+id/tv_nav_mine"
