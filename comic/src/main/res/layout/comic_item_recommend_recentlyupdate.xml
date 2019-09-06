@@ -17,6 +17,7 @@
             android:id="@+id/iv_recently_icon"
             android:layout_width="@dimen/dp_90"
             android:layout_height="@dimen/dp_120"
+            android:background="@color/comic_ffffff"
             android:layout_centerInParent="true"
             tools:background="@drawable/icon" />
 

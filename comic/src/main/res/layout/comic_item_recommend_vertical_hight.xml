@@ -18,6 +18,7 @@
                 android:layout_centerInParent="true"
                 android:id="@+id/item_recommend_img"
                 android:layout_width="@dimen/dp_90"
+                android:background="@color/comic_ffffff"
                 android:layout_height="@dimen/dp_120"
                 android:scaleType="centerCrop" />
         </RelativeLayout>
