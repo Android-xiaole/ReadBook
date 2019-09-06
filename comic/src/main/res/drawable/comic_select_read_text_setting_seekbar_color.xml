@@ -4,7 +4,7 @@
     <item   android:state_selected="true"
         android:color="@color/comic_565655"></item>
 
-    <item android:color="@color/comic_a8adb3"
+    <item android:color="@color/comic_e8ebf0"
         android:state_selected="false"></item>
 
 </selector>

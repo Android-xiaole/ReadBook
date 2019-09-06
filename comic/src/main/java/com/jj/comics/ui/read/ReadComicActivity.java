@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,25 +36,22 @@ import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.ui.dialog.ComicCollectionDialog;
-import com.jj.comics.ui.dialog.CommentSendDialog;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
-import com.jj.comics.ui.dialog.RewardDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
-import com.jj.comics.util.eventbus.events.RefreshComicFavorStatusEvent;
 import com.jj.comics.widget.bookreadview.PageLoader;
 import com.jj.comics.widget.bookreadview.PageView;
 import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.bean.BookChapterBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
 import com.jj.comics.widget.bookreadview.utils.ReadSettingManager;
+import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
+import com.jj.comics.widget.bubbleview.BubbleSeekBar;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -91,6 +87,10 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     LinearLayout mTopMenu;//上面的菜单
     @BindView(R2.id.lin_bottomMenu)
     LinearLayout mBottomMenu;//下面的菜单
+    @BindView(R2.id.tv_totalNum)
+    TextView tv_totalNum;//所有章节数
+    @BindView(R2.id.iv_back_chapter)
+    ImageView iv_back_chapter;
 
     @BindView(R2.id.lin_nightModel)
     LinearLayout lin_nightModel;//切换夜间模式的点击事件布局
@@ -98,14 +98,18 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     TextView tv_nightModel;//切换夜间模式的文字
     @BindView(R2.id.iv_collect)
     ImageView iv_collect;//收藏按钮
+    @BindView(R2.id.lin_textSetting)
+    LinearLayout lin_textSetting;//设置字号的布局
+    @BindView(R2.id.view_fgx)
+    View view_fgx;//底部菜单分割线
+    @BindView(R2.id.sb_textSetting)
+    BubbleSeekBar sb_textSetting;//设置字号的拖动view
 
     private ReadComicCatalogAdapter catalogAdapter;//章节列表的adapter
 
     public BookModel bookModel;
     public BookCatalogModel catalogModel;
 
-    private RewardDialog rewardDialog;
-    public CommentSendDialog commentSendDialog;
     private ShareDialog shareDialog;
     private ShareMessageModel shareMessageModel;
 
@@ -115,7 +119,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private long mTotalLeaveTime = 0;//总共停留时间
     private long mTimeRecord = 0;//用户可见记录时间
     private int currenPage = 1;//记录目录列表分页码
-    private boolean isCollect, isFavor;
+    private boolean isCollect;
 
     private PageLoader mPageLoader;//页面加载器，用来设置数据，监听各种点击事件
     private Animation mTopInAnim;
@@ -125,10 +129,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
     public boolean isCollect() {
         return isCollect;
-    }
-
-    public boolean isFavor() {
-        return isFavor;
     }
 
     @SuppressLint("WrongConstant")
@@ -145,7 +145,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     public void initData(Bundle savedInstanceState) {
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
         MobclickAgent.onEvent(this, Constants.UMEventId.ENTER_READ, bookModel.getId() + " : " + bookModel.getTitle());
-        catalogModel = ((BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL));
+//        catalogModel = ((BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL));
         if (SharedPref.getInstance(ReadComicActivity.this).getBoolean(Constants.SharedPrefKey.SWITCH_GPRS_READ_REMIND, true) && NetWorkUtil.is4G()) {
             ToastUtil.showToastShort(getString(R.string.comic_read_comic_net_remind));
         }
@@ -154,110 +154,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         catalogAdapter = new ReadComicCatalogAdapter(R.layout.comic_readcomic_cataloglist_item);
         rv_catalogList.setLayoutManager(new LinearLayoutManager(this));
         catalogAdapter.bindToRecyclerView(rv_catalogList);
-
-//        mComicView.setKeepScreenOn(true);
-//        mComicView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (mComicView != null) {
-//                    BookCatalogModel firstCatalog = mComicView.getFirstCatalog();
-//                    if (catalogAdapter != null && firstCatalog != null && catalogAdapter.getCurrentContentId() != firstCatalog.getId()) {
-//                        catalogAdapter.notifyItem(firstCatalog.getId());
-//                    }
-//                    if (firstCatalog != null && catalogModel != null && firstCatalog.getId() != catalogModel.getId()) {
-//                        catalogModel = firstCatalog;
-//                    }
-//                }
-//            }
-//        });
-//        mComicView.addComicViewChildViewOnclickListener(new ComicView.ComicViewChildViewOnclickListener() {
-//            @Override
-//            public void onCollectiClick() {
-//                MobclickAgent.onEvent(getApplicationContext(), Constants.UMEventId.COLLECT_READ, bookModel.getId() + " : " + bookModel.getTitle());
-//                getP().addOrRemoveShelf(bookModel, isCollect,false);
-//            }
-//
-//            @Override
-//            public void onCommentClick() {
-//                MobclickAgent.onEvent(getApplicationContext(), Constants.UMEventId.COMMENT_READ, bookModel.getId() + " : " + bookModel.getTitle());
-//                if (commentSendDialog == null) {
-//                    commentSendDialog = new CommentSendDialog(context, mComicView.mBottomBar, ReadComicActivity.this);
-//                    commentSendDialog.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            String content = commentSendDialog.getContent();
-//                            if (StringUtils.isBlank(content)) {
-//                                ToastUtil.showToastShort(context.getString(R.string.comic_comment_not_allow_null));
-//                            } else {
-//                                if (context instanceof ReadComicActivity) {
-//                                    ((ReadComicActivity) context).getP().sendComment(bookModel.getId(), content);
-//                                }
-//                            }
-//                        }
-//                    });
-//                }
-//                commentSendDialog.show();
-//            }
-//
-//            @Override
-//            public void onFavorClick() {
-//                if (isFavor) return;
-//                MobclickAgent.onEvent(getApplicationContext(), Constants.UMEventId.ARISE_READ, bookModel.getId() + " : " + bookModel.getTitle());
-//                getP().favorContent(bookModel.getId());
-//            }
-//
-//            @Override
-//            public void onCatalogClick() {
-////                onShowCatalogList();
-//                if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
-//                    mCatalogMenu.openDrawer(GravityCompat.START);
-//            }
-//
-//            @Override
-//            public void onLoadNextOrLastCatalogClick(BookCatalogModel catalogModel, boolean next) {
-//                getP().loadData(bookModel, next ? catalogModel.getNextChapterid():catalogModel.getLastChapterid());
-//            }
-//
-//            @Override
-//            public void onRewardClick() {
-//                MobclickAgent.onEvent(getApplicationContext(), Constants.UMEventId.REWARD_READ, bookModel.getId() + " : " + bookModel.getTitle());
-//                if (rewardDialog == null) {
-//                    rewardDialog = new RewardDialog(ReadComicActivity.this, ReadComicActivity.this, bookModel.getId());
-//                }
-//                rewardDialog.show();
-//            }
-//
-//            @Override
-//            public void onShareClick() {
-//                if (bookModel == null)return;
-//                if (shareDialog == null) {
-//                    shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
-//                }
-//                if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
-//                shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
-//                String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
-//                shareMessageModel.setShareContent(shareContent);
-//                shareMessageModel.setShareImgUrl(bookModel.getCover());
-//                String channel_name = Constants.CHANNEL_ID;
-//                String signCode = "";
-//                if (channel_name.contains("-")) {
-//                    String[] code = channel_name.split("-");
-//                    signCode = code[code.length - 1];
-//                } else {
-//                    signCode = channel_name;
-//                }
-//                String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
-//                shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
-//                shareMessageModel.setUmengPrarms(bookModel.getId() + " : " + bookModel.getTitle());
-//                shareDialog.show(shareMessageModel);
-//            }
-//
-//            @Override
-//            public void onBack() {
-//                finish();
-//            }
-//        });
 
         //注册广播
         IntentFilter intentFilter = new IntentFilter();
@@ -278,18 +174,16 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
         //初始化监听事件
         initClickListener();
-        toggleNightModel(ReadSettingManager.getInstance().isNightMode());
+        //初始化阅读设置
+        toggleNightModel(ReadSettingManager.getInstance().isNightMode());//设置是否夜间模式
+        sb_textSetting.setProgress(ScreenUtils.pxToSp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
         showProgress(this);
-//        //加载当前章节
-//        getP().loadData(bookModel,catalogModel.getId());
         //加载章节目录列表
         getP().getCatalogList(bookModel.getId(), currenPage);
         if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
-            //获取内容点赞状态
-            getP().getFavorStatus(bookModel.getId());
         }
     }
 
@@ -301,11 +195,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         catalogAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                BookCatalogModel catalogModel = catalogAdapter.getData().get(position);
-                ReadComicActivity.this.catalogModel = catalogModel;
-                Utils.fixNotch(ReadComicActivity.this);
                 mCatalogMenu.closeDrawers();
-                catalogAdapter.notifyItem(catalogModel.getId());
                 mPageLoader.skipToChapter(position);
             }
         });
@@ -345,7 +235,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
             @Override
             public void onChapterChange(int pos) {
-
+                BookCatalogModel catalogModel = catalogAdapter.getData().get(pos);
+                ReadComicActivity.this.catalogModel = catalogModel;
+                catalogAdapter.notifyItem(catalogModel.getId());
             }
 
             @Override
@@ -398,47 +290,71 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             }
         });
+        sb_textSetting.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
+            @Override
+            public void onProgressChanged(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+
+            }
+
+            @Override
+            public void getProgressOnActionUp(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat) {
+
+            }
+
+            @Override
+            public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
+                mPageLoader.setTextSize(ScreenUtils.spToPx(progress));
+            }
+        });
     }
 
-    @OnClick({R2.id.iv_back, R2.id.iv_buy, R2.id.iv_collect, R2.id.iv_share,
+    @OnClick({R2.id.iv_back_chapter,R2.id.iv_back, R2.id.iv_buy, R2.id.iv_collect, R2.id.iv_share,
             R2.id.lin_makeMoney, R2.id.lin_catalogBtn, R2.id.lin_textStyle, R2.id.lin_eyeModel, R2.id.lin_nightModel})
     public void onClick_ReadActivity(View view) {
         int i = view.getId();
-        if (i == R.id.iv_back) {//返回
+        if (i == R.id.iv_back_chapter){
+            mCatalogMenu.closeDrawers();
+        } else if (i == R.id.iv_back) {//返回
             finish();
         } else if (i == R.id.iv_buy){//购买
             ToastUtil.showToastShort("未实现");
         }else if (i == R.id.iv_collect){//收藏
             ToastUtil.showToastShort("未实现");
         }else if (i == R.id.iv_share) {//分享按钮
-            if (bookModel == null) return;
-            if (shareDialog == null) {
-                shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
-            }
-            if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
-            String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
-            shareMessageModel.setShareContent(shareContent);
-            shareMessageModel.setShareImgUrl(bookModel.getCover());
-            String channel_name = Constants.CHANNEL_ID;
-            String signCode = "";
-            if (channel_name.contains("-")) {
-                String[] code = channel_name.split("-");
-                signCode = code[code.length - 1];
-            } else {
-                signCode = channel_name;
-            }
-            String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
-            shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
-            shareMessageModel.setUmengPrarms(bookModel.getId() + " : " + bookModel.getTitle());
-            shareDialog.show(shareMessageModel);
+//            if (bookModel == null) return;
+//            if (shareDialog == null) {
+//                shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
+//            }
+//            if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
+//            shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
+//            String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
+//            shareMessageModel.setShareContent(shareContent);
+//            shareMessageModel.setShareImgUrl(bookModel.getCover());
+//            String channel_name = Constants.CHANNEL_ID;
+//            String signCode = "";
+//            if (channel_name.contains("-")) {
+//                String[] code = channel_name.split("-");
+//                signCode = code[code.length - 1];
+//            } else {
+//                signCode = channel_name;
+//            }
+//            String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
+//            shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
+//            shareMessageModel.setUmengPrarms(bookModel.getId() + " : " + bookModel.getTitle());
+//            shareDialog.show(shareMessageModel);
         }else if (i == R.id.lin_makeMoney){//赚钱
             ToastUtil.showToastShort("未实现");
         }else if (i == R.id.lin_catalogBtn){//目录
             if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
                 mCatalogMenu.openDrawer(GravityCompat.START);
         }else if (i == R.id.lin_textStyle){//字体
-            ToastUtil.showToastShort("未实现");
+            if (lin_textSetting.getVisibility() == View.GONE) {
+                lin_textSetting.setVisibility(View.VISIBLE);
+                view_fgx.setVisibility(View.VISIBLE);
+            } else {
+                lin_textSetting.setVisibility(GONE);
+                view_fgx.setVisibility(View.GONE);
+            }
         }else if (i == R.id.lin_eyeModel){//护眼
             ToastUtil.showToastShort("未实现");
         }else if (i == R.id.lin_nightModel){//夜间
@@ -451,8 +367,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      */
     private void toggleNightModel(boolean isNightModel){
         if (isNightModel){//切换成夜间模式
-            mTopMenu.setBackgroundColor(getResources().getColor(R.color.comic_23211f));
-            mBottomMenu.setBackgroundColor(getResources().getColor(R.color.comic_23211f));
             tv_nightModel.setText("日间");
             if(isCollect){
                 iv_collect.setImageResource(R.drawable.icon_read_night_collect_pre);
@@ -460,8 +374,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 iv_collect.setImageResource(R.drawable.icon_read_night_collect);
             }
         }else{//切换成日间模式
-            mTopMenu.setBackgroundColor(getResources().getColor(R.color.comic_ffffff));
-            mBottomMenu.setBackgroundColor(getResources().getColor(R.color.comic_ffffff));
             tv_nightModel.setText("夜间");
             if(isCollect){
                 iv_collect.setImageResource(R.drawable.icon_read_collect_pre);
@@ -498,6 +410,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             mBottomMenu.startAnimation(mBottomOutAnim);
             mTopMenu.setVisibility(GONE);
             mBottomMenu.setVisibility(GONE);
+            lin_textSetting.setVisibility(View.GONE);
+            view_fgx.setVisibility(View.GONE);
         }
     }
 
@@ -543,56 +457,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @Override
     public void fillCollectStatus(CommonStatusResponse response) {
         isCollect = response.getData().getStatus();
-//        //切换底部view收藏状态显示
-//        mComicView.mBottomBar.initView(isCollect);
-    }
-
-    @Override
-    public void fillFavorStatus(CommonStatusResponse response) {
-        isFavor = response.getData().getStatus();
-    }
-
-    @Override
-    public void onFavorContentSuccess() {
-        isFavor = true;
-//        //刷新item上的收藏显示
-//        mComicView.refreshComicDetail();
-        //通知详情界面刷新comicDetailModel
-        EventBusManager.sendComicFavorStatus(new RefreshComicFavorStatusEvent());
-    }
-
-    @Override
-    public void onCommentSuccess(ResponseModel result) {
-        showToastShort(getString(R.string.comic_report_success));
-        if (commentSendDialog != null) {
-            commentSendDialog.clearInput();
-            commentSendDialog.dismiss();
-        }
-        //通知界面刷新评论列表数据
-        Intent intent = new Intent();
-        intent.putExtra(Constants.IntentKey.RESULT_STATE, RequestCode.COMMENT_REQUEST_CODE);
-        setResult(Activity.RESULT_OK, intent);
-    }
-
-//    @Override
-//    public void onGetLastOrNextCatalogFail(NetError error) {
-//        hideProgress();
-//        if (error.getType() == NetError.NoConnectError) {
-//            showToastShort(BaseApplication.getApplication().getString(R.string.comic_check_connect));
-//        }
-//        mComicView.setLoading(false);
-//    }
-
-    @Override
-    public void fillData(BookCatalogModel catalogModel) {
-        if (!mShowCollectDialog && Math.abs(this.catalogModel.getChapterorder() - catalogModel.getChapterorder()) >= 1) {
-            mShowCollectDialog = true;
-        }
-        catalogAdapter.notifyItem(catalogModel.getId());
-        this.catalogModel = catalogModel;
-//        mComicView.addCatalog(catalogModel);
-
-        getP().downloadFile(catalogModel);
     }
 
     @Override
@@ -603,23 +467,19 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     @Override
-    public void onLoadDataEnd() {
-//        if (mComicView!=null)mComicView.setLoading(false);
-    }
-
-    @Override
-    public void onGetCatalogList(List<BookCatalogModel> catalogModels) {
+    public void onGetCatalogList(List<BookCatalogModel> catalogModels,int totalNum) {
+        tv_totalNum.setText("共"+totalNum+"章");
         List<BookChapterBean> catalogList = new ArrayList<>();
         for (BookCatalogModel model : catalogModels) {
             //刷新历史记录的章节列表到指定章节位置
-            if (catalogModel.getId() == model.getId()) {
-                int currentChapterPos = catalogModels.indexOf(model);
-                mPageLoader.skipToChapter(currentChapterPos);
-                catalogAdapter.notifyItem(catalogModel.getId());
-            }
+//            if (catalogModel.getId() == model.getId()) {
+//                int currentChapterPos = catalogModels.indexOf(model);
+//                mPageLoader.skipToChapter(currentChapterPos);
+//                catalogAdapter.notifyItem(catalogModel.getId());
+//            }
             BookChapterBean bookChapterBean = new BookChapterBean();
             bookChapterBean.setId(model.getId() + "");
-            bookChapterBean.setTitle(model.getChapterorder() + "");
+            bookChapterBean.setTitle(model.getChaptername() + "");
             catalogList.add(bookChapterBean);
         }
         if (currenPage == 1) {

@@ -106,67 +106,67 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
      */
     public void addCatalog(BookCatalogModel model, boolean isScrollByModel) {
         //是同一本漫画并且漫画有效
-        if (model != null && model.getContent() != null) {
-            ArrayList<CustomModel> data = new ArrayList<>();
-            for (String imageUrl : model.getContent()) {
-                CustomModel customModel = new CustomModel(imageUrl, 0);
-                data.add(customModel);
-            }
+//        if (model != null && model.getContent() != null) {
+//            ArrayList<CustomModel> data = new ArrayList<>();
+//            for (String imageUrl : model.getContent()) {
+//                CustomModel customModel = new CustomModel(imageUrl, 0);
+//                data.add(customModel);
+//            }
             //设置尾部局
-            data.add(new CustomModel("", 1));
+//            data.add(new CustomModel("", 1));
 
-            if (!CommonUtil.checkEmpty(catalogModels)) {
-                //获取第一本漫画
-                if (catalogModels.get(0).getChapterorder() - model.getChapterorder() == 1) {
-                    //此时model为前一章 删除最后一章 model添加到一章
-                    while (catalogModels.size() >= 3) {
-                        BookCatalogModel catalogModel = catalogModels.get(catalogModels.size() - 1);
-                        if (!CommonUtil.checkEmpty(catalogModel.getContent())) {
-                            int index = getData().indexOf(new CustomModel(catalogModel.getContent().get(0), 0));
-                            for (int i = 0; i < catalogModel.getContent().size(); i++) {
-                                getData().remove(new CustomModel(catalogModel.getContent().get(i), 0));
-                            }
-                            getData().remove(getData().size() - 1);
-                            notifyItemRangeRemoved(index, catalogModel.getContent().size() + 1);
-                        }
-                        catalogModels.remove(catalogModel);
-                    }
-                    catalogModels.add(0, model);
-                    addData(0, data);
-                } else if (catalogModels.get(catalogModels.size() - 1).getChapterorder() - model.getChapterorder() == -1) {
-                    //此时model为后一章 删除第一章 model添加到最后一章
-                    while (catalogModels.size() >= 3) {
-                        BookCatalogModel catalogModel = catalogModels.get(0);
-                        if (!CommonUtil.checkEmpty(catalogModel.getContent())) {
-                            int index = getData().indexOf(new CustomModel(catalogModel.getContent().get(0), 0));
-                            for (int i = 0; i < catalogModel.getContent().size(); i++) {
-                                getData().remove(new CustomModel(catalogModel.getContent().get(i), 0));
-                            }
-                            //删除尾部局
-                            getData().remove(0);
-                            notifyItemRangeRemoved(index, catalogModel.getContent().size() + 1);
-                        }
-                        catalogModels.remove(catalogModel);
-                    }
-                    catalogModels.add(model);
-                    addData(data);
-                } else if (catalogModels.contains(model)) {
-                    //相同不作处理  什么情况下才会相同？？ 当前展示漫画中含有待展示漫画才会相同 此时滑动到当前位置
-                    scrollToPosition(model);
-                } else {
-                    //此时model与catalogModel不连贯 清空集合 添加model
-                    catalogModels.clear();
-                    catalogModels.add(model);
-                    setNewData(data);
-                }
-            } else {
-                if (catalogModels == null) catalogModels = new ArrayList<>(3);
-                catalogModels.add(model);
-                setNewData(data);
-            }
-//            if (isScrollByModel)
-                scrollToPosition(model);
-        }
+//            if (!CommonUtil.checkEmpty(catalogModels)) {
+//                //获取第一本漫画
+//                if (catalogModels.get(0).getChapterorder() - model.getChapterorder() == 1) {
+//                    //此时model为前一章 删除最后一章 model添加到一章
+//                    while (catalogModels.size() >= 3) {
+//                        BookCatalogModel catalogModel = catalogModels.get(catalogModels.size() - 1);
+//                        if (!CommonUtil.checkEmpty(catalogModel.getContent())) {
+//                            int index = getData().indexOf(new CustomModel(catalogModel.getContent().get(0), 0));
+//                            for (int i = 0; i < catalogModel.getContent().size(); i++) {
+//                                getData().remove(new CustomModel(catalogModel.getContent().get(i), 0));
+//                            }
+//                            getData().remove(getData().size() - 1);
+//                            notifyItemRangeRemoved(index, catalogModel.getContent().size() + 1);
+//                        }
+//                        catalogModels.remove(catalogModel);
+//                    }
+//                    catalogModels.add(0, model);
+//                    addData(0, data);
+//                } else if (catalogModels.get(catalogModels.size() - 1).getChapterorder() - model.getChapterorder() == -1) {
+//                    //此时model为后一章 删除第一章 model添加到最后一章
+//                    while (catalogModels.size() >= 3) {
+//                        BookCatalogModel catalogModel = catalogModels.get(0);
+//                        if (!CommonUtil.checkEmpty(catalogModel.getContent())) {
+//                            int index = getData().indexOf(new CustomModel(catalogModel.getContent().get(0), 0));
+//                            for (int i = 0; i < catalogModel.getContent().size(); i++) {
+//                                getData().remove(new CustomModel(catalogModel.getContent().get(i), 0));
+//                            }
+//                            //删除尾部局
+//                            getData().remove(0);
+//                            notifyItemRangeRemoved(index, catalogModel.getContent().size() + 1);
+//                        }
+//                        catalogModels.remove(catalogModel);
+//                    }
+//                    catalogModels.add(model);
+//                    addData(data);
+//                } else if (catalogModels.contains(model)) {
+//                    //相同不作处理  什么情况下才会相同？？ 当前展示漫画中含有待展示漫画才会相同 此时滑动到当前位置
+//                    scrollToPosition(model);
+//                } else {
+//                    //此时model与catalogModel不连贯 清空集合 添加model
+//                    catalogModels.clear();
+//                    catalogModels.add(model);
+//                    setNewData(data);
+//                }
+//            } else {
+//                if (catalogModels == null) catalogModels = new ArrayList<>(3);
+//                catalogModels.add(model);
+//                setNewData(data);
+//            }
+////            if (isScrollByModel)
+//                scrollToPosition(model);
+//        }
     }
 
 //    public boolean hasFrist() {
@@ -192,11 +192,11 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
                 position = position - 1;
                 customModel = getData().get(position);
             }
-            for (BookCatalogModel catalogModel : catalogModels) {
-                if (catalogModel.getContent().contains(customModel.getUrl())) {
-                    return catalogModel;
-                }
-            }
+//            for (BookCatalogModel catalogModel : catalogModels) {
+//                if (catalogModel.getContent().contains(customModel.getUrl())) {
+//                    return catalogModel;
+//                }
+//            }
         }
         return null;
     }
@@ -253,8 +253,8 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
             ReadComicActivity readComicActivity = ((ReadComicActivity) mContext);
             ILFactory.getLoader().loadResource(collection,
                     readComicActivity.isCollect() ? R.drawable.icon_comic_read_bottombar_collection : R.drawable.icon_comic_read_uncollection_black, null);
-            ILFactory.getLoader().loadResource(favor,
-                    readComicActivity.isFavor() ? R.drawable.img_comic_read_reward_dianzan_true : R.drawable.img_comic_read_reward_dianzan_false, null);
+//            ILFactory.getLoader().loadResource(favor,
+//                    readComicActivity.isFavor() ? R.drawable.img_comic_read_reward_dianzan_true : R.drawable.img_comic_read_reward_dianzan_false, null);
             BookCatalogModel catalogModel = getCatalog(position);
             if (catalogModel != null) {
                 if (!catalogModel.isHasLast() && catalogModel.isHasNext()) {
@@ -336,13 +336,13 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
     }
 
     public void scrollToPosition(BookCatalogModel model) {
-        List<String> imageUrls = model.getContent();
-        if (!CommonUtil.checkEmpty(imageUrls) && getRecyclerView() != null) {
-            final int position = getData().indexOf(new CustomModel(imageUrls.get(0), 0)) + getHeaderLayoutCount();
-            if (getRecyclerView() != null && getRecyclerView().getLayoutManager() instanceof LinearLayoutManager) {
-                final LinearLayoutManager layoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
-                //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
-                layoutManager.scrollToPositionWithOffset(position, 0);
+//        List<String> imageUrls = model.getContent();
+//        if (!CommonUtil.checkEmpty(imageUrls) && getRecyclerView() != null) {
+//            final int position = getData().indexOf(new CustomModel(imageUrls.get(0), 0)) + getHeaderLayoutCount();
+//            if (getRecyclerView() != null && getRecyclerView().getLayoutManager() instanceof LinearLayoutManager) {
+//                final LinearLayoutManager layoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
+//                //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
+//                layoutManager.scrollToPositionWithOffset(position, 0);
 //                layoutManager.scrollToPosition(position);
 //                TopSmoothScroller mScroller = new TopSmoothScroller(mContext);
 //                mScroller.setTargetPosition(position);
@@ -358,9 +358,9 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
 //                        }
 //                    }
 //                });
-            }
+//            }
 
-        }
+//        }
     }
 
     public class TopSmoothScroller extends LinearSmoothScroller {

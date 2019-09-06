@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.jj.base.mvp.IView;
 import com.jj.base.net.ApiSubscriber2;
+import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
@@ -16,6 +17,8 @@ public interface ComicDetailContract {
         void onCollectionSuccess(boolean collectByCurrUser);
 
         void fillCollectStatus(CommonStatusResponse response);
+
+        void onLoadRecommendList(BookListDataResponse response);
     }
 
     interface IDetailPresenter {
@@ -25,25 +28,19 @@ public interface ComicDetailContract {
         //收藏或者取消收藏的操作
         void addOrRemoveCollect(BookModel model,boolean collectByCurrUser);
 
-        //点赞内容
-        void favorContent(long id);
 
         //获取漫画详情
         void getComicDetail(long id, final boolean umengUpload);
 
-        //保存章节
-        void saveCatalog(BookModel model);
 
         //跳转到阅读页面
         void toRead(BookModel bookModel,long chapterid);
 
-        //友盟埋点
-        void umengOnEvent(Activity activity,BookModel model);
-
         //获取收藏状态
         void getCollectStatus(long id);
 
-        //获取点赞状态
-        void getFavorStatus(long id);
+        //获取相关推荐列表
+        void loadCommendList(long id, int pageNum, int sectionId);
+
     }
 }

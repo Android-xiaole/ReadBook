@@ -16,6 +16,7 @@ import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookCatalogModel;
+import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -92,39 +93,6 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                 .subscribe(apiSubscriber);
     }
 
-    @Override
-    public void addOrRemoveCollect(final BookModel model, final boolean collectByCurrUser) {
-        getV().showProgress();
-        List<BookModel> models = new ArrayList<>();
-        models.add(model);
-        Observable<CommonStatusResponse> observable = collectByCurrUser
-                ? UserRepository.getInstance().unCollect(models, getV().getClass().getName())
-                : UserRepository.getInstance().collect(model.getId(), getV().getClass().getName());
-        observable.observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse response) {
-                        if (response.getData().getStatus()) {
-                            getV().onCollectionSuccess(!collectByCurrUser);
-                        } else {
-                            ToastUtil.showToastShort(response.getMessage());
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    protected void onEnd() {
-                        super.onEnd();
-                        getV().hideProgress();
-                    }
-                });
-    }
-
     /**
      * 加载漫画
      *
@@ -155,17 +123,6 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                     }
                 });
 
-    }
-
-    /**
-     * 由于此时HistoryFragment 不确定是否存在  若不存在 才可以保存数据到数据库  存在 由HistoryFragment接收消息 处理数据
-     *
-     * @param model
-     */
-    @Override
-    public void saveCatalog(BookModel model) {
-//        if (model != null && !HistoryPresenter.IS_LIVING)
-//            mDaoHelper.insertOrUpdateRecord(model, 0, 0);
     }
 
     @Override
@@ -221,30 +178,36 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
     }
 
     @Override
-    public void umengOnEvent(Activity activity, BookModel model) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.UMEventId.ENTER_DETAIL, model.getId() + " : " + model.getTitle());
-        UserInfo loginUser = LoginHelper.getOnLineUser();
-        String enterWithLogin = "not";
-        String enterWithVip = "未登录";
-        if (loginUser != null) {
-//            String openidWay = loginUser.getOpenidWay();
-//            if (TextUtils.equals(openidWay, "weiboapp")) {
-//                enterWithLogin = "微博登录";
-//            } else if (TextUtils.equals(openidWay, "qqapp")) {
-//                enterWithLogin = "QQ登录";
-//            } else if (TextUtils.equals(openidWay, "wechatapp")) {
-//                enterWithLogin = "微信登录";
-//            } else {
-//                enterWithLogin = "手机登录";
-//            }
-//            enterWithVip = loginUser.getVipName();
-        }
-        map.put("enter_with_login", enterWithLogin);
-        map.put("enter_with_vip", enterWithVip);
-        map.put("from", activity.getIntent().getStringExtra("from"));
-        MobclickAgent.onEvent(activity, Constants.UMEventId.ENTER_DETAIL, map);
+    public void addOrRemoveCollect(final BookModel model, final boolean collectByCurrUser) {
+        getV().showProgress();
+        List<BookModel> models = new ArrayList<>();
+        models.add(model);
+        Observable<CommonStatusResponse> observable = collectByCurrUser
+                ? UserRepository.getInstance().unCollect(models, getV().getClass().getName())
+                : UserRepository.getInstance().collect(model.getId(), getV().getClass().getName());
+        observable.observeOn(AndroidSchedulers.mainThread())
+                .as(this.<CommonStatusResponse>bindLifecycle())
+                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
+                    @Override
+                    public void onNext(CommonStatusResponse response) {
+                        if (response.getData().getStatus()) {
+                            getV().onCollectionSuccess(!collectByCurrUser);
+                        } else {
+                            ToastUtil.showToastShort(response.getMessage());
+                        }
+                    }
 
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
+                    }
+                });
     }
 
     @Override
@@ -267,40 +230,20 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
 
     }
 
-    @Override
-    public void getFavorStatus(long id) {
-        UserRepository.getInstance().getFavorStatus(id, getV().getClass().getSimpleName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse response) {
-//                        getV().fillFavorStatus(response);
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-
-                    }
-                });
-    }
-
     /**
-     * 点赞内容
+     * 获取先关推荐的列表的列表
      */
     @Override
-    public void favorContent(long id) {
-        getV().showProgress();
-        UserRepository.getInstance().favorContent(id)
+    public void loadCommendList(long id, int pageNum, int sectionId) {
+        ContentRepository.getInstance().getLikeBookList(id, pageNum, sectionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
+                .as(this.<BookListDataResponse>bindLifecycle())
+                .subscribe(new ApiSubscriber2<BookListDataResponse>() {
                     @Override
-                    public void onNext(CommonStatusResponse response) {
-                        if (response.getData().getStatus()) {
-//                            getV().onFavorContentSuccess();
+                    public void onNext(BookListDataResponse response) {
+                        if (response.getData() != null && response.getData().getData() != null) {
+                            getV().onLoadRecommendList(response);
                         } else {
                             onFail(new NetError(response.getMessage(), response.getCode()));
                         }
@@ -308,7 +251,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
 
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
+
                     }
 
                     @Override
@@ -318,4 +261,5 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                 });
 
     }
+
 }

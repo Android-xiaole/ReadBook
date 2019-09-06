@@ -1053,8 +1053,8 @@ public abstract class PageLoader {
     boolean parseCurChapter() {
         // 解析数据
         dealLoadPageList(mCurChapterPos);
-        // 预加载下一页面
-        preLoadNextChapter();
+        // 预加载下一页面(由于存在收费章节的情况，所以这里不预加载了)
+//        preLoadNextChapter();
         return mCurPageList != null ? true : false;
     }
 

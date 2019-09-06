@@ -58,6 +58,9 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.widget.bookreadview.utils.Constant;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -677,7 +680,21 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                                     onAdsPush_128_fail(new NetError("下载链接错误", NetError.OtherError));
                                     return;
                                 }
-                                getP().goDown(text1);
+                                AndPermission.with(getActivity())
+                                        .runtime()
+                                        .permission(Permission.WRITE_EXTERNAL_STORAGE)
+                                        .onGranted(new Action<List<String>>() {
+                                            @Override
+                                            public void onAction(List<String> data) {
+                                                getP().goDown(text1);
+                                            }
+                                        })
+                                        .onDenied(new Action<List<String>>() {
+                                            @Override
+                                            public void onAction(List<String> data) {
+                                                ToastUtil.showToastShort("存储权限获取失败，无法下载");
+                                            }
+                                        });
                                 break;
                             case "3"://无需下载，调用应用内webview加载网页
                                 ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY)

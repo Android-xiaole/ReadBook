@@ -2,9 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item   android:state_selected="true"
-        android:color="@color/comic_565655"></item>
+        android:drawable="@color/comic_565655"></item>
 
-    <item android:color="@color/comic_a8adb3"
+    <item android:drawable="@color/comic_e8ebf0"
         android:state_selected="false"></item>
 
 </selector>
