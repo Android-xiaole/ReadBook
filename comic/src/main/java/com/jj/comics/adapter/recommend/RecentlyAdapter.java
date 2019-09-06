@@ -29,7 +29,7 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
                             .error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
             helper.<TextView>getView(R.id.tv_recently_name).setText(item.getTitle());
-//            helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
+            helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
         }
 
     }

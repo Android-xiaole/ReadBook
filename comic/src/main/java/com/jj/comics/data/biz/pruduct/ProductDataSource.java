@@ -28,9 +28,9 @@ public interface ProductDataSource {
     //获取广告
     Observable<Push> getAdsPush(String activityName,String typeId);
 
-    Observable getAppConfig(String channelId);
+    Observable getAppConfig();
 
-    Observable getAppConfigByIP(String channelId);
+    Observable getAppConfigByIP();
 
     Observable<PayActionResponse> getPayAction();
 }

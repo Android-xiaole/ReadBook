@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ResourceName,MissingDefaultResource">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="resourcename,missingdefaultresource">
     <color name="comic_333333">#333333</color>
-    <color name="comic_353a40">#353A40</color>
+    <color name="comic_353a40">#353a40</color>
     <color name="comic_666666">#666666</color>
     <color name="comic_9fa19f">#9fa19f</color>
     <color name="comic_recomment_title_bg">#80000000</color>
@@ -23,7 +23,7 @@
     <color name="comic_ff7b23">#ff7b23</color>
     <color name="comic_f2f2f2">#f2f2f2</color>
     <color name="comic_9d9ea3">#9d9ea3</color>
-    <color name="comic_6e7379">#6E7379</color>
+    <color name="comic_6e7379">#6e7379</color>
     <color name="comic_reward_textc">#ff8a3c</color>
     <color name="comic_yellow_ffe140">#ffe140</color>
     <color name="comic_ff6e00">#ff6e00</color>
@@ -40,12 +40,12 @@
     <color name="comic_646464">#646464</color>
     <color name="comic_toolbar_bg">#88282828</color>
     <color name="comic_fbfbfb">#fbfbfb</color>
-    <color name="comic_battery_bg">#88FFFFFF</color>
+    <color name="comic_battery_bg">#88ffffff</color>
     <color name="comic_77000000">#77000000</color>
     <color name="comic_31d352">#31d352</color>
     <color name="comic_f3483e">#f3483e</color>
     <color name="comic_00a1eb">#00a1eb</color>
-    <color name="comic_0A0908">#0A0908</color>
+    <color name="comic_0a0908">#0a0908</color>
 
     <color name="comic_029fea">#029fea</color>
     <color name="comic_cccccc">#cccccc</color>
@@ -66,7 +66,6 @@
     <color name="comic_aeaeae">#aeaeae</color>
     <color name="comic_44b549">#44b549</color>
     <color name="comic_8a8a8a">#8a8a8a</color>
-    <color name="comic_a8adb3">#A8ADB3</color>
     <color name="comic_565655">#565655</color>
     <color name="comic_383838">#383838</color>
     <color name="comic_fe4d5a">#fe4d5a</color>
@@ -88,41 +87,41 @@
     <color name="comic_e3e3e3">#e3e3e3</color>
     <color name="comic_f5f5f5">#f5f5f5</color>
     <color name="comic_ff6d50">#ff6d50</color>
-    <color name="comic_ff5f20">#FF5F20</color>
+    <color name="comic_ff5f20">#ff5f20</color>
     <color name="comic_ff4723">#ff4723</color>
     <color name="comic_ff5c2c">#ff5c2c</color>
-    <color name="comic_45372e">#45372E</color>
+    <color name="comic_45372e">#45372e</color>
     <color name="comic_ffffff">#ffffff</color>
     <color name="comic_ff9933">#ff9933</color>
     <color name="comic_f9f9f9">#f9f9f9</color>
     <color name="comic_ffe9d3">#ffe9d3</color>
     <color name="comic_ffd850">#ffd850</color>
-    <color name="comic_23211f">#23211F</color>
+    <color name="comic_23211f">#23211f</color>
 
     <color name="comic_000000">#000000</color>
     <color name="comic_00000000">#00000000</color>
-    <color name="comic_ee2a4f">#EE2A4F</color>
-    <color name="comic_e8ebf0">#E8EBF0</color>
-    <color name="comic_ff2e2e">#FF2E2E</color>
-    <color name="comic_ff6c47">#FF6C47</color>
-    <color name="comic_f0610a">#F0610A</color>
+    <color name="comic_ee2a4f">#ee2a4f</color>
+    <color name="comic_e8ebf0">#e8ebf0</color>
+    <color name="comic_ff2e2e">#ff2e2e</color>
+    <color name="comic_ff6c47">#ff6c47</color>
+    <color name="comic_f0610a">#f0610a</color>
     <color name="comic_b3333333">#b3333333</color>
-    <color name="comic_dddddd">#DDDDDD</color>
-    <color name="comic_ff8124">#FF8124</color>
+    <color name="comic_dddddd">#dddddd</color>
+    <color name="comic_ff8124">#ff8124</color>
     <color name="comic_ff1212">#ff1212</color>
-    <color name="comic_ff4b13">#FF4B13</color>
+    <color name="comic_ff4b13">#ff4b13</color>
     <color name="comic_b7b7b7">#b7b7b7</color>
     <color name="comic_fffd2d">#fffd2d</color>
     <color name="comic_ff4c5d">#ff4c5d</color>
     <color name="comic_ff6a30">#ff6a30</color>
     <color name="comic_ff3333">#ff3333</color>
     <color name="comic_ff4a4a">#ff4a4a</color>
-    <color name="comic_ff8040">#FF8040</color>
+    <color name="comic_ff8040">#ff8040</color>
     <color name="comic_e5e5e5">#e5e5e5</color>
     <color name="comic_12ffffff">#12ffffff</color>
-    <color name="comic_8c8c8c">#8C8C8C</color>
+    <color name="comic_8c8c8c">#8c8c8c</color>
     <color name="comic_ff502e">#ff502e</color>
-    <color name="comic_fffcf1">#FFFCF1</color>
+    <color name="comic_fffcf1">#fffcf1</color>
     <color name="comic_ffa248">#ffa248</color>
     <color name="comic_ffe42c">#ffe42c</color>
     <color name="comic_ff4c34">#ff4c34</color>
@@ -130,24 +129,25 @@
 
 
     <!--read-->
-    <color name="nb.read.bg_0">#F4F6F9</color>
-    <color name="nb.read.bg_1">#CEC29C</color>
-    <color name="nb.read.bg_2">#CCEBCC</color>
-    <color name="nb.read.bg_3">#AAAAAA</color>
-    <color name="nb.read.bg_4">#D1CEC5</color>
-    <color name="nb.read.bg_5">#001C27</color>
-    <color name="nb.read.bg_6">#DDCEC29C</color>
+    <color name="nb.read.bg_0">#f4f6f9</color>
+    <color name="nb.read.bg_1">#cec29c</color>
+    <color name="nb.read.bg_2">#ccebcc</color>
+    <color name="nb.read.bg_3">#aaaaaa</color>
+    <color name="nb.read.bg_4">#d1cec5</color>
+    <color name="nb.read.bg_5">#001c27</color>
+    <color name="nb.read.bg_6">#ddcec29c</color>
 
-    <color name="nb.read.font_0">#353A40</color>
-    <color name="nb.read.font_1">#2C2C2C</color>
-    <color name="nb.read.font_2">#2F332D</color>
-    <color name="nb.read.font_3">#92918C</color>
+    <color name="nb.read.font_0">#353a40</color>
+    <color name="nb.read.font_1">#2c2c2c</color>
+    <color name="nb.read.font_2">#2f332d</color>
+    <color name="nb.read.font_3">#92918c</color>
     <color name="nb.read.font_4">#383429</color>
     <color name="nb.read.font_5">#627176</color>
 
-    <color name="nb.read.bg.night">#0A0908</color>
-    <color name="nb.read.font_night">#484A4C</color>
-    <color name="comic_f4f6f9">#F4F6F9</color>
-    <color name="comic_b5bcc6">#B5BCC6</color>
-    <color name="comic_676b71">#676B71</color>
+    <color name="nb.read.bg.night">#0a0908</color>
+    <color name="nb.read.font_night">#484a4c</color>
+    <color name="comic_f4f6f9">#f4f6f9</color>
+    <color name="comic_b5bcc6">#b5bcc6</color>
+    <color name="comic_676b71">#676b71</color>
+    <color name="comic_a8adb3">#a8adb3</color>
 </resources>

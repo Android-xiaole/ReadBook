@@ -94,25 +94,17 @@ public class ProductRepository implements ProductDataSource {
     }
 
     @Override
-    public Observable<AppConfigResponse> getAppConfig( String channelId) {
-        RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.PACKAGE, channelId)
-                .addProperty(Constants.RequestBodyKey.SOURCEID, Constants.SOURCE_ID)
-                .build();
+    public Observable<AppConfigResponse> getAppConfig() {
         return ComicApi.getApi()
-                .getAppConfig(requestBody)
+                .getAppConfig()
                 .compose(ComicApiImpl.<AppConfigResponse>getApiTransformer2())
                 .subscribeOn(Schedulers.io());
     }
 
     @Override
-    public Observable<AppConfigResponse> getAppConfigByIP(String channelId) {
-        RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.PACKAGE, channelId)
-                .addProperty(Constants.RequestBodyKey.SOURCEID, Constants.SOURCE_ID)
-                .build();
+    public Observable<AppConfigResponse> getAppConfigByIP() {
         return ComicApi.getApi()
-                .getAppConfigByIP(requestBody)
+                .getAppConfigByIP()
                 .compose(ComicApiImpl.<AppConfigResponse>getApiTransformer2())
                 .subscribeOn(Schedulers.io());
     }

@@ -784,22 +784,20 @@ public interface ComicService {
 
     /**
      * 获取app配置信息，域名形式获取
-     * @param body
      * @return
      * cartoon-novel.jjmh114.cn 测试
      * cartoon-novel.jishusaice.cn 线上
      * cartoon_novel.langd88.cn 线上唯一,专门用来请求获取app配置
      */
-    @POST("http://"+Constants.HOST_TEST+"/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
-    Observable<AppConfigResponse> getAppConfig(@Body RequestBody body);
+    @GET("http://"+Constants.HOST_TEST+"/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
+    Observable<AppConfigResponse> getAppConfig();
 
     /**
      * 获取app配置信息,IP形式获取
-     * @param body
      * @return
      */
-    @POST("http://129.211.155.99:80/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
-    Observable<AppConfigResponse> getAppConfigByIP(@Body RequestBody body);
+    @GET("http://129.211.155.99:80/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
+    Observable<AppConfigResponse> getAppConfigByIP();
 
     /**
      * 获取支付活动弹窗信息

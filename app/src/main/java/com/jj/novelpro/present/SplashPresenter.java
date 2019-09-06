@@ -26,12 +26,12 @@ public class SplashPresenter extends BasePresenter<BaseRepository,SplashContract
     @Override
     public void sendDelayedMessage(int second) {
         Observable<AppConfigResponse> appConfig = ProductRepository.getInstance()
-                .getAppConfig(Constants.CHANNEL_ID)
+                .getAppConfig()
                 .timeout(5, TimeUnit.SECONDS, new ObservableSource<AppConfigResponse>() {
                     @Override
                     public void subscribe(Observer<? super AppConfigResponse> observer) {
                         ProductRepository.getInstance()
-                                .getAppConfigByIP(Constants.CHANNEL_ID)
+                                .getAppConfigByIP()
                                 .subscribe(new ApiSubscriber2<AppConfigResponse>() {
                                     @Override
                                     public void onNext(AppConfigResponse appConfigResponse) {

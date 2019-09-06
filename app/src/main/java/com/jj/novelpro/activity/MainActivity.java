@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -75,6 +76,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     ImageView mIvShelf;
     @BindView(R2.id.iv_nav_mine)
     ImageView mIvMine;
+
+    @BindView(R2.id.tv_nav_featured)
+    TextView mTvFeatured;
+    @BindView(R2.id.tv_nav_classify)
+    TextView mTvClassify;
+    @BindView(R2.id.tv_nav_money)
+    TextView mTvMoney;
+    @BindView(R2.id.tv_nav_shelf)
+    TextView mTvShelf;
+    @BindView(R2.id.tv_nav_mine)
+    TextView mTvMine;
+
 
     private int currentIndex = -1;
     private int preIndex = -1;
@@ -184,7 +197,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //        mRadioGroup.setOnCheckedChangeListener(this);
 
         int index = savedInstanceState == null ? 0 : savedInstanceState.getInt(Constants.IntentKey.INDEX, 0);
-        setCheck(index);
+
+        switchBtns(index);
         getP().switchFragment(index, currentIndex, mInterceptor);
         getP().checkUpdate();
 //        ARouter.getInstance().build(RouterMap.COMIC_ABOUT_ACTIVITY).navigation(this);
@@ -276,55 +290,89 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             R2.id.btn_nav_shelf,R2.id.btn_nav_mine})
     void onClick(View v) {
         if (v.getId() == R.id.btn_nav_featured) {
+            switchBtns(0);
             getP().switchFragment(0, currentIndex, mInterceptor);
         }else if (v.getId() == R.id.btn_nav_classify) {
+            switchBtns(1);
             getP().switchFragment(1, currentIndex, mInterceptor);
         }else if (v.getId() == R.id.btn_nav_money) {
+            switchBtns(2);
             getP().switchFragment(2, currentIndex, mInterceptor);
         }else if (v.getId() == R.id.btn_nav_shelf) {
+            switchBtns(3);
             getP().switchFragment(3, currentIndex, mInterceptor);
         }else if (v.getId() == R.id.btn_nav_mine) {
+            switchBtns(4);
             getP().switchFragment(4, currentIndex, mInterceptor);
         }
-        switchBtns(v.getId());
     }
 
-    private void switchBtns(int id) {
-        switch (id) {
-            case R.id.btn_nav_featured:
+    private void switchBtns(int index) {
+        switch (index) {
+            case 0:
                 mIvFeatured.setSelected(true);
                 mIvClassify.setSelected(false);
                 mIvMoney.setSelected(false);
                 mIvShelf.setSelected(false);
                 mIvMine.setSelected(false);
+
+                mTvFeatured.setSelected(true);
+                mTvClassify.setSelected(false);
+                mTvMoney.setSelected(false);
+                mTvShelf.setSelected(false);
+                mTvMine.setSelected(false);
                 break;
-            case R.id.btn_nav_classify:
+            case 1:
                 mIvFeatured.setSelected(false);
                 mIvClassify.setSelected(true);
                 mIvMoney.setSelected(false);
                 mIvShelf.setSelected(false);
                 mIvMine.setSelected(false);
+
+                mTvFeatured.setSelected(false);
+                mTvClassify.setSelected(true);
+                mTvMoney.setSelected(false);
+                mTvShelf.setSelected(false);
+                mTvMine.setSelected(false);
                 break;
-            case R.id.btn_nav_money:
+            case 2:
                 mIvFeatured.setSelected(false);
                 mIvClassify.setSelected(false);
                 mIvMoney.setSelected(true);
                 mIvShelf.setSelected(false);
                 mIvMine.setSelected(false);
+
+                mTvFeatured.setSelected(false);
+                mTvClassify.setSelected(false);
+                mTvMoney.setSelected(true);
+                mTvShelf.setSelected(false);
+                mTvMine.setSelected(false);
                 break;
-            case R.id.btn_nav_shelf:
+            case 3:
                 mIvFeatured.setSelected(false);
                 mIvClassify.setSelected(false);
                 mIvMoney.setSelected(false);
                 mIvShelf.setSelected(true);
                 mIvMine.setSelected(false);
+
+                mTvFeatured.setSelected(false);
+                mTvClassify.setSelected(false);
+                mTvMoney.setSelected(false);
+                mTvShelf.setSelected(true);
+                mTvMine.setSelected(false);
                 break;
-            case R.id.btn_nav_mine:
+            case 4:
                 mIvFeatured.setSelected(false);
                 mIvClassify.setSelected(false);
                 mIvMoney.setSelected(false);
                 mIvShelf.setSelected(false);
                 mIvMine.setSelected(true);
+
+                mTvFeatured.setSelected(false);
+                mTvClassify.setSelected(false);
+                mTvMoney.setSelected(false);
+                mTvShelf.setSelected(false);
+                mTvMine.setSelected(true);
                 break;
         }
     }
