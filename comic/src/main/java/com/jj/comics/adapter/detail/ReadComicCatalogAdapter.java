@@ -24,17 +24,34 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
     @Override
     protected void convert(BaseViewHolder helper, BookCatalogModel item) {
         TextView tv_title = helper.getView(R.id.tv_title);
-        tv_title.setText("第"+item.getChapterorder()+"话" + "：" + item.getChaptername());
-        if (currentContentId == item.getId()) {
-            tv_title.setSelected(true);
-            tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        } else {
-            tv_title.setSelected(false);
-            tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+        tv_title.setText("第"+item.getChapterorder()+"章" + "  " + item.getChaptername());
+//        if (currentContentId == -1){//没有阅读记录，默认选中第一章
+//            if ((helper.getLayoutPosition()-getHeaderLayoutCount()) == 0){
+//                tv_title.setSelected(true);
+//                tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+//            }else{
+//                tv_title.setSelected(false);
+//                tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+//            }
+//        }else
+            {
+            if (currentContentId == item.getId()) {
+                tv_title.setSelected(true);
+                tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            } else {
+                tv_title.setSelected(false);
+                tv_title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            }
         }
-        ImageView iv_lockIcon = helper.getView(R.id.iv_lockIcon);
-        iv_lockIcon.setVisibility(item.getIsvip() == 1 ? View.VISIBLE : View.INVISIBLE);
-        helper.setImageResource(R.id.iv_lockIcon, item.isIs_buy() ? R.drawable.img_comic_read_cataloglist_jiesuo : R.drawable.img_comic_read_cataloglist_suo);
+        View tv_free = helper.getView(R.id.tv_free);
+        View tv_notFree = helper.getView(R.id.tv_notFree);
+        if (item.getIsvip() == 0){
+            tv_free.setVisibility(View.VISIBLE);
+            tv_notFree.setVisibility(View.GONE);
+        }else{
+            tv_free.setVisibility(View.GONE);
+            tv_notFree.setVisibility(View.VISIBLE);
+        }
     }
 
     public void notifyItem(long selectId) {

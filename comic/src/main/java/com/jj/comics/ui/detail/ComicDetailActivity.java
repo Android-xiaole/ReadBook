@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.ui.BaseActivity;
@@ -14,13 +15,16 @@ import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.adapter.mine.CommonRecommendAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.ui.dialog.ShareDialog;
+import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 
@@ -28,11 +32,18 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 @Route(path = RouterMap.COMIC_DETAIL_ACTIVITY)
 public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> implements ComicDetailContract.IDetailView {
 
+    @BindView(R2.id.rv_recommendList)
+    RecyclerView rv_recommendList;//底部推荐小说列表
+
+    private CommonRecommendAdapter recommendAdapter;//底部推荐小说适配器
 
     public BookModel model;//漫画详情model
 
@@ -51,6 +62,18 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             getP().getComicDetail(id, true);
         }
 
+        rv_recommendList.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
+        recommendAdapter = new CommonRecommendAdapter(R.layout.comic_item_search_watchingcomicdata);
+        recommendAdapter.bindToRecyclerView(rv_recommendList,true);
+        recommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (model.getId() != recommendAdapter.getData().get(position).getId()) {
+                    DetailActivityHelper.toDetail(ComicDetailActivity.this, recommendAdapter.getData().get(position).getId(),"详情页_推荐");
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
@@ -123,9 +146,13 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 shareDialog.show(shareMessageModel);
             }
         }else if (id == R.id.tv_read){//去阅读
-            if (model != null) {
-                toRead(model, model.getChapterid());
-            }
+//            if (model != null) {
+//                toRead(model, model.getChapterid());
+//            }
+            //test code
+            BookModel bookModel = new BookModel();
+            bookModel.setId(544);
+            ReadComicActivity.toRead(this,bookModel,null);
         }
     }
 
@@ -178,9 +205,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         } else {
 //            mComicRead.setText("立即阅读");
         }
-        if (umengUpload) {
-            getP().umengOnEvent(this, model);
-        }
 //        ILFactory.getLoader().loadNet(mImg, model.getCoverl(), new RequestOptions().error(R.drawable.img_loading)
 //                .placeholder(R.drawable.img_loading));
         if (model.getFullflag() == 1) {//已完结
@@ -198,6 +222,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     @Override
     public void fillCollectStatus(CommonStatusResponse response) {
 
+    }
+
+    @Override
+    public void onLoadRecommendList(BookListDataResponse response) {
+        recommendAdapter.setNewData(response.getData().getData());
     }
 
     public void toRead(BookModel bookModel, long chapterId) {

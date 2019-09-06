@@ -34,25 +34,24 @@ public class BookCatalogModel implements Serializable {
     private int saleprice;
     private boolean is_read;
     private boolean is_buy;
-    private String url = "http://ossmh.jj1699.cn//novel/%E5%BF%83%E6%82%A6%E5%90%9B%E5%85%AE%E5%90%9B%E4%B8%8D%E7%9F%A5%E5%BE%AE%E5%87%89/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E6%B1%82%E6%B1%82%E4%BD%A0.txt";
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
+    private String content;
 
     //下面两个个字段是获取章节内容接口获取的
     private float vip_discount;//折扣率 0.7
-    private List<String> content;//存储章节图片内容信息
 
     //下面四个字段是获取章节内容接口通过返回值手动设置的
     private boolean hasLast;//是否有上一话
     private boolean hasNext;//是否有下一话
     private long lastChapterid;//上一话章节id
     private long nextChapterid;//下一话章节id
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public long getLastChapterid() {
         return lastChapterid;
@@ -68,14 +67,6 @@ public class BookCatalogModel implements Serializable {
 
     public void setNextChapterid(long nextChapterid) {
         this.nextChapterid = nextChapterid;
-    }
-
-    public List<String> getContent() {
-        return content;
-    }
-
-    public void setContent(List<String> content) {
-        this.content = content;
     }
 
     public float getVip_discount() {

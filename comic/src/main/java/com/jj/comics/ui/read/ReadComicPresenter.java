@@ -2,7 +2,6 @@ package com.jj.comics.ui.read;
 
 import android.util.Log;
 
-import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber;
@@ -37,7 +36,6 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -61,7 +59,8 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
             @Override
             public void onNext(BookCatalogModel model) {
                 subscriber = null;
-                getV().fillData(model);
+                //获取章节内容之后去下载txt文件
+                downloadFile(model);
             }
 
             @Override
@@ -73,7 +72,6 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
             @Override
             protected void onEnd() {
                 getV().hideProgress();
-                getV().onLoadDataEnd();
             }
         };
         List<Observable<BookCatalogModel>> requests = new ArrayList<>();
@@ -87,14 +85,18 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(subscriber);
     }
 
-    public void downloadFile(BookCatalogModel catalogModel){
-        ComicApi.getApi().downloadFile(catalogModel.getUrl()+Constants.IDENTIFICATION_IGNORE)
+    /**
+     * 下载小说txt文件，并缓存
+     * @param catalogModel
+     */
+    private void downloadFile(BookCatalogModel catalogModel){
+        ComicApi.getApi().downloadFile(catalogModel.getContent()+Constants.IDENTIFICATION_IGNORE)
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, Publisher<File>>() {
                     @Override
                     public Publisher<File> apply(ResponseBody responseBody) throws Exception {
                         try {
-                            File file = BookRepository.getInstance().saveChapterFile(catalogModel.getBook_id() + "", catalogModel.getChapterorder() + "", responseBody.byteStream());
+                            File file = BookRepository.getInstance().saveChapterFile(catalogModel.getBook_id() + "", catalogModel.getChaptername() + "", responseBody.byteStream());
                             return Flowable.just(file);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -183,25 +185,6 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
 
     }
 
-    @Override
-    public void getFavorStatus(long id) {
-        UserRepository.getInstance().getFavorStatus(id, getV().getClass().getSimpleName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse response) {
-                        getV().fillFavorStatus(response);
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-
-                    }
-                });
-    }
-
     /**
      * 获取目录列表
      */
@@ -215,7 +198,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData());
+                        getV().onGetCatalogList(response.getData().getData(),response.getData().getTotal_num());
                     }
 
                     @Override
@@ -265,67 +248,4 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     }
                 });
     }
-
-    /**
-     * 点赞
-     */
-    @Override
-    public void favorContent(long bookId) {
-        getV().showProgress();
-        UserRepository.getInstance().favorContent(bookId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse response) {
-                        if (response.getData().getStatus()) {
-                            getV().onFavorContentSuccess();
-                        } else {
-                            onFail(new NetError(response.getMessage(), response.getCode()));
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    protected void onEnd() {
-                        getV().hideProgress();
-                    }
-                });
-
-    }
-
-    @Override
-    public void sendComment(long bookId, String commentDetail) {
-        getV().showProgress();
-        ContentRepository.getInstance().sendComment(bookId, commentDetail)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse result) {
-                        if (result.getData().getStatus()) {
-                            getV().onCommentSuccess(result);
-                        } else {
-                            getV().showToastShort(result.getMessage());
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        getV().showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    protected void onEnd() {
-                        getV().hideProgress();
-                    }
-                });
-    }
-
 }

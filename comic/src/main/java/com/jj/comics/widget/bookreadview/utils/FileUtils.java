@@ -66,15 +66,16 @@ public class FileUtils {
 
     //获取Cache文件夹
     public static String getCachePath() {
-        if (isSdCardExist()) {
-            return BaseApplication.getApplication()
-                    .getExternalCacheDir()
-                    .getAbsolutePath();
-        } else {
+//        if (isSdCardExist()) {
+//            return BaseApplication.getApplication()
+//                    .getExternalCacheDir()
+//                    .getAbsolutePath();
+//        } else {
+        //为了避免权限问题，默认使用内部存储
             return BaseApplication.getApplication()
                     .getCacheDir()
                     .getAbsolutePath();
-        }
+//        }
     }
 
     public static long getDirSize(File file) {

@@ -26,6 +26,7 @@ import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.util.LoginHelper;
 import com.jj.novelpro.R;
 import com.jj.novelpro.R2;
@@ -43,11 +44,14 @@ import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.RegularUtil;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -145,6 +149,26 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.READ_PHONE_STATE)
+                .onGranted(permissions -> {
+                    // Storage permission are allowed.
+                    getP().checkUpdate();
+                })
+                .onDenied(permissions -> {
+                    // Storage permission are not allowed.
+                    List<String> strings = Permission.transformText(getApplicationContext(), permissions);
+                    StringBuffer sb = new StringBuffer();
+                    for (String permission : strings) {
+                        sb.append(permission+"、");
+                    }
+                    sb.deleteCharAt(sb.lastIndexOf("、"));
+                    ToastUtil.showToastShort("您已拒绝"+sb.toString()+"权限，可能导致App无法正常使用");
+                })
+                .start();
+
         // 不使用图标默认变色
 //        mBottomNavigationView.setItemIconTintList(null);
 //        mBottomNavigationView.setOnNavigationItemSelectedListener(this);

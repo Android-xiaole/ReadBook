@@ -174,21 +174,21 @@ public class ComicView extends CustomView implements BaseQuickAdapter.OnItemChil
     }
 
     private void updateMsg() {
-        int firstPosition = findFirstVisiblePosition();
-        BookCatalogModel catalog = mAdapter.getCatalog(firstPosition);
-        if (catalog == null)return;
-        String nowTitle = getNowTitle(catalog);
-        if (!TextUtils.equals(nowTitle, mTitleView.getText()))
-            mTitleView.setText(nowTitle);
-        if (catalog != null) {
-            List<String> imageUrls = catalog.getContent();
-            String url = mAdapter.getData().get(firstPosition).getUrl();
-            if (TextUtils.isEmpty(url) && firstPosition > 1) {
-                //如果是尾部局 取上一个
-                url = mAdapter.getData().get(firstPosition - 1).getUrl();
-            }
-            mRemindView.setProgress(catalog.getChapterorder(), imageUrls.indexOf(url) + 1, imageUrls.size());
-        }
+//        int firstPosition = findFirstVisiblePosition();
+//        BookCatalogModel catalog = mAdapter.getCatalog(firstPosition);
+//        if (catalog == null)return;
+//        String nowTitle = getNowTitle(catalog);
+//        if (!TextUtils.equals(nowTitle, mTitleView.getText()))
+//            mTitleView.setText(nowTitle);
+//        if (catalog != null) {
+//            List<String> imageUrls = catalog.getContent();
+//            String url = mAdapter.getData().get(firstPosition).getUrl();
+//            if (TextUtils.isEmpty(url) && firstPosition > 1) {
+//                //如果是尾部局 取上一个
+//                url = mAdapter.getData().get(firstPosition - 1).getUrl();
+//            }
+//            mRemindView.setProgress(catalog.getChapterorder(), imageUrls.indexOf(url) + 1, imageUrls.size());
+//        }
     }
 
     public int findFirstVisiblePosition() {
@@ -230,22 +230,22 @@ public class ComicView extends CustomView implements BaseQuickAdapter.OnItemChil
      * @param model 待展示的漫画
      */
     public void addCatalog(BookCatalogModel model) {
-        if (model != null) {
-            int subSeq = model.getChapterorder();
-            // TODO: 2019-07-24 need help  :getSubCount?
-            if (subSeq > 0 /*&& subSeq <= mComicDetailModel.getSubCount()*/ && !CommonUtil.checkEmpty(model.getContent())) {
-                //添加数据到缓存
-                if (mCache.size() >= COMIC_CACHE_SIZE) {
-                    //删除最不可能加载到的catalog 即距离待展示model距离最远的缓存 SparseArray的key值升序
-                    if (Math.abs(subSeq - mCache.keyAt(0)) >= Math.abs(subSeq - mCache.keyAt(mCache.size() - 1))) {
-                        //如果待展示漫画距离第一个元素较远  则删除第一个元素
-                        mCache.removeAt(0);
-                    } else {
-                        mCache.removeAt(mCache.size() - 1);
-                    }
-                }
-                mCache.put(subSeq, model);
-            }
+//        if (model != null) {
+//            int subSeq = model.getChapterorder();
+//            // TODO: 2019-07-24 need help  :getSubCount?
+//            if (subSeq > 0 /*&& subSeq <= mComicDetailModel.getSubCount()*/ && !CommonUtil.checkEmpty(model.getContent())) {
+//                //添加数据到缓存
+//                if (mCache.size() >= COMIC_CACHE_SIZE) {
+//                    //删除最不可能加载到的catalog 即距离待展示model距离最远的缓存 SparseArray的key值升序
+//                    if (Math.abs(subSeq - mCache.keyAt(0)) >= Math.abs(subSeq - mCache.keyAt(mCache.size() - 1))) {
+//                        //如果待展示漫画距离第一个元素较远  则删除第一个元素
+//                        mCache.removeAt(0);
+//                    } else {
+//                        mCache.removeAt(mCache.size() - 1);
+//                    }
+//                }
+//                mCache.put(subSeq, model);
+//            }
             //更新topBar标题 以及remind文本 mAdapter添加数据之后可能造成获取第一条数据有问题 故需post调用
 //            post(new Runnable() {
 //                @Override
@@ -254,52 +254,52 @@ public class ComicView extends CustomView implements BaseQuickAdapter.OnItemChil
 //                }
 //            });
             //处理头尾布局
-            mAdapter.removeAllHeaderView();
-            mAdapter.removeAllFooterView();
-            if (model.isHasNext() && !model.isHasLast()) {
-                //有下一话，没有上一话
-                enableUpFetch(false);
-                enableLoadMore(true);
-                if (mHeadView == null)
-                    mHeadView = createView(getContext().getString(R.string.comic_front_no_more));
-                if (mAdapter.getHeaderLayoutCount() == 0) mAdapter.addHeaderView(mHeadView, 0);
-                if (mFooterView != null && mAdapter.getFooterLayoutCount() == 1)
-                    mAdapter.removeFooterView(mFooterView);
-            } else if (model.isHasLast() && model.isHasNext()) {
-                //有上一话也有在下一话
-                enableUpFetch(true);
-                enableLoadMore(true);
-                if (mHeadView != null && mAdapter.getHeaderLayoutCount() == 1)
-                    mAdapter.removeHeaderView(mHeadView);
-                if (mFooterView != null && mAdapter.getFooterLayoutCount() == 1)
-                    mAdapter.removeFooterView(mFooterView);
-            } else if (!model.isHasNext() && model.isHasLast()) {
-                //没有下一话，有上一话
-                enableUpFetch(true);
-                enableLoadMore(false);
-                if (mHeadView != null && !model.isHasLast() && mAdapter.getHeaderLayoutCount() == 1)
-                    mAdapter.removeHeaderView(mHeadView);
-                if (mFooterView == null)
-                    mFooterView = createView(getContext().getString(R.string.comic_behind_no_more));
-                if (mAdapter.getFooterLayoutCount() == 0) mAdapter.addFooterView(mFooterView);
-            } else {
-                //上一话下一话都没有
-                enableUpFetch(false);
-                enableLoadMore(false);
-                if (mHeadView == null)
-                    mHeadView = createView(getContext().getString(R.string.comic_front_no_more));
-                if (mAdapter.getHeaderLayoutCount() == 0) mAdapter.addHeaderView(mHeadView, 0);
-                if (mFooterView == null)
-                    mFooterView = createView(getContext().getString(R.string.comic_behind_no_more));
-                if (mAdapter.getFooterLayoutCount() == 0) mAdapter.addFooterView(mFooterView);
-            }
-        }
-        //展示漫画,一定要处理完头尾布局之后再加载漫画
-        mAdapter.addCatalog(model, isScrollToModel);
-        //重置ScrollToModel
-        isScrollToModel = false;
-        //每次添加数据完成后重置加载状态
-        setLoading(false);
+//            mAdapter.removeAllHeaderView();
+//            mAdapter.removeAllFooterView();
+//            if (model.isHasNext() && !model.isHasLast()) {
+//                //有下一话，没有上一话
+//                enableUpFetch(false);
+//                enableLoadMore(true);
+//                if (mHeadView == null)
+//                    mHeadView = createView(getContext().getString(R.string.comic_front_no_more));
+//                if (mAdapter.getHeaderLayoutCount() == 0) mAdapter.addHeaderView(mHeadView, 0);
+//                if (mFooterView != null && mAdapter.getFooterLayoutCount() == 1)
+//                    mAdapter.removeFooterView(mFooterView);
+//            } else if (model.isHasLast() && model.isHasNext()) {
+//                //有上一话也有在下一话
+//                enableUpFetch(true);
+//                enableLoadMore(true);
+//                if (mHeadView != null && mAdapter.getHeaderLayoutCount() == 1)
+//                    mAdapter.removeHeaderView(mHeadView);
+//                if (mFooterView != null && mAdapter.getFooterLayoutCount() == 1)
+//                    mAdapter.removeFooterView(mFooterView);
+//            } else if (!model.isHasNext() && model.isHasLast()) {
+//                //没有下一话，有上一话
+//                enableUpFetch(true);
+//                enableLoadMore(false);
+//                if (mHeadView != null && !model.isHasLast() && mAdapter.getHeaderLayoutCount() == 1)
+//                    mAdapter.removeHeaderView(mHeadView);
+//                if (mFooterView == null)
+//                    mFooterView = createView(getContext().getString(R.string.comic_behind_no_more));
+//                if (mAdapter.getFooterLayoutCount() == 0) mAdapter.addFooterView(mFooterView);
+//            } else {
+//                //上一话下一话都没有
+//                enableUpFetch(false);
+//                enableLoadMore(false);
+//                if (mHeadView == null)
+//                    mHeadView = createView(getContext().getString(R.string.comic_front_no_more));
+//                if (mAdapter.getHeaderLayoutCount() == 0) mAdapter.addHeaderView(mHeadView, 0);
+//                if (mFooterView == null)
+//                    mFooterView = createView(getContext().getString(R.string.comic_behind_no_more));
+//                if (mAdapter.getFooterLayoutCount() == 0) mAdapter.addFooterView(mFooterView);
+//            }
+//        }
+//        //展示漫画,一定要处理完头尾布局之后再加载漫画
+//        mAdapter.addCatalog(model, isScrollToModel);
+//        //重置ScrollToModel
+//        isScrollToModel = false;
+//        //每次添加数据完成后重置加载状态
+//        setLoading(false);
     }
 
     private void logCache() {

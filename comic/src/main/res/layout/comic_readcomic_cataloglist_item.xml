@@ -2,24 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_32"
-    android:background="@drawable/comic_readcomic_cataloglist_item_bg"
-    android:gravity="center_vertical">
+    android:layout_height="wrap_content"
+    android:background="@color/comic_ffffff"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_lockIcon"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_15"
-        android:layout_marginRight="@dimen/dp_10"
-        tools:src="@drawable/img_comic_read_cataloglist_jiesuo" />
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textColor="@drawable/comic_readcomic_cataloglist_item_textc"
-        android:textSize="@dimen/dp_13" />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_18"
+            android:layout_marginBottom="@dimen/dp_18"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textColor="@drawable/comic_readcomic_cataloglist_item_textc"
+            android:textSize="@dimen/dp_13"
+            tools:text="第一章   龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人龙的传人" />
+
+        <TextView
+            android:id="@+id/tv_free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_16"
+            android:text="免费"
+            android:textColor="@color/comic_a8adb3"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:id="@+id/tv_notFree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_16"
+            android:text="收费"
+            android:textColor="@color/comic_ffad70"
+            android:textSize="@dimen/dp_14"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginRight="@dimen/dp_16"
+        android:background="@color/comic_e8ebf0" />
 
 </LinearLayout>
