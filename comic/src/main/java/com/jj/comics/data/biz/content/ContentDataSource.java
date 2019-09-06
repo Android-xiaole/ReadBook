@@ -52,7 +52,8 @@ public interface ContentDataSource {
     Observable<BannerResponse> getBanner(String retryTag);
 
     //获取最近更新
-    Observable<BookListDataResponse> getRecentUpdate(int pageNum, int i, String retryTag);
+    Observable<BookListDataResponse> getRecentUpdate(int channelFlag,int pageNum, int i,
+                                                     String retryTag);
 
     //发现页面热门搜索
     Observable<SearchHotKeywordsResponse> getHotSearchKeywords(String retryTag);

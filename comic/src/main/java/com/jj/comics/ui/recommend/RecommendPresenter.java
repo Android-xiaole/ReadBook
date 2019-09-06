@@ -86,9 +86,10 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
     }
 
     @Override
-    public void loadRecentlyComic(int pageNum) {
+    public void loadRecentlyComic(int pageNum,int channelFlag) {
+        getV().showProgress();
         ContentRepository.getInstance()
-                .getRecentUpdate(pageNum, 5, getV().getClass().getName())
+                .getRecentUpdate(channelFlag,pageNum, 5, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookListDataResponse>bindLifecycle())

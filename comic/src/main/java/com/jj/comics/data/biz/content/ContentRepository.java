@@ -185,9 +185,10 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookListDataResponse> getRecentUpdate(int pageNum, int pageSize,
+    public Observable<BookListDataResponse> getRecentUpdate(int channelFlag,int pageNum,
+                                                            int pageSize,
                                                           String retryTag) {
-        return ComicApi.getApi().getRecentUpdate(pageNum, pageSize)
+        return ComicApi.getApi().getRecentUpdate(channelFlag,pageNum, pageSize)
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }

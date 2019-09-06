@@ -23,7 +23,7 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
     protected void convert(BaseViewHolder helper, BookModel item) {
         if (item != null) {
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_recently_icon),
-                    item.getCoverl(),
+                    item.getCover(),
                     new RequestOptions()
                             .transforms(new CenterCrop())
                             .error(R.drawable.img_loading)

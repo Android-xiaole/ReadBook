@@ -201,6 +201,10 @@ public class Constants {
         public static final String ORDER_BY = "order_by";
 
 
+        //首页男女频切换标识
+        public static final int CONTENT_CHANNEL_FLAG_ALL = 0;
+        public static final int CONTENT_CHANNEL_FLAG_MAN = 1;
+        public static final int CONTENT_CHANNEL_FLAG_WOMAN = 2;
         /**
          * ------------------ java api key-------------------------
          */

@@ -52,7 +52,7 @@ public interface RecommendContract {
         void loadData(int pageNum, boolean evict);
 
         //获取最近更新数据
-        void loadRecentlyComic(int pageNum);
+        void loadRecentlyComic(int pageNum,int channelFlag);
 
         //检查获取免费金币
         void checkFreeGoldStatus();

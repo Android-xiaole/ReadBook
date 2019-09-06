@@ -217,7 +217,8 @@ public interface ComicService {
      * @return
      */
     @GET(API_RECENT_UPDATES)
-    Observable<BookListDataResponse> getRecentUpdate(@Query("page") int pageNum,
+    Observable<BookListDataResponse> getRecentUpdate(@Query("channel") int channelFlag,
+                                                     @Query("page") int pageNum,
                                                    @Query("length") int pageSize);
 
 
