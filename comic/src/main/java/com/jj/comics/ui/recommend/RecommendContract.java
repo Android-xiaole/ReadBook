@@ -45,6 +45,10 @@ public interface RecommendContract {
         void onPaySuccess();
 
         void payFail(String result);
+
+        void onLoadPopShareSucc(List<BookModel> bookModelList);
+
+        void onLoadPopShareFail(NetError netError);
     }
 
     interface IRecommendPresenter {
@@ -53,6 +57,8 @@ public interface RecommendContract {
 
         //获取最近更新数据
         void loadRecentlyComic(int pageNum,int channelFlag);
+
+        void loadPopShare(int channelFlag);
 
         //检查获取免费金币
         void checkFreeGoldStatus();

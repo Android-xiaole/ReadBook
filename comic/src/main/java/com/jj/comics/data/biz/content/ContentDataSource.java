@@ -4,6 +4,7 @@ import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookListDataResponse;
+import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
@@ -66,6 +67,9 @@ public interface ContentDataSource {
 
     //获取首页推荐
     Observable<BookListRecommondResponse> getRecommond(String retryTag);
+
+    //获取首页最热分享
+    Observable<BookListPopShareResponse> getPopShare(int channelFlag,String retryTag);
 
     //免费专区
     Observable<BookListDataResponse> getFree(int pageNum, int pageSize, String retryTag);

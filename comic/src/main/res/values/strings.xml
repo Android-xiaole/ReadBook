@@ -295,6 +295,7 @@
     <string name="comic_recommend_free_title1">本周限免</string>
     <string name="comic_recommend_free_title2">下周预告</string>
     <string name="comic_recently_title">最近更新</string>
+    <string name="comic_pop_share_title">热门分享</string>
     <string name="comic_go_sign_in">去签到</string>
     <string name="comic_no_balance">0金币</string>
     <string name="comic_clear_cache">清除缓存</string>

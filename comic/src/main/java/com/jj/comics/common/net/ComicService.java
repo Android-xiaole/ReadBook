@@ -6,6 +6,7 @@ import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookListDataResponse;
+import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
@@ -135,6 +136,8 @@ public interface ComicService {
     String API_ALIPAY_APP = "api/alipay_app";
     String API_HUIFUBAO_APP = "api/huifubao";
 
+    String API_POP_SHARE = "api/pop_share";
+
     /**
      * 设置是否自动购买(暂时未被使用，客户端只做本地保存)
      *
@@ -210,6 +213,14 @@ public interface ComicService {
      */
     @GET(API_RECOMMENDED)
     Observable<BookListRecommondResponse> getRecommond();
+
+    /**
+     * 首页最热分享
+     *
+     * @return
+     */
+    @GET(API_POP_SHARE)
+    Observable<BookListPopShareResponse> getPopShare(@Query("channel") int channelFlag);
 
     /**
      * 最近更新

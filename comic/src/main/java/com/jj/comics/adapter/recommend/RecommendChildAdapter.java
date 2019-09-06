@@ -47,8 +47,7 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
 
     @Override
     protected void convert(BaseViewHolder helper, BookModel mainContent) {
-//        String imageUrl = getImageUrl(imageVertical, useCustom,mainContent);
-        String imageUrl = mainContent.getModel_img_url();
+        String imageUrl = getImageUrl(imageVertical, useCustom,mainContent);
         if (!TextUtils.isEmpty(imageUrl)) {
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.item_recommend_img),
                     imageUrl,
@@ -81,7 +80,7 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
         if (useCostom) {
             imageUrl = mainContent.getModel_img_url();
             if (TextUtils.isEmpty(imageUrl) || !imageUrl.startsWith("http")) {
-                imageUrl = mainContent.getCoverl();
+                imageUrl = mainContent.getCover();
             }
         }else {
             if (imageVertical) {//竖图

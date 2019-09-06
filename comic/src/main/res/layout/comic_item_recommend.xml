@@ -64,11 +64,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_20"
         />
 
-    <View
-        android:background="@color/comic_f4f6f9"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_5">
-    </View>
 </LinearLayout>

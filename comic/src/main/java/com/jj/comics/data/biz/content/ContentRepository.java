@@ -11,6 +11,7 @@ import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookListDataResponse;
+import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
@@ -174,6 +175,13 @@ public class ContentRepository implements ContentDataSource {
     public Observable<BookListRecommondResponse> getRecommond(String retryTag) {
         return ComicApi.getApi().getRecommond()
                 .compose(ComicApiImpl.<BookListRecommondResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2(retryTag));
+    }
+
+    @Override
+    public Observable<BookListPopShareResponse> getPopShare(int channelFlag,String retryTag) {
+        return ComicApi.getApi().getPopShare(channelFlag)
+                .compose(ComicApiImpl.<BookListPopShareResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }
 

@@ -76,9 +76,12 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                                     .placeholder(R.drawable.img_loading));
 
                 } else {
-                    ILFactory.getLoader().loadResource(header.<ImageView>findViewById(R.id.item_recommend_img),
-                            R.drawable.img_loading,
-                            new RequestOptions().transforms(new CenterCrop()));
+                    ILFactory.getLoader().loadNet(header.<ImageView>findViewById(R.id.item_recommend_img),
+                            mainContent.getCover(),
+                            new RequestOptions().transforms(new CenterCrop()/*, new RoundedCorners(12)*/)
+                                    .error(R.drawable.img_loading)
+                                    .transforms(new CenterCrop())
+                                    .placeholder(R.drawable.img_loading));
                 }
                 header.<TextView>findViewById(R.id.item_recommend_name).setText(mainContent.getTitle());
                 header.<TextView>findViewById(R.id.item_recommend_desc).setText(mainContent.getIntro());
@@ -122,7 +125,10 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
     private String getImageUrl(boolean imageVertical, BookModel mainContent) {
         String imageUrl = "";
         if (imageVertical) {//竖图
-            imageUrl = mainContent.getCover();
+            imageUrl = mainContent.getModel_img_url();
+            if (TextUtils.isEmpty(imageUrl)) {
+                imageUrl = mainContent.getCover();
+            }
         } else {
             imageUrl = mainContent.getCoverl();
         }

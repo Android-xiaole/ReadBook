@@ -40,6 +40,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.recommend.RecentlyAdapter;
 import com.jj.comics.adapter.recommend.RecommendAdapter;
+import com.jj.comics.adapter.recommend.RecommendChildAdapter;
 import com.jj.comics.common.callback.OnScrollListenerWithButton;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
@@ -69,6 +70,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -97,7 +99,9 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     private RecentlyAdapter adapter_recently;//最近更新adapter
     private RecyclerView rv_content;//头部内容加载recyclerview
+    private RecyclerView rv_popShare;//头部内容加载recyclerview
     private RecommendAdapter adapter_content;//头部专区内容adapter
+    private RecommendChildAdapter adapterPopShare;//头部专区内容adapter
     private int recentlyPage = 1;//记录最近更新分页请求页数
     private int recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL;//记录最近选择的首页频道
     private Banner mBanner;
@@ -155,6 +159,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         adapter_recently.addHeaderView(getBannerHeadView());
 //        adapter_recently.addHeaderView(getHeaderViewBtns());
         adapter_recently.addHeaderView(getContentHeadView());
+        adapter_recently.addHeaderView(getPopShareHeadView());
         adapter_recently.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -169,6 +174,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         mRefresh.setRefreshing(true);
         getP().getBanner();
         getP().loadData(1, false);
+        getP().loadPopShare(recentChannelFlag);
         getP().loadRecentlyComic(recentlyPage, Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
 
         if (LoginHelper.getOnLineUser()!=null){
@@ -416,6 +422,35 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         return headView;
     }
 
+    /**
+     * 获取热门分享
+     */
+    private View getPopShareHeadView() {
+        View headView = getLayoutInflater().inflate(R.layout.comic_header_pop_share,
+                (ViewGroup) rv_recently.getParent(), false);
+        rv_popShare = headView.findViewById(R.id.rv_pop_share);
+        adapterPopShare = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
+                Integer.MAX_VALUE, false,true);
+        rv_popShare.setLayoutManager(new GridLayoutManager(getContext(),2));
+        adapterPopShare.bindToRecyclerView(rv_popShare, true);
+        adapterPopShare.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                //点击事件友盟统计
+                List data = adapter.getData();
+                if (data != null) {
+                    BookModel model = (BookModel) data.get(position);
+                    if (model != null) {
+                        getP().umengOnEvent("popShare", model);
+                        DetailActivityHelper.toDetail(getActivity(), model.getId(), "popShare");
+                    }
+                }
+
+            }
+        });
+        return headView;
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.comic_fragment_recommend;
@@ -456,19 +491,22 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         }else if (view.getId()  == R.id.recommend_featured) {
             switchTvs(0);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
         }else if (view.getId()  == R.id.recommend_man) {
             switchTvs(1);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN);
         }else if (view.getId()  == R.id.recommend_woman) {
             switchTvs(2);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN);
         }
     }
 
     private void switchTvs(int index) {
         switch (index) {
             case 0:
-                mTvFeatured.setTextColor(getResources().getColor(R.color.comic_353a40));
+                mTvFeatured.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvFeatured.getPaint().setFakeBoldText(true);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvMan.getPaint().setFakeBoldText(false);
@@ -478,7 +516,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             case 1:
                 mTvFeatured.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvFeatured.getPaint().setFakeBoldText(false);
-                mTvMan.setTextColor(getResources().getColor(R.color.comic_353a40));
+                mTvMan.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvMan.getPaint().setFakeBoldText(true);
                 mTvWoman.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvWoman.getPaint().setFakeBoldText(false);
@@ -488,7 +526,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 mTvFeatured.getPaint().setFakeBoldText(true);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvMan.getPaint().setFakeBoldText(false);
-                mTvWoman.setTextColor(getResources().getColor(R.color.comic_353a40));
+                mTvWoman.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvWoman.getPaint().setFakeBoldText(true);
                 break;
         }
@@ -499,6 +537,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         getP().loadData(1, false);
         recentlyPage = 1;
         getP().loadRecentlyComic(recentlyPage,recentChannelFlag);
+        getP().loadPopShare(recentChannelFlag);
         getP().getBanner();
     }
 
@@ -539,6 +578,15 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         recentlyPage--;
     }
 
+    @Override
+    public void onLoadPopShareSucc(List<BookModel> bookModelList) {
+        adapterPopShare.setNewData(bookModelList);
+    }
+
+    @Override
+    public void onLoadPopShareFail(NetError error) {
+
+    }
 
     @Override
     public void onItemClick(BookModel model, String from) {

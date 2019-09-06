@@ -27,6 +27,7 @@ import com.jj.comics.data.biz.pruduct.ProductRepository;
 import com.jj.comics.data.biz.task.TaskRepository;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookListDataResponse;
+import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -89,7 +90,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
     public void loadRecentlyComic(int pageNum,int channelFlag) {
         getV().showProgress();
         ContentRepository.getInstance()
-                .getRecentUpdate(channelFlag,pageNum, 5, getV().getClass().getName())
+                .getRecentUpdate(channelFlag,pageNum, 10, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookListDataResponse>bindLifecycle())
@@ -115,6 +116,33 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                     }
                 });
     }
+
+    @Override
+    public void loadPopShare(int channelFlag) {
+        getV().showProgress();
+        ContentRepository.getInstance()
+                .getPopShare(channelFlag, getV().getClass().getName())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(this.<BookListPopShareResponse>bindLifecycle())
+                .subscribe(new ApiSubscriber2<BookListPopShareResponse>() {
+                    @Override
+                    public void onNext(BookListPopShareResponse response) {
+                        List<BookModel> bookModels = response.getData();
+                        if (bookModels != null) {
+                            getV().onLoadPopShareSucc(bookModels);
+                        } else {
+                            getV().onLoadPopShareFail(NetError.noDataError());
+                        }
+                    }
+
+                    @Override
+                    protected void onFail(NetError error) {
+                        getV().onLoadRecentlyComicFail(error);
+                    }
+                });
+    }
+
 
 
     @Override

@@ -1,5 +1,6 @@
 package com.jj.comics.adapter.recommend;
 
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,8 +23,12 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
     @Override
     protected void convert(BaseViewHolder helper, BookModel item) {
         if (item != null) {
+            String imgUrl = item.getModel_img_url();
+            if (TextUtils.isEmpty(imgUrl)) {
+                imgUrl = item.getCover();
+            }
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_recently_icon),
-                    item.getCover(),
+                    imgUrl,
                     new RequestOptions()
                             .transforms(new CenterCrop())
                             .error(R.drawable.img_loading)

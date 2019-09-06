@@ -37,6 +37,8 @@ public class BookModel implements Serializable {
      * category_id : [25,35] (所属类别，获取猜你喜欢的数据)
      * chapterid : 阅读历史章节id
      * order:阅读历史章节数
+     * author:作者
+     * yesterday_share:昨日分享
      */
 
     @Id(autoincrement = true)
@@ -65,6 +67,25 @@ public class BookModel implements Serializable {
     @SerializedName(value = "tag", alternate = {"category", "category_name"})
     private List<String> tag;
 
+    private String author;
+    private long yesterday_share;
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public long getYesterday_share() {
+        return yesterday_share;
+    }
+
+    public void setYesterday_share(long yesterday_share) {
+        this.yesterday_share = yesterday_share;
+    }
+
     //设置以下两个属性不写入表中
     @Transient
     private List<Integer> category_id;
@@ -76,9 +97,9 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 780991266)
+    @Generated(hash = 147605189)
     public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int allvisit,
-            int reviewnum, int goodnum, long chapterid, int order, List<String> tag, long userId, long create_time, long update_time) {
+            int reviewnum, int goodnum, long chapterid, int order, List<String> tag, String author, long yesterday_share, long userId, long create_time, long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -97,6 +118,8 @@ public class BookModel implements Serializable {
         this.chapterid = chapterid;
         this.order = order;
         this.tag = tag;
+        this.author = author;
+        this.yesterday_share = yesterday_share;
         this.userId = userId;
         this.create_time = create_time;
         this.update_time = update_time;
