@@ -60,7 +60,7 @@ import retrofit2.HttpException;
 public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendContract.IRecommendView> implements RecommendContract.IRecommendPresenter {
 
     @Override
-    public void loadData(int pageNum, boolean evict) {
+    public void loadData(int pageNum, boolean evict,boolean changeChannel) {
         ComicApi.getProviders().getRecommendData(ContentRepository.getInstance()
                         .getRecommond(getV().getClass().getName()),
                 new DynamicKey(pageNum),
@@ -72,7 +72,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                     @Override
                     public void onNext(BookListRecommondResponse response) {
                         if (response.getData() != null) {
-                            getV().fillData(response.getData());
+                            getV().fillData(changeChannel,response.getData());
                         } else {
                             getV().getDataFail(new NetError("获取数据失败", NetError.noDataError().getType()));
                         }
@@ -87,7 +87,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
     }
 
     @Override
-    public void loadRecentlyComic(int pageNum,int channelFlag) {
+    public void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel) {
         getV().showProgress();
         ContentRepository.getInstance()
                 .getRecentUpdate(channelFlag,pageNum, 10, getV().getClass().getName())
@@ -101,7 +101,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                         if (data != null) {
                             List<BookModel> bookModels = data.getData();
                             if (bookModels != null) {
-                                getV().onLoadRecentlyComicSuccess(bookModels);
+                                getV().onLoadRecentlyComicSuccess(changeChannel,bookModels);
                             } else {
                                 getV().onLoadRecentlyComicFail(NetError.noDataError());
                             }
@@ -118,7 +118,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
     }
 
     @Override
-    public void loadPopShare(int channelFlag) {
+    public void loadPopShare(int channelFlag,boolean changeChannel) {
         getV().showProgress();
         ContentRepository.getInstance()
                 .getPopShare(channelFlag, getV().getClass().getName())
@@ -130,7 +130,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                     public void onNext(BookListPopShareResponse response) {
                         List<BookModel> bookModels = response.getData();
                         if (bookModels != null) {
-                            getV().onLoadPopShareSucc(bookModels);
+                            getV().onLoadPopShareSucc(changeChannel,bookModels);
                         } else {
                             getV().onLoadPopShareFail(NetError.noDataError());
                         }

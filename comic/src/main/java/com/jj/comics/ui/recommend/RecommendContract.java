@@ -15,12 +15,12 @@ public interface RecommendContract {
     interface IRecommendView extends IView {
 
         //填充数据
-        void fillData(List<BookListRecommondResponse.DataBean> data);
+        void fillData(boolean changeChannel,List<BookListRecommondResponse.DataBean> data);
 
         //加载数据失败
         void getDataFail(NetError error);
 
-        void onLoadRecentlyComicSuccess(List<BookModel> bookModelList);
+        void onLoadRecentlyComicSuccess(boolean changeChannel,List<BookModel> bookModelList);
 
         void onLoadRecentlyComicFail(NetError netError);
 
@@ -46,19 +46,19 @@ public interface RecommendContract {
 
         void payFail(String result);
 
-        void onLoadPopShareSucc(List<BookModel> bookModelList);
+        void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList);
 
         void onLoadPopShareFail(NetError netError);
     }
 
     interface IRecommendPresenter {
         //记载推荐数据
-        void loadData(int pageNum, boolean evict);
+        void loadData(int pageNum, boolean evict,boolean changeChannel);
 
         //获取最近更新数据
-        void loadRecentlyComic(int pageNum,int channelFlag);
+        void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel);
 
-        void loadPopShare(int channelFlag);
+        void loadPopShare(int channelFlag,boolean changeChannel);
 
         //检查获取免费金币
         void checkFreeGoldStatus();

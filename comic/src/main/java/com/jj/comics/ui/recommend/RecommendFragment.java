@@ -132,13 +132,13 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             @Override
             public void onLoadMoreRequested() {
                 recentlyPage++;
-                getP().loadRecentlyComic(recentlyPage,recentChannelFlag);
+                getP().loadRecentlyComic(recentlyPage,recentChannelFlag,false);
             }
         }, rv_recently);
         adapter_recently.setEmptyClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getP().loadRecentlyComic(recentlyPage,recentChannelFlag);
+                getP().loadRecentlyComic(recentlyPage,recentChannelFlag,false);
             }
         });
         rv_recently.addOnScrollListener(new OnScrollListenerWithButton(mToTop));
@@ -176,9 +176,10 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
         mRefresh.setRefreshing(true);
         getP().getBanner();
-        getP().loadData(1, false);
-        getP().loadPopShare(recentChannelFlag);
-        getP().loadRecentlyComic(recentlyPage, Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
+        getP().loadData(1, false,false);
+        getP().loadPopShare(recentChannelFlag,false);
+        getP().loadRecentlyComic(recentlyPage, Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,
+                false);
 
         if (LoginHelper.getOnLineUser()!=null){
             //用户登录优选调用获取支付弹窗活动的信息
@@ -465,7 +466,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     }
 
     @Override
-    public void fillData(List<BookListRecommondResponse.DataBean> data) {
+    public void fillData(boolean changeChannel,List<BookListRecommondResponse.DataBean> data) {
         ArrayList<SectionModel> sectionModels = new ArrayList<>();
 
         for (BookListRecommondResponse.DataBean dataBean : data) {
@@ -493,16 +494,16 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
         }else if (view.getId()  == R.id.recommend_featured) {
             switchTvs(0);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL);
+            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
         }else if (view.getId()  == R.id.recommend_man) {
             switchTvs(1);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN);
+            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
         }else if (view.getId()  == R.id.recommend_woman) {
             switchTvs(2);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN);
+            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
+            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
         }
     }
 
@@ -537,10 +538,10 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onRefresh() {
-        getP().loadData(1, false);
+        getP().loadData(1, false,false);
         recentlyPage = 1;
-        getP().loadRecentlyComic(recentlyPage,recentChannelFlag);
-        getP().loadPopShare(recentChannelFlag);
+        getP().loadRecentlyComic(recentlyPage,recentChannelFlag,false);
+        getP().loadPopShare(recentChannelFlag,false);
         getP().getBanner();
     }
 
@@ -554,9 +555,9 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     }
 
     @Override
-    public void onLoadRecentlyComicSuccess(List<BookModel> bookModelList) {
+    public void onLoadRecentlyComicSuccess(boolean changeChannel,List<BookModel> bookModelList) {
         hideProgress();
-        if (recentlyPage == 1) {
+        if (changeChannel || recentlyPage == 1) {
             adapter_recently.setNewData(bookModelList);
         } else {
             adapter_recently.addData(bookModelList);
@@ -582,7 +583,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     }
 
     @Override
-    public void onLoadPopShareSucc(List<BookModel> bookModelList) {
+    public void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList) {
         adapterPopShare.setNewData(bookModelList);
     }
 
