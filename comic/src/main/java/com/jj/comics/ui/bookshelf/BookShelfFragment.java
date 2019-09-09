@@ -16,8 +16,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.ViewPagerAdapter;
 import com.jj.comics.ui.bookshelf.collection.CollectionFragment;
-import com.jj.comics.ui.bookshelf.history.HistoryFragment;
-import com.jj.comics.util.LoginHelper;
+import com.jj.comics.ui.mine.history.HistoryFragment;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 
 import org.greenrobot.eventbus.Subscribe;

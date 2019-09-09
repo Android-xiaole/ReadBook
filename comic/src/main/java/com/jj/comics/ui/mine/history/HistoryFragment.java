@@ -1,4 +1,4 @@
-package com.jj.comics.ui.bookshelf.history;
+package com.jj.comics.ui.mine.history;
 
 import android.os.Bundle;
 import android.util.Log;

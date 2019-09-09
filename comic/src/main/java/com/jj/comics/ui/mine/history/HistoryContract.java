@@ -1,4 +1,4 @@
-package com.jj.comics.ui.bookshelf.history;
+package com.jj.comics.ui.mine.history;
 
 import com.jj.base.mvp.IView;
 import com.jj.base.net.NetError;

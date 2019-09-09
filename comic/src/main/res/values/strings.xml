@@ -222,6 +222,7 @@
     <string name="comic_feed_back_text">意见反馈</string>
     <string name="comic_myfeedback_text">我的反馈</string>
     <string name="comic_notification_text">消息公告</string>
+    <string name="comic_history_text">阅读历史</string>
     <string name="comic_report_text">提交反馈</string>
     <string name="comic_find_kefu_text">联系客服</string>
     <string name="comic_kefu_work_time">客服工作时间：9:00 ~ 17:35</string>

@@ -151,7 +151,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
         } else if (view.getId() == R.id.comic_mine_history) {
-            ToastUtil.showToastShort("me" + view.getId());
+            ARouter.getInstance().build(RouterMap.COMIC_HISTORY_ACTIVITY).navigation();
         } else if (view.getId() == R.id.comic_mine_notification) {
             ARouter.getInstance().build(RouterMap.COMIC_NOTIFICATION_ACTIVITY).navigation();
         } else if (view.getId() == R.id.comic_mine_recharge) {
