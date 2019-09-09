@@ -271,8 +271,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
                 .reset()
                 .fitsSystemWindows(true)
                 .keyboardEnable(false)
-                .statusBarDarkFont(false, 0.2f)
-                .statusBarColor(R.color.base_color_ffd850)
+                .statusBarDarkFont(true, 0.2f)
+                .statusBarColor(R.color.base_color_ffffff)
 //                .navigationBarColor(R.color.base_color_ffffff)
                 .init();
     }

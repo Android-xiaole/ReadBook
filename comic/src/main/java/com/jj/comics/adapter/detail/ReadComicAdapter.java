@@ -307,7 +307,7 @@ public class ReadComicAdapter extends BaseMultiItemQuickAdapter<CustomModel, Bas
         ContentRepository.getInstance().getRewardRecordByContent(bookModel.getId(), 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .as(AutoDispose.<RewardListResponse>autoDisposable(AndroidLifecycleScopeProvider.from(baseActivity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<RewardListResponse>autoDisposable(AndroidLifecycleScopeProvider.from(baseActivity.getLifecycle(), Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new ApiSubscriber2<RewardListResponse>() {
                     @Override
                     public void onNext(RewardListResponse response) {

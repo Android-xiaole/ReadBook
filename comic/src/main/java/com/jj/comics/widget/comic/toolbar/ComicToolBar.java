@@ -51,7 +51,8 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ComicToolBar);
         //设置背景
-        int backgroundColor = typedArray.getColor(R.styleable.ComicToolBar_backgroundColor,Color.argb(0xff,0xff,0xd8,0x50));
+        int backgroundColor = typedArray.getColor(R.styleable.ComicToolBar_backgroundColor,
+                Color.argb(0xff,0xff,0xff,0xff));
         setBackgroundColorRootView(backgroundColor);
         //设置阴影是否可见，暂时无论怎么设置都没阴影，原因不明
 //        boolean shadowVisible = typedArray.getBoolean(R.styleable.ComicToolBar_shadowVisible, true);
@@ -61,14 +62,16 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         String titleText = typedArray.getString(R.styleable.ComicToolBar_title);
         setTitleText(titleText);
         //设置标题颜色
-        int titleColor = typedArray.getColor(R.styleable.ComicToolBar_titleColor, Color.WHITE);
+        int titleColor = typedArray.getColor(R.styleable.ComicToolBar_titleColor,
+                Color.argb(0xff,0x33,0x33,0x33));
         setTitleColor(titleColor);
 
         //设置左边icon是否可见
         int leftIconVisible = typedArray.getInt(R.styleable.ComicToolBar_rightIconVisible, View.VISIBLE);
         setLeftIconVisible(leftIconVisible);
         //设置左边icon图片资源
-        int leftIconRes = typedArray.getResourceId(R.styleable.ComicToolBar_leftIconRes,R.drawable.icon_back_white);
+        int leftIconRes = typedArray.getResourceId(R.styleable.ComicToolBar_leftIconRes,
+                R.drawable.icon_back_black);
         setLeftIconRes(leftIconRes);
         //设置右边icon图片资源
         int rightIconRes = typedArray.getResourceId(R.styleable.ComicToolBar_rightIconRes,R.drawable.icon_comic_home);

@@ -1,5 +1,6 @@
 package com.jj.comics.data.biz.pruduct;
 
+import com.jj.comics.data.model.NotificationListResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
@@ -8,8 +9,6 @@ import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.UpdateModelProxy;
 
 import io.reactivex.Observable;
-import io.reactivex.Observable;
-import okhttp3.ResponseBody;
 
 public interface ProductDataSource {
 
@@ -33,4 +32,7 @@ public interface ProductDataSource {
     Observable getAppConfigByIP();
 
     Observable<PayActionResponse> getPayAction();
+
+    //获取消息公告
+    Observable<NotificationListResponse> getNotificationList(int pageNum);
 }

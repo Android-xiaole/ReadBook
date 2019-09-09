@@ -96,7 +96,8 @@ public class ShareHelper {
         }
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
-                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
+                        , Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new Observer<File>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -164,7 +165,8 @@ public class ShareHelper {
         }
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
-                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
+                        , Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new Observer<File>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -233,7 +235,8 @@ public class ShareHelper {
         }
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
-                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
+                        , Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new Observer<File>() {
 
                     @Override
@@ -282,7 +285,8 @@ public class ShareHelper {
         }
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
-                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
+                        , Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new Observer<File>() {
 
                     @Override
@@ -331,7 +335,8 @@ public class ShareHelper {
         }
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
-                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
+                        , Lifecycle.Event.ON_DESTROY)))
                 .subscribe(new Observer<File>() {
 
                     @Override

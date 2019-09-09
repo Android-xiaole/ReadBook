@@ -19,6 +19,8 @@ import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginByCodeResponse;
+import com.jj.comics.data.model.NotificationListResponse;
+import com.jj.comics.data.model.NotificationResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
@@ -137,6 +139,8 @@ public interface ComicService {
     String API_HUIFUBAO_APP = "api/huifubao";
 
     String API_POP_SHARE = "api/pop_share";
+    String API_NOTIDICATION_LIST = "api/message_notice";
+    String API_NOTIDICATION_DETAIL = "api/notice_details";
 
     /**
      * 设置是否自动购买(暂时未被使用，客户端只做本地保存)
@@ -740,6 +744,21 @@ public interface ComicService {
     @Streaming
     @GET
     Flowable<ResponseBody> updateApp(@Url String url);
+
+    /**
+     * 获取应用消息公告列表
+     * @param pageNum
+     * @return
+     */
+    @GET(API_NOTIDICATION_LIST)
+    Observable<NotificationListResponse> getNotificationList(@Query("page") int pageNum);
+
+    /**
+     * 获取应用消息公告详情
+     * @return
+     */
+    @GET(API_NOTIDICATION_LIST)
+    Observable<NotificationResponse> getNotificationDetail(@Query("noticeid") int id);
 
 /****************************************************** 以上是 product 模块********************************************************************************/
 

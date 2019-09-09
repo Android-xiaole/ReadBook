@@ -280,4 +280,5 @@ dependencies {
     api "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
     //动态监测安卓危险权限
     api 'com.yanzhenjie.permission:x:2.0.1'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

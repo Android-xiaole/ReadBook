@@ -80,7 +80,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                                 @Override
                                 public BookCatalogModel apply(BookCatalogContentResponse response) throws Exception {
                                     BookCatalogModel catalogModel = new BookCatalogModel();
-//                                    BookCatalogContentResponse.DataBean.NowBean nowCatalog = response.getData().getNow();
+//                                    BookCatalogContentResponse.SimpleNotificationDataBean.NowBean nowCatalog = response.getData().getNow();
 //                                    catalogModel.setId(chapterid);
 //                                    catalogModel.setChapterorder(nowCatalog.getChapterorder()+"");
 //                                    catalogModel.setSaleprice(nowCatalog.getSaleprice());

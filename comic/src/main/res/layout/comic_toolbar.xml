@@ -17,7 +17,7 @@
             android:layout_height="@dimen/dp_45"
             android:layout_centerVertical="true"
             android:padding="@dimen/dp_12"
-            tools:src="@drawable/icon_back_white" />
+            tools:src="@drawable/icon_back_black" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:padding="@dimen/dp_12"
             tools:text="标题"
-            android:textColor="@color/comic_ffffff"
+            android:textColor="@color/comic_333333"
             android:textSize="@dimen/dp_18" />
 
 
