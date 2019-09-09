@@ -10,11 +10,19 @@
         android:layout_height="wrap_content"
         app:title="@string/comic_notification_text" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
         android:layout_below="@id/comic_tool_bar"
+        android:background="@color/comic_e8ebf0"></View>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/divider">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
