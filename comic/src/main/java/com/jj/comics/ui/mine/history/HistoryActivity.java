@@ -130,7 +130,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
         ImageView img = view.findViewById(R.id.iv_empty_img);
         img.setBackgroundResource(R.drawable.img_empty_read);
         TextView tvDesc = (TextView) view.findViewById(R.id.tv_empty_desc);
-        tvDesc.setText("哦呵~您还没有看过任何书籍\\r\\n赶快去看书吧~");
+        tvDesc.setText("哦呵~您还没有看过任何书籍\r\n赶快去看书吧~");
         TextView btnAction = (TextView) view.findViewById(R.id.btn_empty_action);
         btnAction.setText(R.string.comic_go_read);
         btnAction.setOnClickListener(new View.OnClickListener() {
