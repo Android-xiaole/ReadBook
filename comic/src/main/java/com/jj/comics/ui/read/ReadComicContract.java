@@ -32,7 +32,7 @@ public interface ReadComicContract {
         void addOrRemoveShelf(BookModel model, boolean collectByCurrUser, boolean needFinish);
 
         //获取章节目录列表
-        void getCatalogList(long bookId, int pageNum);
+        void getCatalogList(long bookId, int pageNum,String sort);
 
         //获取收藏状态
         void getCollectStatus(long id);

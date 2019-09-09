@@ -52,6 +52,7 @@ import java.util.Date;
 
 import androidx.core.app.NotificationCompat;
 import androidx.multidex.MultiDex;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import me.jessyan.autosize.AutoSizeConfig;
@@ -118,6 +119,8 @@ public class ComicApplication extends BaseApplication {
 
         // 初始化 EventBus
         EventBusHelper.init();
+        //初始化极光推送
+        JPushInterface.init(this);
 
 //        DoraemonKit.install(getApplication());
 

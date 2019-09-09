@@ -35,7 +35,7 @@ public interface ContentDataSource {
     Observable<BookCatalogContentResponse> getCatalogContent(long id,long chapterid);
 
     //获取内容详情,附加点赞数，评论数，收藏数等用户相关信息
-    Observable<BookModelResponse> getContentDetailWithUserActions(long id, String retryTag);
+    Observable<BookModelResponse> getContentDetail(long id, String retryTag);
 
     //获取用户收藏列表
     Observable <CollectionResponse> getCollectionByUserId(int pageNum, int pageSize);

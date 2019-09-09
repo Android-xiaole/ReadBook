@@ -296,12 +296,12 @@ public interface ComicService {
     Observable<BookCatalogContentResponse> getCatalogContent(@QueryMap Map<String, Object> parames);
 
     /**
-     * 根据contentMianId和用户id获取内容详情,内容详情基础上加了一些和用户相关信息，比如点赞数，评论数，收藏数什么的，对当前内容是否点赞，是否收藏等
+     * 获取书籍详情
      *
      * @return
      */
     @GET(API_CARTOON_INFO)
-    Observable<BookModelResponse> getContentDetailWithUserActions(@Query("id") long id);
+    Observable<BookModelResponse> getContentDetail(@Query("id") long id);
 
     /**
      * 获取用户收藏列表

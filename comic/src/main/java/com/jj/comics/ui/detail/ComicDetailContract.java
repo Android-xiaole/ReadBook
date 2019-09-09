@@ -12,11 +12,11 @@ import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 public interface ComicDetailContract {
     interface IDetailView extends IView {
         //加载漫画详情的回调
-        void onLoadComicDetail(BookModel model, boolean umengUpload);
+        void onLoadComicDetail(BookModel model);
 
         void onCollectionSuccess(boolean collectByCurrUser);
 
-        void fillCollectStatus(CommonStatusResponse response);
+        void fillCollectStatus(boolean collectByCurrUser);
 
         void onLoadRecommendList(BookListDataResponse response);
     }
@@ -30,7 +30,7 @@ public interface ComicDetailContract {
 
 
         //获取漫画详情
-        void getComicDetail(long id, final boolean umengUpload);
+        void getComicDetail(long id);
 
 
         //跳转到阅读页面

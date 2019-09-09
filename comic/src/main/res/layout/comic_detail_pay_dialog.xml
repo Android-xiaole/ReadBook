@@ -53,6 +53,7 @@
                     android:textColor="@color/comic_353a40"/>
 
                 <TextView
+                    android:id="@+id/tv_buyCoinNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/comic_fe4d5a"
@@ -74,6 +75,7 @@
                     android:textColor="@color/comic_a8adb3"/>
 
                 <TextView
+                    android:id="@+id/tv_myCoinNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/comic_a8adb3"
