@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -512,26 +513,35 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             case 0:
                 mTvFeatured.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvFeatured.getPaint().setFakeBoldText(true);
+                mTvFeatured.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvMan.getPaint().setFakeBoldText(false);
+                mTvMan.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 mTvWoman.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvWoman.getPaint().setFakeBoldText(false);
+                mTvWoman.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 break;
             case 1:
                 mTvFeatured.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvFeatured.getPaint().setFakeBoldText(false);
+                mTvFeatured.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvMan.getPaint().setFakeBoldText(true);
+                mTvMan.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
                 mTvWoman.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvWoman.getPaint().setFakeBoldText(false);
+                mTvWoman.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 break;
             case 2:
                 mTvFeatured.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvFeatured.getPaint().setFakeBoldText(true);
+                mTvFeatured.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvMan.getPaint().setFakeBoldText(false);
+                mTvMan.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 mTvWoman.setTextColor(getResources().getColor(R.color.comic_ffad70));
                 mTvWoman.getPaint().setFakeBoldText(true);
+                mTvWoman.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
                 break;
         }
     }
