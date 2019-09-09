@@ -79,7 +79,6 @@ public class HistoryFragment extends BaseVPFragment<HistoryPresenter> implements
     @Override
     public void initData(Bundle savedInstanceState) {
         mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item);
-
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.base_yellow_ffd850));
         mRefresh.setRefreshing(true);
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
