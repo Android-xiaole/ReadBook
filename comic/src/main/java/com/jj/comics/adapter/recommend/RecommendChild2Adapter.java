@@ -85,6 +85,7 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                 }
                 header.<TextView>findViewById(R.id.item_recommend_name).setText(mainContent.getTitle());
                 header.<TextView>findViewById(R.id.item_recommend_desc).setText(mainContent.getIntro());
+                header.<TextView>findViewById(R.id.item_recommend_author).setText(mainContent.getAuthor());
                 //旧接口返回int数字的格式化代码
 //                header.<TextView>findViewById(R.id.comic_recommend_hot).setText(Utils.convertUnit(Integer.parseInt(mainContent.getHot_const())));
             } else {

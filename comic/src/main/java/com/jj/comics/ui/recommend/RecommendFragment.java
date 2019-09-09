@@ -179,8 +179,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         getP().getBanner();
         getP().loadData(recentChannelFlag,1, false,false);
         getP().loadPopShare(recentChannelFlag,false);
-        getP().loadRecentlyComic(recentlyPage, Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,
-                false);
+        getP().loadRecentlyComic(recentlyPage, recentChannelFlag, false);
 
         if (LoginHelper.getOnLineUser()!=null){
             //用户登录优选调用获取支付弹窗活动的信息
@@ -494,16 +493,19 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         }else if (view.getId()  == R.id.recommend_search) {
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
         }else if (view.getId()  == R.id.recommend_featured) {
+            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL;
             switchTvs(0);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
             getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,1, false,true);
         }else if (view.getId()  == R.id.recommend_man) {
+            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN;
             switchTvs(1);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
             getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,1, false,true);
         }else if (view.getId()  == R.id.recommend_woman) {
+            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN;
             switchTvs(2);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);

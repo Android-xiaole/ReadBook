@@ -29,7 +29,7 @@ public class BookListRecommondResponse extends ResponseModel {
          */
 
         private long id;
-        private String model_name;
+        private String name;
         private String style;
         private List<BookModel> list;
 
@@ -42,11 +42,11 @@ public class BookListRecommondResponse extends ResponseModel {
         }
 
         public String getModel_name() {
-            return model_name;
+            return name;
         }
 
         public void setModel_name(String model_name) {
-            this.model_name = model_name;
+            this.name = model_name;
         }
 
         public String getStyle() {

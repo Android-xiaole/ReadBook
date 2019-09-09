@@ -45,7 +45,7 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
 
     @Override
     protected void convert(BaseViewHolder helper, SectionModel item) {
-        final String value = item.getName();
+        String value = item.getName();
         helper.setText(R.id.item_recommend_title, value).setTag(R.id.item_recommend_title, value);
 
         ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.item_recommend_icon), item.getImage1()
