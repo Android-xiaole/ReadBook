@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/fl_readView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -39,9 +40,11 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/iv_buy"
+                android:id="@+id/iv_batchBuy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
+                tools:visibility="visible"
                 android:src="@drawable/comic_select_read_buy" />
 
             <ImageView
@@ -50,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_20"
-                android:src="@drawable/icon_read_collect" />
+                android:src="@drawable/icon_read_uncollect" />
 
             <ImageView
                 android:id="@+id/iv_share"
@@ -205,16 +208,17 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/iv_eyeModel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/comic_select_read_eye" />
 
                     <TextView
+                        android:id="@+id/tv_eyeModel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_3"
-                        android:text="护眼"
-                        android:textColor="@drawable/comic_select_read_text_color" />
+                        android:text="护眼" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -294,10 +298,19 @@
                 tools:text="共998章" />
 
             <TextView
+                android:id="@+id/tv_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/comic_a8adb3"
                 android:layout_marginRight="@dimen/dp_16"
+                android:paddingLeft="@dimen/dp_7"
+                android:paddingRight="@dimen/dp_7"
+                android:paddingTop="@dimen/dp_5"
+                android:paddingBottom="@dimen/dp_5"
+                android:drawablePadding="6dp"
+                android:textSize="@dimen/dp_10"
+                android:drawableRight="@drawable/icon_read_catalog_desc"
+                android:background="@drawable/comic_shape_read_catalog_sort_text_bg"
                 android:layout_gravity="right|center_vertical"
                 android:text="倒序"/>
 

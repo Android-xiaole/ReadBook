@@ -16,7 +16,7 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.CommonRecommendAdapter;
+import com.jj.comics.adapter.detail.CommonRecommendAdapter;
 import com.jj.comics.adapter.mine.SearchResultAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;

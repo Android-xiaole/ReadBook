@@ -298,7 +298,6 @@ public class FileUtils {
             finalStr = sb.toString();
         }
         //转换之后再写入文件
-        //获取流并存储
         Writer writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(file));

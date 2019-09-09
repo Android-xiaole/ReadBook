@@ -162,7 +162,7 @@ public class SubComicDetailPresenter extends BasePresenter<BaseRepository, SubCo
 
     @Override
     public void getComicDetail(long id) {
-        ContentRepository.getInstance().getContentDetailWithUserActions(id, getV().getClass().getName())
+        ContentRepository.getInstance().getContentDetail(id, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookModelResponse>bindLifecycle())

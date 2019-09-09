@@ -14,10 +14,6 @@ android {
         versionName VERSION_NAME
         flavorDimensions "versionCode"
         multiDexKeepProguard file("tinker_multidexkeep.pro")
-        ndk {
-            // 设置支持的SO库架构
-//            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
-        }
         //butter knife
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -31,7 +27,22 @@ android {
             }
         }
 
-        manifestPlaceholders = [value_isDebug: isDebug.toBoolean()]
+//        manifestPlaceholders = [value_isDebug: isDebug.toBoolean()]
+
+        //JPush config
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        //JPush config
+        manifestPlaceholders = [
+                value_isDebug: isDebug.toBoolean(),//this is not JPush config
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "cbe249f59dfa811d088cdab5", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
 
     lintOptions {

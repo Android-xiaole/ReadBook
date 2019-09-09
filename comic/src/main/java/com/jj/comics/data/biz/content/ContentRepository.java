@@ -95,8 +95,8 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookModelResponse> getContentDetailWithUserActions(long id, String retryTag) {
-        return ComicApi.getApi().getContentDetailWithUserActions(id)
+    public Observable<BookModelResponse> getContentDetail(long id, String retryTag) {
+        return ComicApi.getApi().getContentDetail(id)
                 .compose(ComicApiImpl.<BookModelResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }

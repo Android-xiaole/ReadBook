@@ -20,14 +20,10 @@ import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.read.ReadComicActivity;
-import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -100,15 +96,16 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
      * @param umengUpload 是否要上传umeng时间
      */
     @Override
-    public void getComicDetail(long id, final boolean umengUpload) {
-        ContentRepository.getInstance().getContentDetailWithUserActions(id, getV().getClass().getName())
+    public void getComicDetail(long id) {
+        getV().showProgress();
+        ContentRepository.getInstance().getContentDetail(id, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookModelResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookModelResponse>() {
                     @Override
                     public void onNext(final BookModelResponse response) {
-                        getV().onLoadComicDetail(response.getData(), umengUpload);
+                        getV().onLoadComicDetail(response.getData());
                     }
 
                     @Override
@@ -219,7 +216,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                 .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
                     @Override
                     public void onNext(CommonStatusResponse response) {
-                        getV().fillCollectStatus(response);
+                        getV().fillCollectStatus(response.getData().getStatus());
                     }
 
                     @Override

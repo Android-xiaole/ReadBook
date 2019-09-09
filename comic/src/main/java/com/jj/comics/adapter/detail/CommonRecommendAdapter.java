@@ -1,4 +1,4 @@
-package com.jj.comics.adapter.mine;
+package com.jj.comics.adapter.detail;
 
 import android.widget.ImageView;
 
@@ -21,7 +21,7 @@ public class CommonRecommendAdapter extends SimpleBaseAdapter<BookModel> {
 
     public CommonRecommendAdapter(int layoutResId) {
         super(layoutResId);
-        options = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(10))
+        options = new RequestOptions().transforms(new CenterCrop())
                 .error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading);
     }

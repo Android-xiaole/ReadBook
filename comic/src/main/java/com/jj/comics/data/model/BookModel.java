@@ -57,7 +57,6 @@ public class BookModel implements Serializable {
     private String intro;
     private int fullflag;
     private String lastvolume;
-    private int allvisit;
     private int reviewnum;
     private int goodnum;
     private long chapterid;
@@ -67,8 +66,61 @@ public class BookModel implements Serializable {
     @SerializedName(value = "tag", alternate = {"category", "category_name"})
     private List<String> tag;
 
-    private String author;
-    private long yesterday_share;
+    private String author;//作者
+    private String yesterday_share;
+    private String allvisit;//阅读人数
+    private String size;//总字数
+    private String total_share;//总的分享次数
+    private int batchbuy;//''购买方式：1-章节售卖 2-整本售卖
+    private int batchprice;//整本购买的价格
+
+    public String getYesterday_share() {
+        return yesterday_share;
+    }
+
+    public void setYesterday_share(String yesterday_share) {
+        this.yesterday_share = yesterday_share;
+    }
+
+    public int getBatchbuy() {
+        return batchbuy;
+    }
+
+    public void setBatchbuy(int batchbuy) {
+        this.batchbuy = batchbuy;
+    }
+
+    public int getBatchprice() {
+        return batchprice;
+    }
+
+    public void setBatchprice(int batchprice) {
+        this.batchprice = batchprice;
+    }
+
+    public String getTotal_share() {
+        return total_share;
+    }
+
+    public void setTotal_share(String total_share) {
+        this.total_share = total_share;
+    }
+
+    public String getAllvisit() {
+        return allvisit;
+    }
+
+    public void setAllvisit(String allvisit) {
+        this.allvisit = allvisit;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 
     public String getAuthor() {
         return author;
@@ -76,14 +128,6 @@ public class BookModel implements Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public long getYesterday_share() {
-        return yesterday_share;
-    }
-
-    public void setYesterday_share(long yesterday_share) {
-        this.yesterday_share = yesterday_share;
     }
 
     //设置以下两个属性不写入表中
@@ -97,9 +141,10 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 147605189)
-    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int allvisit,
-            int reviewnum, int goodnum, long chapterid, int order, List<String> tag, String author, long yesterday_share, long userId, long create_time, long update_time) {
+    @Generated(hash = 2054071114)
+    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
+            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, long userId, long create_time,
+            long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -112,7 +157,6 @@ public class BookModel implements Serializable {
         this.intro = intro;
         this.fullflag = fullflag;
         this.lastvolume = lastvolume;
-        this.allvisit = allvisit;
         this.reviewnum = reviewnum;
         this.goodnum = goodnum;
         this.chapterid = chapterid;
@@ -120,6 +164,11 @@ public class BookModel implements Serializable {
         this.tag = tag;
         this.author = author;
         this.yesterday_share = yesterday_share;
+        this.allvisit = allvisit;
+        this.size = size;
+        this.total_share = total_share;
+        this.batchbuy = batchbuy;
+        this.batchprice = batchprice;
         this.userId = userId;
         this.create_time = create_time;
         this.update_time = update_time;
@@ -128,7 +177,6 @@ public class BookModel implements Serializable {
     @Generated(hash = 1421733684)
     public BookModel() {
     }
-
 
     public String getModel_img_url() {
         return model_img_url;
@@ -224,14 +272,6 @@ public class BookModel implements Serializable {
 
     public void setLastvolume(String lastvolume) {
         this.lastvolume = lastvolume;
-    }
-
-    public int getAllvisit() {
-        return allvisit;
-    }
-
-    public void setAllvisit(int allvisit) {
-        this.allvisit = allvisit;
     }
 
     public int getReviewnum() {

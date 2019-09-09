@@ -7,27 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.ui.BaseActivity;
-import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.CommonRecommendAdapter;
 import com.jj.comics.adapter.mine.RecentAdapter;
 import com.jj.comics.adapter.mine.SearchRecentAdapter;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.SearchModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.library.flowlayout.FlowLayoutManager;
 import com.library.flowlayout.SpaceItemDecoration;
 
@@ -36,12 +30,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
-import me.jessyan.autosize.utils.ScreenUtils;
 
 /**
  * 发现搜索页面
