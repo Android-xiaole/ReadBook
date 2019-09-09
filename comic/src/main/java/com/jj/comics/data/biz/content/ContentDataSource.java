@@ -66,7 +66,7 @@ public interface ContentDataSource {
     Observable<BookListResponse> getSearchComicListByKeywords(String keyWord,String retryTag);
 
     //获取首页推荐
-    Observable<BookListRecommondResponse> getRecommond(String retryTag);
+    Observable<BookListRecommondResponse> getRecommond(int channelFlag,String retryTag);
 
     //获取首页最热分享
     Observable<BookListPopShareResponse> getPopShare(int channelFlag,String retryTag);

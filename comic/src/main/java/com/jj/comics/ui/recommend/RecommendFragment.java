@@ -177,7 +177,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
         mRefresh.setRefreshing(true);
         getP().getBanner();
-        getP().loadData(1, false,false);
+        getP().loadData(recentChannelFlag,1, false,false);
         getP().loadPopShare(recentChannelFlag,false);
         getP().loadRecentlyComic(recentlyPage, Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,
                 false);
@@ -415,9 +415,9 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 if (view.getId() == R.id.tv_loadMore) {
                     List<SectionModel> datas = adapter_content.getData();
                     SectionModel sectionModel = datas.get(position);
-                    int sectionId = sectionModel.getSectionId();
+                    long sectionId = sectionModel.getSectionId();
                     ARouter.getInstance().build(RouterMap.COMIC_RECOMMEND_LOADMORE)
-                            .withInt(Constants.IntentKey.SECTION_ID, sectionId)
+                            .withLong(Constants.IntentKey.SECTION_ID, sectionId)
                             .withString(Constants.IntentKey.TITLE, sectionModel.getName())
                             .navigation(getActivity());
                 }
@@ -497,14 +497,17 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             switchTvs(0);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
+            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,1, false,true);
         }else if (view.getId()  == R.id.recommend_man) {
             switchTvs(1);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
+            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,1, false,true);
         }else if (view.getId()  == R.id.recommend_woman) {
             switchTvs(2);
             getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
             getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
+            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,1, false,true);
         }
     }
 
@@ -548,7 +551,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onRefresh() {
-        getP().loadData(1, false,false);
+        getP().loadData(recentChannelFlag,1, false,false);
         recentlyPage = 1;
         getP().loadRecentlyComic(recentlyPage,recentChannelFlag,false);
         getP().loadPopShare(recentChannelFlag,false);

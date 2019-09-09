@@ -28,16 +28,16 @@ public class BookListRecommondResponse extends ResponseModel {
          * list : [{"id":106,"cover":"http://ossmh.jj1699.cn/images/青年发型社/1560417337-青年发型社.jpg","title":"青年发型社","coverl":"http://ossmh.jj1699.cn/images/青年发型社/1560417790-青年发型社.jpg","coverl_index":"/public/images/default.png","cover_index":"/public/images/default.png","hot_const":4105,"intro":"                                                                                                                                                                                                        一位优秀职场青年意外的在面试中怯场，为了一位女神进了社区的一家美容院工作，借着工作之名展开了一场追爱行动.....                                                                                                                                                                                    ","model_img_url":"","category":["恋爱","都市"]}]
          */
 
-        private int id;
+        private long id;
         private String model_name;
         private String style;
         private List<BookModel> list;
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 

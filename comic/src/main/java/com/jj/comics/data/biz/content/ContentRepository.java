@@ -172,8 +172,8 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookListRecommondResponse> getRecommond(String retryTag) {
-        return ComicApi.getApi().getRecommond()
+    public Observable<BookListRecommondResponse> getRecommond(int channelFlag,String retryTag) {
+        return ComicApi.getApi().getRecommond(channelFlag)
                 .compose(ComicApiImpl.<BookListRecommondResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }

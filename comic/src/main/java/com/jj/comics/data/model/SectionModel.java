@@ -3,17 +3,17 @@ package com.jj.comics.data.model;
 import java.util.List;
 
 public class SectionModel {
-    private int sectionId;
+    private long sectionId;
     private String name;
     private String style;
     private String image1;
     private List<BookModel> mContentList;
 
-    public int getSectionId() {
+    public long getSectionId() {
         return sectionId;
     }
 
-    public void setSectionId(int sectionId) {
+    public void setSectionId(long sectionId) {
         this.sectionId = sectionId;
     }
 

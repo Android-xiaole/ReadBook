@@ -60,11 +60,9 @@ import retrofit2.HttpException;
 public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendContract.IRecommendView> implements RecommendContract.IRecommendPresenter {
 
     @Override
-    public void loadData(int pageNum, boolean evict,boolean changeChannel) {
-        ComicApi.getProviders().getRecommendData(ContentRepository.getInstance()
-                        .getRecommond(getV().getClass().getName()),
-                new DynamicKey(pageNum),
-                new EvictDynamicKey(evict))
+    public void loadData(int channelFlag,int pageNum, boolean evict,boolean changeChannel) {
+        ContentRepository.getInstance()
+                .getRecommond(channelFlag,getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookListRecommondResponse>bindLifecycle())

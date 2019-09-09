@@ -216,7 +216,7 @@ public interface ComicService {
      * @return
      */
     @GET(API_RECOMMENDED)
-    Observable<BookListRecommondResponse> getRecommond();
+    Observable<BookListRecommondResponse> getRecommond(@Query("channel")int channelFlag);
 
     /**
      * 首页最热分享

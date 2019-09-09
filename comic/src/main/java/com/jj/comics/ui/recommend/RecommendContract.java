@@ -53,7 +53,7 @@ public interface RecommendContract {
 
     interface IRecommendPresenter {
         //记载推荐数据
-        void loadData(int pageNum, boolean evict,boolean changeChannel);
+        void loadData(int channelFlag,int pageNum, boolean evict,boolean changeChannel);
 
         //获取最近更新数据
         void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel);
