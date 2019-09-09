@@ -264,7 +264,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         .init();
                 break;
             case 4:
-                ImmersionBar.with(MainActivity.this).reset().init();
+                ImmersionBar.with(MainActivity.this)
+                        .reset()
+                        .statusBarDarkFont(true, 0.2f)
+                        .statusBarColor(R.color.base_color_ffffff)
+                        .init();
                 break;
         }
     }
