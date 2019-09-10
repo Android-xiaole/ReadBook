@@ -56,4 +56,5 @@ public class RouterMap {
     public static final String COMIC_NOTIFICATION_ACTIVITY = "/ui/mine/NotificationActivity";
     public static final String COMIC_HISTORY_ACTIVITY = "/ui/mine/HistoryActivity";
     public static final String COMIC_USERINFO_ACTIVITY = "/ui/mine/UserInfoActivity";
+    public static final String COMIC_MYCOIN_ACTIVITY = "/ui/mine/MyCoinActivity";
 }

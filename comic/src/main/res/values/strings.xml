@@ -190,6 +190,7 @@
     <string name="comic_no_history_query">没有查询到历史记录</string>
     <string name="comic_read_comic_net_remind">当前正在使用流量阅读</string>
     <string name="comic_about_us">关于我们</string>
+    <string name="comic_my_coin">我的书币</string>
     <string name="comic_introduction1">超多漫画免费看，你想看的全都有！</string>
     <string name="comic_introduction2">天天更新超快速，追更漫画零等待！</string>
     <string name="comic_introduction3">超多福利等你拿，种类齐全任你挑！</string>
@@ -306,6 +307,8 @@
     <string name="comic_mine_coins">我的书币</string>
     <string name="comic_mine_buy">我的购买</string>
     <string name="comic_mine_history">阅读历史</string>
+    <string name="comic_coin_consume_history">消耗记录</string>
+    <string name="comic_coin_recharge_history">充值记录</string>
     <string name="comic_mine_notification">消息公告</string>
     <string name="comic_mine_recharge">充值中心</string>
     <string name="comic_mine_help">帮助中心</string>

@@ -68,7 +68,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @BindView(R2.id.comic_mine_help)
     MineItemView mineItemView_help;
 
-
+    private int mCoin = 99999;
     @Override
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
@@ -146,7 +146,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public void onGetUserPayInfo(PayInfo payInfo) {
     }
 
-    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,R2.id.edit_user_info})
+    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification,
+            R2.id.comic_mine_recharge, R2.id.comic_mine_help,R2.id.edit_user_info,
+            R2.id.btn_my_rebate,R2.id.btn_my_coin})
     void onClick(View view) {
         if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
@@ -161,6 +163,10 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.edit_user_info) {
             ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
+        }else if (view.getId() == R.id.btn_my_coin) {
+            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong("coin",mCoin).navigation();
+        }else if (view.getId() == R.id.btn_my_rebate) {
+
         }
     }
 
