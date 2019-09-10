@@ -128,7 +128,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         rv_recently.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_recently.setHasFixedSize(true);
         adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
-        adapter_recently.bindToRecyclerView(rv_recently);
+        adapter_recently.bindToRecyclerView(rv_recently,true);
         adapter_recently.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -405,7 +405,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         rv_content = headView.findViewById(R.id.rv_content);
         adapter_content = new RecommendAdapter(R.layout.comic_item_recommend);
         rv_content.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter_content.bindToRecyclerView(rv_content, true);
+        adapter_content.bindToRecyclerView(rv_content, false);
         adapter_content.setOnClick(this);
         adapter_content.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -436,7 +436,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         adapterPopShare = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
                 Integer.MAX_VALUE, false,true);
         rv_popShare.setLayoutManager(new GridLayoutManager(getContext(),2));
-        adapterPopShare.bindToRecyclerView(rv_popShare, true);
+        adapterPopShare.bindToRecyclerView(rv_popShare, false);
         adapterPopShare.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -564,7 +564,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     public void getDataFail(NetError error) {
         if (mRefresh.isRefreshing())
             mRefresh.setRefreshing(false);
-        adapter_content.setEmptyText(error.getMessage());
+        //设置不显示无数据的布局
+//        adapter_content.setEmptyText(error.getMessage());
         adapter_content.setNewData(null);
 //        hideProgress();
     }

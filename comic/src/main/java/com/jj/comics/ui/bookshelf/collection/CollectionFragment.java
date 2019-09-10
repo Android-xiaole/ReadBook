@@ -77,7 +77,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item);
+        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item,null);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.base_yellow_ffd850));
         mRefresh.setRefreshing(true);
@@ -103,19 +103,6 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
         mAdapter.setHeaderFooterEmpty(true, true);
         mAdapter.addFooterView(getFootView());
 
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (mAdapter.isEditMode()) {
-                    mAdapter.autoSelect(position);
-                    mSelectCheckBox.setChecked(mAdapter.isSelectAll());
-                    mDeleteCheckBox.setChecked(!mAdapter.getDelete().isEmpty());
-                } else {
-                    DetailActivityHelper.toDetail(getActivity(),
-                            mAdapter.getData().get(position).getId(), "收藏列表");
-                }
-            }
-        });
 
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
@@ -203,13 +190,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
 //            EventBus.getDefault().post(new Refresh(1));
             EventBusManager.sendChangeTabBarEvent(new ChangeTabBarEvent(1));
         } else if (id == R.id.comic_bookshelf_select) {
-            mSelectCheckBox.setChecked(!mSelectCheckBox.isChecked());
-            mAdapter.autoSelectAllOrNot();
-            mDeleteCheckBox.setChecked(!mAdapter.getDelete().isEmpty());
         } else if (id == R.id.comic_bookshelf_delete) {
-            if (!mAdapter.getDelete().isEmpty())
-//                getP().deleteCollection(getChildFragmentManager(),mAdapter.getDelete());
-                deleteCollection(mAdapter.getDelete());
         } else if (id == R.id.load_more) {
             currentPage++;
             getP().getCollectionList(currentPage, pageSize);
@@ -237,13 +218,10 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
     @Override
     public void onDeleteComplete() {
         currentPage = 1;
-        mAdapter.getDelete().clear();
         List<BookModel> data = mAdapter.getData();
         int size = data.size();
         data.clear();
         mAdapter.notifyItemRangeRemoved(mAdapter.getHeaderLayoutCount(), size);
-        mSelectCheckBox.setChecked(mAdapter.isSelectAll());
-        mDeleteCheckBox.setChecked(!mAdapter.getDelete().isEmpty());
         Fragment fragment = getParentFragment();
         if (fragment instanceof BookShelfFragment)
             ((BookShelfFragment) fragment).setEditMode(false);
@@ -283,7 +261,6 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
 
     public void setEditMode(boolean editMode) {
         if (mAdapter == null) return;
-        mAdapter.setEditMode(editMode);
 //        if (mAdapter.getHeaderLayoutCount() > 0) mAdapter.removeAllHeaderView();
         if (editMode) {
 //            mAdapter.addHeaderView(getDeleteHeaderView());
@@ -316,9 +293,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
     public void logout(LogoutEvent logoutEvent) {
         currentPage = 1;
         if (mAdapter != null) {
-            mAdapter.setEditMode(false);
             mAdapter.isUseEmpty(false);
-            mAdapter.getDelete().clear();
             if (mDeleteHeaderView != null) mAdapter.removeHeaderView(mDeleteHeaderView);
             if (mAdapter.getHeaderLayoutCount() == 0) mAdapter.addHeaderView(getLoginHeaderView());
             mRecycler.getLayoutManager().scrollToPosition(0);

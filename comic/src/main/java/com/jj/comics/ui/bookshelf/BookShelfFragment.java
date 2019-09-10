@@ -16,7 +16,6 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.ViewPagerAdapter;
 import com.jj.comics.ui.bookshelf.collection.CollectionFragment;
-import com.jj.comics.ui.mine.history.HistoryFragment;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -62,8 +61,6 @@ public class BookShelfFragment extends BaseCommonFragment<BookShelfPresenter> im
 
         mList = new ArrayList<>();
         mList.add(new CollectionFragment());
-        HistoryFragment historyFragment = new HistoryFragment();
-        mList.add(historyFragment);
         mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mList, new String[]{getString(R.string.comic_collect_text), getString(R.string.comic_history)});
         mPager.setOffscreenPageLimit(0);
         mPager.setAdapter(mPagerAdapter);
@@ -103,9 +100,7 @@ public class BookShelfFragment extends BaseCommonFragment<BookShelfPresenter> im
         mDelete.setVisibility(editMode ? View.GONE : View.VISIBLE);
         mDone.setVisibility(editMode ? View.VISIBLE : View.GONE);
         for (BaseFragment baseFragment : mList) {
-            if (baseFragment instanceof HistoryFragment)
-                ((HistoryFragment) baseFragment).setEditMode(editMode);
-            else if (baseFragment instanceof CollectionFragment) {
+            if (baseFragment instanceof CollectionFragment) {
                 ((CollectionFragment) baseFragment).setEditMode(editMode);
             }
         }

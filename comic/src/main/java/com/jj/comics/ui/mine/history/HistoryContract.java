@@ -22,7 +22,7 @@ public interface HistoryContract {
         void getFooterDataFail(NetError error);
 
         //删除完成的回调
-        void onDeleteComplete();
+        void onDeleteComplete(int position);
     }
 
     interface IHistoryPresenter {
@@ -39,6 +39,6 @@ public interface HistoryContract {
         void toRead(final BookModel bookModel, final long chapterid);
 
         //删除历史记录
-        void deleteHistory(List<BookModel> delete);
+        void deleteHistory(List<BookModel> delete,int position);
     }
 }
