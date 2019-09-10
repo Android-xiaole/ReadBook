@@ -44,12 +44,13 @@ public class LoginHelper {
     }
 
     public static UserInfo getOnLineUser() {
-        if (onLineUser == null) {
-            synchronized (LoginHelper.class) {
-                if (onLineUser == null)
-                    onLineUser = mHelper.getLoginUser();
-            }
-        }
+//        if (onLineUser == null) {
+//            synchronized (LoginHelper.class) {
+//                if (onLineUser == null)
+//                    onLineUser = mHelper.getLoginUser();
+//            }
+//        }
+        onLineUser = new UserInfo();//先设置默认登录状态，方便调试
         return onLineUser;
     }
 
