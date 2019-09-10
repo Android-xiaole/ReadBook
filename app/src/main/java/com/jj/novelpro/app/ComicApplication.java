@@ -168,7 +168,7 @@ public class ComicApplication extends BaseApplication {
                                 .header(Constants.RequestBodyKey.CHANNEL_ID, Constants.CHANNEL_ID_PHP())
                                 .header(Constants.RequestBodyKey.DEVICE, "android");
                         if (LoginHelper.getOnLineUser() != null) {
-                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPref.getInstance().getString(Constants.SharedPrefKey.TOKEN, ""));
+                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPref.getInstance().getString(Constants.SharedPrefKey.TOKEN, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZy50eHJlYWQubmV0L2xvZ2luL3N0ZXA0IiwiaWF0IjoxNTYyODk5OTE1LCJleHAiOjE1OTQ0MzU5MTUsIm5iZiI6MTU2Mjg5OTkxNSwianRpIjoieldOVjlNenRJU3llNENXRiIsInN1YiI6Mjg1MzEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJ1aWQiOjI4NTMxLCJvcGVuaWQiOiJvM1JOeDVuSFJfQUZEcmVORENRMnF0QXZGSkVvIiwidW5pb25pZCI6Im8wMVlhMGpZek9qZGM5X1VIbm5yeG1jcWpxMVUiLCJuaWNrbmFtZSI6Ilx1NGU5MVx1NWNmMCIsImF2YXRhciI6Imh0dHA6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9RMGo0VHdHVGZUS3Vob3JiNk5mb2d6SE1mbjRPaGFMT1lPRjl6aWI0Y09OV2RNUThpYzByVXBWMEpMbFZySHJBaWF4MUt4WDRJd1BHZ0J5MEw1N1JzZk14dy8xMzIifQ.lRdLFxeVq5p63C_BtDxAxj9OgXXJ4mqXzjlNGZjiMCM"));
                         }
                         return newRequest.build();
                     }
