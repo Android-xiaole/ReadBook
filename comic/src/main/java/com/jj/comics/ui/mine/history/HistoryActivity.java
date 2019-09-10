@@ -1,5 +1,6 @@
 package com.jj.comics.ui.mine.history;
 
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +10,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
+import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
@@ -26,6 +30,7 @@ import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,24 +52,36 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item);
+        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item,null);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecycler);
         mAdapter.setEmptyView(getEmptyView());
 
-        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DetailActivityHelper.toDetail(HistoryActivity.this,
-                        mAdapter.getData().get(position).getId(),
-                        "历史列表");
-            }
-        });
+//        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                DetailActivityHelper.toDetail(HistoryActivity.this,
+//                        mAdapter.getData().get(position).getId(),
+//                        "历史列表");
+//            }
+//        });
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                getP().toRead(mAdapter.getData().get(position), mAdapter.getData().get(position).getChapterid());
+                BookModel bookModel = mAdapter.getData().get(position);
+                if (bookModel == null) return;
+
+                if (view.getId() == R.id.content) {
+//                    getP().toRead(mAdapter.getData().get(position), mAdapter.getData().get(position).getChapterid());
+                    DetailActivityHelper.toDetail(HistoryActivity.this,
+                            bookModel.getId(),
+                            "历史列表");
+                }else if (view.getId() == R.id.right) {
+                    showToastShort("删除");
+                    ArrayList<BookModel> list = new ArrayList<>();
+                    list.add(bookModel);
+                    getP().deleteHistory(list,position);
+                }
             }
         });
 
@@ -115,8 +132,8 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
     }
 
     @Override
-    public void onDeleteComplete() {
-
+    public void onDeleteComplete(int position) {
+        mAdapter.remove(position);
     }
 
     @Override

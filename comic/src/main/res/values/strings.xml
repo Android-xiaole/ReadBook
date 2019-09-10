@@ -10,7 +10,7 @@
     <string name="comic_str2">2、绑定手机号仅用于安全验证,不作为登录账号使用。</string>
     <string name="comic_str3">3、若您已经使用手机号登录过,也可以将目前登录的账号绑定之前的手机号。</string>
     <!--书架阅读历史记录-->
-    <string name="comic_bookshelf_record_format">阅读至%1$d话/更新至%2$s话</string>
+    <string name="comic_bookshelf_record_format">阅读到第%1$d章</string>
     <!--打赏弹窗豪气值-->
     <string name="comic_num_top">%1$d豪气值</string>
     <!--支付界面所需支付人民币-->

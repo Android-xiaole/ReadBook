@@ -7,7 +7,7 @@ import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseFragment;
+import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
@@ -204,7 +204,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
                 }).flatMap(new Function<Long, ObservableSource<BookCatalogModel>>() {
             @Override
             public ObservableSource<BookCatalogModel> apply(Long chapterid) throws Exception {
-                return ReadComicHelper.getComicHelper().getBookCatalogContent(((BaseFragment)getV()).getBaseActivity(),bookModel,chapterid)
+                return ReadComicHelper.getComicHelper().getBookCatalogContent(((BaseActivity)getV()),bookModel,chapterid)
                         .subscribeOn(Schedulers.io());
             }
         }).observeOn(AndroidSchedulers.mainThread())
@@ -212,7 +212,8 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
                 .subscribe(new ComicSubscriber<BookCatalogModel>() {
                     @Override
                     public void onNext(BookCatalogModel catalogModel) {
-                        ReadComicActivity.toRead(((BaseFragment)getV()).getBaseActivity(),bookModel,catalogModel);
+                        ReadComicActivity.toRead(((BaseActivity)getV()),bookModel,
+                                catalogModel);
                     }
 
                     @Override
@@ -228,7 +229,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
     }
 
     @Override
-    public void deleteHistory(List<BookModel> delete) {
+    public void deleteHistory(List<BookModel> delete,int position) {
         if (delete == null || delete.size() == 0) {
             return;
         }
@@ -237,7 +238,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
             for (BookModel bookModel : delete) {
                 mDaoHelper.delete(bookModel);
             }
-            getV().onDeleteComplete();
+            getV().onDeleteComplete(position);
             return;
         }
         StringBuilder builder = new StringBuilder();
@@ -260,7 +261,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
                                     mDaoHelper.delete(bookModel);
                                 }
                             }
-                            getV().onDeleteComplete();
+                            getV().onDeleteComplete(position);
                         } else {
                             ToastUtil.showToastShort(commonStatusResponse.getMessage());
                         }

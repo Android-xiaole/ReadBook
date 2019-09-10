@@ -131,7 +131,7 @@
                     android:id="@+id/comic_mine_buy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_50"
+                    android:paddingTop="@dimen/dp_50"
                     app:iconResource="@drawable/gouwuche"
                     app:switchVisible="gone"
                     app:titleText="@string/comic_mine_buy" />
@@ -140,7 +140,7 @@
                     android:id="@+id/comic_mine_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_45"
+                    android:paddingTop="@dimen/dp_45"
                     app:iconResource="@drawable/history"
                     app:switchVisible="gone"
                     app:titleText="@string/comic_mine_history" />
@@ -149,7 +149,7 @@
                     android:id="@+id/comic_mine_notification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_45"
+                    android:paddingTop="@dimen/dp_45"
                     app:iconResource="@drawable/mine_notification"
                     app:switchVisible="gone"
                     app:titleText="@string/comic_mine_notification" />
@@ -158,7 +158,7 @@
                     android:id="@+id/comic_mine_recharge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_45"
+                    android:paddingTop="@dimen/dp_45"
                     app:iconResource="@drawable/mine_recharge"
                     app:switchVisible="gone"
                     app:titleText="@string/comic_mine_recharge" />
@@ -167,7 +167,7 @@
                     android:id="@+id/comic_mine_help"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_45"
+                    android:paddingTop="@dimen/dp_45"
                     app:iconResource="@drawable/mine_help"
                     app:switchVisible="gone"
                     app:titleText="@string/comic_mine_help" />

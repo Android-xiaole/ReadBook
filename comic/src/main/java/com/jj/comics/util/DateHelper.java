@@ -46,6 +46,15 @@ public class DateHelper {
     }
 
     /**
+     * 将毫秒转换成日期格式
+     */
+    public static String formatSecLong(long sec){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DateFormat.YMDHMS);
+        String date = dateFormat.format(new Date(sec));
+        return date;
+    }
+
+    /**
      * 将日期格式转换成秒
      *
      * @param formatStr
