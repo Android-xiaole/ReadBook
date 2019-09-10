@@ -183,30 +183,39 @@ public class NetPageLoader extends PageLoader {
         }
     }
 
+    /**
+     * 由于存在章节收费的逻辑，这里就不进行预加载，只加载当前章节
+     * @param start
+     * @param end
+     */
     private void requestChapters(int start, int end) {
-        // 检验输入值
-        if (start < 0) {
-            start = 0;
+        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
+        if (!hasChapterData(txtChapter)){//如果缓存中不存在就去网络加载
+            mPageChangeListener.requestChapters(txtChapter);
         }
-
-        if (end >= mChapterList.size()) {
-            end = mChapterList.size() - 1;
-        }
-
-
-        List<TxtChapter> chapters = new ArrayList<>();
-
-        // 过滤，哪些数据已经加载了
-        for (int i = start; i <= end; ++i) {
-            TxtChapter txtChapter = mChapterList.get(i);
-            if (!hasChapterData(txtChapter)) {
-                chapters.add(txtChapter);
-            }
-        }
-
-        if (!chapters.isEmpty()) {
-            mPageChangeListener.requestChapters(chapters);
-        }
+//        // 检验输入值
+//        if (start < 0) {
+//            start = 0;
+//        }
+//
+//        if (end >= mChapterList.size()) {
+//            end = mChapterList.size() - 1;
+//        }
+//
+//
+//        List<TxtChapter> chapters = new ArrayList<>();
+//
+//        // 过滤，哪些数据已经加载了
+//        for (int i = start; i <= end; ++i) {
+//            TxtChapter txtChapter = mChapterList.get(i);
+//            if (!hasChapterData(txtChapter)) {
+//                chapters.add(txtChapter);
+//            }
+//        }
+//
+//        if (!chapters.isEmpty()) {
+//            mPageChangeListener.requestChapters(chapters);
+//        }
     }
 
     @Override

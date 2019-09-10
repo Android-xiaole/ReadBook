@@ -26,6 +26,7 @@ import com.jj.comics.widget.bookreadview.utils.StringUtils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -751,8 +752,14 @@ public abstract class PageLoader {
                 float y = mDisplayHeight - mTipPaint.getFontMetrics().bottom - tipMarginHeight;
                 // 只有finish的时候采用页码
                 if (mStatus == STATUS_FINISH) {
-                    String percent = (mCurPage.position + 1) + "/" + mCurPageList.size();
-                    canvas.drawText(percent, mDisplayWidth-ScreenUtils.dpToPx(16)-mTipPaint.measureText(percent), y, mTipPaint);
+                    NumberFormat numberFormat = NumberFormat.getInstance();
+                    // 设置精确到小数点后2位
+                    numberFormat.setMaximumFractionDigits(2);
+                    String percent = numberFormat.format((float)(mCurChapterPos+1)/(float) mChapterList.size()*100)+"%";
+                    canvas.drawText(percent, (float) mDisplayWidth/2, y, mTipPaint);
+
+                    String curPercent = (mCurPage.position + 1) + "/" + mCurPageList.size();
+                    canvas.drawText(curPercent, mDisplayWidth-ScreenUtils.dpToPx(16)-mTipPaint.measureText(curPercent), y, mTipPaint);
                 }
             }
         } else {
@@ -1053,8 +1060,8 @@ public abstract class PageLoader {
     boolean parseCurChapter() {
         // 解析数据
         dealLoadPageList(mCurChapterPos);
-        // 预加载下一页面
-        preLoadNextChapter();
+        // 预加载下一页面（由于存在收费逻辑，这里就不预加载下一章节了）
+//        preLoadNextChapter();
         return mCurPageList != null ? true : false;
     }
 
@@ -1423,9 +1430,10 @@ public abstract class PageLoader {
         /**
          * 作用：请求加载章节内容
          *
-         * @param requestChapters:需要下载的章节列表
+         * @param requestChapter:需要下载的章节列表
          */
-        void requestChapters(List<TxtChapter> requestChapters);
+//        void requestChapters(List<TxtChapter> requestChapters);
+        void requestChapters(TxtChapter requestChapter);
 
         /**
          * 作用：章节目录加载完成时候回调

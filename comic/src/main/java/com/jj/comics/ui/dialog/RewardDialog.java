@@ -26,7 +26,6 @@ import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.RewardGiftsResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.mine.pay.PayActivity;
-import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.RefreshRewardRecordListEvent;
@@ -193,8 +192,6 @@ public class RewardDialog extends Dialog implements View.OnClickListener, BaseQu
 
                             EventBusManager.sendRefreshRewardRecordListEvent(new RefreshRewardRecordListEvent());//通知刷新打赏列表
                             EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent());//通知我的界面刷新用户数据
-                            if (mContext instanceof ReadComicActivity)
-                                ((ReadComicActivity) mContext).rewardSuccess();
                         } else {
                             ToastUtil.showToastShort(response.getMessage());
                         }

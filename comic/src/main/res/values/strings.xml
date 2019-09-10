@@ -183,7 +183,7 @@
     <string name="comic_open_vip_text">开通会员</string>
     <string name="comic_go_open">去开通</string>
     <string name="comic_catalog_text">目录</string>
-    <string name="comic_continue_read">继续阅读 第%1$d章</string>
+    <string name="comic_continue_read">继续阅读\n第%1$d章</string>
     <string name="comic_read_now">立即阅读</string>
     <string name="comic_share_text">分享</string>
     <string name="comic_null_abstract">还不快到碗里来！！！</string>

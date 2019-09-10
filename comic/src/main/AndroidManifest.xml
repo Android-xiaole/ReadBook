@@ -47,7 +47,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.mine.pay.SubscribeActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Comic.NoTitleTranslucentTheme" />
         <activity
             android:name=".ui.list.RankActivity"

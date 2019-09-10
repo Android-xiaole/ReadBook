@@ -84,12 +84,12 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
         }
         mPayDialog.show(getSupportFragmentManager(),payInfo,
                 catalogModel,isSelected,mDialogClick);
-        if (payInfo.getIs_vip() == 1){
-            int discountPrice = (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount());
-            tag = discountPrice > payInfo.getTotal_egold();
-        }else{
+//        if (payInfo.getIs_vip() == 1){
+//            int discountPrice = (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount());
+//            tag = discountPrice > payInfo.getTotal_egold();
+//        }else{
             tag = catalogModel.getSaleprice() > payInfo.getTotal_egold();
-        }
+//        }
     }
 
     @Override

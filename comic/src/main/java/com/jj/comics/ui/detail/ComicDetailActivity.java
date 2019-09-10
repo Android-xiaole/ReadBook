@@ -30,7 +30,6 @@ import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
-import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
