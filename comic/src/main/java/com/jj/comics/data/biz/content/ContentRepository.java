@@ -19,8 +19,10 @@ import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.RewardListResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
+import com.jj.comics.data.model.SortListResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
 
@@ -51,6 +53,13 @@ public class ContentRepository implements ContentDataSource {
         return ComicApi.getApi().getCategories()
                 .retryWhen(new RetryFunction2())
                 .compose(ComicApiImpl.<CategoryResponse>getApiTransformer2());
+    }
+
+    @Override
+    public Observable<SortListResponse> getSortList() {
+        return ComicApi.getApi().getSortList()
+                .retryWhen(new RetryFunction2())
+                .compose(ComicApiImpl.<SortListResponse>getApiTransformer2());
     }
 
     @Override
@@ -245,5 +254,12 @@ public class ContentRepository implements ContentDataSource {
                 .retryWhen(new RetryFunction2());
     }
 
+
+    @Override
+    public Observable<OSSResponse> getOSSConfig(String name) {
+        return ComicApi.getApi().getOSSConfig()
+                .compose(ComicApiImpl.<OSSResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2(name));
+    }
 
 }

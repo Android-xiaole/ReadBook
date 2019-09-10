@@ -30,6 +30,7 @@ public class RouterMap {
     public static final String COMIC_RECOMMEND_LOADMORE = "/ui/featured/RecommendLoadMoreActovity";
     public static final String COMIC_HOME_FRAGMENT = "/comic/recommend_list/HomeFragment";
     public static final String COMIC_FIND_FRAGMENT = "/comic/classify/FindBookFragment";
+    public static final String COMIC_SORT_FRAGMENT = "/comic/classify/SortFragment";
     public static final String COMIC_SEARCH_FRAGMENT = "/comic/money/SearchFragment";
     public static final String COMIC_BOOKSHELF_FRAGMENT = "/comic/bookshelf/BookShelfFragment";
     public static final String COMIC_MINE_FRAGMENT = "/comic/mine/MineFragment";
@@ -54,4 +55,5 @@ public class RouterMap {
     public static final String COMIC_AGREEMENT_ACTIVITY = "/ui/mine/UserAgreementActivity";
     public static final String COMIC_NOTIFICATION_ACTIVITY = "/ui/mine/NotificationActivity";
     public static final String COMIC_HISTORY_ACTIVITY = "/ui/mine/HistoryActivity";
+    public static final String COMIC_USERINFO_ACTIVITY = "/ui/mine/UserInfoActivity";
 }

@@ -421,4 +421,8 @@ public class Constants {
         public static final String HAS_ALIPAY = "has_alipay";
         public static final String USER_INSTALL_ALIPAY = "user_install_alipay";
     }
+
+    // oss相关配置
+    public static final String OSS_ENDPOINT = "oss-cn-shanghai.aliyuncs.com";
+    public static final String BUCKET_NAME = "fanlixiaoshuo";
 }

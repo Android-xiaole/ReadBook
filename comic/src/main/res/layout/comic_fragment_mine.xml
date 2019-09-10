@@ -65,6 +65,7 @@
                             android:text="name" />
 
                         <ImageView
+                            android:id="@+id/edit_user_info"
                             android:layout_width="@dimen/dp_26"
                             android:layout_height="@dimen/dp_26"
                             android:layout_marginRight="@dimen/dp_40"

@@ -14,9 +14,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
-        <activity android:name=".ui.detail.BookInfoActivity"
+        <activity
+            android:name=".ui.detail.BookInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base"/>
+            android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
             android:name=".ui.detail.comment.CommentListActivity"
@@ -150,6 +151,10 @@
 
         <activity
             android:name=".ui.mine.history.HistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+        <activity
+            android:name=".ui.mine.userinfo.UserInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 

@@ -37,8 +37,6 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
     ImageView iv_search;
     @BindView(R2.id.rv_searchResult)
     RecyclerView rv_searchResult;
-    @BindView(R2.id.rv_watchingData)
-    RecyclerView rv_watchingData;
 
     private SearchResultAdapter mResultAdapter;
     private CommonRecommendAdapter mRecommendAdapter;
@@ -92,29 +90,12 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
             }
         });
 
-        rv_watchingData.setNestedScrollingEnabled(false);
-        rv_watchingData.setHasFixedSize(true);
-        mRecommendAdapter = new CommonRecommendAdapter(R.layout.comic_item_search_watchingcomicdata);
-        rv_watchingData.setLayoutManager(new GridLayoutManager(this, 3));
-        mRecommendAdapter.bindToRecyclerView(rv_watchingData);
-        mRecommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DetailActivityHelper.toDetail(SearchResultActivity.this,
-                        mRecommendAdapter.getData().get(position).getId(), "搜索结果_热门搜索");
-
-            }
-        });
-        rv_watchingData.setNestedScrollingEnabled(false);
-        rv_watchingData.setHasFixedSize(true);
-
         showProgress();
         String key = getIntent().getStringExtra(Constants.IntentKey.KEY);
         et_search.setText(key);
         et_search.setSelection(key.length());
 
         getP().getSearchComicListByKeywords(key);
-        getP().getWatchingComicData();
     }
 
 

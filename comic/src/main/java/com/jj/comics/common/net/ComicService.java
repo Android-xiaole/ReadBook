@@ -21,6 +21,7 @@ import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginByCodeResponse;
 import com.jj.comics.data.model.NotificationListResponse;
 import com.jj.comics.data.model.NotificationResponse;
+import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
@@ -42,6 +43,7 @@ import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
+import com.jj.comics.data.model.SortListResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -673,7 +675,13 @@ public interface ComicService {
     @GET(API_CATEGORY)
     Observable<CategoryResponse> getCategories();
 
-
+    /**
+     * 获取漫画分类类型
+     *
+     * @return
+     */
+    @GET(API_CATEGORY)
+    Observable<SortListResponse> getSortList();
     /**
      * 分类查询漫画
      *
@@ -859,5 +867,15 @@ public interface ComicService {
     @GET
     @Streaming
     Flowable<ResponseBody> downloadFile(@Url String url);
+
+    /**
+     * 获取oss 上传配置
+     * @return
+     */
+    @GET("api/oss_sign")
+    Observable<OSSResponse> getOSSConfig();
+
+//    @POST("api/update_user")
+//    Observable<>
 
 }

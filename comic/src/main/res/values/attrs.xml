@@ -91,4 +91,19 @@
         <attr name="bsb_rtl" format="boolean"/> <!--right to left, default: false-->
         <attr name="android:enabled"/>
     </declare-styleable>
+
+    <declare-styleable name="UserItemView" tools:ignore = "ResourceName">
+        <attr name="user_item_title" format="string"/>
+        <attr name="head_img" format="reference"/>
+        <attr name="head_img_visible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="bottom_line_visible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+    </declare-styleable>
 </resources>

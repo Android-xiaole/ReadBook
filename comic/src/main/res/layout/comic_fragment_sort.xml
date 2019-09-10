@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/comic_ffffff">
+
+    <EditText
+        android:id="@+id/search_edit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_32"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_6"
+        android:background="@drawable/comic_search_search_bg"
+        android:drawableRight="@drawable/icon_search_search"
+        android:drawablePadding="@dimen/dp_10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="@string/comic_search_comic_hint"
+        android:imeOptions="actionSearch"
+        android:lines="1"
+        android:maxLength="10"
+        android:singleLine="true"
+        android:textColorHint="@color/comic_999999"
+        android:textCursorDrawable="@android:color/black"
+        android:textSize="@dimen/dp_14" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_edit"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/sort"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/male"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/male_vertical"
+                    android:layout_width="1dp"
+                    android:layout_height="14dp"
+                    android:background="@color/comic_ffad70" />
+
+                <TextView
+                    android:id="@+id/male_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:text="男生"
+                    android:textColor="@color/comic_ffad70"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/female"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/female_vertical"
+                    android:layout_width="1dp"
+                    android:layout_height="14dp"
+                    android:background="@color/comic_353a40" />
+
+                <TextView
+                    android:id="@+id/female_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_11"
+                    android:text="女生"
+                    android:textColor="@color/comic_353a40"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sort_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp"
+            android:layout_toRightOf="@id/sort" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -12,8 +12,10 @@ import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.RewardListResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
+import com.jj.comics.data.model.SortListResponse;
 
 import io.reactivex.Observable;
 
@@ -21,6 +23,9 @@ public interface ContentDataSource {
 
     //获取当前分类类型列表
     Observable<CategoryResponse> getCategoryList();
+
+    //获取当前分类类型数据
+    Observable<SortListResponse> getSortList();
 
     //根据分类code获取当前分类下的数据列表
     Observable<BookListDataResponse> getContentListByType(int pageNum, int pageSize, String sectionId,String sort);
@@ -85,5 +90,7 @@ public interface ContentDataSource {
     //详情页的猜你喜欢
     Observable<BookListDataResponse> getLikeBookList(long id,int pageNum,int cid);
 
+    //获取oss 配置
+    Observable<OSSResponse> getOSSConfig(String name);
 
 }

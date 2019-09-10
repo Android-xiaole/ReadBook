@@ -146,7 +146,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public void onGetUserPayInfo(PayInfo payInfo) {
     }
 
-    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help})
+    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,R2.id.edit_user_info})
     void onClick(View view) {
         if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
@@ -158,6 +158,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ToastUtil.showToastShort("me" + view.getId());
         } else if (view.getId() == R.id.comic_mine_help) {
             ToastUtil.showToastShort("me" + view.getId());
+            ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation(getActivity());
+        } else if (view.getId() == R.id.edit_user_info) {
+            ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
         }
     }
 
