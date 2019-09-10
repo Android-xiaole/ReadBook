@@ -33,6 +33,7 @@ import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
+import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -201,7 +202,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             }
         } else if (id == R.id.tv_read) {//去阅读
             if (model == null)return;
-            ReadComicActivity.toRead(this, model, null);
+            getP().toRead(model,model.getChapterid());
         }else if (id == R.id.tv_moreInfo){//查看更多
             if (model == null)return;
             ARouter.getInstance().build(RouterMap.COMIC_DETAIL_BOOKINFO_ACTIVITY)
@@ -226,6 +227,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 case RequestCode.LOGIN_REQUEST_CODE:
                     showProgress();
                     getP().getComicDetail(model.getId());
+                    getP().getCollectStatus(model.getId());
                     break;
                 case RequestCode.SUBSCRIBE_REQUEST_CODE:
                     long chapterId = data.getLongExtra(Constants.IntentKey.ID, 0);
@@ -302,6 +304,10 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         fillCollectStatus(collectByCurrUser);
     }
 
+    /**
+     * 获取小说收藏状态的回调
+     * @param collectByCurrUser
+     */
     @Override
     public void fillCollectStatus(boolean collectByCurrUser) {
         isCollect = collectByCurrUser;
@@ -340,6 +346,14 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         return R.menu.comic_detail_menu;
     }
 
+    /**
+     * 刷新别的页面修改小说收藏状态的通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshCollectStatus(RefreshComicCollectionStatusEvent event){
+        fillCollectStatus(event.collectByCurrUser);
+    }
 
     /**
      * 来自阅读页面产生了历史记录刷新当前立即阅读按钮的文字显示信息
@@ -348,11 +362,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updateReadHistory(UpdateReadHistoryEvent event) {
-//        if (mComicRead != null) {
-//            model.setChapterid(event.getChapterid());
-//            model.setOrder(event.getChapterorder());
-//            mComicRead.setText(String.format(getString(R.string.comic_continue_read), event.getChapterorder()));
-//        }
+        if (tv_read != null) {
+            model.setChapterid(event.getChapterid());
+            model.setOrder(event.getChapterorder());
+            tv_read.setText(String.format(getString(R.string.comic_continue_read), event.getChapterorder()));
+        }
     }
 
     @Override

@@ -235,9 +235,10 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
                     @Override
                     public void onNext(CommonStatusResponse commonStatusResponse) {
-                        Log.i("sync history:", commonStatusResponse.getMessage());
                         //上传成功之后直接删除
-                        daoHelper.delete(bookModel);
+                        if (commonStatusResponse.getData().getStatus()){
+                            daoHelper.delete(bookModel);
+                        }
                     }
 
                     @Override

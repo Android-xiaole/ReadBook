@@ -167,7 +167,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @Override
     public void initData(Bundle savedInstanceState) {
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
-//        catalogModel = ((BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL));
+        catalogModel = ((BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL));
         if (SharedPref.getInstance(ReadComicActivity.this).getBoolean(Constants.SharedPrefKey.SWITCH_GPRS_READ_REMIND, true) && NetWorkUtil.is4G()) {
             ToastUtil.showToastShort(getString(R.string.comic_read_comic_net_remind));
         }
@@ -559,6 +559,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         isCollect = collectByCurrUser;
         EventBusManager.sendComicCollectionStatus(new RefreshComicCollectionStatusEvent(collectByCurrUser));
         if (isCollect) {
+            ToastUtil.showToastShort("已成功加入书架");
             if (ReadSettingManager.getInstance().isNightMode()){
                 iv_collect.setImageResource(R.drawable.icon_read_night_collect);
             }else{
