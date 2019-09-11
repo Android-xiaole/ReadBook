@@ -63,12 +63,12 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookListDataResponse> getContentListByType(int pageNum, int pageSize, String sectionId,String sort) {
-        Map<String,Object> params = new HashMap<>();
-        params.put(Constants.RequestBodyKey.PAGE_NUM,pageNum);
-        params.put(Constants.RequestBodyKey.PAGE_SIZE,pageSize);
-        params.put(Constants.RequestBodyKey.ORDER_BY,sort);
-        params.put(Constants.RequestBodyKey.BOOK_TYPE_ID,sectionId);
+    public Observable<BookListDataResponse> getContentListByType(int pageNum, int pageSize, String sectionId, String sort) {
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constants.RequestBodyKey.PAGE_NUM, pageNum);
+        params.put(Constants.RequestBodyKey.PAGE_SIZE, pageSize);
+        params.put(Constants.RequestBodyKey.ORDER_BY, sort);
+        params.put(Constants.RequestBodyKey.BOOK_TYPE_ID, sectionId);
         return ComicApi.getApi().getBookCategories(params)
                 .retryWhen(new RetryFunction2())
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2());
@@ -76,7 +76,7 @@ public class ContentRepository implements ContentDataSource {
 
     @Override
     public Observable<BookListDataResponse> getSectionListBySectionId(int currentPage, int sectionId, boolean evict,
-                                                                    String retryTag) {
+                                                                      String retryTag) {
         return ComicApi.getProviders().getSectionListBySectionId(ComicApi.getApi().getSectionListBySectionId(currentPage, 20, sectionId), new DynamicKey(currentPage + "   " + sectionId), new EvictDynamicKey(evict))
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
@@ -84,10 +84,10 @@ public class ContentRepository implements ContentDataSource {
 
     @Override
     public Observable<BookCatalogListResponse> getCatalogList(long id, int pageNum, String sort) {
-        HashMap<String,Object> parames = new HashMap();
-        parames.put(Constants.RequestBodyKey.ID,id);
-        parames.put(Constants.RequestBodyKey.PAGE_NUM,pageNum);
-        parames.put(Constants.RequestBodyKey.SORT,sort);
+        HashMap<String, Object> parames = new HashMap();
+        parames.put(Constants.RequestBodyKey.ID, id);
+        parames.put(Constants.RequestBodyKey.PAGE_NUM, pageNum);
+        parames.put(Constants.RequestBodyKey.SORT, sort);
         return ComicApi.getApi().getCatalogList(parames)
                 .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
@@ -95,9 +95,9 @@ public class ContentRepository implements ContentDataSource {
 
     @Override
     public Observable<BookCatalogContentResponse> getCatalogContent(long id, long chapterid) {
-        Map<String,Object> parames = new HashMap<>();
-        parames.put(Constants.RequestBodyKey.BOOK_ID,id);
-        parames.put(Constants.RequestBodyKey.CHAPTER_ID,chapterid);
+        Map<String, Object> parames = new HashMap<>();
+        parames.put(Constants.RequestBodyKey.BOOK_ID, id);
+        parames.put(Constants.RequestBodyKey.CHAPTER_ID, chapterid);
         return ComicApi.getApi().getCatalogContent(parames)
                 .compose(ComicApiImpl.<BookCatalogContentResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
@@ -181,14 +181,14 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookListRecommondResponse> getRecommond(int channelFlag,String retryTag) {
+    public Observable<BookListRecommondResponse> getRecommond(int channelFlag, String retryTag) {
         return ComicApi.getApi().getRecommond(channelFlag)
                 .compose(ComicApiImpl.<BookListRecommondResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }
 
     @Override
-    public Observable<BookListPopShareResponse> getPopShare(int channelFlag,String retryTag) {
+    public Observable<BookListPopShareResponse> getPopShare(int channelFlag, String retryTag) {
         return ComicApi.getApi().getPopShare(channelFlag)
                 .compose(ComicApiImpl.<BookListPopShareResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
@@ -202,10 +202,10 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookListDataResponse> getRecentUpdate(int channelFlag,int pageNum,
+    public Observable<BookListDataResponse> getRecentUpdate(int channelFlag, int pageNum,
                                                             int pageSize,
-                                                          String retryTag) {
-        return ComicApi.getApi().getRecentUpdate(channelFlag,pageNum, pageSize)
+                                                            String retryTag) {
+        return ComicApi.getApi().getRecentUpdate(channelFlag, pageNum, pageSize)
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
     }
@@ -219,10 +219,10 @@ public class ContentRepository implements ContentDataSource {
 
     @Override
     public Observable<BookListDataResponse> getForFree(int pageNum, int pageSize, String type) {
-        Map<String,Object> parames = new HashMap<>();
-        parames.put(Constants.RequestBodyKey.PAGE_NUM,pageNum);
-        parames.put(Constants.RequestBodyKey.PAGE_SIZE,pageSize);
-        parames.put(Constants.RequestBodyKey.COMMON_TYPE,type);
+        Map<String, Object> parames = new HashMap<>();
+        parames.put(Constants.RequestBodyKey.PAGE_NUM, pageNum);
+        parames.put(Constants.RequestBodyKey.PAGE_SIZE, pageSize);
+        parames.put(Constants.RequestBodyKey.COMMON_TYPE, type);
         return ComicApi.getApi().getForFree(parames)
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
@@ -230,7 +230,7 @@ public class ContentRepository implements ContentDataSource {
 
     @Override
     public Observable<BookListDataResponse> getRankListByAction(String action, int pageNum,
-                                                              int pageSize, String retryTag) {
+                                                                int pageSize, String retryTag) {
         return ComicApi.getApi().getRankListByAction(action, pageNum, pageSize)
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(retryTag));
@@ -255,11 +255,19 @@ public class ContentRepository implements ContentDataSource {
     }
 
 
+    /**
+     * oss 文件上传获取token
+     *
+     * @param name
+     * @return
+     */
     @Override
     public Observable<OSSResponse> getOSSConfig(String name) {
         return ComicApi.getApi().getOSSConfig()
                 .compose(ComicApiImpl.<OSSResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(name));
     }
+
+
 
 }

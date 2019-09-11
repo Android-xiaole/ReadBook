@@ -62,7 +62,7 @@ public class Constants {
     public static final int CACHE_SIZE = 50; //RxCache缓存大小 单位MB
     public static final String CACHE_PATH = BaseApplication.getApplication().getCacheDir().getAbsolutePath();
 
-//    public static String HOST = "cartoon-novel.jishusaice.cn";
+    //    public static String HOST = "cartoon-novel.jishusaice.cn";
     public static final String HOST_TEST = "cartoon-novel.ds7j0i.cn";//测试环境域名
     public static final String HOST_APP_CONFIG = "cartoon_novel.langd88.cn";//获取app配置
     //cartoon-novel.txread.net
@@ -294,6 +294,11 @@ public class Constants {
         public static final String REWARD = "Reward";
         public static final String CONTENT_NAME_LIKE = "contentNameLike";
         public static final String CONTENT_IDS = "contentIds";
+        public static final String AVATAR = "avatar";
+        public static final String NICKNAME = "nickname";
+        public static final String SEX = "sex";
+        public static final String PHONE_NUMBER = "phone_number";
+        public static final String CODE = "code";
     }
 
     //时间格式
@@ -425,4 +430,5 @@ public class Constants {
     // oss相关配置
     public static final String OSS_ENDPOINT = "oss-cn-shanghai.aliyuncs.com";
     public static final String BUCKET_NAME = "fanlixiaoshuo";
+    public static final String BUCKET_URL = "https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/";
 }

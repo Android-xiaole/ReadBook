@@ -364,4 +364,8 @@
     <string name="comic_user_info_iphone">手机号</string>
     <string name="comic_user_info_title">个人信息</string>
     <string name="comic_user_info_setting">设置</string>
+    <string name="comic_user_info_edit_nickname">修改昵称</string>
+    <string name="comic_user_info_edit_sex">修改性别</string>
+    <string name="comic_user_info_confirm">确认修改</string>
+    <string name="comic_user_info_auto_bug">自动购买</string>
 </resources>

@@ -9,16 +9,14 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
-import com.alibaba.sdk.android.oss.common.auth.OSSAuthCredentialsProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
-import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -42,7 +40,6 @@ import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
-import com.jj.comics.widget.UserItemView;
 
 import java.io.File;
 
@@ -99,10 +96,18 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     }
 
 
-    @OnClick({R2.id.user_head})
+    @OnClick({R2.id.user_head, R2.id.user_nickname, R2.id.user_sex, R2.id.user_phone, R2.id.user_setting})
     void onClick(View view) {
         if (view.getId() == R.id.user_head) {
             IntentUtils.openPic(this);//编辑头像
+        } else if (view.getId() == R.id.user_nickname) {
+            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_sex) {
+            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_phone) {
+            ARouter.getInstance().build(RouterMap.COMIC_BIND_PHONE_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_setting) {
+            ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
         }
     }
 
@@ -157,6 +162,13 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 Log.d("PutObject", "UploadSuccess");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String filepath = Constants.BUCKET_URL + request.getObjectKey();
+                        getP().updateUserInfo(filepath, null, -1);
+                    }
+                });
             }
 
             @Override
