@@ -14,6 +14,7 @@ import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
@@ -904,5 +905,10 @@ public interface ComicService {
      */
     @POST("api/share")
     Observable<CommonStatusResponse> reportShare(@Body RequestBody requestBody);
+    @POST("api/article_details")
+    Observable<ConsumeDetailListResponse> getConsumeDetail(@Body RequestBody requestBody);
+
+//    @POST("api/update_user")
+//    Observable<>
 
 }

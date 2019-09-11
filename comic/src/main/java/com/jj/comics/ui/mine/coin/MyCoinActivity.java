@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
@@ -38,10 +39,10 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     void onClick(View view) {
         if (view.getId() == R.id.btn_recharge) {
             showToastShort("跳转充值中心");
-        }else if (view.getId() == R.id.comic_coin_recharge_history) {
-            showToastShort("跳转充值历史");
         }else if (view.getId() == R.id.comic_coin_consume_history) {
-            showToastShort("跳转消费历史");
+            ARouter.getInstance().build(RouterMap.COMIC_CONSUME_RECORD_ACTIVITY).navigation();
+        }else if (view.getId() == R.id.comic_coin_recharge_history) {
+            ARouter.getInstance().build(RouterMap.COMIC_RECHARGE_RECORD_ACTIVITY).navigation();
         }
     }
 

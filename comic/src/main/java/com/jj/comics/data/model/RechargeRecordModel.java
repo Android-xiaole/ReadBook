@@ -14,6 +14,15 @@ public class RechargeRecordModel {
     private String title;
     private int jinbi;
     private String created_at;
+    private String money;
+
+    public String getMoney() {
+        return money;
+    }
+
+    public void setMoney(String money) {
+        this.money = money;
+    }
 
     public long getId() {
         return id;

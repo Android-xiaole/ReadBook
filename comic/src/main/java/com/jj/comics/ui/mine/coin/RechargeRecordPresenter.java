@@ -1,4 +1,4 @@
-package com.jj.comics.ui.mine.pay;
+package com.jj.comics.ui.mine.coin;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;

@@ -1,4 +1,4 @@
-package com.jj.comics.ui.mine.pay;
+package com.jj.comics.ui.mine.coin;
 
 import com.jj.base.mvp.IView;
 import com.jj.base.net.NetError;
@@ -6,9 +6,9 @@ import com.jj.comics.data.model.ExpenseSumRecordModel;
 
 import java.util.List;
 
-public interface PayRecordContract {
+public interface ConsumeRecordContract {
 
-    interface IPayRecordView extends IView {
+    interface IConsumeRecordView extends IView {
         //加载支付记录数据的回调
         void fillData(List<ExpenseSumRecordModel> expenseRecords);
 
@@ -16,7 +16,7 @@ public interface PayRecordContract {
         void getDataFail(NetError netError);
     }
 
-    interface IPayRecordPresenter {
+    interface IConsumeRecordPresenter {
         //获取支付数据
         void loadData(int currentPage);
     }

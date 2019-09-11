@@ -1,22 +1,21 @@
-package com.jj.comics.ui.mine.pay;
+package com.jj.comics.ui.mine.coin;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.jj.base.log.LogUtil;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseVPFragment;
-import com.jj.base.utils.Utils;
+import com.jj.base.ui.BaseActivity;
+import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.NewRechargeRecordAdapter;
+import com.jj.comics.adapter.mine.RechargeRecordAdapter;
 import com.jj.comics.data.model.RechargeRecordModel;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
-import com.jj.comics.widget.RecycleViewDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +28,17 @@ import butterknife.BindView;
 /**
  * 充值记录
  */
-public class RechargeRecordFragment extends BaseVPFragment<RechargeRecordPresenter> implements RechargeRecordContract.IRechargeRecordView, SwipeRefreshLayout.OnRefreshListener {
+
+@Route(path = RouterMap.COMIC_RECHARGE_RECORD_ACTIVITY)
+public class RechargeRecordActivity extends BaseActivity<RechargeRecordPresenter> implements RechargeRecordContract.IRechargeRecordView, SwipeRefreshLayout.OnRefreshListener {
     //下拉刷新
-    @BindView(R2.id.recommend_list_refresh)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout mRefresh;
     //记录列表
-    @BindView(R2.id.recommend_list_recycler)
+    @BindView(R2.id.recyclerView)
     RecyclerView mRecyclerView;
-    //顶部导航栏
-    @BindView(R2.id.recommend_list_bar)
-    AppBarLayout mBar;
     //列表适配器
-    private NewRechargeRecordAdapter mAdapter;
+    private RechargeRecordAdapter mAdapter;
     //当前页
     private int currentPage = 1;
 
@@ -51,13 +49,13 @@ public class RechargeRecordFragment extends BaseVPFragment<RechargeRecordPresent
      */
     @Override
     public void initData(Bundle savedInstanceState) {
-        mBar.setVisibility(View.GONE);
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
         mRefresh.setOnRefreshListener(this);
         //充值记录
-        mAdapter = new NewRechargeRecordAdapter(R.layout.comic_item_new_recharge_record);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.VERTICAL, Utils.dip2px(getContext(), 1), getResources().getColor(R.color.comic_efefef)));
+        mAdapter = new RechargeRecordAdapter(R.layout.comic_item_recharge_record);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL,
+//                Utils.dip2px(this, 1), getResources().getColor(R.color.comic_efefef)));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
         mAdapter.setEmptyImgSrc(R.drawable.img_weichongzhi, true);
         mAdapter.isUseEmpty(true);
@@ -117,7 +115,7 @@ public class RechargeRecordFragment extends BaseVPFragment<RechargeRecordPresent
     public void getDataFail(NetError error) {
 
         if (error.getType() == NetError.AuthError) {
-            getActivity().finish();
+            finish();
             EventBusManager.sendLogoutEvent(new LogoutEvent());
         } else {
             if (error.getType() == NetError.NoDataError) {
@@ -153,7 +151,7 @@ public class RechargeRecordFragment extends BaseVPFragment<RechargeRecordPresent
      */
     @Override
     public int getLayoutId() {
-        return R.layout.comic_activity_type_list;
+        return R.layout.comic_activity_recharge_record;
     }
 
     /**

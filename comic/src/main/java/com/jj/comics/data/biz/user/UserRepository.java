@@ -15,6 +15,7 @@ import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
@@ -517,6 +518,16 @@ public class UserRepository implements UserDataSource {
     public Observable<PayCenterInfoResponse> getPayCenterInfo() {
         return ComicApi.getApi().getPayCenterInfo("PAY_SETTING_APP")
                 .compose(ComicApiImpl.<PayCenterInfoResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable getConsumeDetail(long bookId) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("articleid", bookId)
+                .build();
+        return ComicApi.getApi().getConsumeDetail(body)
+                .compose(ComicApiImpl.<ConsumeDetailListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 

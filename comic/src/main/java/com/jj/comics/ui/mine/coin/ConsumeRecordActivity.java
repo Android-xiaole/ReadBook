@@ -1,16 +1,19 @@
-package com.jj.comics.ui.mine.pay;
+package com.jj.comics.ui.mine.coin;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.android.material.appbar.AppBarLayout;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseVPFragment;
+import com.jj.base.ui.BaseActivity;
+import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.NewPayRecordAdapter;
+import com.jj.comics.adapter.mine.ComsumeRecordAdapter;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.ExpenseSumRecordModel;
 import com.jj.comics.widget.RecycleViewDivider;
 
@@ -25,23 +28,20 @@ import butterknife.BindView;
 /**
  * 消费记录页面
  */
-public class PayRecordFragment extends BaseVPFragment<PayRecordPresenter> implements PayRecordContract.IPayRecordView,SwipeRefreshLayout.OnRefreshListener {
-    /**
-     * 顶部导航栏
-     */
-    @BindView(R2.id.recommend_list_bar)
-    AppBarLayout mBar;
+
+@Route(path = RouterMap.COMIC_CONSUME_RECORD_ACTIVITY)
+public class ConsumeRecordActivity extends BaseActivity<ConsumeRecordPresenter> implements ConsumeRecordContract.IConsumeRecordView,SwipeRefreshLayout.OnRefreshListener {
     /**
      * 下拉刷新页面
      */
-    @BindView(R2.id.recommend_list_refresh)
+    @BindView(R2.id.swipeRefreshLayout)
     SwipeRefreshLayout mRefresh;
     /**
      * 列表
      */
-    @BindView(R2.id.recommend_list_recycler)
+    @BindView(R2.id.recyclerView)
     RecyclerView mRecyclerView;
-    private NewPayRecordAdapter mAdapter;
+    private ComsumeRecordAdapter mAdapter;
     //当前页
     private int currentPage = 1;
 
@@ -51,14 +51,12 @@ public class PayRecordFragment extends BaseVPFragment<PayRecordPresenter> implem
      */
     @Override
     public void initData(Bundle savedInstanceState) {
-        mBar.setVisibility(View.GONE);
-        mBar.setBackgroundColor(getResources().getColor(android.R.color.white));
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
         mRefresh.setOnRefreshListener(this);
 
-        mAdapter = new NewPayRecordAdapter(R.layout.comic_item_new_recharge_record);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new RecycleViewDivider(getContext(), LinearLayoutManager.VERTICAL, Utils.dip2px(getContext(), 1), getResources().getColor(R.color.comic_efefef)));
+        mAdapter = new ComsumeRecordAdapter(R.layout.comic_item_consume_record);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL, Utils.dip2px(this, 1), getResources().getColor(R.color.comic_efefef)));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
         mAdapter.setEmptyImgSrc(R.drawable.img_weixiaofei, true);
         mAdapter.disableLoadMoreIfNotFullPage();
@@ -71,6 +69,14 @@ public class PayRecordFragment extends BaseVPFragment<PayRecordPresenter> implem
                 getP().loadData(currentPage);
             }
         }, mRecyclerView);
+
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ExpenseSumRecordModel model = (ExpenseSumRecordModel) adapter.getData().get(position);
+                ARouter.getInstance().build(RouterMap.COMIC_CONSUME_DETAIL_ACTIVITY).withLong(Constants.IntentKey.BOOK_ID,model.getArticleid()).navigation();
+            }
+        });
 
         //刷新
         mAdapter.setEmptyClickListener(new View.OnClickListener() {
@@ -146,7 +152,7 @@ public class PayRecordFragment extends BaseVPFragment<PayRecordPresenter> implem
      */
     @Override
     public int getLayoutId() {
-        return R.layout.comic_activity_type_list;
+        return R.layout.comic_activity_consume_record;
     }
 
     /**
@@ -155,7 +161,7 @@ public class PayRecordFragment extends BaseVPFragment<PayRecordPresenter> implem
      * @return
      */
     @Override
-    public PayRecordPresenter setPresenter() {
-        return new PayRecordPresenter();
+    public ConsumeRecordPresenter setPresenter() {
+        return new ConsumeRecordPresenter();
     }
 }

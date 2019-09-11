@@ -308,6 +308,7 @@
     <string name="comic_mine_buy">我的购买</string>
     <string name="comic_mine_history">阅读历史</string>
     <string name="comic_coin_consume_history">消耗记录</string>
+    <string name="comic_coin_consume_detail">消耗明细</string>
     <string name="comic_coin_recharge_history">充值记录</string>
     <string name="comic_mine_notification">消息公告</string>
     <string name="comic_mine_recharge">充值中心</string>

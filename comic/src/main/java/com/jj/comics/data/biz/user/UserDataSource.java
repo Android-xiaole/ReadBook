@@ -4,6 +4,7 @@ import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
@@ -146,6 +147,8 @@ public interface UserDataSource {
     Observable<CommonStatusResponse> favorComment(long id, String type);
 
     Observable<PayCenterInfoResponse> getPayCenterInfo();
+
+    Observable<ConsumeDetailListResponse> getConsumeDetail(long bookId);
 
     /**
      * 更新用户信息

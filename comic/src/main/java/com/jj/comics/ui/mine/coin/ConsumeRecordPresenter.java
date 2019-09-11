@@ -1,45 +1,47 @@
-package com.jj.comics.ui.mine.pay;
+package com.jj.comics.ui.mine.coin;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.data.biz.user.UserRepository;
-import com.jj.comics.data.model.RecharegeRecordsResponse;
-import com.jj.comics.data.model.RechargeRecordModel;
+import com.jj.comics.data.model.ExpenseSumRecordModel;
+import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
-import com.uber.autodispose.AutoDispose;
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class NewRechargeRecordPresenter extends BasePresenter<BaseRepository, RechargeRecordFragment> implements NewRechargeContract.INewRechargePresenter {
+/**
+ * P 层数据获取实现类
+ */
+public class ConsumeRecordPresenter extends BasePresenter<BaseRepository, ConsumeRecordContract.IConsumeRecordView> implements ConsumeRecordContract.IConsumeRecordPresenter {
+
 
     /**
-     * 查询充值记录数据
-     * 请求页面数据
+     * 获取数据
+     * 请求加载页数据
      *
      * @param currentPage 当前页
      */
     @Override
     public void loadData(int currentPage) {
-
-        UserRepository.getInstance().getRechargeRecord(currentPage)
+        UserRepository.getInstance().getConsumptionRecord(getV().getClass().getName(), currentPage)
                 .observeOn(AndroidSchedulers.mainThread())
-                .as(AutoDispose.<RecharegeRecordsResponse>autoDisposable(AndroidLifecycleScopeProvider.from(getV().getLifecycle())))
-                .subscribe(new ApiSubscriber2<RecharegeRecordsResponse>() {
+                .as(this.<ExpenseSumRecordsResponse>bindLifecycle())
+                .subscribe(new ApiSubscriber2<ExpenseSumRecordsResponse>() {
                     @Override
-                    public void onNext(RecharegeRecordsResponse model) {
-                        List<RechargeRecordModel> rechargeRecords = model.getData();
+                    public void onNext(ExpenseSumRecordsResponse model) {
+                        ExpenseSumRecordsResponse.DataBeanX dataBeanX = model.getData();
+                        List<ExpenseSumRecordModel> expenseRecords = dataBeanX.getData();
                         if (model.error() != null) {
                             onFail(model.error());
-                        } else if (rechargeRecords == null || rechargeRecords.isEmpty()) {
+                        } else if (expenseRecords == null || expenseRecords.isEmpty()) {
                             onFail(NetError.noDataError());
                         } else
-                            getV().fillData(rechargeRecords);
+                            getV().fillData(expenseRecords);
                     }
 
                     @Override

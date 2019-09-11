@@ -76,12 +76,7 @@
             android:layout_marginRight="@dimen/dp_4"
             app:user_item_title="@string/comic_coin_recharge_history" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:layout_marginLeft="@dimen/dp_4"
-            android:layout_marginRight="@dimen/dp_4"
-            android:background="@color/comic_e8ebf0"></View>
+
 
         <com.jj.comics.widget.UserItemView
             android:id="@+id/comic_coin_consume_history"
