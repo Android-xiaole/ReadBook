@@ -80,14 +80,16 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
                         if (payCenterInfoResponse.getData() != null) {
                             getV().fillData(payCenterInfoResponse.getData());
                         } else {
-                            ToastUtil.showToastShort(payCenterInfoResponse.getMessage());
+                            ToastUtil.showToastShort("没有数据");
                         }
                     }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
+                    }
                 });
-    }
-
-    private void getPayCenterInfo(boolean isPay) {
-
     }
 
     @Override
@@ -186,7 +188,7 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
      */
     @Override
     public CharSequence getReminderText(final Activity activity) {
-        SpannableString reminder = new SpannableString(BaseApplication.getApplication().getString(R.string.comic_reminder_new));
+        SpannableString reminder = new SpannableString(BaseApplication.getApplication().getString(R.string.comic_reminder));
         reminder.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_333333)), 0, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        reminder.setSpan(new ForegroundColorSpan(getV().getResources().getColor(R.color.comic_ff4c5d)), reminder.length() - 8, reminder.length() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         reminder.setSpan(new ImageSpan(BaseApplication.getApplication(), R.drawable.img_comic_pay_qq_red, ALIGN_BASELINE) {

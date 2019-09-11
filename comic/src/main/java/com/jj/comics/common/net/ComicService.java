@@ -96,6 +96,7 @@ public interface ComicService {
     String API_BOOK_BONUS = "/api/book_bonus";
     String API_REVIEW_LIST = "api/review_list";
     String API_SEND_CODE = "api/send_code";
+    String API_ALTER_PHONE_SEND_CODE = "api/phone_code";
     String API_MLOGIN = "api/mlogin";
     String API_GET_USERINFO = "api/get_userinfo";
     String API_GET_USER_ACCOUNT = "api/get_user_account";
@@ -118,6 +119,7 @@ public interface ComicService {
     String USER_WEBAPI_ALERT_USERINFO = "user.webapi/alert_userinfo";
     String API_DIANZAN = "api/dianzan";
     String USER_WEBAPI_BIND_SECURITY_MOBILE = "user.webapi/bind_security_mobile";
+    String USER_ALTER_MOBILE = "api/replace_phone";
     String API_RICHEST_ROLL = "api/richest_roll";
     String API_READINGHISTORY = "api/readinghistory";
     String API_SYNCHRONIZATION = "api/synchronization";
@@ -356,6 +358,15 @@ public interface ComicService {
     Observable<ResponseModel> getSecurityCode(@Body RequestBody body);
 
     /**
+     * 修改手机号获取验证码
+     *
+     * @param body
+     * @return
+     */
+    @POST(API_ALTER_PHONE_SEND_CODE)
+    Observable<ResponseModel> getPhoneCode(@Body RequestBody body);
+
+    /**
      * 验证码登录,免注册
      *
      * @param body
@@ -532,8 +543,8 @@ public interface ComicService {
      * @param body
      * @return
      */
-    @POST(USER_WEBAPI_ALERT_USERINFO)
-    Observable<UserInfoResponse> updateUserInfo(@Body RequestBody body);
+//    @POST(USER_WEBAPI_ALERT_USERINFO)
+//    Observable<UserInfoResponse> updateUserInfo(@Body RequestBody body);
 
 
     /**
@@ -555,6 +566,14 @@ public interface ComicService {
     @POST(USER_WEBAPI_BIND_SECURITY_MOBILE)
     Observable<ResponseModel> bindMobile(@Body RequestBody body);
 
+    /**
+     * 修改手机号
+     *
+     * @param body
+     * @return
+     */
+    @POST(USER_ALTER_MOBILE)
+    Observable<ResponseModel> alterMobile(@Body RequestBody body);
     /**
      * 获取实时打赏用户的列表
      *
@@ -875,7 +894,15 @@ public interface ComicService {
     @GET("api/oss_sign")
     Observable<OSSResponse> getOSSConfig();
 
-//    @POST("api/update_user")
-//    Observable<>
+    @POST("api/update_user")
+    Observable<UserInfoResponse> updateUserInfo(@Body RequestBody requestBody);
+
+    /**
+     * 分享成功上报接口
+     * @param requestBody
+     * @return
+     */
+    @POST("api/share")
+    Observable<CommonStatusResponse> reportShare(@Body RequestBody requestBody);
 
 }

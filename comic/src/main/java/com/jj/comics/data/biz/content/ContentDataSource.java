@@ -34,7 +34,7 @@ public interface ContentDataSource {
     Observable<BookListDataResponse> getSectionListBySectionId(int currentPage, int sectionId, boolean evict,String retryTag);
 
     //根据内容漫画id获取章节列表
-    Observable<BookCatalogListResponse> getCatalogList(long id, int pageNum, String sort);
+    Observable<BookCatalogListResponse> getCatalogList(long id);
 
     //根据章获取章节内容详情
     Observable<BookCatalogContentResponse> getCatalogContent(long id,long chapterid);

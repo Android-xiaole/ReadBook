@@ -95,7 +95,14 @@
     <declare-styleable name="UserItemView" tools:ignore = "ResourceName">
         <attr name="user_item_title" format="string"/>
         <attr name="head_img" format="reference"/>
+        <attr name="title_size" format="dimension"/>
+        <attr name="right_text" format="string"/>
         <attr name="head_img_visible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="right_title_visible" format="enum">
             <enum name="visible" value="0x00000000"/>
             <enum name="invisible" value="0x00000004"/>
             <enum name="gone" value="0x00000008"/>

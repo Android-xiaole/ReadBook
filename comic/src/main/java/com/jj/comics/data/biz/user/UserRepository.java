@@ -70,6 +70,24 @@ public class UserRepository implements UserDataSource {
         return compose;
     }
 
+    /**
+     * 用户修改手机号获取验证码
+     *
+     * @param activityName
+     * @param mobile
+     * @return
+     */
+    @Override
+    public Observable<ResponseModel> getPhoneCode(String activityName, String mobile) {
+        Observable<ResponseModel> compose = ComicApi.getApi().getPhoneCode(new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, mobile)
+                .build())
+                .retryWhen(new RetryFunction2(activityName))
+                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
+                .subscribeOn(Schedulers.io());
+        return compose;
+    }
+
     @Override
     public Observable<LoginByCodeResponse> loginBySecurityCode(boolean isCheck, String phone, String psw) {
         RequestBody requestBody = new RequestBodyBuilder()
@@ -337,7 +355,7 @@ public class UserRepository implements UserDataSource {
                 .addProperty("uid", uid)
                 .build();
 
-       return ComicApi.getApi().uidLogin(body)
+        return ComicApi.getApi().uidLogin(body)
                 .subscribeOn(Schedulers.io())
                 .compose(ComicApiImpl.<UidLoginResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2())
@@ -382,6 +400,29 @@ public class UserRepository implements UserDataSource {
                 .build();
 
         Observable<ResponseModel> compose = ComicApi.getApi().bindMobile(requestBody)
+                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
+                .retryWhen(new RetryFunction2(activityName))
+                .subscribeOn(Schedulers.io());
+        return compose;
+    }
+
+    /**
+     * 修改手机号
+     *
+     * @param activityName
+     * @param phone_number
+     * @param code
+     * @return
+     */
+    @Override
+    public Observable<ResponseModel> alterMobile(String activityName, String phone_number, String code) {
+        RequestBody requestBody = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.TOKEN, SharedPref.getInstance(BaseApplication.getApplication()).getString(Constants.SharedPrefKey.TOKEN, ""))
+                .addProperty(Constants.RequestBodyKey.CODE, code)
+                .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phone_number)
+                .build();
+
+        Observable<ResponseModel> compose = ComicApi.getApi().alterMobile(requestBody)
                 .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
                 .retryWhen(new RetryFunction2(activityName))
                 .subscribeOn(Schedulers.io());
@@ -480,4 +521,28 @@ public class UserRepository implements UserDataSource {
     }
 
 
+    @Override
+    public Observable<UserInfoResponse> updateUserInfo(String avatar, String nickname, int sex) {
+        RequestBodyBuilder requestBodyBuilder = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.AVATAR, avatar)
+                .addProperty(Constants.RequestBodyKey.NICKNAME, nickname)
+                .addProperty(Constants.RequestBodyKey.SEX, sex);
+        if (avatar == null) {
+            requestBodyBuilder.removeProperty(Constants.RequestBodyKey.AVATAR);
+        }
+
+        if (nickname == null) {
+            requestBodyBuilder.removeProperty(Constants.RequestBodyKey.NICKNAME);
+        }
+
+        if (sex == -1) {
+            requestBodyBuilder.removeProperty(Constants.RequestBodyKey.SEX);
+        }
+
+        RequestBody requestBody = requestBodyBuilder.build();
+
+        return ComicApi.getApi().updateUserInfo(requestBody)
+                .compose(ComicApiImpl.<UserInfoResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
 }

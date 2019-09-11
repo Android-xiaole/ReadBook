@@ -303,8 +303,7 @@ public class FileUtils {
             writer = new BufferedWriter(new FileWriter(file));
             writer.write(finalStr);
             writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }finally {
             IOUtils.close(writer);
         }
 

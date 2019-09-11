@@ -26,20 +26,21 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneContract.IBindPhoneView> implements BindPhoneContract.IBindPhonePresenter{
+public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneContract.IBindPhoneView> implements BindPhoneContract.IBindPhonePresenter {
     private static final int SECOND = 60;
     boolean isDown = false;
 
 
     @Override
-    public void bindPhone(String mobile, String verify, String newMobile, String securityMobile) {
-        UserRepository.getInstance().bindMobile(getV().getClass().getName(), mobile, verify, newMobile, securityMobile)
+    public void alterPhone(String mobile, String verify) {
+        UserRepository.getInstance().alterMobile(getV().getClass().getName(), mobile, verify)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<ResponseModel>bindLifecycle())
                 .subscribe(new ApiSubscriber2<ResponseModel>() {
                     @Override
                     public void onNext(ResponseModel responseModel) {
                         getUserData();
+                        getV().alterSuccess(responseModel);
                     }
 
                     @Override
@@ -81,7 +82,7 @@ public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneC
 
     @Override
     public void getCode(String mobile) {
-        UserRepository.getInstance().getSecurityCode(getV().getClass().getName(), mobile)
+        UserRepository.getInstance().getPhoneCode(getV().getClass().getName(), mobile)
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<ResponseModel, ObservableSource<Long>>() {
                     @Override

@@ -73,36 +73,36 @@ public class RechargeNotifyDialog extends BaseFragmentDialog {
 
         if (payInfo != null) {
             iv_alert_pay_auto.setSelected(isAutoPay);
-            boolean isVip = payInfo.getIs_vip() == 1;
+//            boolean isVip = payInfo.getIs_vip() == 1;
             String real = catalogModel.getSaleprice() + "";
             String desc = "解锁本章节仅需要 " + catalogModel.getSaleprice() + " 金币";
-            if (isVip) {
-                real = (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount()) + " ";
-                desc = "解锁本章节仅需要 " + real + catalogModel.getSaleprice() + " 金币";
-            }
+//            if (isVip) {
+//                real = (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount()) + " ";
+//                desc = "解锁本章节仅需要 " + real + catalogModel.getSaleprice() + " 金币";
+//            }
             SpannableString descSpan = new SpannableString(desc);
             RelativeSizeSpan sizeSpanDesc = new RelativeSizeSpan(1.7f);
             ForegroundColorSpan colorSpanDesc =
                     new ForegroundColorSpan(getContext().getResources().getColor(R.color.comic_ff4723));
             descSpan.setSpan(sizeSpanDesc, 9, 9 + real.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             descSpan.setSpan(colorSpanDesc, 9, 9 + real.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            if (isVip) {
-                tv_alert_pay_vip.setVisibility(View.VISIBLE);
-                StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
-                RelativeSizeSpan sizeSpanDesc2 = new RelativeSizeSpan(0.8f);
-                descSpan.setSpan(strikethroughSpan, 9 + real.length(), 9 + (real + catalogModel.getSaleprice()).length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                descSpan.setSpan(sizeSpanDesc2, 9 + real.length(), 9 + (real + catalogModel.getSaleprice()).length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                // TODO: 2019/7/18 待使用
-                String vipDes = "VIP" + (int) (catalogModel.getVip_discount() * 10) + "折优惠(会员于" + DateHelper.formatSec(payInfo.getVip_enddate() * 1000) + "到期)";
-                SpannableString vipSpan = new SpannableString(vipDes);
-                RelativeSizeSpan vipSpanDesc = new RelativeSizeSpan(1.2f);
-                ForegroundColorSpan vipColorSpanDesc =
-                        new ForegroundColorSpan(getContext().getResources().getColor(R.color.comic_ff7b23));
-                vipSpan.setSpan(vipSpanDesc, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                vipSpan.setSpan(vipColorSpanDesc, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                tv_alert_pay_vip.setText(vipSpan);
-            }
+//            if (isVip) {
+//                tv_alert_pay_vip.setVisibility(View.VISIBLE);
+//                StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
+//                RelativeSizeSpan sizeSpanDesc2 = new RelativeSizeSpan(0.8f);
+//                descSpan.setSpan(strikethroughSpan, 9 + real.length(), 9 + (real + catalogModel.getSaleprice()).length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                descSpan.setSpan(sizeSpanDesc2, 9 + real.length(), 9 + (real + catalogModel.getSaleprice()).length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//                // TODO: 2019/7/18 待使用
+//                String vipDes = "VIP" + (int) (catalogModel.getVip_discount() * 10) + "折优惠(会员于" + DateHelper.formatSec(payInfo.getVip_enddate() * 1000) + "到期)";
+//                SpannableString vipSpan = new SpannableString(vipDes);
+//                RelativeSizeSpan vipSpanDesc = new RelativeSizeSpan(1.2f);
+//                ForegroundColorSpan vipColorSpanDesc =
+//                        new ForegroundColorSpan(getContext().getResources().getColor(R.color.comic_ff7b23));
+//                vipSpan.setSpan(vipSpanDesc, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                vipSpan.setSpan(vipColorSpanDesc, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                tv_alert_pay_vip.setText(vipSpan);
+//            }
 
             tv_alert_pay_desc.setText(descSpan);
             //设置用户金币余额以及按钮显示状态
@@ -145,11 +145,11 @@ public class RechargeNotifyDialog extends BaseFragmentDialog {
      */
     public void setCoinAndBtnStatus(PayInfo payInfo) {
         //设置按钮显示状态
-        if (payInfo.getIs_vip() == 1){
-            ILFactory.getLoader().loadResource(btn_alert_pay_now, (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount()) > payInfo.getTotal_egold() ? R.drawable.btn_comic_subscribe_pay_now : R.drawable.btn_comic_subscribe_yuedu, null);
-        }else{
+//        if (payInfo.getIs_vip() == 1){
+//            ILFactory.getLoader().loadResource(btn_alert_pay_now, (int) (catalogModel.getSaleprice() * catalogModel.getVip_discount()) > payInfo.getTotal_egold() ? R.drawable.btn_comic_subscribe_pay_now : R.drawable.btn_comic_subscribe_yuedu, null);
+//        }else{
             ILFactory.getLoader().loadResource(btn_alert_pay_now, catalogModel.getSaleprice() > payInfo.getTotal_egold() ? R.drawable.btn_comic_subscribe_pay_now : R.drawable.btn_comic_subscribe_yuedu, null);
-        }
+//        }
 
         //设置金币余额
         String remaining = "金币余额 " + payInfo.getTotal_egold();

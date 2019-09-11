@@ -16,7 +16,7 @@ public class CatalogPresenter extends BasePresenter<BaseRepository,CatalogContra
     @Override
     public void getCatalogList(long id, int pageNum,String sort) {
         getV().showProgress();
-        ContentRepository.getInstance().getCatalogList(id,pageNum,sort)
+        ContentRepository.getInstance().getCatalogList(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())

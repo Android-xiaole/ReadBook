@@ -1,7 +1,5 @@
 package com.jj.comics.ui.read;
 
-import android.util.Log;
-
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber;
@@ -46,8 +44,10 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
     private ApiSubscriber2<BookCatalogModel> subscriber;
     private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
 
-    public void loadData(BookModel bookModel, List<TxtChapter> requestChapters) {
-        getV().showProgress();
+    public void loadData(BookModel bookModel, TxtChapter requestChapter) {
+        if (getV() instanceof ReadComicActivity){
+            getV().showProgress((ReadComicActivity)getV());
+        }
         /*
         这里加载的内容时候需要取消上一个subscriber事件，保证一时间只有一个章节内容加载
         防止出现同时加载多个章节数据错乱的问题
@@ -74,15 +74,20 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 getV().hideProgress();
             }
         };
-        List<Observable<BookCatalogModel>> requests = new ArrayList<>();
-        for (TxtChapter requestChapter : requestChapters) {
-            requests.add(ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId())));
-        }
-        Observable.concat(requests)
-        //订阅漫画封装类
+        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogModel>bindLifecycle())
                 .subscribe(subscriber);
+
+//        List<Observable<BookCatalogModel>> requests = new ArrayList<>();
+//        for (TxtChapter requestChapter : requestChapters) {
+//            requests.add(ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId())));
+//        }
+//        Observable.concat(requests)
+//        //订阅漫画封装类
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .as(this.<BookCatalogModel>bindLifecycle())
+//                .subscribe(subscriber);
     }
 
     /**
@@ -189,10 +194,12 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
      * 获取目录列表
      */
     @Override
-    public void getCatalogList(long bookId, int pageNum,String sort) {
+    public void getCatalogList(long bookId) {
         if (getV() == null)return;
-        getV().showProgress();
-        ContentRepository.getInstance().getCatalogList(bookId, pageNum, sort)
+        if (getV() instanceof ReadComicActivity){
+            getV().showProgress((ReadComicActivity)getV());
+        }
+        ContentRepository.getInstance().getCatalogList(bookId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
@@ -205,7 +212,6 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     @Override
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
-                        getV().onGetCatalogListFail();
                     }
 
                     @Override

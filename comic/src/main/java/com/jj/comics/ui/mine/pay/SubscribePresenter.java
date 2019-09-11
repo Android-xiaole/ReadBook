@@ -29,14 +29,19 @@ public class SubscribePresenter extends BasePresenter<BaseRepository, SubscribeC
                         if (payInfo!=null){
                             getV().showDiaLog(payInfo);
                         }else{
-                            ToastUtil.showToastShort(response.getMessage());
+                            onFail(new NetError("用户余额信息为空",response.getCode()));
                         }
                     }
 
                     @Override
                     protected void onFail(NetError error) {
+                        if (getV() instanceof SubscribeActivity){
+                            ((SubscribeActivity) getV()).finish();
+                        }
                         if (error.getType() == NetError.AuthError) {
                             EventBusManager.sendLogoutEvent(new LogoutEvent());
+                        }else{
+                            ToastUtil.showToastShort(error.getMessage());
                         }
                     }
                 });

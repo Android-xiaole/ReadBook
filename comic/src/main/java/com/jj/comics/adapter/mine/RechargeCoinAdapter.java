@@ -35,19 +35,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class RechargeCoinAdapter extends BaseMultiItemQuickAdapter<PayCenterInfoResponse.PayCenterInfo, BaseViewHolder> {
-    private Unbinder mFooterBinder;
+
     private int selectIndex = 0;
-    private ProductPayTypeEnum mPayType = ProductPayTypeEnum.WeChat;
-    @BindView(R2.id.pay_wx_container)
-    LinearLayout mWxContainer;
-    @BindView(R2.id.pay_wx_checked)
-    ImageView mWxChecked;
-    @BindView(R2.id.pay_alipay_container)
-    LinearLayout mAlipayContainer;
-    @BindView(R2.id.pay_alipay_checked)
-    ImageView mAlipayChecked;
-    @BindView(R2.id.pay_reminder)
-    TextView mReminder;
 
     /**
      * Same as QuickAdapter#QuickAdapter(Context,int) but with
@@ -75,52 +64,6 @@ public class RechargeCoinAdapter extends BaseMultiItemQuickAdapter<PayCenterInfo
             notifyItemChanged(selectIndex + getHeaderLayoutCount());
             notifyItemChanged(this.selectIndex + getHeaderLayoutCount());
             this.selectIndex = selectIndex;
-        }
-    }
-
-    public View getFooterView(PayActivity payActivity) {
-        if (getRecyclerView() == null) return null;
-        View footView = LayoutInflater.from(payActivity).inflate(R.layout.comic_pay_footer, (ViewGroup) getRecyclerView().getParent(), false);
-        mFooterBinder = ButterKnife.bind(this, footView);
-//        mWxContainer.setVisibility(View.GONE);
-//        mPayType = ProductPayTypeEnum.AliPay;
-//        payType(mPayType);
-        mReminder.setText(payActivity.getReminderText());
-        mReminder.setMovementMethod(LinkMovementMethod.getInstance());
-        return footView;
-    }
-
-
-    private void payType(ProductPayTypeEnum payType) {
-        switch (payType) {
-            case WeChat:
-                mWxContainer.setSelected(true);
-                mWxChecked.setVisibility(View.VISIBLE);
-                mAlipayContainer.setSelected(false);
-                mAlipayChecked.setVisibility(View.GONE);
-                break;
-            default:
-                mWxContainer.setSelected(false);
-                mWxChecked.setVisibility(View.GONE);
-                mAlipayContainer.setSelected(true);
-                mAlipayChecked.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
-    @OnClick({R2.id.pay_wx_container, R2.id.pay_alipay_container})
-    void dealClick(View view) {
-        int id = view.getId();
-        if (id == R.id.pay_wx_container) {
-            if (mPayType != ProductPayTypeEnum.WeChat) {
-                mPayType = ProductPayTypeEnum.WeChat;
-                payType(mPayType);
-            }
-        } else if (id == R.id.pay_alipay_container) {
-            if (mPayType != ProductPayTypeEnum.AliPay) {
-                mPayType = ProductPayTypeEnum.AliPay;
-                payType(mPayType);
-            }
         }
     }
 
@@ -183,10 +126,6 @@ public class RechargeCoinAdapter extends BaseMultiItemQuickAdapter<PayCenterInfo
         } catch (Exception e) {
             return 0f;
         }
-    }
-
-    public void unbind() {
-        if (mFooterBinder != null) mFooterBinder.unbind();
     }
 
     public PayCenterInfoResponse.PayCenterInfo getSelect() {

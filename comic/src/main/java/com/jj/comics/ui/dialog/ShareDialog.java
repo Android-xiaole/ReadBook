@@ -15,19 +15,16 @@ import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.ShareMenuModel;
+import com.jj.comics.data.model.ShareMessageModel;
+import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
-import com.jj.comics.data.model.ShareMenuModel;
-import com.jj.comics.data.model.ShareMessageModel;
-import com.jj.comics.data.model.UserInfo;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -139,7 +136,6 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             }
             String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
             shareMessageModel.setShareUrl(String.format(activity.getString(R.string.comic_share_dialog_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), uid, channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE + "&noShare=false");
-            shareMessageModel.setUmengPrarms("分享APP下载地址");
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -148,28 +144,18 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         ShareMenuModel shareMenuModel = (ShareMenuModel) adapter.getData().get(position);
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信
-                //上传分享到微信事件到友盟
-                MobclickAgent.onEvent(activity, Constants.UMEventId.WECHAT_FRIEND_SHARE, shareMessageModel.getUmengPrarms());
                 ShareHelper.getInstance().shareToWechat(activity, shareMessageModel);
                 break;
             case WECHATMOMENT://分享朋友圈
-                //上传分享到朋友圈事件到友盟
-                MobclickAgent.onEvent(activity, Constants.UMEventId.WECHAT_MOMENTS_SHARE, shareMessageModel.getUmengPrarms());
                 ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
                 break;
             case QQ://分享QQ
-                //上传分享到QQ事件到友盟
-                MobclickAgent.onEvent(activity, Constants.UMEventId.QQ_SHARE, shareMessageModel.getUmengPrarms());
                 ShareHelper.getInstance().shareToQQ(activity, shareMessageModel);
                 break;
             case QQZONE://分享QQ空间
-                //上传分享到QQ空间事件到友盟
-                MobclickAgent.onEvent(activity, Constants.UMEventId.QZONE_SHARE, shareMessageModel.getUmengPrarms());
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);
                 break;
             case SINA://分享新浪微博
-                //上传分享到新浪微博事件到友盟
-                MobclickAgent.onEvent(activity, Constants.UMEventId.WEIBO_SHARE, shareMessageModel.getUmengPrarms());
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
                 break;
             case PHOTO://分享图片

@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -58,8 +59,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     RecyclerView mShubiRecycler;
     @BindView(R2.id.pay_list_refresh)
     SwipeRefreshLayout mRefresh;
-    @BindView(R2.id.pay_confirm_charge)
-    Button pay;
     private RechargeCoinAdapter mShubiAdapter;
     private AlertDialog mPayFailDialog;
 
@@ -94,17 +93,15 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 getP().loadData();
             }
         });
-        ComicToolBar comicToolBar = findViewById(R.id.comic_tool_bar);
-//        comicToolBar.setBackgroundColorRootView(Color.parseColor("#FF4C5D"));
         mShubiRecycler.addItemDecoration(new UniversalItemDecoration() {
             @Override
             public Decoration getItemOffsets(int position) {
                 Log.i("Decoration", "position: " + position + "size: " + mShubiAdapter.getItemCount());
                 ColorDecoration decoration = new ColorDecoration();
-                if (position >= mShubiAdapter.getItemCount() - 1) {
-                    decoration.right = Utils.dip2px(PayActivity.this, 15);
-                    decoration.left = Utils.dip2px(PayActivity.this, 15);
-                } else {
+                if (position == 0||position == mShubiAdapter.getItemCount()-1) {//头布局和脚布局
+//                    decoration.right = Utils.dip2px(PayActivity.this, 15);
+//                    decoration.left = Utils.dip2px(PayActivity.this, 15);
+                }else {
                     if (mShubiAdapter.getData().get(position).getItemType() == 2) {
                         if (position == 0) {
                             decoration.top = Utils.dip2px(PayActivity.this, 15);
@@ -136,6 +133,29 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 return decoration;
             }
         });
+        mShubiAdapter.addHeaderView(getHeadView());
+        mShubiAdapter.addFooterView(getFooterView());
+    }
+
+    private View getHeadView(){
+        View head_view = View.inflate(this,R.layout.comic_pay_header,null);
+        return head_view;
+    }
+
+    private View getFooterView(){
+        View footView = View.inflate(this,R.layout.comic_pay_footer,null);
+        TextView pay_reminder = footView.findViewById(R.id.pay_reminder);
+        pay_reminder.setText(getReminderText());
+        footView.findViewById(R.id.pay_confirm_charge).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PayCenterInfoResponse.PayCenterInfo selectModel = mShubiAdapter.getSelect();
+                if (selectModel != null) {
+                    showBottomDialog(pay_reminder, selectModel.getId());
+                }
+            }
+        });
+        return footView;
     }
 
     /**
@@ -207,9 +227,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @Override
     public void fillData(List<PayCenterInfoResponse.PayCenterInfo> rechargeCoinList) {
         if (mShubiAdapter.getFooterLayoutCount() <= 0)
-            mShubiAdapter.addFooterView(mShubiAdapter.getFooterView(this));
-//        if (mShubiAdapter.getHeaderLayoutCount() <= 0)
-//            mShubiAdapter.addHeaderView(mShubiAdapter.getHeaderView(this));
+            mShubiAdapter.addFooterView(getFooterView());
         mShubiAdapter.setNewData(rechargeCoinList);
         if (mRefresh.isRefreshing()) mRefresh.setRefreshing(false);
         hideProgress();
@@ -316,34 +334,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     public static void toPay(Activity activity, long comicId) {
         ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).
                 withLong(Constants.IntentKey.BOOK_ID, comicId).navigation(activity, RequestCode.PAY_REQUEST_CODE);
-    }
-
-//    @OnClick(R2.id.pay_list_home)
-//    void toHome() {
-//        ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
-//        finish();
-//    }
-
-    @OnClick(R2.id.pay_confirm_charge)
-    void pay() {
-        PayCenterInfoResponse.PayCenterInfo selectModel = mShubiAdapter.getSelect();
-        if (selectModel != null) {
-//                    showProgress();
-//                    ProductPayTypeEnum payType = mShubiAdapter.getPayType();
-//                    HashMap<String, String> map = new HashMap<>();
-//                    map.put("pay_way", payType.getName());
-//                    map.put("pay_count", selectModel.getPrice() + "元");
-//                    map.put("pay_goods", selectModel.getVip_level() + "");
-//                    MobclickAgent.onEvent(context, Constants.UMEventId.CLICK_RECHARGE_CENTER_PAY, map);
-//                    long comicId = getIntent().getLongExtra("comicId", 0);
-            showBottomDialog(pay, selectModel.getId());
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mShubiAdapter != null) mShubiAdapter.unbind();
-        super.onDestroy();
     }
 
     @Override

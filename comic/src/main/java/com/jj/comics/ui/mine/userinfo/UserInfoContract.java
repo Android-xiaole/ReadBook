@@ -22,7 +22,7 @@ public class UserInfoContract {
         void uploadImage(UserInfo userInfo, File file, String filePath);
 
         //更新用户信息
-        void updateUserInfo(UserInfo userInfo);
+        void updateUserInfo(String avatar, String nickname, int sex);
 
         void getOSSConfig();
     }

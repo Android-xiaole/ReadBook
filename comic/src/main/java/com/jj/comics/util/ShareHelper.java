@@ -69,6 +69,8 @@ public class ShareHelper {
     private String qqUmengEventId;
     private String wxUmengEventId;
 
+    private ShareMessageModel shareMessageModel;//分享内容
+
     /**
      * 禁止外部实例化
      */
@@ -94,6 +96,7 @@ public class ShareHelper {
             ToastUtil.showToastLong(activity.getString(R.string.comic_not_install_wx));
             return;
         }
+        this.shareMessageModel = shareMessageModel;
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
                 .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
@@ -163,6 +166,7 @@ public class ShareHelper {
             ToastUtil.showToastLong("请安装微信客户端后分享");
             return;
         }
+        this.shareMessageModel = shareMessageModel;
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
                 .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
@@ -233,6 +237,7 @@ public class ShareHelper {
             ToastUtil.showToastLong("请安装QQ客户端后分享");
             return;
         }
+        this.shareMessageModel = shareMessageModel;
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
                 .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
@@ -283,6 +288,7 @@ public class ShareHelper {
             ToastUtil.showToastLong("请安装QQ客户端后分享");
             return;
         }
+        this.shareMessageModel = shareMessageModel;
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
                 .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
@@ -333,6 +339,7 @@ public class ShareHelper {
             ToastUtil.showToastLong("请安装微博客户端后分享");
             return;
         }
+        this.shareMessageModel = shareMessageModel;
         activity.showProgress();
         getDownObservable(shareMessageModel.getShareImgUrl())
                 .as(AutoDispose.<File>autoDisposable(AndroidLifecycleScopeProvider.from(activity.getLifecycle()
@@ -404,9 +411,7 @@ public class ShareHelper {
         switch (wxShareEvent.errCode) {
             case BaseResp.ErrCode.ERR_OK:
                 result = "分享成功";
-                //上传分享事件到友盟
-                MobclickAgent.onEvent(BaseApplication.getApplication(), wxUmengEventId);
-                TaskReporter.reportShare();
+                if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = "分享取消";
@@ -440,9 +445,7 @@ public class ShareHelper {
             //分享成功
             if (shareTemFile != null && shareTemFile.exists()) shareTemFile.delete();
             ToastUtil.showToastShort("分享成功");
-            TaskReporter.reportShare();
-            //上传友盟事件到友盟
-            MobclickAgent.onEvent(BaseApplication.getApplication(), qqUmengEventId);
+            if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
         }
 
         @Override
@@ -477,9 +480,7 @@ public class ShareHelper {
                 @Override
                 public void onWbShareSuccess() {
                     ToastUtil.showToastShort("分享成功");
-                    TaskReporter.reportShare();
-                    //上传分享时间到友盟
-                    MobclickAgent.onEvent(BaseApplication.getApplication(), "WeiboShare");
+                    if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
                     recycleBitmap(thumbBmp);
                 }
 

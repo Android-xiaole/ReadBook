@@ -1,11 +1,17 @@
 package com.jj.base.mvp;
 
 
+import android.content.DialogInterface;
+
 import com.jj.base.utils.toast.ToastUtil;
 
 public interface IView {
 
     default void showProgress(){
+
+    }
+
+    default void showProgress(DialogInterface.OnDismissListener onDismissListener){
 
     }
 

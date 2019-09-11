@@ -30,6 +30,9 @@ public interface UserDataSource {
     //获取验证码
     Observable<ResponseModel> getSecurityCode(String activityName, String mobile);
 
+    //获取验证码
+    Observable<ResponseModel> getPhoneCode(String activityName, String mobile);
+
     //验证码登录
     Observable<LoginByCodeResponse> loginBySecurityCode(boolean isCheck, String phone, String psw);
 
@@ -121,6 +124,9 @@ public interface UserDataSource {
     //绑定手机号
     Observable<ResponseModel> bindMobile(String activityName, String mobile, String verify, String newMobile, String securityMobile);
 
+    //修改手机号
+    Observable<ResponseModel> alterMobile(String activityName, String phone_number, String code);
+
     //获取用户阅读历史记录列表
     Observable<CollectionResponse> getHistoryList();
 
@@ -140,5 +146,12 @@ public interface UserDataSource {
     Observable<CommonStatusResponse> favorComment(long id, String type);
 
     Observable<PayCenterInfoResponse> getPayCenterInfo();
+
+    /**
+     * 更新用户信息
+     *
+     * @return
+     */
+    Observable<UserInfoResponse> updateUserInfo(String avatar, String nickname, int sex);
 
 }

@@ -7,18 +7,15 @@ import com.jj.comics.data.model.UpdateModelProxy;
 public interface SettingContract {
 
     interface ISettingView extends IView {
-        //展示版本更新弹窗的回调
-        void updateAlert(UpdateModelProxy.UpdateModel updateModel);
-
-        //发送信息的回调
-        void sendMessage(int what, Object info);
+        //设置缓存大小的回调
+        void setCacheSize(String cacheSize);
     }
 
     interface ISettingPresenter {
-        //检查版本更新
-        void checkUpdate(BaseActivity baseActivity);
+        //清楚缓存
+        void clearCache();
 
-        //去下载
-        void goDown(String updateAppUrl, BaseActivity baseActivity);
+        //获取缓存大小
+        void getCacheSize();
     }
 }

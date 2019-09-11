@@ -4,21 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback;
-import com.alibaba.sdk.android.oss.common.auth.OSSAuthCredentialsProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
-import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -42,9 +41,12 @@ import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
-import com.jj.comics.widget.UserItemView;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -71,6 +73,18 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     protected void initData(Bundle savedInstanceState) {
         filePath = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath()
                 + File.separator + PackageUtil.getAppName(this) + File.separator;
+        UserInfo userInfo = LoginHelper.getOnLineUser();
+        if (userInfo != null) {
+            //设置头像
+            if (TextUtils.isEmpty(userInfo.getAvatar())) {
+                ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                        new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
+            } else {
+                ILFactory.getLoader().loadNet(headImg, userInfo.getAvatar(),
+                        new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                                .placeholder(R.drawable.img_loading));
+            }
+        }
     }
 
     @Override
@@ -85,7 +99,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
 
     @Override
     public void onImgUploadComplete(String headImgUrl) {
-
+        if (TextUtils.isEmpty(headImgUrl)) {
+            ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
+        } else {
+            ILFactory.getLoader().loadNet(headImg, headImgUrl,
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                            .placeholder(R.drawable.img_loading));
+        }
     }
 
     @Override
@@ -99,10 +120,32 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     }
 
 
-    @OnClick({R2.id.user_head})
+    @OnClick({R2.id.user_head, R2.id.user_nickname, R2.id.user_sex, R2.id.user_phone, R2.id.user_setting})
     void onClick(View view) {
         if (view.getId() == R.id.user_head) {
-            IntentUtils.openPic(this);//编辑头像
+            AndPermission.with(this)
+                    .runtime()
+                    .permission(Permission.READ_EXTERNAL_STORAGE)
+                    .onGranted(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> data) {
+                            IntentUtils.openPic(UserInfoActivity.this);//编辑头像
+                        }
+                    })
+                    .onDenied(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> data) {
+                            ToastUtil.showToastLong("您拒绝了存储权限，无法使用此功能");
+                        }
+                    }).start();
+        } else if (view.getId() == R.id.user_nickname) {
+            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_sex) {
+            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_phone) {
+            ARouter.getInstance().build(RouterMap.COMIC_BIND_PHONE_ACTIVITY).navigation(UserInfoActivity.this);
+        } else if (view.getId() == R.id.user_setting) {
+            ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
         }
     }
 
@@ -157,6 +200,13 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 Log.d("PutObject", "UploadSuccess");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String filepath = Constants.BUCKET_URL + request.getObjectKey();
+                        getP().updateUserInfo(filepath, null, -1);
+                    }
+                });
             }
 
             @Override

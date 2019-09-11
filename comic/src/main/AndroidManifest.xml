@@ -47,7 +47,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.mine.pay.SubscribeActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Comic.NoTitleTranslucentTheme" />
         <activity
             android:name=".ui.list.RankActivity"
@@ -155,6 +154,15 @@
             android:theme="@style/Comic.AppTheme.Base" />
         <activity
             android:name=".ui.mine.userinfo.UserInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.userinfo.EditNickNameActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+        <activity
+            android:name=".ui.mine.userinfo.EditSexActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
