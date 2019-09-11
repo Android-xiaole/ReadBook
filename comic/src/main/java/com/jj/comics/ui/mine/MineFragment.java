@@ -158,9 +158,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mCoins.setText(payInfo.getTotal_egold() + "");
     }
 
-    @OnClick({R2.id.mine_head_img,R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help, R2.id.edit_user_info
-   ,R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification,
-            R2.id.comic_mine_recharge, R2.id.comic_mine_help,R2.id.edit_user_info,
+    @OnClick({R2.id.mine_head_img,R2.id.comic_mine_buy, R2.id.comic_mine_history,
+            R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,
+            R2.id.edit_user_info,
             R2.id.btn_my_rebate,R2.id.btn_my_coin})
     void onClick(View view) {
         if (view.getId() == R.id.mine_head_img){
