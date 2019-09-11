@@ -82,12 +82,11 @@ public class ContentRepository implements ContentDataSource {
                 .retryWhen(new RetryFunction2(retryTag));
     }
 
-    @Override
-    public Observable<BookCatalogListResponse> getCatalogList(long id, int pageNum, String sort) {
-        HashMap<String, Object> parames = new HashMap();
-        parames.put(Constants.RequestBodyKey.ID, id);
-        parames.put(Constants.RequestBodyKey.PAGE_NUM, pageNum);
-        parames.put(Constants.RequestBodyKey.SORT, sort);
+    public Observable<BookCatalogListResponse> getCatalogList(long id) {
+        HashMap<String,Object> parames = new HashMap();
+        parames.put(Constants.RequestBodyKey.ID,id);
+        parames.put(Constants.RequestBodyKey.PAGE_NUM,1);
+        parames.put(Constants.RequestBodyKey.SORT,Constants.RequestBodyKey.SORT_ASC);
         return ComicApi.getApi().getCatalogList(parames)
                 .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());

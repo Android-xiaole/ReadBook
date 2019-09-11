@@ -1,16 +1,12 @@
 package com.jj.comics.ui.mine;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -18,24 +14,19 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseCommonFragment;
-import com.jj.base.utils.NetWorkUtil;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.common.callback.LoginNavigationCallbackImpl;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.ui.mine.settings.SettingActivity;
-import com.jj.comics.util.DateHelper;
+import com.jj.comics.ui.mine.login.LoginActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
@@ -50,7 +41,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import q.rorbin.badgeview.QBadgeView;
 
 /**
  * 我的页面
@@ -168,9 +158,11 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mCoins.setText(payInfo.getTotal_egold() + "");
     }
 
-    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help, R2.id.edit_user_info})
+    @OnClick({R2.id.mine_head_img,R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help, R2.id.edit_user_info})
     void onClick(View view) {
-        if (view.getId() == R.id.comic_mine_buy) {
+        if (view.getId() == R.id.mine_head_img){
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }else if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
         } else if (view.getId() == R.id.comic_mine_history) {
             ARouter.getInstance().build(RouterMap.COMIC_HISTORY_ACTIVITY).navigation();

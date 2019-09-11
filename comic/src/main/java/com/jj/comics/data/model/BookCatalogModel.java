@@ -34,7 +34,7 @@ public class BookCatalogModel implements Serializable {
     private int saleprice;
     private boolean is_read;
     private boolean is_buy;
-    private String content;
+    private String content;//小说下载地址链接
 
     //下面两个个字段是获取章节内容接口获取的
     private float vip_discount;//折扣率 0.7

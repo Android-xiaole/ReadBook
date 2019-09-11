@@ -41,8 +41,12 @@ import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -119,7 +123,21 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     @OnClick({R2.id.user_head, R2.id.user_nickname, R2.id.user_sex, R2.id.user_phone, R2.id.user_setting})
     void onClick(View view) {
         if (view.getId() == R.id.user_head) {
-            IntentUtils.openPic(this);//编辑头像
+            AndPermission.with(this)
+                    .runtime()
+                    .permission(Permission.READ_EXTERNAL_STORAGE)
+                    .onGranted(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> data) {
+                            IntentUtils.openPic(UserInfoActivity.this);//编辑头像
+                        }
+                    })
+                    .onDenied(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> data) {
+                            ToastUtil.showToastLong("您拒绝了存储权限，无法使用此功能");
+                        }
+                    }).start();
         } else if (view.getId() == R.id.user_nickname) {
             ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this);
         } else if (view.getId() == R.id.user_sex) {

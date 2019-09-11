@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,7 +44,6 @@ import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ShareMessageModel;
-import com.jj.comics.ui.dialog.ComicCollectionDialog;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
@@ -57,6 +57,7 @@ import com.jj.comics.widget.bookreadview.PageView;
 import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.bean.BookChapterBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
+import com.jj.comics.widget.bookreadview.utils.BookManager;
 import com.jj.comics.widget.bookreadview.utils.ReadSettingManager;
 import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.comics.widget.bubbleview.BubbleSeekBar;
@@ -66,6 +67,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,9 +142,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private long mReadStartTime = 0;//开始阅读时间
     private long mTotalLeaveTime = 0;//总共停留时间
     private long mTimeRecord = 0;//用户可见记录时间
-    private int currenPage = 1;//记录目录列表分页码
     private boolean isCollect;//是否收藏
-    private String sort = Constants.RequestBodyKey.SORT_ASC;//目录列表默认正序请求
 
     private PageLoader mPageLoader;//页面加载器，用来设置数据，监听各种点击事件
     private Animation mTopInAnim;
@@ -209,7 +209,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             iv_batchBuy.setVisibility(View.GONE);
         }
         //加载章节目录列表
-        getP().getCatalogList(bookModel.getId(), currenPage, sort);
+        getP().getCatalogList(bookModel.getId());
         if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
@@ -225,17 +225,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 mCatalogMenu.closeDrawers();
-                mPageLoader.skipToChapter(position);
+                for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
+                    if ((catalogAdapter.getData().get(position).getId()+"").equals(bookChapterBean.getId())){
+                        mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+                    }
+                }
             }
         });
-        //侧滑目录列表加载更多
-        catalogAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                currenPage++;
-                getP().getCatalogList(bookModel.getId(), currenPage, sort);
-            }
-        }, rv_catalogList);
 
         //侧滑目录控件的滑动状态监听
         mCatalogMenu.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -342,22 +338,22 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     public void onClick_ReadActivity(View view) {
         int i = view.getId();
         if (i == R.id.tv_sort) {
+            if (catalogAdapter.getData()==null||catalogAdapter.getData().size() == 0)return;
             tv_sort.setSelected(!tv_sort.isSelected());
             if (tv_sort.isSelected()) {
-                sort = Constants.RequestBodyKey.SORT_DESC;
                 tv_sort.setText("正序");
                 Drawable drawable = getResources().getDrawable(R.drawable.icon_read_catalog_asc);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv_sort.setCompoundDrawables(null, null, drawable, null);
             } else {
-                sort = Constants.RequestBodyKey.SORT_ASC;
                 tv_sort.setText("倒序");
                 Drawable drawable = getResources().getDrawable(R.drawable.icon_read_catalog_desc);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv_sort.setCompoundDrawables(null, null, drawable, null);
             }
-            currenPage = 1;
-            getP().getCatalogList(bookModel.getId(), currenPage, sort);
+            List<BookCatalogModel> data = catalogAdapter.getData();
+            Collections.reverse(data);
+            catalogAdapter.notifyDataSetChanged();
         } else if (i == R.id.iv_back_chapter) {//目录的返回键
             mCatalogMenu.closeDrawers();
         } else if (i == R.id.iv_back) {//topMenu的返回建
@@ -526,25 +522,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             bookChapterBean.setTitle(model.getChaptername() + "");
             catalogList.add(bookChapterBean);
         }
-        if (currenPage == 1) {
-            mPageLoader.getCollBook().setBookChapters(catalogList);
-            catalogAdapter.setNewData(catalogModels);
-        } else {
-            mPageLoader.getCollBook().addBookChapters(catalogList);
-            catalogAdapter.addData(catalogModels);
-        }
-        if (catalogModels.size() != 0) {
-            catalogAdapter.loadMoreComplete();
-        } else {
-            catalogAdapter.loadMoreEnd(true);
-        }
+        mPageLoader.getCollBook().setBookChapters(catalogList);
+        catalogAdapter.setNewData(catalogModels);
         mPageLoader.refreshChapterList();
-    }
-
-    @Override
-    public void onGetCatalogListFail() {
-        catalogAdapter.loadMoreFail();
-        currenPage--;
     }
 
     /**
@@ -552,8 +532,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshCatalogListBySubscribe(RefreshCatalogListBySubscribeEvent refreshCatalogListBySubscribeEvent) {
-        currenPage = 1;
-        getP().getCatalogList(bookModel.getId(), currenPage, sort);
+//        getP().getCatalogList(bookModel.getId());
     }
 
     @Override
@@ -568,8 +547,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             switch (requestCode) {
                 case RequestCode.LOGIN_REQUEST_CODE:
                     if (bookModel != null) {
-                        currenPage = 1;
-                        getP().getCatalogList(bookModel.getId(), currenPage, sort);
+                        getP().getCatalogList(bookModel.getId());
                         getP().getCollectStatus(bookModel.getId());
                     }
                     if (bookModel != null && catalogModel != null && data != null) {
@@ -603,11 +581,10 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         }
     }
 
-    @SuppressLint("WrongConstant")
     @Override
     public void onBackPressed() {
-        if (mCatalogMenu.isDrawerOpen(Gravity.START)) {
-            mCatalogMenu.closeDrawer(Gravity.START);
+        if (mCatalogMenu.isDrawerOpen(GravityCompat.START)) {
+            mCatalogMenu.closeDrawer(GravityCompat.START);
             return;
         }
         super.onBackPressed();
@@ -627,8 +604,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         LogUtil.e("退出阅读界面：" + duration);
         MobclickAgent.onEventValue(this, Constants.UMEventId.EXIT_READ, map, duration);
         super.onDestroy();
-        //上传阅读记录
-        if (bookModel != null && catalogModel != null) {
+        //上传阅读记录(只有已经下载之后的章节才会保存阅读记录)
+        if (bookModel != null && catalogModel != null&& BookManager.isChapterCached(catalogModel.getBook_id()+"",catalogModel.getChaptername())) {
             getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder());
         }
     }

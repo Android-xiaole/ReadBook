@@ -179,6 +179,10 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             getV().showToastShort("请同意漫画服务协议");
             return;
         }
+        if (TextUtils.isEmpty(phone)){
+            getV().showToastShort("请输入手机号");
+            return;
+        }
         if (!RegularUtil.isMobile(phone)) {
             getV().showToastShort("请输入正确的手机号");
             return;

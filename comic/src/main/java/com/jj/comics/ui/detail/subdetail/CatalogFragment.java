@@ -58,7 +58,7 @@ public class CatalogFragment extends BaseVPFragment<CatalogPresenter> implements
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 BookCatalogModel bookCatalogModel = mAdapter.getData().get(position);
                 if (getActivity() instanceof ComicDetailActivity) {
-                    ((ComicDetailActivity) getActivity()).toRead(model,bookCatalogModel.getId());
+//                    ((ComicDetailActivity) getActivity()).toRead(model,bookCatalogModel.getId());
                 }
             }
         });

@@ -4,10 +4,13 @@ import android.app.Activity;
 
 import com.jj.base.mvp.IView;
 import com.jj.base.net.ApiSubscriber2;
+import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
+
+import java.util.List;
 
 public interface ComicDetailContract {
     interface IDetailView extends IView {
@@ -19,11 +22,12 @@ public interface ComicDetailContract {
         void fillCollectStatus(boolean collectByCurrUser);
 
         void onLoadRecommendList(BookListDataResponse response);
+
+        //获取目录列表的回调
+        void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum);
     }
 
     interface IDetailPresenter {
-        //获取改本漫画阅读历史记录
-        void getCatalogHistory(long contentId,int chapterid, ApiSubscriber2 apiSubscriber);
 
         //收藏或者取消收藏的操作
         void addOrRemoveCollect(BookModel model,boolean collectByCurrUser);

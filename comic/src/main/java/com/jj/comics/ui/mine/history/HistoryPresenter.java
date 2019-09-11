@@ -188,7 +188,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
                                 这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
                                 另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
                              */
-                            return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookModel.getId(),1,Constants.RequestBodyKey.SORT_ASC), new DynamicKey(1),
+                            return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookModel.getId()), new DynamicKey(1),
                                     new EvictDynamicKey(true))
                                     .subscribeOn(Schedulers.io())
                                     .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
