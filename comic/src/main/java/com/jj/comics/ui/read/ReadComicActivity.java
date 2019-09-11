@@ -420,7 +420,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             }
             String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
             shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
-            shareMessageModel.setUmengPrarms(bookModel.getId() + " : " + bookModel.getTitle());
+            shareMessageModel.setBoolId(bookModel.getId());
             shareDialog.show(shareMessageModel);
         } else if (i == R.id.lin_makeMoney) {//赚钱
             ToastUtil.showToastShort("未实现");

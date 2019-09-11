@@ -11,6 +11,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.data.biz.task.TaskRepository;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.UserInfo;
@@ -25,27 +26,40 @@ public class TaskReporter {
     /**
      * 上报分享任务
      */
-    public static void reportShare() {
-        UserInfo userInfo = LoginHelper.getOnLineUser();
-
-        if (userInfo == null) {
-            return;
-        }
-        TaskRepository.getInstance().reportShare()
-                .observeOn(AndroidSchedulers.mainThread())
+    public static void reportShare(long bookId) {
+        if (bookId == 0)return;
+        TaskRepository.getInstance()
+                .reportShare(bookId)
                 .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
                     @Override
-                    public void onNext(CommonStatusResponse response) {
-                        if (response.getData() != null) {
-                            showSnackBar(Constants.TaskCode.SHARE);
-                        }
+                    protected void onFail(NetError error) {
                     }
 
                     @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
+                    public void onNext(CommonStatusResponse response) {
                     }
                 });
+
+//        UserInfo userInfo = LoginHelper.getOnLineUser();
+//
+//        if (userInfo == null) {
+//            return;
+//        }
+//        TaskRepository.getInstance().reportShare()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
+//                    @Override
+//                    public void onNext(CommonStatusResponse response) {
+//                        if (response.getData() != null) {
+//                            showSnackBar(Constants.TaskCode.SHARE);
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFail(NetError error) {
+//                        ToastUtil.showToastShort(error.getMessage());
+//                    }
+//                });
     }
 
     public static void showSnackBar(String taskCode){

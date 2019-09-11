@@ -116,4 +116,15 @@ public class TaskRepository implements TaskDataSource {
                 .compose(ComicApiImpl.<CommonStatusResponse>getApiTransformer2());
         return compose;
     }
+
+    @Override
+    public Observable<CommonStatusResponse> reportShare(long bookId) {
+        RequestBody requestBody = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.BOOK_ID,bookId)
+                .build();
+        return ComicApi.getApi().reportShare(requestBody)
+                .subscribeOn(Schedulers.io())
+                .retryWhen(new RetryFunction2())
+                .observeOn(Schedulers.io());
+    }
 }

@@ -37,4 +37,7 @@ public interface TaskDataSource {
     Observable<SignTaskResponse> getSignTasks(String activityName);
 
     Observable<CommonStatusResponse>presentGold();
+
+    Observable<CommonStatusResponse> reportShare(long bookId);
+
 }

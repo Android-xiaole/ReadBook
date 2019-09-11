@@ -897,4 +897,12 @@ public interface ComicService {
     @POST("api/update_user")
     Observable<UserInfoResponse> updateUserInfo(@Body RequestBody requestBody);
 
+    /**
+     * 分享成功上报接口
+     * @param requestBody
+     * @return
+     */
+    @POST("api/share")
+    Observable<CommonStatusResponse> reportShare(@Body RequestBody requestBody);
+
 }

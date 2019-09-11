@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -257,7 +256,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
 //                String sign = SignUtil.sign(Constants.PRODUCT_CODE + matcher.replaceAll(" ").trim());
                 shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), model.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
-                shareMessageModel.setUmengPrarms(model.getId() + " : " + model.getTitle());
+                shareMessageModel.setBoolId(model.getId());
                 shareDialog.show(shareMessageModel);
             }
         } else if (id == R.id.tv_read) {//去阅读
