@@ -15,6 +15,8 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
@@ -50,6 +52,10 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
             }
         });
         textView.setVisibility(View.VISIBLE);
+        UserInfo userInfo = LoginHelper.getOnLineUser();
+        if (userInfo != null) {
+            editText.setText(userInfo.getNickname());
+        }
     }
 
     @Override

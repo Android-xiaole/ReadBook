@@ -32,7 +32,7 @@ public class UserInfoPresenter extends BasePresenter<BaseRepository, UserInfoCon
                     public void onNext(UserInfoResponse response) {
                         UserInfoResponse.DataBean data = response.getData();
                         if (data != null) {
-//                            getV().onLoadConfig(data);
+                            getV().onImgUploadComplete(data.getBaseinfo().getAvatar());
                         } else {
                             getV().onLoadFail(NetError.noDataError());
                         }

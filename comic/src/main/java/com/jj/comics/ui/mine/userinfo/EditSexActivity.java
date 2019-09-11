@@ -11,6 +11,8 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
@@ -45,6 +47,17 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
 
             }
         });
+//        初始化性别
+        UserInfo userInfo = LoginHelper.getOnLineUser();
+        if (userInfo != null) {
+            if (userInfo.getSex() == 1) {
+                maleCheck.setChecked(true);
+                femaleCheck.setChecked(false);
+            } else {
+                maleCheck.setChecked(false);
+                femaleCheck.setChecked(true);
+            }
+        }
     }
 
     @Override

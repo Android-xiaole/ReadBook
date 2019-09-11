@@ -67,12 +67,22 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     MineItemView mineItemView_recharge;
     @BindView(R2.id.comic_mine_help)
     MineItemView mineItemView_help;
+    @BindView(R2.id.mine_head_img)
+    ImageView headImg;
+    @BindView(R2.id.mine_nickname)
+    TextView mNickname;
+    @BindView(R2.id.mine_rebate)
+    TextView mRebate;
+    @BindView(R2.id.mine_coins)
+    TextView mCoins;
 
 
     @Override
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
         MobclickAgent.onEvent(getContext(), Constants.UMEventId.ACCESS_USER_CENTER);
+        getP().getUserInfo();
+        getP().getUserPayInfo();
     }
 
     /**
@@ -140,13 +150,25 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
 
     @Override
     public void onGetUserInfo(UserInfo userInfo) {
+        //设置头像
+        if (TextUtils.isEmpty(userInfo.getAvatar())) {
+            ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
+        } else {
+            ILFactory.getLoader().loadNet(headImg, userInfo.getAvatar(),
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                            .placeholder(R.drawable.img_loading));
+        }
+        //设置昵称
+        mNickname.setText(userInfo.getNickname());
     }
 
     @Override
     public void onGetUserPayInfo(PayInfo payInfo) {
+        mCoins.setText(payInfo.getTotal_egold() + "");
     }
 
-    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,R2.id.edit_user_info})
+    @OnClick({R2.id.comic_mine_buy, R2.id.comic_mine_history, R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help, R2.id.edit_user_info})
     void onClick(View view) {
         if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());

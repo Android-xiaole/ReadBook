@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -68,6 +69,18 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     protected void initData(Bundle savedInstanceState) {
         filePath = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath()
                 + File.separator + PackageUtil.getAppName(this) + File.separator;
+        UserInfo userInfo = LoginHelper.getOnLineUser();
+        if (userInfo != null) {
+            //设置头像
+            if (TextUtils.isEmpty(userInfo.getAvatar())) {
+                ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                        new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
+            } else {
+                ILFactory.getLoader().loadNet(headImg, userInfo.getAvatar(),
+                        new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                                .placeholder(R.drawable.img_loading));
+            }
+        }
     }
 
     @Override
@@ -82,7 +95,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
 
     @Override
     public void onImgUploadComplete(String headImgUrl) {
-
+        if (TextUtils.isEmpty(headImgUrl)) {
+            ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
+        } else {
+            ILFactory.getLoader().loadNet(headImg, headImgUrl,
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                            .placeholder(R.drawable.img_loading));
+        }
     }
 
     @Override

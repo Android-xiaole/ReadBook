@@ -1,46 +1,27 @@
 package com.jj.comics.ui.mine.settings;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.gyf.barlibrary.ImmersionBar;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.common.constants.RequestCode;
-import com.jj.comics.data.model.UpdateModelProxy;
-import com.jj.comics.util.eventbus.events.LogoutEvent;
-import com.jj.comics.common.net.download.DownInfo;
-import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.widget.SwitchButton;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.widget.UserItemView;
 import com.tencent.stat.StatMultiAccount;
 import com.tencent.stat.StatService;
 
-import java.io.File;
-
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -53,15 +34,15 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     UserItemView mCache;
 
     @BindView(R2.id.switch_autoBuy)
-    SwitchButton switchButton;
+    Switch switchButton;
 
     @Override
     public void initData(Bundle savedInstanceState) {
         getP().getCacheSize();
         updateLoginStatus();
-        switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     SharedPref.getInstance(SettingActivity.this).putBoolean(Constants.SharedPrefKey.AUTO_BUY, true);
                 } else {

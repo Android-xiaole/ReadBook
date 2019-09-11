@@ -73,7 +73,6 @@ public class MinePresenter extends BasePresenter<BaseRepository, MineContract.IM
                     protected void onEnd() {
                         super.onEnd();
                         getV().hideProgress();
-                        getCacheSize();
                     }
                 });
     }
@@ -165,41 +164,6 @@ public class MinePresenter extends BasePresenter<BaseRepository, MineContract.IM
                         getV().onGetTaskInfo(integer);
                     }
                 });
-    }
-
-    private void getCacheSize() {
-        Flowable.create(new FlowableOnSubscribe<String>() {
-            @Override
-            public void subscribe(FlowableEmitter<String> flowableEmitter) throws Exception {
-                try {
-                    flowableEmitter.onNext(FileUtil.getCaCheSize(BaseApplication.getApplication()));
-                } catch (Exception e) {
-                    flowableEmitter.onError(e);
-                }
-                flowableEmitter.onComplete();
-            }
-        }, BackpressureStrategy.BUFFER)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-//                .compose(getV().<String>bindUntilEvent(FragmentEvent.DESTROY))
-//                .as(AutoDispose.<String>autoDisposable(AndroidLifecycleScopeProvider.from(getV().getLifecycle())))
-                .as(this.<String>bindLifecycle())
-                .subscribe(new ResourceSubscriber<String>() {
-                    @Override
-                    public void onNext(String size) {
-                        getV().setCacheSize(size);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
     }
 
     @Override

@@ -61,6 +61,9 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dp_16"
+                            android:textSize="@dimen/dp_18"
+                            android:textColor="@color/comic_ffffff"
+                            android:textStyle="bold"
                             android:layout_weight="1"
                             android:text="name" />
 
@@ -87,6 +90,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/mine_rebate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="50.00"
@@ -112,6 +116,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/mine_coins"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1500000"
