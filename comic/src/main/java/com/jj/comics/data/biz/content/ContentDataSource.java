@@ -36,7 +36,10 @@ public interface ContentDataSource {
     //根据内容漫画id获取章节列表
     Observable<BookCatalogListResponse> getCatalogList(long id);
 
-    //根据章获取章节内容详情
+    //获取缓存的目录列表
+    Observable<BookCatalogListResponse> getCacheCatalogList(long id);
+
+        //根据章获取章节内容详情
     Observable<BookCatalogContentResponse> getCatalogContent(long id,long chapterid);
 
     //获取内容详情,附加点赞数，评论数，收藏数等用户相关信息

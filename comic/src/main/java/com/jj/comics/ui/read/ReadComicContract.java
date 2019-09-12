@@ -10,6 +10,10 @@ import java.util.List;
 public interface ReadComicContract {
 
     interface IReadComicView extends IView {
+
+        //加载章节内容结束的回调
+        void onLoadCatalogContentEnd();
+
         //文件下载成功，加载资源的回调
         void onLoadChapterContent();
 

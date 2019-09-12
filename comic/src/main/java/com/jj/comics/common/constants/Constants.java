@@ -112,6 +112,7 @@ public class Constants {
         public static final String BOOK_CATALOG_MODEL = "catalogModel";
         public static final String BOOK_MODEL = "bookModel";
         public static final String BOOK_INFO = "bookInfo";
+        public static final String BOOK_BUY_ALL = "bookBuyAll";
 
         public static final String INDEX = "index";
         public static final String ID = "id";

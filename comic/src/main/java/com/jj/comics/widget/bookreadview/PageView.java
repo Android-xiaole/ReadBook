@@ -223,7 +223,7 @@ public class PageView extends View {
                 }
 
                 // 如果滑动了，则进行翻页。
-                if (isMove) {
+                if (isMove&&canMove&&mPageLoader.getPageStatus() == PageLoader.STATUS_FINISH) {
                     mPageAnim.onTouchEvent(event);
                 }
                 break;
@@ -247,6 +247,19 @@ public class PageView extends View {
                 break;
         }
         return true;
+    }
+
+    private boolean canMove = true;//设置是否允许滑动
+
+    /**
+     * 控制加载器是否可以滑动（如果存在收费章节会弹出订阅界面，如果不及时禁止滑动会导致弹出多个订阅界面）
+     * @param canMove
+     */
+    public void setMove(boolean canMove){
+        this.canMove = canMove;
+        if (!canMove){
+            mPageAnim.abortAnim();
+        }
     }
 
     /**

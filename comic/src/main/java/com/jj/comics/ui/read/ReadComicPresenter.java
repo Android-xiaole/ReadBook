@@ -44,7 +44,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
     private ApiSubscriber2<BookCatalogModel> subscriber;
     private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
 
-    public void loadData(BookModel bookModel, TxtChapter requestChapter) {
+    public void loadData(BookModel bookModel, long chapterId) {
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
         }
@@ -58,23 +58,23 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
         subscriber = new ComicSubscriber<BookCatalogModel>() {
             @Override
             public void onNext(BookCatalogModel model) {
-                subscriber = null;
                 //获取章节内容之后去下载txt文件
                 downloadFile(model);
             }
 
             @Override
             protected void onFail(NetError error) {
-                subscriber = null;
                 ToastUtil.showToastShort(error.getMessage());
             }
 
             @Override
             protected void onEnd() {
+                subscriber = null;
                 getV().hideProgress();
+                getV().onLoadCatalogContentEnd();
             }
         };
-        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId()))
+        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, chapterId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogModel>bindLifecycle())
                 .subscribe(subscriber);
@@ -199,8 +199,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
         }
-        ContentRepository.getInstance().getCatalogList(bookId)
-                .subscribeOn(Schedulers.io())
+        ContentRepository.getInstance().getCacheCatalogList(bookId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {

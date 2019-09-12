@@ -102,16 +102,15 @@
                     android:id="@+id/sb_textSetting"
                     android:layout_width="235dp"
                     android:layout_height="wrap_content"
-                    app:bsb_auto_adjust_section_mark="true"
-                    app:bsb_bubble_color="@drawable/comic_select_read_text_setting_seekbar_color"
-                    app:bsb_bubble_text_color="@color/comic_e8ebf0"
-                    app:bsb_bubble_text_size="18sp"
                     app:bsb_max="40"
                     app:bsb_min="10"
-                    app:bsb_second_track_color="@drawable/comic_select_read_text_setting_seekbar_color"
-                    app:bsb_section_count="5"
+                    app:bsb_auto_adjust_section_mark="true"
                     app:bsb_show_section_mark="true"
-                    app:bsb_thumb_text_size="18sp" />
+                    app:bsb_hide_bubble = "true"
+                    app:bsb_track_color="@color/comic_e8ebf0"
+                    app:bsb_second_track_color="@color/comic_e8ebf0"
+                    app:bsb_thumb_color="@color/comic_ffad70"
+                    app:bsb_section_count="5" />
 
                 <TextView
                     android:layout_width="wrap_content"

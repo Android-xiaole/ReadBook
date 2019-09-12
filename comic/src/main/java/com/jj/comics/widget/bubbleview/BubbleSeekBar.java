@@ -614,16 +614,16 @@ public class BubbleSeekBar extends View {
             }
         }
 
-        // draw track
-        mPaint.setColor(mSecondTrackColor);
-        mPaint.setStrokeWidth(mSecondTrackSize);
+        // draw second track
+        mPaint.setColor(mTrackColor);//之前是mSecondTrackColor，为了使滑动轨迹和背景轨迹看起来一样设置和背景轨迹颜色和大小都一致，下同
+        mPaint.setStrokeWidth(mTrackSize);//mSecondTrackSize
         if (isRtl) {
             canvas.drawLine(xRight, yTop, mThumbCenterX, yTop, mPaint);
         } else {
             canvas.drawLine(xLeft, yTop, mThumbCenterX, yTop, mPaint);
         }
 
-        // draw second track
+        // draw track
         mPaint.setColor(mTrackColor);
         mPaint.setStrokeWidth(mTrackSize);
         if (isRtl) {
