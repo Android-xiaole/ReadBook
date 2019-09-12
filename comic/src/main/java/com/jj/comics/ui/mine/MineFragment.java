@@ -183,7 +183,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         }else if (view.getId() == R.id.btn_my_coin) {
             int egold = 0;
             if (mPayInfo != null) {
-                egold = mPayInfo.getEgold();
+                egold = mPayInfo.getTotal_egold();
             }
             ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withInt(Constants.IntentKey.COIN,egold).navigation();
         }else if (view.getId() == R.id.btn_my_rebate) {
