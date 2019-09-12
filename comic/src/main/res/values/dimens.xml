@@ -89,6 +89,7 @@
     <dimen name="dp_125">125dp</dimen>
     <dimen name="dp_335">335dp</dimen>
     <dimen name="dp_33">33dp</dimen>
+    <dimen name="dp_54">54dp</dimen>
     <dimen name="comic_half_dp">0.5dp</dimen>
 
     <dimen name="dp_88">88dp</dimen>

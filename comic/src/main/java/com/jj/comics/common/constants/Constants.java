@@ -131,6 +131,8 @@ public class Constants {
         public static final String ACTION = "action";
 
         public static final String MESSAGE_SUM = "message_sum";
+        public static final String PAY_INFO = "pay_info";
+        public static final String COIN = "coin";
     }
 
     //SharedPreferences存值key

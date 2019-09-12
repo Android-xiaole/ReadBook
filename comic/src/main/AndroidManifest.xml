@@ -190,6 +190,26 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
+        <activity
+            android:name=".ui.mine.rebate.MyRebateActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.rebate.cashout.AddCashOutWayAliActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.rebate.cashout.CashOutWayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.rebate.cashout.DoCashOutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
         <receiver android:name=".broadcast.NetWorkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

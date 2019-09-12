@@ -10,6 +10,7 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.widget.UserItemView;
 
 import butterknife.BindView;
@@ -28,7 +29,7 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     UserItemView mItemConsumeHistory;
     @Override
     protected void initData(Bundle savedInstanceState) {
-        long coin = getIntent().getLongExtra("coin", 0);
+        long coin = getIntent().getLongExtra(Constants.IntentKey.COIN, 0);
         String coinMsg = "暂无余额";
         if (coin > 0)  coinMsg = coin + "";
         mTvCoin.setText(coinMsg);

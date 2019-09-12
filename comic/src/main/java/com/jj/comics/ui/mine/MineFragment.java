@@ -67,6 +67,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mCoins;
 
     private int mCoin = 99999;
+    private PayInfo mPayInfo;
     @Override
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
@@ -155,6 +156,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
 
     @Override
     public void onGetUserPayInfo(PayInfo payInfo) {
+        mPayInfo = payInfo;
         mCoins.setText(payInfo.getTotal_egold() + "");
         mRebate.setText(payInfo.getCan_drawout_amount() + "");
     }
@@ -180,9 +182,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         } else if (view.getId() == R.id.edit_user_info) {
             ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
         }else if (view.getId() == R.id.btn_my_coin) {
-            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong("coin",mCoin).navigation();
+            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong(Constants.IntentKey.COIN,mCoin).navigation();
         }else if (view.getId() == R.id.btn_my_rebate) {
-
+            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
         }
     }
 

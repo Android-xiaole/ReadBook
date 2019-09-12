@@ -14,12 +14,18 @@
 
         <attr name="leftIconRes" format="reference"/>
         <attr name="rightIconRes" format="reference"/>
+        <attr name="rightTextString" format="string"></attr>
         <attr name="leftIconVisible" format="enum">
             <enum name="visible" value="0x00000000"/>
             <enum name="invisible" value="0x00000004"/>
             <enum name="gone" value="0x00000008"/>
         </attr>
         <attr name="rightIconVisible" format="enum">
+            <enum name="visible" value="0x00000000"/>
+            <enum name="invisible" value="0x00000004"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="rightTextVisibleToolbar" format="enum">
             <enum name="visible" value="0x00000000"/>
             <enum name="invisible" value="0x00000004"/>
             <enum name="gone" value="0x00000008"/>

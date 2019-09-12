@@ -1,9 +1,11 @@
 package com.jj.comics.data.model;
 
+import java.io.Serializable;
+
 /**
  * 用户支付相关信息
  */
-public class PayInfo extends ResponseModel {
+public class PayInfo extends ResponseModel implements Serializable {
 
 
     /**

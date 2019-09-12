@@ -260,6 +260,11 @@ public class WelfareActivity extends BaseActivity<WelfarePresenter> implements W
         shareDialog.show();
     }
 
+    @Override
+    public void onComicToolBarRightTextClick(View childView) {
+
+    }
+
     /**
      * 任务中心点击 事件
      *

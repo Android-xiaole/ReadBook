@@ -46,6 +46,11 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
             public void onComicToolBarRightIconClick(View childView) {
 
             }
+
+            @Override
+            public void onComicToolBarRightTextClick(View childView) {
+
+            }
         });
 //        初始化性别
         UserInfo userInfo = LoginHelper.getOnLineUser();

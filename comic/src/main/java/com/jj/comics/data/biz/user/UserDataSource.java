@@ -1,6 +1,7 @@
 package com.jj.comics.data.biz.user;
 
 import com.jj.comics.data.model.BookModel;
+import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -12,6 +13,7 @@ import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginByCodeResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
+import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
@@ -156,5 +158,19 @@ public interface UserDataSource {
      * @return
      */
     Observable<UserInfoResponse> updateUserInfo(String avatar, String nickname, int sex);
+
+    /**
+     * 我的返利列表
+     * @param page
+     * @return
+     */
+    Observable<RebateListResponse> getRebateList(int page);
+
+    /**
+     * 我的提现列表
+     * @param page
+     * @return
+     */
+    Observable<CashOutListResponse> getCashOutList(int page);
 
 }
