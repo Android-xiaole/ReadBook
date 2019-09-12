@@ -55,9 +55,15 @@ public class ContentRepository implements ContentDataSource {
                 .compose(ComicApiImpl.<CategoryResponse>getApiTransformer2());
     }
 
+    /**
+     * 男生、女生分类列表
+     *
+     * @param name
+     * @return
+     */
     @Override
-    public Observable<SortListResponse> getSortList() {
-        return ComicApi.getApi().getSortList()
+    public Observable<SortListResponse> getSortList(String name) {
+        return ComicApi.getApi().getSortList(name)
                 .retryWhen(new RetryFunction2())
                 .compose(ComicApiImpl.<SortListResponse>getApiTransformer2());
     }
@@ -70,6 +76,13 @@ public class ContentRepository implements ContentDataSource {
         params.put(Constants.RequestBodyKey.ORDER_BY, sort);
         params.put(Constants.RequestBodyKey.BOOK_TYPE_ID, sectionId);
         return ComicApi.getApi().getBookCategories(params)
+                .retryWhen(new RetryFunction2())
+                .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2());
+    }
+
+    @Override
+    public Observable<BookListDataResponse> getBookCategories(int pageNum, int pageSize, long cid) {
+        return ComicApi.getApi().getBookCategories(pageNum, pageSize, cid)
                 .retryWhen(new RetryFunction2())
                 .compose(ComicApiImpl.<BookListDataResponse>getApiTransformer2());
     }
@@ -266,7 +279,6 @@ public class ContentRepository implements ContentDataSource {
                 .compose(ComicApiImpl.<OSSResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(name));
     }
-
 
 
 }

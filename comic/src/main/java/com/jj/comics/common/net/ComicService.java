@@ -195,8 +195,8 @@ public interface ComicService {
      */
     @GET(API_RANKING_LIST)
     Observable<BookListDataResponse> getRankListByAction(@Query("action") String action,
-                                                       @Query("page") int pageNum,
-                                                       @Query("length") int pageSize);
+                                                         @Query("page") int pageNum,
+                                                         @Query("length") int pageSize);
 
     /**
      * 免费专区
@@ -205,7 +205,7 @@ public interface ComicService {
      */
     @GET(API_FREE)
     Observable<BookListDataResponse> getFree(@Query("page") int pageNum,
-                                           @Query("length") int pageSize);
+                                             @Query("length") int pageSize);
 
     /**
      * 限时免费(包含本周免费和下周预告)
@@ -221,7 +221,7 @@ public interface ComicService {
      * @return
      */
     @GET(API_RECOMMENDED)
-    Observable<BookListRecommondResponse> getRecommond(@Query("channel")int channelFlag);
+    Observable<BookListRecommondResponse> getRecommond(@Query("channel") int channelFlag);
 
     /**
      * 首页最热分享
@@ -239,7 +239,7 @@ public interface ComicService {
     @GET(API_RECENT_UPDATES)
     Observable<BookListDataResponse> getRecentUpdate(@Query("channel") int channelFlag,
                                                      @Query("page") int pageNum,
-                                                   @Query("length") int pageSize);
+                                                     @Query("length") int pageSize);
 
 
     /**
@@ -575,6 +575,7 @@ public interface ComicService {
      */
     @POST(USER_ALTER_MOBILE)
     Observable<ResponseModel> alterMobile(@Body RequestBody body);
+
     /**
      * 获取实时打赏用户的列表
      *
@@ -608,7 +609,7 @@ public interface ComicService {
      * @param body
      * @return
      */
-    @POST("http://api.08.biedese.cn/behavior.webapi/user_action_report"+Constants.IDENTIFICATION_IGNORE)
+    @POST("http://api.08.biedese.cn/behavior.webapi/user_action_report" + Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> reportAction(@Body RequestBody body);
 
 /*********************************************** 以上是用户行为 Behavior 模块*************************************************************************/
@@ -684,7 +685,7 @@ public interface ComicService {
      * @param protocolCode
      * @return
      */
-    @GET("http://api.08.biedese.cn/product.webapi/product_protocol"+Constants.IDENTIFICATION_IGNORE)
+    @GET("http://api.08.biedese.cn/product.webapi/product_protocol" + Constants.IDENTIFICATION_IGNORE)
     Observable<ProtocalModel> getProductProtocalByProtocolCode(@Query("productCode") String productCode, @Query("protocolCode") String protocolCode);
 
     /**
@@ -701,7 +702,8 @@ public interface ComicService {
      * @return
      */
     @GET(API_CATEGORY)
-    Observable<SortListResponse> getSortList();
+    Observable<SortListResponse> getSortList(@Query("name") String name);
+
     /**
      * 分类查询漫画
      *
@@ -710,6 +712,13 @@ public interface ComicService {
     @GET(API_BOOK_CATEGORY)
     Observable<BookListDataResponse> getBookCategories(@QueryMap Map<String, Object> params);
 
+    /**
+     * 分类查询漫画
+     *
+     * @return
+     */
+    @GET(API_BOOK_CATEGORY)
+    Observable<BookListDataResponse> getBookCategories(@Query("page") int page, @Query("length") int length, @Query("cid") long cid);
 
     /**
      * 提交反馈
@@ -745,7 +754,7 @@ public interface ComicService {
      * @param channelId
      * @return
      */
-    @GET("http://api.08.biedese.cn/product.webapi/channel_update"+Constants.IDENTIFICATION_IGNORE)
+    @GET("http://api.08.biedese.cn/product.webapi/channel_update" + Constants.IDENTIFICATION_IGNORE)
     Observable<UpdateModelProxy> getChannelUpdateInfo(@Query("productCode") String productCode, @Query("channelId") String channelId);
 
 
@@ -755,7 +764,7 @@ public interface ComicService {
      * @param build
      * @return
      */
-    @POST("http://api.08.biedese.cn/product.webapi/get_share_parameter"+Constants.IDENTIFICATION_IGNORE)
+    @POST("http://api.08.biedese.cn/product.webapi/get_share_parameter" + Constants.IDENTIFICATION_IGNORE)
     Observable<ShareParamModel> getShareParam(@Body RequestBody build);
 
 
@@ -766,7 +775,7 @@ public interface ComicService {
      * @param adId
      * @return
      */
-    @GET("http://api.08.biedese.cn/ad_api/ad_query_forapp"+Constants.IDENTIFICATION_IGNORE)
+    @GET("http://api.08.biedese.cn/ad_api/ad_query_forapp" + Constants.IDENTIFICATION_IGNORE)
     Observable<Push> getAdsPush(@Query("yc") String channelId, @Query("adId") String adId);
 
     @Streaming
@@ -775,6 +784,7 @@ public interface ComicService {
 
     /**
      * 获取应用消息公告列表
+     *
      * @param pageNum
      * @return
      */
@@ -783,6 +793,7 @@ public interface ComicService {
 
     /**
      * 获取应用消息公告详情
+     *
      * @return
      */
     @GET(API_NOTIDICATION_LIST)
@@ -843,23 +854,25 @@ public interface ComicService {
 
     /**
      * 获取app配置信息，域名形式获取
-     * @return
-     * cartoon-novel.jjmh114.cn 测试
+     *
+     * @return cartoon-novel.jjmh114.cn 测试
      * cartoon-novel.jishusaice.cn 线上
      * cartoon_novel.langd88.cn 线上唯一,专门用来请求获取app配置
      */
-    @GET("http://"+Constants.HOST_TEST+"/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
+    @GET("http://" + Constants.HOST_TEST + "/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfig();
 
     /**
      * 获取app配置信息,IP形式获取
+     *
      * @return
      */
-    @GET("http://129.211.155.99:80/api/get_app_config"+Constants.IDENTIFICATION_IGNORE)
+    @GET("http://129.211.155.99:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfigByIP();
 
     /**
      * 获取支付活动弹窗信息
+     *
      * @return
      */
     @POST("api/get_alert_info")
@@ -867,6 +880,7 @@ public interface ComicService {
 
     /**
      * 获取充值中心数据
+     *
      * @return
      */
     @GET("api/app_pay_setting")
@@ -874,6 +888,7 @@ public interface ComicService {
 
     /**
      * UID登录接口
+     *
      * @return
      */
     @POST("api/app_id_login")
@@ -881,6 +896,7 @@ public interface ComicService {
 
     /**
      * 通用的下载文件
+     *
      * @param url
      * @return
      */
@@ -890,6 +906,7 @@ public interface ComicService {
 
     /**
      * 获取oss 上传配置
+     *
      * @return
      */
     @GET("api/oss_sign")

@@ -54,7 +54,7 @@ public class SortListResponse implements IModel {
          */
 
         private String title;
-        private int id;
+        private long id;
         private int icon;
         private String cover;
 
@@ -66,11 +66,11 @@ public class SortListResponse implements IModel {
             this.title = title;
         }
 
-        public int getId() {
+        public long getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(long id) {
             this.id = id;
         }
 

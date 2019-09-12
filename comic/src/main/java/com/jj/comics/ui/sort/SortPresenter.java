@@ -22,8 +22,8 @@ public class SortPresenter extends BasePresenter<BaseRepository, SortContract.IS
      * 获取漫画分类类型
      */
     @Override
-    public void loadTypeList() {
-        ContentRepository.getInstance().getSortList()
+    public void loadTypeList(String name) {
+        ContentRepository.getInstance().getSortList(name)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<SortListResponse>bindLifecycle())

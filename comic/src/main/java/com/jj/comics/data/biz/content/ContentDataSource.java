@@ -25,7 +25,7 @@ public interface ContentDataSource {
     Observable<CategoryResponse> getCategoryList();
 
     //获取当前分类类型数据
-    Observable<SortListResponse> getSortList();
+    Observable<SortListResponse> getSortList(String name);
 
     //根据分类code获取当前分类下的数据列表
     Observable<BookListDataResponse> getContentListByType(int pageNum, int pageSize, String sectionId,String sort);
@@ -92,5 +92,7 @@ public interface ContentDataSource {
 
     //获取oss 配置
     Observable<OSSResponse> getOSSConfig(String name);
+
+    Observable<BookListDataResponse> getBookCategories(int pageNum, int pageSize, long cid);
 
 }

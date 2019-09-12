@@ -3,7 +3,7 @@ package com.jj.comics.data.model;
 /**
  * 用户支付相关信息
  */
-public class PayInfo extends ResponseModel{
+public class PayInfo extends ResponseModel {
 
 
     /**
@@ -38,6 +38,10 @@ public class PayInfo extends ResponseModel{
     private int svip_endday;
     private String create_time;
     private String update_time;
+    private float total_rebate_amount;
+    private float total_drawcash_amount;
+    private float can_drawout_amount;
+    private float newest_rebate;
 
     public long getId() {
         return id;
@@ -165,5 +169,37 @@ public class PayInfo extends ResponseModel{
 
     public void setUpdate_time(String update_time) {
         this.update_time = update_time;
+    }
+
+    public float getTotal_rebate_amount() {
+        return total_rebate_amount;
+    }
+
+    public void setTotal_rebate_amount(float total_rebate_amount) {
+        this.total_rebate_amount = total_rebate_amount;
+    }
+
+    public float getTotal_drawcash_amount() {
+        return total_drawcash_amount;
+    }
+
+    public void setTotal_drawcash_amount(float total_drawcash_amount) {
+        this.total_drawcash_amount = total_drawcash_amount;
+    }
+
+    public float getCan_drawout_amount() {
+        return can_drawout_amount;
+    }
+
+    public void setCan_drawout_amount(float can_drawout_amount) {
+        this.can_drawout_amount = can_drawout_amount;
+    }
+
+    public float getNewest_rebate() {
+        return newest_rebate;
+    }
+
+    public void setNewest_rebate(float newest_rebate) {
+        this.newest_rebate = newest_rebate;
     }
 }

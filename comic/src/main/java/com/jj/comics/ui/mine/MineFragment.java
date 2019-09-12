@@ -156,6 +156,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @Override
     public void onGetUserPayInfo(PayInfo payInfo) {
         mCoins.setText(payInfo.getTotal_egold() + "");
+        mRebate.setText(payInfo.getCan_drawout_amount() + "");
     }
 
     @OnClick({R2.id.mine_head_img,R2.id.comic_mine_buy, R2.id.comic_mine_history,

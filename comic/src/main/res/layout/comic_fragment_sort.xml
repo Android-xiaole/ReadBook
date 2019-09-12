@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/comic_ffffff">
 
-    <EditText
+    <TextView
         android:id="@+id/search_edit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_32"
@@ -14,12 +14,11 @@
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_16"
+        android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/dp_6"
         android:background="@drawable/comic_search_search_bg"
         android:drawableRight="@drawable/icon_search_search"
         android:drawablePadding="@dimen/dp_10"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:hint="@string/comic_search_comic_hint"
         android:imeOptions="actionSearch"
         android:lines="1"

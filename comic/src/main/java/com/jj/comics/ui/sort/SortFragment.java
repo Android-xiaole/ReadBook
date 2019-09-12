@@ -9,14 +9,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.sort.SortAdapter;
 import com.jj.comics.data.model.SortListResponse;
+import com.jj.comics.ui.mine.userinfo.UserInfoActivity;
 import com.jj.comics.widget.UniversalItemDecoration;
 
 import java.util.List;
@@ -31,9 +35,6 @@ import me.jessyan.autosize.utils.ScreenUtils;
 public class SortFragment extends BaseFragment<SortPresenter> implements SortContract.ISortView {
     @BindView(R2.id.ll_root)
     RelativeLayout ll_root;
-
-    @BindView(R2.id.search_edit)
-    EditText search_edit;
 
     @BindView(R2.id.sort_recycler)
     RecyclerView sortRecycler;
@@ -52,6 +53,8 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
     @BindView(R2.id.female_text)
     TextView female_text;
 
+    private String name = "1";
+
     @Override
     public void initData(Bundle savedInstanceState) {
         //设置toolbar距离上端的高度
@@ -60,7 +63,7 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
         lp.topMargin = statusBarHeight;
         ll_root.setLayoutParams(lp);
 
-        getP().loadTypeList();
+        getP().loadTypeList(name);
         sortAdapter = new SortAdapter(R.layout.comic_item_sort_adapter);
         sortRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         sortAdapter.bindToRecyclerView(sortRecycler);
@@ -73,6 +76,14 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
                 decoration.bottom = Utils.dip2px(getActivity(), 30);
                 decoration.decorationColor = Color.WHITE;
                 return decoration;
+            }
+        });
+
+        sortAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                SortListResponse.DataBean dataBean = sortAdapter.getItem(position);
+                ARouter.getInstance().build(RouterMap.COMIC_SORTLIST_ACTIVITY).withLong("id", dataBean.getId()).withString("title", dataBean.getTitle()).navigation(getActivity());
             }
         });
     }
@@ -113,14 +124,19 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
 
     @Override
     public void getTypeListFail(NetError netError) {
-
+        ToastUtil.showToastShort(netError.getMessage());
     }
 
-    @OnClick({R2.id.male, R2.id.female})
+    @OnClick({R2.id.male, R2.id.female, R2.id.search_edit})
     void onClick(View view) {
         if (view.getId() == R.id.male) {
             setTextColor(true);
-        } else if (view.getId() == R.id.female)
+            getP().loadTypeList("1");
+        } else if (view.getId() == R.id.female) {
             setTextColor(false);
+            getP().loadTypeList("2");
+        } else if (view.getId() == R.id.search_edit) {
+            ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation(getActivity());
+        }
     }
 }

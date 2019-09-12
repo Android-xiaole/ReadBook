@@ -372,4 +372,7 @@
     <string name="comic_user_info_edit_sex">修改性别</string>
     <string name="comic_user_info_confirm">确认修改</string>
     <string name="comic_user_info_auto_bug">自动购买</string>
+
+    <string name="comic_sort_cid_title">玄幻</string>
+
 </resources>

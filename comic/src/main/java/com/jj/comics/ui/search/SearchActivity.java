@@ -33,6 +33,7 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 发现搜索页面
@@ -146,7 +147,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public void onComplete() {
         hideProgress();
-        if (swipeRefreshLayout.isRefreshing()){
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -166,5 +167,12 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
     @Override
     public boolean useEventBus() {
         return true;
+    }
+
+    @OnClick({R2.id.search_back})
+    void onClick(View view) {
+        if (view.getId() == R.id.search_back) {
+            finish();
+        }
     }
 }

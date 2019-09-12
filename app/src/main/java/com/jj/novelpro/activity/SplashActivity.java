@@ -82,7 +82,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
         layouts.add(getView(R.layout.comic_guide_1, R.drawable.img_comic_splash_yindaoye1));
         layouts.add(getView(R.layout.comic_guide_2, R.drawable.img_comic_splash_yindaoye2));
-        layouts.add(getView(R.layout.comic_guide_3, R.drawable.img_comic_splash_yindaoye3));
 
         mPagerAdapter = new ImagePagerAdapter(layouts);
         mPagerAdapter.setOnBannerListener(new OnBannerListener() {
