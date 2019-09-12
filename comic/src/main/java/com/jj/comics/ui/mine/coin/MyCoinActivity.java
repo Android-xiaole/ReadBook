@@ -29,7 +29,7 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     UserItemView mItemConsumeHistory;
     @Override
     protected void initData(Bundle savedInstanceState) {
-        long coin = getIntent().getLongExtra(Constants.IntentKey.COIN, 0);
+        long coin = getIntent().getIntExtra(Constants.IntentKey.COIN, 0);
         String coinMsg = "暂无余额";
         if (coin > 0)  coinMsg = coin + "";
         mTvCoin.setText(coinMsg);
