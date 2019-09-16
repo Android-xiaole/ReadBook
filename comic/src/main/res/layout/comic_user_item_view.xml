@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/right_title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <ImageView
             android:layout_width="8dp"
@@ -46,7 +46,7 @@
         android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:layout_below="@id/user_info_edit_head"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_16"
         android:layout_marginRight="@dimen/dp_16"
         android:background="@color/comic_e8ebf0" />

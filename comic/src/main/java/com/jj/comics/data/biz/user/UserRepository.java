@@ -11,8 +11,10 @@ import com.jj.base.utils.SharedPref;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
+import com.jj.comics.data.model.AddCashOutWayResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CashOutListResponse;
+import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -573,6 +575,39 @@ public class UserRepository implements UserDataSource {
     public Observable<CashOutListResponse> getCashOutList(int page) {
         return ComicApi.getApi().getCashOutList(page)
                 .compose(ComicApiImpl.<CashOutListResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+
+    @Override
+    public Observable<CashOutWayResponse> getCashOutWayStatus() {
+        RequestBody body = new RequestBodyBuilder()
+                .build();
+        return ComicApi.getApi().getCashOutWayStatus(body)
+                .compose(ComicApiImpl.<CashOutWayResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<AddCashOutWayResponse> addCashOutWayAli(String account_number, String opener) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("account_number", account_number )
+                .addProperty("opener", opener )
+                .build();
+        return ComicApi.getApi().addCashOutAli(body)
+                .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<AddCashOutWayResponse> addCashOutWayUnion(String account_number, String opener, String opening_bank) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("account_number", account_number )
+                .addProperty("opener", opener )
+                .addProperty("opening_bank", opening_bank )
+                .build();
+        return ComicApi.getApi().addCashOutAli(body)
+                .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

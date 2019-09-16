@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
+import com.jj.comics.R;
 
 @Route(path = RouterMap.COMIC_DOCASHOUT_ACTIVITY)
 public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implements DoCashOutContract.IDoCashOutView {
@@ -15,7 +16,7 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
 
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.comic_activity_cash_out;
     }
 
     @Override

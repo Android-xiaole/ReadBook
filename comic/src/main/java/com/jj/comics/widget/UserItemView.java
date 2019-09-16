@@ -3,6 +3,7 @@ package com.jj.comics.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 
 public class UserItemView extends LinearLayout {
     private TextView right_title;
+    private TextView mTitle;
 
     public UserItemView(Context context) {
         super(context);
@@ -34,13 +36,14 @@ public class UserItemView extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater.from(context).inflate(R.layout.comic_user_item_view, this, true);
         ImageView headImg = findViewById(R.id.user_info_head_img);//右侧头像
-        TextView title = findViewById(R.id.title);//标题
+        //标题
+        mTitle = findViewById(R.id.title);
         right_title = findViewById(R.id.right_title);//标题
         View line = findViewById(R.id.bottom_line);//分割线
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.UserItemView);
 
         String titleText = typedArray.getString(R.styleable.UserItemView_user_item_title);
-        title.setText(titleText);
+        mTitle.setText(titleText);
 
         int headVisible = typedArray.getInt(R.styleable.UserItemView_head_img_visible, View.GONE);
         headImg.setVisibility(headVisible);
@@ -51,12 +54,20 @@ public class UserItemView extends LinearLayout {
         int bottomLineVisible = typedArray.getInt(R.styleable.UserItemView_bottom_line_visible, View.GONE);
         line.setVisibility(bottomLineVisible);
 
-        float titleSize = typedArray.getFloat(R.styleable.UserItemView_title_size, 15);
-        title.setTextSize(titleSize);
+        float titleSize = typedArray.getDimension(R.styleable.UserItemView_title_size, 15);
+//        float applyDimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, titleSize,
+//                getResources().getDisplayMetrics());
+        mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
 
         String rightTitleText = typedArray.getString(R.styleable.UserItemView_right_text);
         right_title.setText(rightTitleText);
         typedArray.recycle();
+    }
+
+    public void setTitle(String title) {
+        if (mTitle != null) {
+            mTitle.setText(title + "");
+        }
     }
 
     /**

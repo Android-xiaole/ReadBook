@@ -1,6 +1,7 @@
 package com.jj.comics.common.net;
 
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.AddCashOutWayResponse;
 import com.jj.comics.data.model.AppConfigResponse;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookCatalogContentResponse;
@@ -11,6 +12,7 @@ import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CashOutListResponse;
+import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -942,7 +944,28 @@ public interface ComicService {
     @GET("api/withdraw_list")
     Observable<CashOutListResponse> getCashOutList(@Query("page") int page);
 
-//    @POST("api/update_user")
-//    Observable<>
+    /**
+     * 添加支付宝提现方式
+     * @param body
+     * @return
+     */
+    @POST("api/withdrawal_alipay")
+    Observable<AddCashOutWayResponse> addCashOutAli(@Body RequestBody body);
+
+    /**
+     * 添加银行卡体现方式
+     * @param body
+     * @return
+     */
+    @POST("api/withdrawal_bank")
+    Observable<AddCashOutWayResponse> addCashOutUnion(@Body RequestBody body);
+
+    /**
+     * 获取添加提现方式状态
+     * @param body
+     * @return
+     */
+    @POST("api/withd_status")
+    Observable<CashOutWayResponse> getCashOutWayStatus(@Body RequestBody body);
 
 }
