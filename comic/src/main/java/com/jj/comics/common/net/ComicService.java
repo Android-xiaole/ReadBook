@@ -10,6 +10,7 @@ import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
+import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -31,6 +32,7 @@ import com.jj.comics.data.model.PrePayOrderResponseHuifubao;
 import com.jj.comics.data.model.PrePayOrderResponseWx;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
+import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
@@ -924,6 +926,21 @@ public interface ComicService {
     Observable<CommonStatusResponse> reportShare(@Body RequestBody requestBody);
     @POST("api/article_details")
     Observable<ConsumeDetailListResponse> getConsumeDetail(@Body RequestBody requestBody);
+
+    /**
+     * 我的返利列表
+     * @param body
+     * @return
+     */
+    @POST("api/rebatelist")
+    Observable<RebateListResponse> getRebateList(@Body RequestBody body);
+
+    /**
+     * 我的提现
+     * @return
+     */
+    @GET("api/withdraw_list")
+    Observable<CashOutListResponse> getCashOutList(@Query("page") int page);
 
 //    @POST("api/update_user")
 //    Observable<>

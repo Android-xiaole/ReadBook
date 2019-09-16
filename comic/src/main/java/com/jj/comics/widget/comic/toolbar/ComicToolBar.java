@@ -20,6 +20,7 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
     private AppBarLayout rootView;//根布局
     private ImageView iv_leftIcon, iv_rightIcon;
     private TextView tv_title;
+    private TextView tv_right;
 
     private OnComicToolBarListener onChildClickListener;
 
@@ -45,9 +46,12 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         iv_leftIcon = findViewById(R.id.iv_leftIcon);
         tv_title = findViewById(R.id.tv_title);
         iv_rightIcon = findViewById(R.id.iv_rightIcon);
+        tv_right = findViewById(R.id.tv_rightText);
 
         iv_leftIcon.setOnClickListener(this);
         iv_rightIcon.setOnClickListener(this);
+        tv_right.setOnClickListener(this);
+
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ComicToolBar);
         //设置背景
@@ -61,6 +65,9 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         //设置标题文字
         String titleText = typedArray.getString(R.styleable.ComicToolBar_title);
         setTitleText(titleText);
+        //设置右边文字
+        String titleRight= typedArray.getString(R.styleable.ComicToolBar_rightTextString);
+        setRightText(titleRight);
         //设置标题颜色
         int titleColor = typedArray.getColor(R.styleable.ComicToolBar_titleColor,
                 Color.argb(0xff,0x33,0x33,0x33));
@@ -79,11 +86,17 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         //设置右边icon是否可见
         int rightIconVisible = typedArray.getInt(R.styleable.ComicToolBar_rightIconVisible, View.GONE);
         setRightIconVisible(rightIconVisible);
+        //设置右边text是否可见
+        int rightTextVisible = typedArray.getInt(R.styleable.ComicToolBar_rightTextVisibleToolbar,
+                View.GONE);
+        setRightTextVisible(rightTextVisible);
     }
 
     public interface OnComicToolBarListener {
         void onComicToolBarLeftIconClick(View childView);
         void onComicToolBarRightIconClick(View childView);
+        void onComicToolBarRightTextClick(View childView);
+
     }
 
     @Override
@@ -127,6 +140,16 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
     }
 
     @Override
+    public IToolBarFactory setRightText(String right) {
+        if (right == null){
+            tv_right.setText("");
+        }else{
+            tv_right.setText(right);
+        }
+        return this;
+    }
+
+    @Override
     public String getTitleText() {
         return tv_title.getText().toString();
     }
@@ -160,6 +183,11 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         iv_rightIcon.setVisibility(visibility);
         return this;
     }
+    @Override
+    public IToolBarFactory setRightTextVisible(int visibility) {
+        tv_right.setVisibility(visibility);
+        return this;
+    }
 
     @Override
     public void onClick(View v) {
@@ -176,6 +204,10 @@ public class ComicToolBar extends LinearLayout implements IToolBarFactory, View.
         }else if (viewId == R.id.iv_rightIcon){
             if (onChildClickListener != null) {
                 onChildClickListener.onComicToolBarRightIconClick(v);
+            }
+        }else if (viewId == R.id.tv_rightText) {
+            if (onChildClickListener != null) {
+                onChildClickListener.onComicToolBarRightTextClick(v);
             }
         }
     }

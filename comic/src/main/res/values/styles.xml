@@ -89,6 +89,11 @@
         <item name="android:textSize">@dimen/dp_16</item>
     </style>
 
+    <style name="comic_tab_text_style_rebate">
+        <item name="android:textSize">@dimen/dp_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="comic_tab_text_18">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>

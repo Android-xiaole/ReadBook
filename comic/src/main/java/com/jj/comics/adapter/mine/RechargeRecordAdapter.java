@@ -3,6 +3,7 @@ package com.jj.comics.adapter.mine;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
@@ -19,17 +20,13 @@ public class RechargeRecordAdapter extends SimpleBaseAdapter<RechargeRecordModel
     @Override
     protected void convert(BaseViewHolder helper, RechargeRecordModel item) {
         helper.setText(R.id.item_recharge_time, item.getCreated_at());
-        String describe = item.getTitle();
-        if (describe != null && describe.contains("-")) {
-            String[] split = describe.split("-");
-            if (split.length > 0) {
-                describe = split[0];
-            } else {
-                describe = "";
-            }
-        }
-        helper.setText(R.id.item_recharge_coin,item.getJinbi()+ "");
-        helper.setText(R.id.item_recharge_describe, describe);
+
+        String value = item.getJinbi() + "书币";
+        SpannableString descSpan = new SpannableString(value);
+        descSpan.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),value.indexOf("书币"),
+                value.indexOf("书币") + 2,SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helper.setText(R.id.item_recharge_coin, descSpan);
+
         String money = item.getMoney();
         if (!money.contains(".")) money = money + ".00";
         money = "￥" + money;

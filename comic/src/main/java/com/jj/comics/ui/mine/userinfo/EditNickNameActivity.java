@@ -50,6 +50,11 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
             public void onComicToolBarRightIconClick(View childView) {
 
             }
+
+            @Override
+            public void onComicToolBarRightTextClick(View childView) {
+
+            }
         });
         textView.setVisibility(View.VISIBLE);
         UserInfo userInfo = LoginHelper.getOnLineUser();

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -47,6 +48,7 @@ import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
+import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -166,6 +168,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @SuppressLint("MissingPermission")
     @Override
     public void initData(Bundle savedInstanceState) {
+//        TrafficStats.setThreadStatsTag(10000);
+
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
         catalogModel = ((BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL));
         if (SharedPref.getInstance(ReadComicActivity.this).getBoolean(Constants.SharedPrefKey.SWITCH_GPRS_READ_REMIND, true) && NetWorkUtil.is4G()) {
@@ -270,7 +274,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 /*
                    这里返回需要加载的章节
                  */
-                getP().loadData(bookModel, requestChapter);
+                mPageView.setMove(false);
+                getP().loadData(bookModel, Long.parseLong(requestChapter.getChapterId()));
             }
 
             @Override
@@ -359,27 +364,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         } else if (i == R.id.iv_back) {//topMenu的返回建
             finish();
         } else if (i == R.id.iv_batchBuy) {//全本购买
-            if (bookModel == null) return;
-            if (buyDialog == null) {
-                buyDialog = new CustomFragmentDialog();
+            if (bookModel!=null&&catalogModel!=null){
+                SubscribeActivity.toSubscribe(this,bookModel,catalogModel);
             }
-            buyDialog.show(this, getSupportFragmentManager(), R.layout.comic_detail_pay_dialog);
-            TextView tv_buyCoinNum = buyDialog.getDialog().findViewById(R.id.tv_buyCoinNum);
-            TextView tv_myCoinNum = buyDialog.getDialog().findViewById(R.id.tv_myCoinNum);
-
-            tv_buyCoinNum.setText(bookModel.getBatchprice() + "书币");
-            buyDialog.getDialog().findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    buyDialog.dismiss();
-                }
-            });
-            buyDialog.getDialog().findViewById(R.id.btn_pay).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ToastUtil.showToastShort("未实现");
-                }
-            });
         } else if (i == R.id.iv_collect) {//收藏
             if (LoginHelper.interruptLogin(this, null) && bookModel != null) {
                 if (isCollect) {
@@ -400,7 +387,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                     getP().addOrRemoveShelf(bookModel, isCollect, false);
                 }
             }
-        } else if (i == R.id.iv_share) {//分享按钮
+        } else if (i == R.id.iv_share||i == R.id.lin_makeMoney) {//分享按钮&赚钱按钮
             if (bookModel == null) return;
             if (shareDialog == null) {
                 shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
@@ -422,8 +409,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
             shareMessageModel.setBoolId(bookModel.getId());
             shareDialog.show(shareMessageModel);
-        } else if (i == R.id.lin_makeMoney) {//赚钱
-            ToastUtil.showToastShort("未实现");
         } else if (i == R.id.lin_catalogBtn) {//目录
             if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
                 mCatalogMenu.openDrawer(GravityCompat.START);
@@ -498,6 +483,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
     }
 
+    @Override
+    public void onLoadCatalogContentEnd() {
+        if (mPageView!=null)mPageView.setMove(true);
+    }
+
     /**
      * 下载完内容txt文件之后加载章节内容的回调
      */
@@ -551,13 +541,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                         getP().getCollectStatus(bookModel.getId());
                     }
                     if (bookModel != null && catalogModel != null && data != null) {
-//                        getP().loadData(bookModel,data.getLongExtra(Constants.IntentKey.ID, catalogModel.getId()));
+                        getP().loadData(bookModel,catalogModel.getBook_id());
                     }
                     break;
                 case RequestCode.SUBSCRIBE_REQUEST_CODE:
                 case RequestCode.PAY_REQUEST_CODE:
                     if (bookModel != null && catalogModel != null && data != null) {
-//                        getP().loadData(bookModel,data.getLongExtra(Constants.IntentKey.ID, catalogModel.getId()));
+                        getP().loadData(bookModel,catalogModel.getId());
                     }
                     break;
             }
@@ -665,6 +655,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      */
     private void toggleNightModel(boolean isNightModel) {
         if (isNightModel) {//切换成夜间模式
+            sb_textSetting.setTrackColor(getResources().getColor(R.color.comic_565655));
+            sb_textSetting.setSecondTrackColor(getResources().getColor(R.color.comic_565655));
             tv_nightModel.setText("日间");
             if (!ReadSettingManager.getInstance().isEyeModel()) {
                 tv_eyeModel.setTextColor(getResources().getColor(R.color.comic_565655));
@@ -675,6 +667,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 iv_collect.setImageResource(R.drawable.icon_read_night_uncollect);
             }
         } else {//切换成日间模式
+            sb_textSetting.setTrackColor(getResources().getColor(R.color.comic_e8ebf0));
+            sb_textSetting.setSecondTrackColor(getResources().getColor(R.color.comic_e8ebf0));
             tv_nightModel.setText("夜间");
             if (!ReadSettingManager.getInstance().isEyeModel()) {
                 tv_eyeModel.setTextColor(getResources().getColor(R.color.comic_a8adb3));

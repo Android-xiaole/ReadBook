@@ -39,6 +39,13 @@ public interface IToolBarFactory {
     IToolBarFactory setTitleText(String title);
 
     /**
+     * 设置右边文字
+     * @param title
+     * @return
+     */
+    IToolBarFactory setRightText(String title);
+
+    /**
      * 获取标题文字
      * @return
      */
@@ -78,4 +85,11 @@ public interface IToolBarFactory {
      * @return
      */
     IToolBarFactory setRightIconVisible(int visibility);
+
+    /**
+     * 设置右边的Text是否可见
+     * @param visibility
+     * @return
+     */
+    IToolBarFactory setRightTextVisible(int visibility);
 }

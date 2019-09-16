@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.SuggestionSpan;
 
+import com.jj.comics.R;
 import com.jj.comics.widget.bookreadview.bean.BookRecordBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
@@ -408,10 +409,10 @@ public abstract class PageLoader {
         isNightMode = nightMode;
 
         if (isNightMode) {
-            mBatteryPaint.setColor(Color.WHITE);
+            mBatteryPaint.setColor(mContext.getResources().getColor(R.color.comic_353a40));
             setPageStyle(PageStyle.NIGHT);
         } else {
-            mBatteryPaint.setColor(Color.BLACK);
+            mBatteryPaint.setColor(mContext.getResources().getColor(R.color.comic_a8adb3));
             setPageStyle(mPageStyle);
         }
     }

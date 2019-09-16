@@ -12,6 +12,7 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
 import com.jj.comics.data.model.BookModel;
+import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -23,6 +24,7 @@ import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginByCodeResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
+import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
@@ -554,6 +556,23 @@ public class UserRepository implements UserDataSource {
 
         return ComicApi.getApi().updateUserInfo(requestBody)
                 .compose(ComicApiImpl.<UserInfoResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<RebateListResponse> getRebateList(int page) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("page", page)
+                .build();
+        return ComicApi.getApi().getRebateList(body)
+                .compose(ComicApiImpl.<RebateListResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<CashOutListResponse> getCashOutList(int page) {
+        return ComicApi.getApi().getCashOutList(page)
+                .compose(ComicApiImpl.<CashOutListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

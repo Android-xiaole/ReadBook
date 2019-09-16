@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import okhttp3.RequestBody;
@@ -95,12 +96,21 @@ public class ContentRepository implements ContentDataSource {
                 .retryWhen(new RetryFunction2(retryTag));
     }
 
+    @Override
     public Observable<BookCatalogListResponse> getCatalogList(long id) {
         HashMap<String,Object> parames = new HashMap();
         parames.put(Constants.RequestBodyKey.ID,id);
         parames.put(Constants.RequestBodyKey.PAGE_NUM,1);
         parames.put(Constants.RequestBodyKey.SORT,Constants.RequestBodyKey.SORT_ASC);
         return ComicApi.getApi().getCatalogList(parames)
+                .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<BookCatalogListResponse> getCacheCatalogList(long bookId) {
+        return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookId),new DynamicKey(bookId))
+                .subscribeOn(Schedulers.io())
                 .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }

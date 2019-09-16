@@ -59,5 +59,14 @@ public class RouterMap {
     public static final String COMIC_EDITSEX_ACTIVITY = "/ui/mine/EditSexActivity";
     public static final String COMIC_MYCOIN_ACTIVITY = "/ui/mine/MyCoinActivity";
     public static final String COMIC_CONSUME_DETAIL_ACTIVITY = "/ui/mine/ConsumeDetailActivity";
+    public static final String COMIC_MY_REBATE_ACTIVITY = "/ui/mine/MyRebateActivity";
+    public static final String COMIC_ADDCASHOUTWAY_ALI_ACTIVITY = "/ui/mine" +
+            "/AddCashOutWayAliActivity";
+    public static final String COMIC_ADDCASHOUTWAY_UNION_ACTIVITY = "/ui/mine" +
+            "/AddCashOutWayUnionActivity";
+    public static final String COMIC_CASHOUTWAY_ACTIVITY = "/ui/mine/CashOutWayActivity";
+    public static final String COMIC_DOCASHOUT_ACTIVITY = "/ui/mine/DoCashOutActivity";
+    public static final String COMIC_CASHOUT_FRAGMENT = "/ui/mine/CashOutFragment";
+    public static final String COMIC_REBATE_FRAGMENT = "/ui/mine/RebateFragment";
     public static final String COMIC_SORTLIST_ACTIVITY = "/ui/sort/SortListActivity";
 }

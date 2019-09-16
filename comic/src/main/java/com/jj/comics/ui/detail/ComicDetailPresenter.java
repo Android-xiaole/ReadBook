@@ -84,8 +84,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
                                 这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
                                 另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
                              */
-                            return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookModel.getId()), new DynamicKey(1),
-                                    new EvictDynamicKey(true))
+                            return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId())
                                     .subscribeOn(Schedulers.io())
                                     .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
                                         @Override
@@ -211,8 +210,7 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,
     public void getCatalogList(long bookId) {
         if (getV() == null)return;
         getV().showProgress();
-        ContentRepository.getInstance().getCatalogList(bookId)
-                .subscribeOn(Schedulers.io())
+        ContentRepository.getInstance().getCacheCatalogList(bookId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {

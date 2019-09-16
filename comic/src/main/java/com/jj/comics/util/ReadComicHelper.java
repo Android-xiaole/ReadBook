@@ -58,8 +58,8 @@ public class ReadComicHelper {
                                 return Observable.empty();
                             }
                         }else if (response.getCode() == 1002){//未购买
-                            //如果用户是自动购买就直接调用购买接口
-                            if (SharedPref.getInstance().getBoolean(Constants.SharedPrefKey.AUTO_BUY, false)) {
+                            //如果用户是自动购买就直接调用购买接口,并且支持分章节购买
+                            if (SharedPref.getInstance().getBoolean(Constants.SharedPrefKey.AUTO_BUY, false)&&bookModel.getBatchbuy() == 1) {
                                 return UserRepository.getInstance().subscribe(bookModel.getId(),chapterid)
                                         .flatMap(new Function<CommonStatusResponse, ObservableSource<BookCatalogModel>>() {
                                             @Override
@@ -95,7 +95,7 @@ public class ReadComicHelper {
                                                             });
                                                 }else if (subResponse.getCode() == 1002){//金币不足，需要充值
                                                     //跳转到订阅界面
-                                                    SubscribeActivity.toSubscribe(activity, response.getData().getNow());
+                                                    SubscribeActivity.toSubscribe(activity, bookModel,response.getData().getNow());
                                                     return Observable.empty();
                                                 }else{
                                                     ToastUtil.showToastShort("订阅失败："+subResponse.getMessage());
@@ -105,7 +105,7 @@ public class ReadComicHelper {
                                         });
                             }else{
                                 //如果不是自动购买就跳转到订阅界面
-                                SubscribeActivity.toSubscribe(activity, response.getData().getNow());
+                                SubscribeActivity.toSubscribe(activity,bookModel, response.getData().getNow());
                                 return Observable.empty();
                             }
                         }
