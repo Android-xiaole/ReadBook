@@ -7,9 +7,7 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.model.BookListDataResponse;
-import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.data.model.SortListResponse;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/user_info_edit_head"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/comic_ffffff"
         android:gravity="center_vertical"
         android:orientation="horizontal">

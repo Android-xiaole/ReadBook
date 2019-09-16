@@ -1,6 +1,7 @@
 package com.jj.novelpro.app;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.content.Context;
 import android.os.StrictMode;
@@ -10,6 +11,7 @@ import android.widget.RemoteViews;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.fm.openinstall.OpenInstall;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jj.base.BaseApplication;
@@ -74,6 +76,10 @@ public class ComicApplication extends BaseApplication {
     public void init() {
 //        img = getString(R.string.share_default_img);
         initBugly();
+        //openinstall
+        if (isMainProcess()) {
+            OpenInstall.init(this);
+        }
         Beta.autoCheckUpgrade = false;
         if (Constants.DEBUG) {
             ARouter.openLog();     // Print log
@@ -108,7 +114,7 @@ public class ComicApplication extends BaseApplication {
         getShareParams();
 
         //处理Rxjava全局捕获异常，防止下游终止订阅之后，上游有未处理的异常导致崩溃
-        if (!Constants.DEBUG){//如果是调试模式就不开启，这样方便排查BUG
+        if (!Constants.DEBUG) {//如果是调试模式就不开启，这样方便排查BUG
             RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
                 @Override
                 public void accept(Throwable throwable) throws Exception {
@@ -538,5 +544,16 @@ public class ComicApplication extends BaseApplication {
     protected void setStrictMode() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
+    }
+
+    public boolean isMainProcess() {
+        int pid = android.os.Process.myPid();
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return getApplicationInfo().packageName.equals(appProcess.processName);
+            }
+        }
+        return false;
     }
 }
