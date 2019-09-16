@@ -12,7 +12,7 @@ import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
-import com.jj.comics.data.model.LoginByCodeResponse;
+import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.RebateListResponse;
@@ -32,6 +32,13 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 
 public interface UserDataSource {
+    //第三方登录绑定手机号
+    Observable<LoginResponse> bindPhone(String phoneNum, String code,String inviteCode,String openId);
+
+
+    //第三方登录获取验证码
+    Observable<ResponseModel> getThirdLoginCode(String phoneNum, String type);
+
     //获取验证码
     Observable<ResponseModel> getSecurityCode(String activityName, String mobile);
 
@@ -39,7 +46,7 @@ public interface UserDataSource {
     Observable<ResponseModel> getPhoneCode(String activityName, String mobile);
 
     //验证码登录
-    Observable<LoginByCodeResponse> loginBySecurityCode(boolean isCheck, String phone, String psw);
+    Observable<LoginResponse> loginBySecurityCode(boolean isCheck, String phone, String psw);
 
     /**
      * 微信登录
@@ -48,7 +55,7 @@ public interface UserDataSource {
      * @param code
      * @return
      */
-    Observable<LoginByCodeResponse> wxLogin(String spreadid, String code);
+    Observable<LoginResponse> wxLogin(String spreadid, String code);
 
     /**
      * QQ 登录
@@ -57,7 +64,7 @@ public interface UserDataSource {
      * @param access_token
      * @return
      */
-    Observable<LoginByCodeResponse> qqLogin(String openid, String access_token);
+    Observable<LoginResponse> qqLogin(String openid, String access_token);
 
 
     /**
@@ -65,7 +72,7 @@ public interface UserDataSource {
      *
      * @return
      */
-    Observable<LoginByCodeResponse> wbLogin(String accecc_tokon, String uid);
+    Observable<LoginResponse> wbLogin(String accecc_tokon, String uid);
 
     Observable<UidLoginResponse> uidLogin(String uid);
 

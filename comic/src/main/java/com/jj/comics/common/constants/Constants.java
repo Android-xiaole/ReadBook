@@ -134,6 +134,11 @@ public class Constants {
         public static final String MESSAGE_SUM = "message_sum";
         public static final String PAY_INFO = "pay_info";
         public static final String COIN = "coin";
+
+        //login
+        public static final String LOGIN_TYPE = "type";
+        public static final String LOGIN_OPENID = "openid";
+
     }
 
     //SharedPreferences存值key
@@ -159,6 +164,7 @@ public class Constants {
         public static final String SP_NO_DIALOG_FOR_DELETE_COMMENT = "SP_NO_DIALOG_FOR_DELETE_COMMENT";
         public static final String AD_PUSH_ID = "ad_push_id";
         public static final String MAIN_PUSH = "main_push";
+        public static final String INVITE_CODE = "invite_code";//通过openinstall传过来的邀请码
     }
 
     //获取网络数据 传参key字段名
@@ -182,6 +188,9 @@ public class Constants {
         /* login key */
         public static final String LOGIN_PHONE_NUMBER = "phone_number";
         public static final String LOGIN_CODE = "code";
+        public static final String LOGIN_TYPE = "type";
+        public static final String LOGIN_INVITE_CODE = "invitecode";
+        public static final String LOGIN_OPENID = "openid";
 
         public static final String ID = "id";
         public static final String ARTICLE_ID = "articleid";
@@ -254,7 +263,6 @@ public class Constants {
         public static final String MOBILE = "mobile";
         public static final String ACCOUNT = "account";
         public static final String PASSWORD = "password";
-        public static final String LOGIN_TYPE = "loginType";
         public static final String SECURITY_CODE = "securityCode";
         public static final String OPEN_ID_WAY = "openidWay";
         public static final String OPEN_ID_KEY = "openidKey";

@@ -46,7 +46,7 @@ public interface ContentDataSource {
     Observable<BookModelResponse> getContentDetail(long id, String retryTag);
 
     //获取用户收藏列表
-    Observable <CollectionResponse> getCollectionByUserId(int pageNum, int pageSize);
+    Observable <CollectionResponse> getCollectionByUserId(int pageNum);
 
     //提交评论
     Observable<CommonStatusResponse> sendComment(long bookId, String commentDetail);

@@ -19,20 +19,20 @@ public interface CollectionContract {
         //接在收藏列表结束的回调
         void onLoadCollectionListEnd();
 
-        //加载为你推荐列表的回调
-        void onLoadRecommendList(List<BookModel> bookModelList);
-
-        //加载为你推荐列表失败的回调
-        void onLoadRecommendListFail(NetError error);
+//        //加载为你推荐列表的回调
+//        void onLoadRecommendList(List<BookModel> bookModelList);
+//
+//        //加载为你推荐列表失败的回调
+//        void onLoadRecommendListFail(NetError error);
 
         //删除完成的回调
-        void onDeleteComplete();
+        void onDeleteComplete(int position);
     }
 
 
     interface ICollectionPresenter{
         //获取收藏列表
-        void getCollectionList(int pageNum, int pageSize);
+        void getCollectionList(int pageNum);
 
         //获取为你推荐列表
         void loadRecommendData();
@@ -41,6 +41,6 @@ public interface CollectionContract {
         void toRead(final BookModel bookModel, final long chapterid);
 
         //移除收藏
-        void removeShelf(List<BookModel> delete);
+        void removeShelf(List<BookModel> delete,int position);
     }
 }

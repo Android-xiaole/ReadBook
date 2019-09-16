@@ -75,8 +75,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
         MobclickAgent.onEvent(getContext(), Constants.UMEventId.ACCESS_USER_CENTER);
-        getP().getUserInfo();
-        getP().getUserPayInfo();
+        if (LoginHelper.getOnLineUser()!=null){
+            getP().getUserInfo();
+        }
     }
 
     /**
@@ -103,6 +104,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @Override
     public void onVisiable(boolean visiable) {
         super.onVisiable(visiable);
+        if (LoginHelper.getOnLineUser()!=null){
+            getP().getUserPayInfo();
+        }
     }
 
     @Override
@@ -117,17 +121,6 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
                 case RequestCode.MINE_REQUEST_CODE:
                     getP().getFeedbackStatus();
                     break;
-//                case RequestCode.OPEN_PIC_REQUEST_CODE:
-//                    final String file = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath()
-//                            + File.separator + PackageUtil.getAppName(getContext()) + File.separator;
-//                    Uri orgUri = data.getData();
-//                    String fileName = FileUtil.getFileName(Utils.getRealFilePath(getContext(), orgUri));
-//                    IntentUtils.cropImageUri(getActivity(), orgUri, Uri.fromFile(new File(file + fileName)));
-//                    break;
-//                case RequestCode.CROP_IMG_REQUEST_CODE:
-//                    Uri uri = data.getData();
-//                    LogUtil.e(uri.getPath());
-//                    break;
             }
         }
     }
@@ -165,13 +158,15 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mApprentice.setText(payInfo.getDisciple_num() + "");
     }
 
-    @OnClick({R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
+    @OnClick({R2.id.mine_nickname,R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
             R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,
             R2.id.edit_user_info,
             R2.id.btn_my_rebate, R2.id.btn_my_coin})
     void onClick(View view) {
-        if (view.getId() == R.id.mine_head_img) {
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+        if (view.getId() == R.id.mine_head_img||view.getId() == R.id.mine_nickname) {
+            if (LoginHelper.getOnLineUser() == null){
+                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getActivity());
+            }
         } else if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
         } else if (view.getId() == R.id.comic_mine_history) {
@@ -235,10 +230,17 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void logoutEvent(LogoutEvent event) {
+        mNickname.setText("未登录");
+        mCoins.setText("0");
+        mRebate.setText("0");
+        mApprentice.setText("0");
+        ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void loginEvent(LoginEvent loginEvent) {
+        getP().getUserInfo();
     }
 
     @Override

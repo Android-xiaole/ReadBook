@@ -133,9 +133,9 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<CollectionResponse> getCollectionByUserId(int pageNum, int pageSize) {
+    public Observable<CollectionResponse> getCollectionByUserId(int pageNum) {
         RequestBody body = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.PAGE_NUM, 1)
+                .addProperty(Constants.RequestBodyKey.PAGE_NUM, pageNum)
                 .build();
 
         return ComicApi.getApi().getCollectionByUserId(body)

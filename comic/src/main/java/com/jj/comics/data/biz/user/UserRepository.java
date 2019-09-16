@@ -23,7 +23,7 @@ import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
-import com.jj.comics.data.model.LoginByCodeResponse;
+import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.RebateListResponse;
@@ -65,6 +65,32 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
+    public Observable<LoginResponse> bindPhone(String phoneNum, String code, String inviteCode, String openId) {
+        RequestBody requestBody = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phoneNum)
+                .addProperty(Constants.RequestBodyKey.LOGIN_CODE, code)
+                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE, inviteCode)
+                .addProperty(Constants.RequestBodyKey.LOGIN_OPENID, openId)
+                .build();
+        return ComicApi.getApi().bindPhone(requestBody)
+                .retryWhen(new RetryFunction2())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<ResponseModel> getThirdLoginCode(String phoneNum, String type) {
+        RequestBody requestBody = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phoneNum)
+                .addProperty(Constants.RequestBodyKey.LOGIN_TYPE, type)
+                .build();
+        return ComicApi.getApi().getThirdLoginCode(requestBody)
+                .retryWhen(new RetryFunction2())
+                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
     public Observable<ResponseModel> getSecurityCode(String activityName, String mobile) {
         Observable<ResponseModel> compose = ComicApi.getApi().getSecurityCode(new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, mobile)
@@ -94,14 +120,14 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<LoginByCodeResponse> loginBySecurityCode(boolean isCheck, String phone, String psw) {
+    public Observable<LoginResponse> loginBySecurityCode(boolean isCheck, String phone, String psw) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, phone)
                 .addProperty(Constants.RequestBodyKey.LOGIN_CODE, psw)
                 .build();
-        Observable<LoginByCodeResponse> compose = ComicApi.getApi().loginBySecurityCode(requestBody)
+        Observable<LoginResponse> compose = ComicApi.getApi().loginBySecurityCode(requestBody)
                 .retryWhen(new RetryFunction2())
-                .compose(ComicApiImpl.<LoginByCodeResponse>getApiTransformer2())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
                 .subscribeOn(Schedulers.io());
         return compose;
     }
@@ -305,15 +331,15 @@ public class UserRepository implements UserDataSource {
      * @return
      */
     @Override
-    public Observable<LoginByCodeResponse> wxLogin(String spreadid, String code) {
+    public Observable<LoginResponse> wxLogin(String spreadid, String code) {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("spreadid", spreadid)
                 .addProperty("code", code)
                 .build();
 
-        Observable<LoginByCodeResponse> observable = ComicApi.getApi().wxLogin(body)
+        Observable<LoginResponse> observable = ComicApi.getApi().wxLogin(body)
                 .subscribeOn(Schedulers.io())
-                .compose(ComicApiImpl.<LoginByCodeResponse>getApiTransformer2())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
         return observable;
     }
@@ -324,15 +350,15 @@ public class UserRepository implements UserDataSource {
      * @return
      */
     @Override
-    public Observable<LoginByCodeResponse> qqLogin(String openid, String access_token) {
+    public Observable<LoginResponse> qqLogin(String openid, String access_token) {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("openid", openid)
                 .addProperty("access_token", access_token)
                 .build();
 
-        Observable<LoginByCodeResponse> observable = ComicApi.getApi().qqLogin(body)
+        Observable<LoginResponse> observable = ComicApi.getApi().qqLogin(body)
                 .subscribeOn(Schedulers.io())
-                .compose(ComicApiImpl.<LoginByCodeResponse>getApiTransformer2())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
         return observable;
     }
@@ -341,15 +367,15 @@ public class UserRepository implements UserDataSource {
      * @return
      */
     @Override
-    public Observable<LoginByCodeResponse> wbLogin(String access_token, String uid) {
+    public Observable<LoginResponse> wbLogin(String access_token, String uid) {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("access_token", access_token)
                 .addProperty("uid", uid)
                 .build();
 
-        Observable<LoginByCodeResponse> observable = ComicApi.getApi().wbLogin(body)
+        Observable<LoginResponse> observable = ComicApi.getApi().wbLogin(body)
                 .subscribeOn(Schedulers.io())
-                .compose(ComicApiImpl.<LoginByCodeResponse>getApiTransformer2())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
         return observable;
     }
@@ -370,7 +396,6 @@ public class UserRepository implements UserDataSource {
     @Override
     public Observable<UserInfoResponse> updateUserInfo(String activityName, UserInfo userInfo) {
         RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.TOKEN, SharedPref.getInstance(BaseApplication.getApplication()).getString(Constants.SharedPrefKey.TOKEN, ""))
                 .addProperty(Constants.RequestBodyKey.USER, new Gson().toJsonTree(userInfo))
                 .build();
 
@@ -397,7 +422,6 @@ public class UserRepository implements UserDataSource {
     public Observable<ResponseModel> bindMobile(String activityName, String mobile, String
             verify, String newMobile, String securityMobile) {
         RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.TOKEN, SharedPref.getInstance(BaseApplication.getApplication()).getString(Constants.SharedPrefKey.TOKEN, ""))
                 .addProperty(Constants.RequestBodyKey.SECURITY_CODE, verify)
                 .addProperty(Constants.RequestBodyKey.SECURITY_MOBILE, securityMobile)
                 .addProperty(Constants.RequestBodyKey.MOBILE, mobile)
@@ -422,7 +446,6 @@ public class UserRepository implements UserDataSource {
     @Override
     public Observable<ResponseModel> alterMobile(String activityName, String phone_number, String code) {
         RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.TOKEN, SharedPref.getInstance(BaseApplication.getApplication()).getString(Constants.SharedPrefKey.TOKEN, ""))
                 .addProperty(Constants.RequestBodyKey.CODE, code)
                 .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phone_number)
                 .build();

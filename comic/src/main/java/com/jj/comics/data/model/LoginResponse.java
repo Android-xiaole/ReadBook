@@ -1,6 +1,6 @@
 package com.jj.comics.data.model;
 
-public class LoginByCodeResponse extends ResponseModel {
+public class LoginResponse extends ResponseModel {
 
 
     /**
@@ -25,6 +25,35 @@ public class LoginByCodeResponse extends ResponseModel {
 
         private String bearer_token;
         private UserInfo user_info;
+
+        //下面三个字段如果第三方登录没有绑定手机号才会返回，code=400
+        private String openid;//自己后台的openid
+        private String type;//第三方登录类型
+        private boolean is_binding;//是否绑定
+
+        public String getOpenid() {
+            return openid;
+        }
+
+        public void setOpenid(String openid) {
+            this.openid = openid;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public boolean isIs_binding() {
+            return is_binding;
+        }
+
+        public void setIs_binding(boolean is_binding) {
+            this.is_binding = is_binding;
+        }
 
         public void setBearer_token(String bearer_token) {
             this.bearer_token = bearer_token;

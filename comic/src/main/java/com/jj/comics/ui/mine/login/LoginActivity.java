@@ -104,7 +104,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     public void setResultAndFinish() {
         EventBusManager.sendLoginEvent(new LoginEvent());
         Intent intent = new Intent();
-        intent.putExtras(getIntent().getExtras());
+        if (getIntent()!=null){
+            intent.putExtras(getIntent().getExtras());
+        }
         setResult(RESULT_OK, intent);
         finish();
     }

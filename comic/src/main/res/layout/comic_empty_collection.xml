@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    
+    <ImageView
+        android:layout_width="@dimen/dp_280"
+        android:layout_height="@dimen/dp_130"
+        android:src="@drawable/img_enpty_book"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="哦呵~您的书架还没有任何书籍"
+        android:textColor="@color/comic_a8adb3"
+        android:layout_marginTop="@dimen/dp_18"
+        android:textSize="@dimen/dp_12"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="赶快去添加吧~"
+        android:layout_marginTop="@dimen/dp_5"
+        android:textColor="@color/comic_a8adb3"
+        android:textSize="@dimen/dp_12"/>
+
+</LinearLayout>

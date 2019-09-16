@@ -101,7 +101,7 @@ public class BookShelfFragment extends BaseCommonFragment<BookShelfPresenter> im
         mDone.setVisibility(editMode ? View.VISIBLE : View.GONE);
         for (BaseFragment baseFragment : mList) {
             if (baseFragment instanceof CollectionFragment) {
-                ((CollectionFragment) baseFragment).setEditMode(editMode);
+//                ((CollectionFragment) baseFragment).setEditMode(editMode);
             }
         }
     }

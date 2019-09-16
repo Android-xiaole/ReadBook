@@ -31,6 +31,7 @@ import com.jj.comics.data.model.SignTaskResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.util.FRouterHelper;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
 import com.jj.novelpro.R;
 import com.jj.novelpro.activity.MainActivity;
@@ -57,7 +58,7 @@ public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IM
     private String fragmentPath[] = new String[]{RouterMap.COMIC_HOME_FRAGMENT,
             RouterMap.COMIC_SORT_FRAGMENT,
             RouterMap.COMIC_SEARCH_FRAGMENT,
-            RouterMap.COMIC_BOOKSHELF_FRAGMENT,
+            RouterMap.COMIC_BOOKCOLLECTION_FRAGMENT,
             RouterMap.COMIC_MINE_FRAGMENT};
 
     private FRouterHelper mFRouterHelper;
@@ -71,11 +72,10 @@ public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IM
         Flowable.create(new FlowableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(FlowableEmitter<Boolean> emitter) throws Exception {
-                SharedPref.getInstance().remove(Constants.SharedPrefKey.TOKEN);
-//                new DaoHelper<UserInfo>(getV()).logOffAllUser();
+                //删除token
+                SharedPreManger.getInstance().removeToken();
+                //删除所有本地保存的用户
                 LoginHelper.logOffAllUser();
-//                if (mHelper == null) mHelper = new DaoHelper<>();
-//                mHelper.deleteSomeReadRecords();
                 MobclickAgent.onProfileSignOff();
                 TencentHelper.getTencent().logout(BaseApplication.getApplication());
                 AccessTokenKeeper.clear(BaseApplication.getApplication());

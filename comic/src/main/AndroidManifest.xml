@@ -42,9 +42,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Full" />
+
         <activity
-            android:name=".ui.mine.pay.NewRechargeRecordActivity"
-            android:screenOrientation="portrait" />
+            android:name=".ui.mine.login.BindPhoneActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ui.mine.pay.SubscribeActivity"
             android:theme="@style/Comic.NoTitleTranslucentTheme" />

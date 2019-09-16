@@ -41,9 +41,13 @@ import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
+import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -226,5 +230,15 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                 }
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void logoutEvent(LogoutEvent event) {
+        finish();
+    }
+
+    @Override
+    public boolean useEventBus() {
+        return true;
     }
 }
