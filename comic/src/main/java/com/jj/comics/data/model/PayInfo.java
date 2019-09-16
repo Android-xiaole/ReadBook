@@ -44,6 +44,7 @@ public class PayInfo extends ResponseModel implements Serializable {
     private float total_drawcash_amount;
     private float can_drawout_amount;
     private float newest_rebate;
+    private int disciple_num;
 
     public long getId() {
         return id;
@@ -203,5 +204,13 @@ public class PayInfo extends ResponseModel implements Serializable {
 
     public void setNewest_rebate(float newest_rebate) {
         this.newest_rebate = newest_rebate;
+    }
+
+    public int getDisciple_num() {
+        return disciple_num;
+    }
+
+    public void setDisciple_num(int disciple_num) {
+        this.disciple_num = disciple_num;
     }
 }

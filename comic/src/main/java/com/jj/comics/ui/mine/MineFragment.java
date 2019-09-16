@@ -65,6 +65,10 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mRebate;
     @BindView(R2.id.mine_coins)
     TextView mCoins;
+    @BindView(R2.id.mine_apprentice)
+    TextView mApprentice;
+
+    private int mCoin = 99999;
 
     private PayInfo mPayInfo;
     @Override
@@ -158,16 +162,17 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mPayInfo = payInfo;
         mCoins.setText(payInfo.getTotal_egold() + "");
         mRebate.setText(payInfo.getCan_drawout_amount() + "");
+        mApprentice.setText(payInfo.getDisciple_num() + "");
     }
 
-    @OnClick({R2.id.mine_head_img,R2.id.comic_mine_buy, R2.id.comic_mine_history,
+    @OnClick({R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
             R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,
             R2.id.edit_user_info,
-            R2.id.btn_my_rebate,R2.id.btn_my_coin})
+            R2.id.btn_my_rebate, R2.id.btn_my_coin})
     void onClick(View view) {
-        if (view.getId() == R.id.mine_head_img){
+        if (view.getId() == R.id.mine_head_img) {
             startActivity(new Intent(getActivity(), LoginActivity.class));
-        }else if (view.getId() == R.id.comic_mine_buy) {
+        } else if (view.getId() == R.id.comic_mine_buy) {
             ToastUtil.showToastShort("me" + view.getId());
         } else if (view.getId() == R.id.comic_mine_history) {
             ARouter.getInstance().build(RouterMap.COMIC_HISTORY_ACTIVITY).navigation();
@@ -180,6 +185,10 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.edit_user_info) {
             ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
+        } else if (view.getId() == R.id.btn_my_coin) {
+            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong("coin", mCoin).navigation();
+        } else if (view.getId() == R.id.btn_my_rebate) {
+
         }else if (view.getId() == R.id.btn_my_coin) {
             int egold = 0;
             if (mPayInfo != null) {

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,10 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.fm.openinstall.OpenInstall;
+import com.fm.openinstall.listener.AppInstallAdapter;
+import com.fm.openinstall.listener.AppWakeUpAdapter;
+import com.fm.openinstall.model.AppData;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gyf.barlibrary.ImmersionBar;
@@ -149,7 +154,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void initData(Bundle savedInstanceState) {
-
+        //获取唤醒参数
+        OpenInstall.getWakeUp(getIntent(), wakeUpAdapter);
+        //获取OpenInstall安装数据
+        OpenInstall.getInstall(new AppInstallAdapter() {
+            @Override
+            public void onInstall(AppData appData) {
+                //获取渠道数据
+                String channelCode = appData.getChannel();
+                //获取自定义数据
+                String bindData = appData.getData();
+                Log.d("OpenInstall", "getInstall : installData = " + appData.toString());
+            }
+        });
         AndPermission.with(this)
                 .runtime()
                 .permission(Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.READ_PHONE_STATE)
@@ -284,6 +301,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        // 此处要调用，否则App在后台运行时，会无法截获
+        OpenInstall.getWakeUp(intent, wakeUpAdapter);
         if (intent != null) umengMessageClick(intent.getStringExtra(Constants.IntentKey.ID));
     }
 
@@ -568,4 +587,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         message.sendToTarget();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        wakeUpAdapter = null;
+    }
+
+    AppWakeUpAdapter wakeUpAdapter = new AppWakeUpAdapter() {
+        @Override
+        public void onWakeUp(AppData appData) {
+            //获取渠道数据
+            String channelCode = appData.getChannel();
+            //获取绑定数据
+            String bindData = appData.getData();
+            Log.d("OpenInstall", "getWakeUp : wakeupData = " + appData.toString());
+        }
+    };
 }

@@ -306,6 +306,7 @@
     <string name="comic_mine">我的</string>
     <string name="comic_mine_money">我的返利</string>
     <string name="comic_mine_coins">我的书币</string>
+    <string name="comic_mine_apprentice">我的徒弟</string>
     <string name="comic_mine_buy">我的购买</string>
     <string name="comic_mine_history">阅读历史</string>
     <string name="comic_coin_consume_history">消耗记录</string>

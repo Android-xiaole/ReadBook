@@ -13,6 +13,7 @@ buildscript {
         maven { url "https://dl.bintray.com/thelasterstar/maven/" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         maven { url "http://nexus2.tingyun.com/nexus/content/repositories/snapshots/" }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'

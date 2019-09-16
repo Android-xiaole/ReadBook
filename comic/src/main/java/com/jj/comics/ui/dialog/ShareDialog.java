@@ -3,6 +3,7 @@ package com.jj.comics.ui.dialog;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -15,6 +16,7 @@ import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.ShareInfo;
 import com.jj.comics.data.model.ShareMenuModel;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.UserInfo;
@@ -22,6 +24,7 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
+import com.jj.comics.widget.SharePicture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +162,28 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
                 break;
             case PHOTO://分享图片
-                ToastUtil.showToastShort("未实现");
+                ShareInfo shareInfo = new ShareInfo();
+                shareInfo.setTitle("测试");
+                shareInfo.setTitle("liu");
+                shareInfo.setContent("fadfadfsadfasda");
+                shareInfo.setCover("https://www.baidu.com/s?wd=%E4%BB%8A%E6%97%A5%E6%96%B0%E9%B2%9C%E4%BA%8B&tn=SE_Pclogo_6ysd4c7a&sa=ire_dl_gh_logo&rsv_dl=igh_logo_pc");
+                shareInfo.setKeywords("key1");
+                shareInfo.setQrcodeImg("https://www.baidu.com/s?wd=%E4%BB%8A%E6%97%A5%E6%96%B0%E9%B2%9C%E4%BA%8B&tn=SE_Pclogo_6ysd4c7a&sa=ire_dl_gh_logo&rsv_dl=igh_logo_pc");
+                SharePicture sharePicture = new SharePicture(activity);
+                sharePicture.setData(shareInfo);
+                sharePicture.setListener(new SharePicture.Listener() {
+                    @Override
+                    public void onSuccess(String path) {
+
+                    }
+
+                    @Override
+                    public void onFail() {
+                        Log.i("share_picture", "error");
+                    }
+                });
+//                ToastUtil.showToastShort("未实现");
+                sharePicture.startDraw();
                 break;
             case COPYLINK://复制链接
                 copyLink(shareMessageModel.getShareUrl());
