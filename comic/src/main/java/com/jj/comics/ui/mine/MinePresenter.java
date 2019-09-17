@@ -92,6 +92,9 @@ public class MinePresenter extends BasePresenter<BaseRepository, MineContract.IM
                     @Override
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
+                        if (error.getType() == NetError.AuthError){
+                            EventBusManager.sendLogoutEvent(new LogoutEvent());
+                        }
                     }
                 });
     }

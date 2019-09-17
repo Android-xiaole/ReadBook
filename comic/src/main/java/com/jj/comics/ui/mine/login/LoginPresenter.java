@@ -18,15 +18,15 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.user.UserRepository;
-import com.jj.comics.data.model.LoginByCodeResponse;
+import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
 import com.jj.comics.util.eventbus.events.WxLoginEvent;
 import com.sina.weibo.sdk.WbSdk;
@@ -56,7 +56,9 @@ import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableConverter;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -194,9 +196,9 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         getV().showProgress();
         UserRepository.getInstance().loginBySecurityCode(isCheck, phone, psw)
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<LoginByCodeResponse, ObservableSource<UserInfo>>() {
+                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
-                    public ObservableSource<UserInfo> apply(LoginByCodeResponse responseModel) throws Exception {
+                    public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                         if (responseModel.getData() != null && responseModel.getData().getUser_info() != null) {
                             UserInfo user_info = responseModel.getData().getUser_info();
                             //腾讯统计登录用户统计
@@ -260,18 +262,15 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                                 "openid"), jsonObject.getString(
                                 "access_token"))
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .flatMap(new Function<LoginByCodeResponse, ObservableSource<UserInfo>>() {
+                                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                                     @Override
-                                    public ObservableSource<UserInfo> apply(LoginByCodeResponse responseModel) throws Exception {
-                                        UserInfo user_info = responseModel.getData().getUser_info();
+                                    public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
+                                        return dealLoginResponse(responseModel);
                                         //腾讯统计登录用户统计
-                                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_QQ,
-                                                user_info.getUid() + "");
-                                        MobclickAgent.onEvent(BaseApplication.getApplication(),
-                                                Constants.UMEventId.QQ_LOGIN);
-                                        SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, responseModel.getData().getBearer_token());
-
-                                        return UserRepository.getInstance().saveUser(user_info);
+//                                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_QQ,
+//                                                user_info.getUid() + "");
+//                                        MobclickAgent.onEvent(BaseApplication.getApplication(),
+//                                                Constants.UMEventId.QQ_LOGIN);
                                     }
                                 }).subscribe(new LoginApiSubscriber());
                     } catch (JSONException e) {
@@ -327,18 +326,10 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                 UserRepository.getInstance()
                         .wbLogin(oauth2AccessToken.getToken(), oauth2AccessToken.getUid())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .flatMap(new Function<LoginByCodeResponse, ObservableSource<UserInfo>>() {
+                        .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                             @Override
-                            public ObservableSource<UserInfo> apply(LoginByCodeResponse responseModel) {
-                                UserInfo user_info = responseModel.getData().getUser_info();
-                                //腾讯统计登录用户统计
-                                tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIBO,
-                                        user_info.getUid() + "");
-
-                                MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
-                                SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, responseModel.getData().getBearer_token());
-
-                                return UserRepository.getInstance().saveUser(user_info);
+                            public ObservableSource<UserInfo> apply(LoginResponse responseModel) {
+                                return dealLoginResponse(responseModel);
                             }
                         }).subscribe(new LoginApiSubscriber());
             } else {
@@ -410,21 +401,46 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         //微信获取openId后获取用户信息
         UserRepository.getInstance().wxLogin("0", code)
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<LoginByCodeResponse, ObservableSource<UserInfo>>() {
+                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
-                    public ObservableSource<UserInfo> apply(LoginByCodeResponse responseModel) throws Exception {
-                        UserInfo user_info = responseModel.getData().getUser_info();
-                        //腾讯统计登录用户统计
-                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIXIN,
-                                user_info.getUid() + "");
-                        MobclickAgent.onEvent(BaseApplication.getApplication(),
-                                Constants.UMEventId.WX_LOGIN);
-                        SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, responseModel.getData().getBearer_token());
-                        return UserRepository.getInstance().saveUser(responseModel.getData().getUser_info());
+                    public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
+                        return dealLoginResponse(responseModel);
+//                        //腾讯统计登录用户统计
+//                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIXIN,
+//                                user_info.getUid() + "");
+//                        MobclickAgent.onEvent(BaseApplication.getApplication(),
+//                                Constants.UMEventId.WX_LOGIN);
                     }
                 })
                 .as(this.<UserInfo>bindLifecycle())
                 .subscribe(new LoginApiSubscriber());
+    }
+
+    /**
+     * 处理三方登录返回的数据
+     * @return
+     */
+    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse){
+        LoginResponse.DataBean data = loginResponse.getData();
+        if (data!=null){
+            if (data.isIs_binding()){//绑定了手机号
+                UserInfo user_info = loginResponse.getData().getUser_info();
+                if (user_info!=null){
+                    //保存token
+                    SharedPreManger.getInstance().saveToken(data.getBearer_token());
+//                    //腾讯统计登录用户统计
+//                    tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIBO,user_info.getUid() + "");
+//                    //UM登录统计
+//                    MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
+                    //最后保存用户信息到数据库
+                    return UserRepository.getInstance().saveUser(user_info);
+                }
+            }else{//未绑定手机号码,跳转到绑定号码的页面
+                BindPhoneActivity.toBindPhoneActivity(data.getType(),data.getOpenid(),(LoginActivity)getV());
+                return Observable.empty();
+            }
+        }
+        return Observable.error(NetError.noDataError());
     }
 
     @Override

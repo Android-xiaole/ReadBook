@@ -23,7 +23,7 @@ import com.jj.comics.data.model.ExpenseSumRecordsResponse;
 import com.jj.comics.data.model.FeedbackListResponse;
 import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
-import com.jj.comics.data.model.LoginByCodeResponse;
+import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.NotificationListResponse;
 import com.jj.comics.data.model.NotificationResponse;
 import com.jj.comics.data.model.OSSResponse;
@@ -66,7 +66,6 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -379,7 +378,7 @@ public interface ComicService {
      * @return
      */
     @POST(API_MLOGIN)
-    Observable<LoginByCodeResponse> loginBySecurityCode(@Body RequestBody body);
+    Observable<LoginResponse> loginBySecurityCode(@Body RequestBody body);
 
     /**
      * 获取用户信息.可以是第三方登录后根据第三方平台openid首次获取,也可以是根据登录的后用户token刷新用户信息
@@ -463,7 +462,7 @@ public interface ComicService {
      * @return
      */
     @POST(API_APP_WXLOGIN)
-    Observable<LoginByCodeResponse> wxLogin(@Body RequestBody body);
+    Observable<LoginResponse> wxLogin(@Body RequestBody body);
 
     /**
      * QQ登录
@@ -472,7 +471,7 @@ public interface ComicService {
      * @return
      */
     @POST(API_QQ_LOGIN)
-    Observable<LoginByCodeResponse> qqLogin(@Body RequestBody body);
+    Observable<LoginResponse> qqLogin(@Body RequestBody body);
 
     /**
      * 微博登录
@@ -481,7 +480,7 @@ public interface ComicService {
      * @return
      */
     @POST(API_APP_WEIBO_LOGIN)
-    Observable<LoginByCodeResponse> wbLogin(@Body RequestBody body);
+    Observable<LoginResponse> wbLogin(@Body RequestBody body);
 
     /**
      * 获取当前用户的打赏记录
@@ -969,6 +968,19 @@ public interface ComicService {
     @POST("api/withd_status")
     Observable<CashOutWayResponse> getCashOutWayStatus(@Body RequestBody body);
 
+    /**
+     * 第三方登录的获取验证码(包括验证是否绑定)
+     * @param requestBody
+     * @return
+     */
+    @POST("api/binding_code")
+    Observable<ResponseModel> getThirdLoginCode(@Body RequestBody requestBody);
+
+    /**
+     * 第三方登录绑定手机号
+     */
+    @POST("api/create_user")
+    Observable<LoginResponse> bindPhone(@Body RequestBody requestBody);
     /**
      * 申请提现
      * @param body

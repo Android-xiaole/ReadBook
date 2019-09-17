@@ -32,12 +32,10 @@ import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 
 public class CollectionPresenter extends BasePresenter<BaseRepository, CollectionContract.ICollectionView> implements CollectionContract.ICollectionPresenter {
-    private static final int RECOMMEND_PAGE_SIZE = 6;
-    private static final boolean SHOW_LOCAL_DATA = false;
 
     @Override
-    public void getCollectionList(final int pageNum, final int pageSize) {
-        ContentRepository.getInstance().getCollectionByUserId(pageNum, pageSize)
+    public void getCollectionList(int pageNum) {
+        ContentRepository.getInstance().getCollectionByUserId(pageNum)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<CollectionResponse>bindLifecycle())
@@ -66,26 +64,26 @@ public class CollectionPresenter extends BasePresenter<BaseRepository, Collectio
 
     @Override
     public void loadRecommendData() {
-        getRecommendObservable()
-                .as(this.<BookListResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<BookListResponse>() {
-                    @Override
-                    public void onNext(BookListResponse bookListResponse) {
-                        List<BookModel> data = bookListResponse.getData();
-                        if (data != null) {
-                            getV().onLoadRecommendList(data);
-                        } else {
-                            getV().onLoadRecommendListFail(new NetError("DATA EMPTY",
-                                    NetError.NoDataError));
-                        }
-
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        getV().onLoadRecommendListFail(error);
-                    }
-                });
+//        getRecommendObservable()
+//                .as(this.<BookListResponse>bindLifecycle())
+//                .subscribe(new ApiSubscriber2<BookListResponse>() {
+//                    @Override
+//                    public void onNext(BookListResponse bookListResponse) {
+//                        List<BookModel> data = bookListResponse.getData();
+//                        if (data != null) {
+//                            getV().onLoadRecommendList(data);
+//                        } else {
+//                            getV().onLoadRecommendListFail(new NetError("DATA EMPTY",
+//                                    NetError.NoDataError));
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    protected void onFail(NetError error) {
+//                        getV().onLoadRecommendListFail(error);
+//                    }
+//                });
 
     }
 
@@ -147,7 +145,7 @@ public class CollectionPresenter extends BasePresenter<BaseRepository, Collectio
     }
 
     @Override
-    public void removeShelf(List<BookModel> delete) {
+    public void removeShelf(List<BookModel> delete,int position) {
         UserRepository.getInstance().unCollect(delete, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -156,7 +154,7 @@ public class CollectionPresenter extends BasePresenter<BaseRepository, Collectio
                     @Override
                     public void onNext(CommonStatusResponse response) {
                         if (response.getData().getStatus()) {
-                            getV().onDeleteComplete();
+                            getV().onDeleteComplete(position);
                         } else {
                             ToastUtil.showToastShort(response.getMessage());
                         }

@@ -36,6 +36,7 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
+import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 
@@ -357,6 +358,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     @Override
     public void onCollectionSuccess(boolean collectByCurrUser) {
+        EventBusManager.sendComicCollectionStatus(new RefreshComicCollectionStatusEvent(collectByCurrUser));
         if (collectByCurrUser) {
             ToastUtil.showToastShort("已成功加入书架");
         }

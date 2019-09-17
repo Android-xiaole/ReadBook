@@ -14,6 +14,7 @@ import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.LoginNotifyDialog;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.umeng.analytics.MobclickAgent;
@@ -30,7 +31,7 @@ public abstract class ComicSubscriber<T> extends ApiSubscriber2<T> {
     public void onError(Throwable e) {
         if (e instanceof NetError){
             if (((NetError) e).getType() == NetError.AuthError){
-                SharedPref.getInstance().remove(Constants.SharedPrefKey.TOKEN);
+                SharedPreManger.getInstance().removeToken();
                 LoginHelper.logOffAllUser();
                 MobclickAgent.onProfileSignOff();
                 Activity topActivity = BaseApplication.getApplication().getTopActivity();

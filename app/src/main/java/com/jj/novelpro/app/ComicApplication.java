@@ -30,6 +30,7 @@ import com.jj.comics.common.net.gsonconvert.CommonGsonConverterFactory;
 import com.jj.comics.data.biz.pruduct.ProductRepository;
 import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
 import com.jj.novelpro.R;
 import com.tencent.bugly.Bugly;
@@ -171,10 +172,10 @@ public class ComicApplication extends BaseApplication {
                     public Request onBeforeRequest(Request request, Interceptor.Chain chain) {
                         Request.Builder newRequest = request.newBuilder()
                                 .header(Constants.RequestBodyKey.SOURCEID, Constants.SOURCE_ID + "")
-                                .header(Constants.RequestBodyKey.CHANNEL_ID, Constants.CHANNEL_ID_PHP())
+                                .header(Constants.RequestBodyKey.CHANNEL_ID, Constants.CHANNEL_ID)
                                 .header(Constants.RequestBodyKey.DEVICE, "android");
                         if (LoginHelper.getOnLineUser() != null) {
-                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPref.getInstance().getString(Constants.SharedPrefKey.TOKEN, "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZy50eHJlYWQubmV0L2xvZ2luL3N0ZXA0IiwiaWF0IjoxNTYyODk5OTE1LCJleHAiOjE1OTQ0MzU5MTUsIm5iZiI6MTU2Mjg5OTkxNSwianRpIjoieldOVjlNenRJU3llNENXRiIsInN1YiI6Mjg1MzEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJ1aWQiOjI4NTMxLCJvcGVuaWQiOiJvM1JOeDVuSFJfQUZEcmVORENRMnF0QXZGSkVvIiwidW5pb25pZCI6Im8wMVlhMGpZek9qZGM5X1VIbm5yeG1jcWpxMVUiLCJuaWNrbmFtZSI6Ilx1NGU5MVx1NWNmMCIsImF2YXRhciI6Imh0dHA6Ly90aGlyZHd4LnFsb2dvLmNuL21tb3Blbi92aV8zMi9RMGo0VHdHVGZUS3Vob3JiNk5mb2d6SE1mbjRPaGFMT1lPRjl6aWI0Y09OV2RNUThpYzByVXBWMEpMbFZySHJBaWF4MUt4WDRJd1BHZ0J5MEw1N1JzZk14dy8xMzIifQ.lRdLFxeVq5p63C_BtDxAxj9OgXXJ4mqXzjlNGZjiMCM"));
+                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
                         }
                         return newRequest.build();
                     }

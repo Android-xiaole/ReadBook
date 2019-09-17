@@ -7,7 +7,7 @@ import com.jj.base.BaseApplication;
 
 
 /**
- * Created by newbiechen on 17-4-16.
+ * 这个是阅读模块专用共享参数工具类
  */
 
 public class SharedPreUtils {

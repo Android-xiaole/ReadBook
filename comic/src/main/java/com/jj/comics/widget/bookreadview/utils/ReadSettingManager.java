@@ -5,7 +5,6 @@ import com.jj.comics.widget.bookreadview.PageMode;
 import com.jj.comics.widget.bookreadview.PageStyle;
 
 /**
- * Created by newbiechen on 17-5-17.
  * 阅读器的配置管理
  */
 

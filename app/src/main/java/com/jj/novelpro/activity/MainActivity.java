@@ -24,8 +24,12 @@ import com.fm.openinstall.listener.AppWakeUpAdapter;
 import com.fm.openinstall.model.AppData;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jj.base.CusNavigationCallback;
+import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.PackageUtil;
@@ -33,6 +37,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.novelpro.R;
 import com.jj.novelpro.R2;
 import com.jj.novelpro.present.MainContract;
@@ -160,11 +165,23 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         OpenInstall.getInstall(new AppInstallAdapter() {
             @Override
             public void onInstall(AppData appData) {
+                Log.d("OpenInstall", "getInstall : installData = " + appData.toString());
                 //获取渠道数据
                 String channelCode = appData.getChannel();
                 //获取自定义数据
                 String bindData = appData.getData();
-                Log.d("OpenInstall", "getInstall : installData = " + appData.toString());
+                JsonObject jsonObject;
+                try {
+                    jsonObject = new JsonParser().parse(bindData).getAsJsonObject();
+                    if (jsonObject!=null){
+                        String invite_code = jsonObject.getAsJsonObject(Constants.SharedPrefKey.INVITE_CODE).getAsString();
+                        if (!TextUtils.isEmpty(invite_code)){
+                            SharedPreManger.getInstance().saveInvitecode(invite_code);
+                        }
+                    }
+                }catch (IllegalStateException e){
+                    LogUtil.e("OpenInstall:appData转换json失败");
+                }
             }
         });
         AndPermission.with(this)
