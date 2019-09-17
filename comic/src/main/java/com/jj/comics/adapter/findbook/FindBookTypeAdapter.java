@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FindBookTypeAdapter extends SimpleBaseAdapter<CategoryResponse.DataBean> {
     private int selectIndex = 0;

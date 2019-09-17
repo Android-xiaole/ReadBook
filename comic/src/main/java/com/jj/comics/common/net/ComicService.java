@@ -11,6 +11,7 @@ import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
+import com.jj.comics.data.model.BoughtResponse;
 import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CashOutResponse;
 import com.jj.comics.data.model.CashOutWayResponse;
@@ -988,4 +989,12 @@ public interface ComicService {
      */
     @POST("api/withdrawal")
     Observable<CashOutResponse> cashOut(@Body RequestBody body);
+
+    /**
+     * 我的购买
+     * @param body
+     * @return
+     */
+    @POST("api/my_purchase")
+    Observable<BoughtResponse> myBought(@Body RequestBody body);
 }

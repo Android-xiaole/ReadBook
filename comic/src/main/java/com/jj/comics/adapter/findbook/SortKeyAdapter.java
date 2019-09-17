@@ -3,11 +3,11 @@ package com.jj.comics.adapter.findbook;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
-import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.TypeSortKeyBean;
 
 import java.util.ArrayList;

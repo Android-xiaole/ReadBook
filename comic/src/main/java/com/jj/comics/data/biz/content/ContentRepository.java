@@ -15,6 +15,7 @@ import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
+import com.jj.comics.data.model.BoughtResponse;
 import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -289,6 +290,17 @@ public class ContentRepository implements ContentDataSource {
                 .compose(ComicApiImpl.<OSSResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(name));
     }
+
+    @Override
+    public Observable<BoughtResponse> myBought(int pageNum) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty(Constants.RequestBodyKey.PAGE_NUM, pageNum)
+                .build();
+        return ComicApi.getApi().myBought(body)
+                .compose(ComicApiImpl.<BoughtResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
 
 
 }

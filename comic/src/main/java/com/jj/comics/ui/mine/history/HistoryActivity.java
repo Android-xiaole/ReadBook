@@ -42,8 +42,6 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
     @BindView(R2.id.recyclerView)
     RecyclerView mRecycler;
     private BookShelfAdapter mAdapter;
-    private TextView loadMore;
-    private int currentPage = 1;
 
     @Override
     public void onClick(View v) {
@@ -90,7 +88,6 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                currentPage = 1;
                 getP().getHistoryList();
             }
         });

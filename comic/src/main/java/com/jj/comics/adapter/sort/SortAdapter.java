@@ -1,7 +1,8 @@
 package com.jj.comics.adapter.sort;
 
-import android.text.Html;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
@@ -12,7 +13,6 @@ import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.utils.Utils;
 import com.jj.comics.R;
-import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SortListResponse;
 
 public class SortAdapter extends SimpleBaseAdapter<SortListResponse.DataBean> {

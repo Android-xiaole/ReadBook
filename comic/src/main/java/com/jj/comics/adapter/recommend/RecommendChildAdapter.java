@@ -1,6 +1,5 @@
 package com.jj.comics.adapter.recommend;
 
-import android.text.Html;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
     protected int mSize;

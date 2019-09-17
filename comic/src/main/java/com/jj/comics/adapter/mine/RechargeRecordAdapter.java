@@ -5,12 +5,12 @@ import android.text.Spanned;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
 import com.jj.comics.data.model.RechargeRecordModel;
-
-import java.math.BigDecimal;
 
 public class RechargeRecordAdapter extends SimpleBaseAdapter<RechargeRecordModel> {
     public RechargeRecordAdapter(int layoutResId) {

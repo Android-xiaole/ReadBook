@@ -16,6 +16,15 @@ public class ExpenseSumRecordModel {
     private String update_time;
     private String total_money;
     private String articlename;
+    private String cover;
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
 
     public long getId() {
         return id;

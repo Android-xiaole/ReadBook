@@ -8,6 +8,7 @@ import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookListResponse;
 import com.jj.comics.data.model.BookModelResponse;
+import com.jj.comics.data.model.BoughtResponse;
 import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -97,5 +98,8 @@ public interface ContentDataSource {
     Observable<OSSResponse> getOSSConfig(String name);
 
     Observable<BookListDataResponse> getBookCategories(int pageNum, int pageSize, long cid);
+
+   //我的购买
+    Observable<BoughtResponse> myBought(int pageSize);
 
 }

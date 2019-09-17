@@ -70,7 +70,7 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
         mToolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-
+                finish();
             }
 
             @Override

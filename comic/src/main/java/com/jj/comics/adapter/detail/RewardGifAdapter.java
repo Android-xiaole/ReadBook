@@ -3,13 +3,14 @@ package com.jj.comics.adapter.detail;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.RewardGiftsResponse;
-import com.jj.sdk.GlideApp;
 
 public class RewardGifAdapter extends SimpleBaseAdapter<RewardGiftsResponse.DataBean> {
 

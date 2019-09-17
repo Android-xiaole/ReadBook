@@ -6,12 +6,9 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.comics.R;
-import com.jj.comics.data.model.SignInDay;
 import com.jj.comics.data.model.SignTaskResponse;
 
-import java.util.List;
-
-import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class WelfareCoinAdapter extends SimpleBaseAdapter<SignTaskResponse.DataBean.QiandaoListBean> {
 

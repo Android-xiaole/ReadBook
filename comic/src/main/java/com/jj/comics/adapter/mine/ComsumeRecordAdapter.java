@@ -3,6 +3,8 @@ package com.jj.comics.adapter.mine;
 
 import android.widget.ImageView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -25,7 +27,7 @@ public class ComsumeRecordAdapter extends SimpleBaseAdapter<ExpenseSumRecordMode
         helper.setText(R.id.tv_item_consume_record_coin, item.getTotal_money());
 
         ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_item_consume_record),
-                "", new RequestOptions().transforms(new CenterCrop(),
+                item.getCover(), new RequestOptions().transforms(new CenterCrop(),
                         new RoundedCorners(4))
                         .error(R.drawable.img_loading)
                         .placeholder(R.drawable.img_loading));

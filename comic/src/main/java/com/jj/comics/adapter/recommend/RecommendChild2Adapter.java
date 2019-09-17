@@ -1,6 +1,5 @@
 package com.jj.comics.adapter.recommend;
 
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.jj.base.BaseApplication;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
-import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.data.model.BookModel;
 
@@ -23,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
     private RecommendAdapter.OnClickListener mOnClick;

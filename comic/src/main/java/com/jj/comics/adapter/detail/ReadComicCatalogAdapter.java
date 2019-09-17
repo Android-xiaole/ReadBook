@@ -2,7 +2,6 @@ package com.jj.comics.adapter.detail;
 
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -12,6 +11,7 @@ import com.jj.comics.R;
 import com.jj.comics.data.model.BookCatalogModel;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel> {
 
