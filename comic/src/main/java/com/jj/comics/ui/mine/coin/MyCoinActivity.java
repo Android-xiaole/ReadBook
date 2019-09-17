@@ -40,6 +40,7 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     void onClick(View view) {
         if (view.getId() == R.id.btn_recharge) {
             showToastShort("跳转充值中心");
+            ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).navigation();
         }else if (view.getId() == R.id.comic_coin_consume_history) {
             ARouter.getInstance().build(RouterMap.COMIC_CONSUME_RECORD_ACTIVITY).navigation();
         }else if (view.getId() == R.id.comic_coin_recharge_history) {
