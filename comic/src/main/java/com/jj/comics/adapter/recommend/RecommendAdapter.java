@@ -94,7 +94,10 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
                     LinearLayoutManager.HORIZONTAL, Utils.dip2px(mContext, 10), Color.WHITE));
             recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, Utils.dip2px(mContext, 10), Color.WHITE));
         }
-
+        if (adapter == null) {
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
+                    Integer.MAX_VALUE, false,true);
+        }
         adapter.bindToRecyclerView(recyclerView);
         //给每个子item设置监听  另外 由于RecommendChild2Adapter中是以头布局进行排版  所以也要把mOnClick传过去便于监听
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
