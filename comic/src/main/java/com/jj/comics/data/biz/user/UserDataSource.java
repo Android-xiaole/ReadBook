@@ -1,6 +1,7 @@
 package com.jj.comics.data.biz.user;
 
 import com.jj.comics.data.model.AddCashOutWayResponse;
+import com.jj.comics.data.model.ApprenticeListResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CashOutResponse;
@@ -215,4 +216,11 @@ public interface UserDataSource {
      */
     Observable<CashOutResponse> cashOut(int type, float money);
 
+    /**
+     * 徒弟
+     * @param type
+     * @param page
+     * @return
+     */
+    Observable<ApprenticeListResponse> getApprenticeList(int page, int type);
 }

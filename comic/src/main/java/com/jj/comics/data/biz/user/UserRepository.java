@@ -12,6 +12,7 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
 import com.jj.comics.data.model.AddCashOutWayResponse;
+import com.jj.comics.data.model.ApprenticeListResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CashOutListResponse;
 import com.jj.comics.data.model.CashOutResponse;
@@ -643,6 +644,13 @@ public class UserRepository implements UserDataSource {
                 .build();
         return ComicApi.getApi().cashOut(body)
                 .compose(ComicApiImpl.<CashOutResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<ApprenticeListResponse> getApprenticeList(int page, int type) {
+        return ComicApi.getApi().getApprenticeList(page,type)
+                .compose(ComicApiImpl.<ApprenticeListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

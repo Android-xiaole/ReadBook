@@ -449,4 +449,9 @@ public class Constants {
         public static final int ALIPAY = 1;
         public static final int UNION = 2;
     }
+
+    public static class APPRENTICE {
+        public static final int TUZI = 1;
+        public static final int TUSUN = 2;
+    }
 }

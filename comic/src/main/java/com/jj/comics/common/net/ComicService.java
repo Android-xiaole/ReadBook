@@ -3,6 +3,7 @@ package com.jj.comics.common.net;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.AddCashOutWayResponse;
 import com.jj.comics.data.model.AppConfigResponse;
+import com.jj.comics.data.model.ApprenticeListResponse;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
@@ -997,4 +998,12 @@ public interface ComicService {
      */
     @POST("api/my_purchase")
     Observable<BoughtResponse> myBought(@Body RequestBody body);
+
+    /**
+     * 获取徒弟列表
+     *
+     * @return
+     */
+    @GET("api/my_disciple")
+    Observable<ApprenticeListResponse> getApprenticeList(@Query("page") int page, @Query("type") int type);
 }
