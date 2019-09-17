@@ -54,10 +54,10 @@ public class UserItemView extends LinearLayout {
         int bottomLineVisible = typedArray.getInt(R.styleable.UserItemView_bottom_line_visible, View.GONE);
         line.setVisibility(bottomLineVisible);
 
-        float titleSize = typedArray.getDimension(R.styleable.UserItemView_title_size, 15);
+        float titleSize = typedArray.getDimension(R.styleable.UserItemView_title_size, 0);
 //        float applyDimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, titleSize,
 //                getResources().getDisplayMetrics());
-        mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
+        if (titleSize >0)  mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
 
         String rightTitleText = typedArray.getString(R.styleable.UserItemView_right_text);
         right_title.setText(rightTitleText);

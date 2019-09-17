@@ -74,8 +74,8 @@
             android:layout_height="@dimen/dp_45"
             android:layout_marginLeft="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_4"
+            app:bottom_line_visible="visible"
             app:user_item_title="@string/comic_coin_recharge_history" />
-
 
 
         <com.jj.comics.widget.UserItemView

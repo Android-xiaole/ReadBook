@@ -51,16 +51,16 @@ public class CashOutListResponse extends ResponseModel {
              * create_time : 2019-09-12 14:29:51
              */
 
-            private int id;
+            private long id;
             private String amount;
             private String status;
             private String create_time;
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

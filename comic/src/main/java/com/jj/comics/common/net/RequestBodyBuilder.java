@@ -29,10 +29,16 @@ public class RequestBodyBuilder {
         return this;
     }
 
+    public RequestBodyBuilder addProperty(String property, float value) {
+        jsonObject.addProperty(property, value);
+        return this;
+    }
+
     public RequestBodyBuilder addProperty(String property, JsonElement jsonObject) {
         this.jsonObject.add(property, jsonObject);
         return this;
     }
+
 
     public RequestBodyBuilder removeProperty(String property) {
         this.jsonObject.remove(property);

@@ -1,19 +1,18 @@
 package com.jj.comics.data.model;
 
-public class AddCashOutWayResponse extends ResponseModel {
-
+public class CashOutResponse extends ResponseModel {
 
     /**
      * data : {"status":true}
      */
 
-    private DataBean data;
+    private CashOutResponse.DataBean data;
 
-    public DataBean getData() {
+    public CashOutResponse.DataBean getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(CashOutResponse.DataBean data) {
         this.data = data;
     }
 

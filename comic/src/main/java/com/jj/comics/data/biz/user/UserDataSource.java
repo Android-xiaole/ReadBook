@@ -3,6 +3,7 @@ package com.jj.comics.data.biz.user;
 import com.jj.comics.data.model.AddCashOutWayResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CashOutListResponse;
+import com.jj.comics.data.model.CashOutResponse;
 import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -181,9 +182,30 @@ public interface UserDataSource {
      */
     Observable<CashOutWayResponse> getCashOutWayStatus();
 
+    /**
+     * 添加支付宝
+     * @param account_number
+     * @param opener
+     * @return
+     */
     Observable<AddCashOutWayResponse> addCashOutWayAli(String account_number,String opener);
 
+    /**
+     * 添加银行卡
+     * @param account_number
+     * @param opener
+     * @param opening_bank
+     * @return
+     */
     Observable<AddCashOutWayResponse> addCashOutWayUnion(String account_number, String opener,
                                                          String opening_bank);
+
+    /**
+     * 提现
+     * @param type
+     * @param money
+     * @return
+     */
+    Observable<CashOutResponse> cashOut(int type, float money);
 
 }

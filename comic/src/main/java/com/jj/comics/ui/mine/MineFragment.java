@@ -186,9 +186,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         } else if (view.getId() == R.id.edit_user_info) {
             ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.btn_my_coin) {
-            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong("coin", mCoin).navigation();
+            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong(Constants.IntentKey.COIN, mCoin).navigation();
         } else if (view.getId() == R.id.btn_my_rebate) {
-
+            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
         }else if (view.getId() == R.id.btn_my_coin) {
             int egold = 0;
             if (mPayInfo != null) {

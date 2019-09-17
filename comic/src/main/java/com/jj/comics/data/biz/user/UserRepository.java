@@ -14,6 +14,7 @@ import com.jj.comics.common.net.RequestBodyBuilder;
 import com.jj.comics.data.model.AddCashOutWayResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CashOutListResponse;
+import com.jj.comics.data.model.CashOutResponse;
 import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
@@ -608,6 +609,17 @@ public class UserRepository implements UserDataSource {
                 .build();
         return ComicApi.getApi().addCashOutAli(body)
                 .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<CashOutResponse> cashOut(int type, float money) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("type", type)
+                .addProperty("money", money)
+                .build();
+        return ComicApi.getApi().cashOut(body)
+                .compose(ComicApiImpl.<CashOutResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

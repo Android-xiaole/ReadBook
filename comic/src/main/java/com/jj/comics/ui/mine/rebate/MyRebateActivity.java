@@ -52,13 +52,13 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     ComicToolBar mToolBar;
     private ViewPagerAdapter mViewPagerAdapter;
 
+    private  PayInfo payInfo = null;
     @Override
     protected void initData(Bundle savedInstanceState) {
         Serializable serializable = getIntent().getSerializableExtra(Constants.IntentKey.PAY_INFO);
-        PayInfo payInfo = null;
+
         if (serializable instanceof PayInfo)
             payInfo = (PayInfo) serializable;
-
         if (payInfo != null) {
             String can_drawout_amount = payInfo.getCan_drawout_amount() + "";
             if (!can_drawout_amount.contains(".")) can_drawout_amount = can_drawout_amount + ".00";
@@ -103,7 +103,7 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     @OnClick({R2.id.btn_rebate_cash_out})
     void onClick(View view) {
        if (view.getId() == R.id.btn_rebate_cash_out) {
-            ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).navigation();
+            ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE,payInfo.getCan_drawout_amount()).navigation();
         }
     }
 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="请选择提现方式"
+            android:textColor="@color/base_333333"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:id="@+id/base_pay_dialog_cancel"
+            android:layout_width="22dp"
+            android:layout_height="@dimen/dp_22"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="11dp"
+            android:src="@drawable/base_vip_pay_cancel" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e3e3e3" />
+
+    <LinearLayout
+        android:id="@+id/base_pay_dialog_alipay"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/base_vip_pay_alipay" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/base_zfb"
+                android:textColor="@color/base_333333"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="@dimen/dp_16"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/base_vip_pay_right" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e3e3e3" />
+
+    <LinearLayout
+        android:id="@+id/base_pay_dialog_union"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/base_vip_pay_wechat" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="银行卡"
+                android:textColor="@color/base_333333"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="@dimen/dp_16"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/base_vip_pay_right" />
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#fff" />
+
+</LinearLayout>
