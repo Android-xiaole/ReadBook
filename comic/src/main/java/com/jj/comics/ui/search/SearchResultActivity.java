@@ -18,6 +18,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.detail.CommonRecommendAdapter;
 import com.jj.comics.adapter.mine.SearchResultAdapter;
+import com.jj.comics.adapter.recommend.RecentlyAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.detail.DetailActivityHelper;
@@ -25,6 +26,7 @@ import com.jj.comics.ui.detail.DetailActivityHelper;
 import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -38,7 +40,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
     @BindView(R2.id.rv_searchResult)
     RecyclerView rv_searchResult;
 
-    private SearchResultAdapter mResultAdapter;
+    private RecentlyAdapter adapter_recently;//最近更新adapter
     private CommonRecommendAdapter mRecommendAdapter;
 
     @Override
@@ -76,17 +78,17 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
             }
         });
 
-        mResultAdapter = new SearchResultAdapter(R.layout.comic_item_searchresult_activity);
+        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
         rv_searchResult.setNestedScrollingEnabled(false);
         rv_searchResult.setHasFixedSize(true);
-        rv_searchResult.setLayoutManager(new GridLayoutManager(this, 5));
-        mResultAdapter.bindToRecyclerView(rv_searchResult, true, true);
-        mResultAdapter.setEmptyImgSrc(R.drawable.img_unsearch, false);
-        mResultAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        rv_searchResult.setLayoutManager(new LinearLayoutManager(this));
+        adapter_recently.bindToRecyclerView(rv_searchResult, true, true);
+        adapter_recently.setEmptyImgSrc(R.drawable.img_unsearch, false);
+        adapter_recently.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 DetailActivityHelper.toDetail(SearchResultActivity.this,
-                        mResultAdapter.getData().get(position).getId()+"", "搜索结果");
+                        adapter_recently.getData().get(position).getId()+"", "搜索结果");
             }
         });
 
@@ -119,7 +121,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
 
     @Override
     public void fillSearchComicListByKeywords(List<BookModel> contentList) {
-        mResultAdapter.setNewData(contentList);
+        adapter_recently.setNewData(contentList);
     }
 
     @Override

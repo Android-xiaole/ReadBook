@@ -23,7 +23,7 @@ public class SortAdapter extends SimpleBaseAdapter<SortListResponse.DataBean> {
     @Override
     protected void convert(BaseViewHolder helper, SortListResponse.DataBean item) {
         ILFactory.getLoader()
-                .loadNet(helper.<ImageView>getView(R.id.iv_recently_icon), item.getCover(),
+                .loadNet(helper.<ImageView>getView(R.id.iv_recently_icon), item.getIcon(),
                         new RequestOptions()
                                 .placeholder(R.drawable.img_loading)
                                 .error(R.drawable.img_loading)

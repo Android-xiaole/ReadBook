@@ -55,8 +55,7 @@ public class SortListResponse implements IModel {
 
         private String title;
         private long id;
-        private int icon;
-        private String cover;
+        private String icon;
 
         public String getTitle() {
             return title;
@@ -74,20 +73,12 @@ public class SortListResponse implements IModel {
             this.id = id;
         }
 
-        public int getIcon() {
+        public String getIcon() {
             return icon;
         }
 
-        public void setIcon(int icon) {
+        public void setIcon(String icon) {
             this.icon = icon;
-        }
-
-        public String getCover() {
-            return "http:\\/\\/ossmh.jj1699.cn\\/novel\\/一胎两宝：总裁爹地好霸道\\/1565160184-一胎两宝：总裁爹地好霸道.jpg";
-        }
-
-        public void setCover(String cover) {
-            this.cover = cover;
         }
     }
 }
