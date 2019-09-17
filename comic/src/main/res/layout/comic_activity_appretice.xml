@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_mine_apprentice"></com.jj.comics.widget.comic.toolbar.ComicToolBar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/comic_f4f6f9"></View>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_apprentice"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_43"
+        app:tabIndicatorColor="@color/comic_353a40"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="@dimen/dp_3"
+        app:tabMaxWidth="@dimen/dp_80"
+        app:tabMinWidth="@dimen/dp_80"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/comic_353a40"
+        app:tabTextAppearance="@style/comic_tab_text_style_rebate"
+        app:tabTextColor="@color/comic_6e7379">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/comic_e8ebf0"></View>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_apprentice"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></androidx.viewpager.widget.ViewPager>
+
+</LinearLayout>

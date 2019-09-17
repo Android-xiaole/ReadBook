@@ -76,4 +76,7 @@ public class RouterMap {
     public static final String COMIC_HELP_ACTIVITY= "/ui/mine/HelpActivity";
     public static final String COMIC_HELP_FISSION_ACTIVITY= "/ui/mine/HelpFissionActivity";
     public static final String COMIC_HELP_RECHARGE_ACTIVITY= "/ui/mine/HelpRechargeActivity";
+    public static final String COMIC_MINE_APPRENTICE_ACTIVITY= "/ui/mine/ApprenticeActivity";
+    public static final String COMIC_MINE_APPRENTICE_TUZI_FRAGMENT= "/ui/mine/ApprenticeTuziFragment";
+    public static final String COMIC_MINE_APPRENTICE_TUSUN_ACTIVITY= "/ui/mine/ApprenticeTusunFragment";
 }

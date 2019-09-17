@@ -161,7 +161,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @OnClick({R2.id.mine_nickname,R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
             R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,
             R2.id.edit_user_info,
-            R2.id.btn_my_rebate, R2.id.btn_my_coin})
+            R2.id.btn_my_rebate, R2.id.btn_my_coin,R2.id.btn_my_apprentice})
     void onClick(View view) {
         if (view.getId() == R.id.mine_head_img||view.getId() == R.id.mine_nickname) {
             if (LoginHelper.getOnLineUser() == null){
@@ -191,6 +191,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withInt(Constants.IntentKey.COIN,egold).navigation();
         }else if (view.getId() == R.id.btn_my_rebate) {
             ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
+        }else if (view.getId() == R.id.btn_my_apprentice) {
+            ARouter.getInstance().build(RouterMap.COMIC_MINE_APPRENTICE_ACTIVITY).navigation();
         }
     }
 

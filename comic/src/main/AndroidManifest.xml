@@ -243,6 +243,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
+        <activity
+            android:name=".ui.mine.apprentice.ApprenticeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
 
         <receiver android:name=".broadcast.NetWorkReceiver">
             <intent-filter>
