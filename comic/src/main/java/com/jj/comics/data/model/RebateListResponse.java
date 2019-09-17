@@ -54,7 +54,7 @@ public class RebateListResponse extends ResponseModel {
              * desc : 返利
              */
 
-            private int id;
+            private long id;
             private String amount;
             private String balance;
             private int profit_uid;
@@ -62,11 +62,11 @@ public class RebateListResponse extends ResponseModel {
             private String create_time;
             private String desc;
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 

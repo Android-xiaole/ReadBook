@@ -43,6 +43,14 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
         mNotificationListAdapter.bindToRecyclerView(mRecyclerView,true);
         mNotificationListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mNotificationListAdapter.setOnLoadMoreListener(this,mRecyclerView);
+//        getP().getRebateList(currentPage);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRefreshLayout.setRefreshing(true);
+        currentPage = 1;
         getP().getRebateList(currentPage);
     }
 

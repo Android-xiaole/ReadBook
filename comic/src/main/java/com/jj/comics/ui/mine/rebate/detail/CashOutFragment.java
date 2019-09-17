@@ -44,6 +44,14 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
         mCashOutListAdapter.bindToRecyclerView(mRecyclerView, true);
         mCashOutListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mCashOutListAdapter.setOnLoadMoreListener(this, mRecyclerView);
+//        getP().getCashOutList(currentPage);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRefreshLayout.setRefreshing(true);
+        currentPage = 1;
         getP().getCashOutList(currentPage);
     }
 

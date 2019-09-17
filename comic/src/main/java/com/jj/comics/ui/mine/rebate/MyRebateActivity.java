@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.tabs.TabLayout;
+import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
@@ -52,32 +53,17 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     ComicToolBar mToolBar;
     private ViewPagerAdapter mViewPagerAdapter;
 
-    private  PayInfo payInfo = null;
+    private PayInfo mPayInfo = null;
+
     @Override
     protected void initData(Bundle savedInstanceState) {
-        Serializable serializable = getIntent().getSerializableExtra(Constants.IntentKey.PAY_INFO);
-
-        if (serializable instanceof PayInfo)
-            payInfo = (PayInfo) serializable;
-        if (payInfo != null) {
-            String can_drawout_amount = payInfo.getCan_drawout_amount() + "";
-            if (!can_drawout_amount.contains(".")) can_drawout_amount = can_drawout_amount + ".00";
-            SpannableString spannableString = new SpannableString(can_drawout_amount);
-            spannableString.setSpan(new RelativeSizeSpan(0.85f),can_drawout_amount.indexOf("."),
-                    can_drawout_amount.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mTvMoney.setText(spannableString);
-            mTvRecently.setText(payInfo.getNewest_rebate() + "");
-            mTvTotalRebate.setText(payInfo.getTotal_rebate_amount() + "");
-            mTvTotalOut.setText(payInfo.getTotal_drawcash_amount() + "");
-        }
-
         ArrayList<BaseFragment> fragments = new ArrayList<>();
         fragments.add(new RebateFragment());
         fragments.add(new CashOutFragment());
-        String[] titles = {"返利","提现"};
+        String[] titles = {"返利", "提现"};
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments,
                 titles);
-        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setOffscreenPageLimit(0);
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -100,10 +86,17 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        showProgress();
+        getP().getMyRebateInfo();
+    }
+
     @OnClick({R2.id.btn_rebate_cash_out})
     void onClick(View view) {
-       if (view.getId() == R.id.btn_rebate_cash_out) {
-            ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE,payInfo.getCan_drawout_amount()).navigation();
+        if (view.getId() == R.id.btn_rebate_cash_out) {
+            ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount()).navigation();
         }
     }
 
@@ -115,5 +108,26 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     @Override
     public MyRebatePrenenter setPresenter() {
         return new MyRebatePrenenter();
+    }
+
+    @Override
+    public void onGetMyRebateInfo(PayInfo payInfo) {
+        mPayInfo = payInfo;
+        hideProgress();
+        String can_drawout_amount = payInfo.getCan_drawout_amount() + "";
+        if (!can_drawout_amount.contains(".")) can_drawout_amount = can_drawout_amount + ".00";
+        SpannableString spannableString = new SpannableString(can_drawout_amount);
+        spannableString.setSpan(new RelativeSizeSpan(0.85f), can_drawout_amount.indexOf("."),
+                can_drawout_amount.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mTvMoney.setText(spannableString);
+        mTvRecently.setText(payInfo.getNewest_rebate() + "");
+        mTvTotalRebate.setText(payInfo.getTotal_rebate_amount() + "");
+        mTvTotalOut.setText(payInfo.getTotal_drawcash_amount() + "");
+    }
+
+    @Override
+    public void onGetMyRebateInfoFail(NetError error) {
+        hideProgress();
+        showToastShort(error.getMessage());
     }
 }

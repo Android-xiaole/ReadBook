@@ -12,17 +12,11 @@
         android:layout_height="wrap_content"
         app:title="@string/comic_rebate_cash_out" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_10"
-        android:layout_below="@id/comic_tool_bar"
-        android:background="@color/comic_e8ebf0"></View>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
-        android:layout_marginTop="@dimen/dp_26"
+        android:layout_marginTop="@dimen/dp_35"
         android:background="@color/comic_ffffff">
 
         <TextView

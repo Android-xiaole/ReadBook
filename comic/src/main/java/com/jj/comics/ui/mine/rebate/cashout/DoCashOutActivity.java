@@ -1,10 +1,12 @@
 package com.jj.comics.ui.mine.rebate.cashout;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -17,6 +19,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.ui.dialog.BottomCashOutDialog;
+import com.jj.comics.ui.recommend.RecommendLoadMoreContract;
 
 import butterknife.BindView;
 
@@ -44,17 +47,16 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         mBtnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hidKeyBoard();
                 mBottomCashOutDialog = new BottomCashOutDialog();
                 mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView, new BottomCashOutDialog.DialogOnClickListener() {
                     @Override
                     public void onAliClick(View v) {
-                        showToastShort("ali");
                         getP().cashOut(1, mParsedSum);
                     }
 
                     @Override
                     public void onUnionClick(View v) {
-                        showToastShort("union");
                         getP().cashOut(2, mParsedSum);
                     }
 
@@ -69,6 +71,7 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         mTvAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hidKeyBoard();
                 if (rebate <= 0){
                     showToastShort("无可提现金额");
                 }else {
@@ -138,5 +141,10 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
                 mBottomCashOutDialog.dismiss();
             }
         }
+    }
+
+    private void hidKeyBoard() {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

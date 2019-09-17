@@ -13,6 +13,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
@@ -51,7 +52,7 @@ public class BottomCashOutDialog {
         });
         mOnClickListener = onClickListener;
 
-        ImageView cancel = popView.findViewById(R.id.base_pay_dialog_cancel);
+        TextView cancel = popView.findViewById(R.id.pay_dialog_cancel);
         LinearLayout alipay = popView.findViewById(R.id.base_pay_dialog_alipay);
         LinearLayout union = popView.findViewById(R.id.base_pay_dialog_union);
 

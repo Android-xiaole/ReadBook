@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
-public class GoodsPriceModel implements Comparable<GoodsPriceModel>, MultiItemEntity {
+public class GoodsPriceModel implements MultiItemEntity {
 
     /**
      * id : 10
@@ -28,7 +28,7 @@ public class GoodsPriceModel implements Comparable<GoodsPriceModel>, MultiItemEn
      */
     public static final int VIP = 1;
     public static final int SHUBI = 2;
-    private int id;
+    private long id;
     private String productCode;
     private String packagesCode;
     private String code;
@@ -46,11 +46,11 @@ public class GoodsPriceModel implements Comparable<GoodsPriceModel>, MultiItemEn
     private int exchangeScale;
     private boolean changeFont;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -181,11 +181,6 @@ public class GoodsPriceModel implements Comparable<GoodsPriceModel>, MultiItemEn
 
     public void setChangeFont(boolean changeFont) {
         this.changeFont = changeFont;
-    }
-
-    @Override
-    public int compareTo(@NonNull GoodsPriceModel o) {
-        return id - o.id;
     }
 
     @Override
