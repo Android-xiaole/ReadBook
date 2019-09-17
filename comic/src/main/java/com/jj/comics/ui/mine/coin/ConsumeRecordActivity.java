@@ -56,7 +56,6 @@ public class ConsumeRecordActivity extends BaseActivity<ConsumeRecordPresenter> 
 
         mAdapter = new ComsumeRecordAdapter(R.layout.comic_item_consume_record);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL, Utils.dip2px(this, 1), getResources().getColor(R.color.comic_efefef)));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
         mAdapter.setEmptyImgSrc(R.drawable.img_weixiaofei, true);
         mAdapter.disableLoadMoreIfNotFullPage();
