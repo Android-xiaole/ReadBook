@@ -25,6 +25,8 @@ public class CashOutListAdapter extends SimpleBaseAdapter<CashOutListResponse.Da
             view.setTextColor(Color.parseColor("#FFFE4C68"));
         }else if (status.contains("完成")) {
             view.setTextColor(Color.parseColor("#FF3FC98A"));
+        }else {
+            view.setTextColor(Color.parseColor("#FF333333"));
         }
         helper.setText(R.id.tv_item_rebate_detail_title, status);
         helper.setText(R.id.tv_item_rebate_detail_time,item.getCreate_time());

@@ -71,4 +71,5 @@ public class RouterMap {
     public static final String COMIC_CASHOUT_FRAGMENT = "/ui/mine/CashOutFragment";
     public static final String COMIC_REBATE_FRAGMENT = "/ui/mine/RebateFragment";
     public static final String COMIC_SORTLIST_ACTIVITY = "/ui/sort/SortListActivity";
+    public static final String COMIC_CASHOUT_RESULT_ACTIVITY = "/ui/mine/CashOutResultActivity";
 }

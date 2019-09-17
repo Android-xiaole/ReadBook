@@ -1,6 +1,8 @@
 package com.jj.comics.ui.mine.rebate.detail;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,20 +32,21 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
     SwipeRefreshLayout mRefreshLayout;
 
     private int currentPage = 1;
-    private RebateListAdapter mNotificationListAdapter;
+    private RebateListAdapter mRebateAdapter;
 
 
     @Override
     public void initData(Bundle savedInstanceState) {
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setRefreshing(true);
-        mNotificationListAdapter = new RebateListAdapter(R.layout.comic_item_rebate_detail);
+        mRebateAdapter = new RebateListAdapter(R.layout.comic_item_rebate_detail);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-        mNotificationListAdapter.bindToRecyclerView(mRecyclerView,true);
-        mNotificationListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
-        mNotificationListAdapter.setOnLoadMoreListener(this,mRecyclerView);
+        mRebateAdapter.bindToRecyclerView(mRecyclerView,true);
+        mRebateAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
+        mRebateAdapter.setOnLoadMoreListener(this,mRecyclerView);
 //        getP().getRebateList(currentPage);
+        mRebateAdapter.setEmptyView(getEmptyView());
     }
 
     @Override
@@ -75,14 +78,14 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
     public void onGetRebateListSucc(List<RebateListResponse.DataBeanX.RebateModel> list) {
         mRefreshLayout.setRefreshing(false);
         if (currentPage == 1) {
-            mNotificationListAdapter.setNewData(list);
+            mRebateAdapter.setNewData(list);
         }else{
-            mNotificationListAdapter.addData(list);
+            mRebateAdapter.addData(list);
         }
         if(list.size() == 0) {
-            mNotificationListAdapter.loadMoreEnd(true);
+            mRebateAdapter.loadMoreEnd(true);
         }else {
-            mNotificationListAdapter.loadMoreComplete();
+            mRebateAdapter.loadMoreComplete();
         }
     }
 
@@ -91,12 +94,17 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
     public void onGetRebateListFail(NetError error) {
         mRefreshLayout.setRefreshing(false);
         currentPage --;
-        mNotificationListAdapter.loadMoreFail();
+        mRebateAdapter.loadMoreFail();
     }
 
     @Override
     public void onLoadMoreRequested() {
         currentPage ++;
         getP().getRebateList(currentPage);
+    }
+
+    private View getEmptyView() {
+        LayoutInflater inflater = getLayoutInflater();
+        return inflater.inflate(R.layout.comic_layout_empty_view_reabte, null);
     }
 }

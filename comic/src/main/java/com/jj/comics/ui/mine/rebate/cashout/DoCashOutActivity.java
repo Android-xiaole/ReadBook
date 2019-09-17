@@ -1,5 +1,6 @@
 package com.jj.comics.ui.mine.rebate.cashout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,15 +14,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.CashOutResponse;
 import com.jj.comics.ui.dialog.BottomCashOutDialog;
 import com.jj.comics.ui.recommend.RecommendLoadMoreContract;
 
 import butterknife.BindView;
+
+import static com.jj.base.utils.RouterMap.COMIC_CASHOUT_RESULT_ACTIVITY;
 
 @Route(path = RouterMap.COMIC_DOCASHOUT_ACTIVITY)
 public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implements DoCashOutContract.IDoCashOutView {
@@ -47,17 +52,17 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         mBtnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hidKeyBoard();
+                hidKeyBoard(DoCashOutActivity.this);
                 mBottomCashOutDialog = new BottomCashOutDialog();
                 mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView, new BottomCashOutDialog.DialogOnClickListener() {
                     @Override
                     public void onAliClick(View v) {
-                        getP().cashOut(1, mParsedSum);
+                        getP().cashOut(Constants.CASH_OUT_WAY.ALIPAY, mParsedSum);
                     }
 
                     @Override
                     public void onUnionClick(View v) {
-                        getP().cashOut(2, mParsedSum);
+                        getP().cashOut(Constants.CASH_OUT_WAY.UNION, mParsedSum);
                     }
 
                     @Override
@@ -71,7 +76,7 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         mTvAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hidKeyBoard();
+                hidKeyBoard(DoCashOutActivity.this);
                 if (rebate <= 0){
                     showToastShort("无可提现金额");
                 }else {
@@ -132,19 +137,22 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
     }
 
     @Override
-    public void cashOutComplete(boolean succ, String msg) {
-        if (succ) {
-            finish();
-        }else {
-            showToastShort("申请失败，请重试！");
-            if (mBottomCashOutDialog != null) {
-                mBottomCashOutDialog.dismiss();
-            }
+    public void cashOutComplete(CashOutResponse.DataBean dataBean) {
+        finish();
+        ARouter.getInstance().build(RouterMap.COMIC_CASHOUT_RESULT_ACTIVITY).withSerializable(Constants.IntentKey.CASH_OUT_RESULT,dataBean).navigation();
+    }
+
+    @Override
+    public void cashOutFail(String message) {
+        showToastShort("申请失败，请重试！");
+        if (mBottomCashOutDialog != null) {
+            mBottomCashOutDialog.dismiss();
         }
     }
 
-    private void hidKeyBoard() {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    private void hidKeyBoard(Activity activity) {
+        ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

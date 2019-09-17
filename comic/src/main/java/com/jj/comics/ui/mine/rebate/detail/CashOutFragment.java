@@ -1,6 +1,8 @@
 package com.jj.comics.ui.mine.rebate.detail;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +46,7 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
         mCashOutListAdapter.bindToRecyclerView(mRecyclerView, true);
         mCashOutListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mCashOutListAdapter.setOnLoadMoreListener(this, mRecyclerView);
+        mCashOutListAdapter.setEmptyView(getEmptyView());
 //        getP().getCashOutList(currentPage);
     }
 
@@ -100,5 +103,10 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
     public void onLoadMoreRequested() {
         currentPage++;
         getP().getCashOutList(currentPage);
+    }
+
+    private View getEmptyView() {
+        LayoutInflater inflater = getLayoutInflater();
+        return inflater.inflate(R.layout.comic_layout_empty_view_reabte, null);
     }
 }

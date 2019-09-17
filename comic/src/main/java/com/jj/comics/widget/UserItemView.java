@@ -36,17 +36,27 @@ public class UserItemView extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         LayoutInflater.from(context).inflate(R.layout.comic_user_item_view, this, true);
         ImageView headImg = findViewById(R.id.user_info_head_img);//右侧头像
+        ImageView rightImg = findViewById(R.id.right_img);
         //标题
         mTitle = findViewById(R.id.title);
         right_title = findViewById(R.id.right_title);//标题
         View line = findViewById(R.id.bottom_line);//分割线
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.UserItemView);
 
+        //view content
         String titleText = typedArray.getString(R.styleable.UserItemView_user_item_title);
         mTitle.setText(titleText);
 
+        String rightText = typedArray.getString(R.styleable.UserItemView_right_text);
+        right_title.setText(rightText);
+
+        // view visiablity
         int headVisible = typedArray.getInt(R.styleable.UserItemView_head_img_visible, View.GONE);
         headImg.setVisibility(headVisible);
+
+        int rightVisible = typedArray.getInt(R.styleable.UserItemView_right_img_visible,
+                View.VISIBLE);
+        rightImg.setVisibility(rightVisible);
 
         int rightTitleVisible = typedArray.getInt(R.styleable.UserItemView_right_title_visible, View.GONE);
         right_title.setVisibility(rightTitleVisible);
@@ -54,13 +64,13 @@ public class UserItemView extends LinearLayout {
         int bottomLineVisible = typedArray.getInt(R.styleable.UserItemView_bottom_line_visible, View.GONE);
         line.setVisibility(bottomLineVisible);
 
+        //view size
         float titleSize = typedArray.getDimension(R.styleable.UserItemView_title_size, 0);
-//        float applyDimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, titleSize,
-//                getResources().getDisplayMetrics());
         if (titleSize >0)  mTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
 
-        String rightTitleText = typedArray.getString(R.styleable.UserItemView_right_text);
-        right_title.setText(rightTitleText);
+        float rightTextSize = typedArray.getDimension(R.styleable.UserItemView_right_text_size, 0);
+        if (rightTextSize >0)  right_title.setTextSize(TypedValue.COMPLEX_UNIT_PX,titleSize);
+
         typedArray.recycle();
     }
 

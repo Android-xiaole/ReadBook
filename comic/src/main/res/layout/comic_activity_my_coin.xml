@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/comic_my_coin" />
+        app:title="我的书币" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_my_coin"

@@ -22,16 +22,17 @@ public class DoCashOutPresenter extends BasePresenter<BaseRepository,DoCashOutAc
                 .subscribe(new ApiSubscriber2<CashOutResponse>() {
                     @Override
                     protected void onFail(NetError error) {
-                        getV().cashOutComplete(false,error.getMessage());
+                        getV().cashOutFail(error.getMessage());
                     }
 
                     @Override
                     public void onNext(CashOutResponse cashOutResponse) {
                         CashOutResponse.DataBean data = cashOutResponse.getData();
-                        if (data != null) {
-                           getV().cashOutComplete(data.isStatus(),"200");
+                        if (data != null && data.isStatus()) {
+                            data.setType(type);
+                           getV().cashOutComplete(data);
                         }else {
-                            getV().cashOutComplete(false,NetError.noDataError().getMessage());
+                            getV().cashOutFail(NetError.noDataError().getMessage());
                         }
                     }
                 });

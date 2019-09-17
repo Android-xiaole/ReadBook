@@ -135,6 +135,7 @@ public class Constants {
         public static final String PAY_INFO = "pay_info";
         public static final String COIN = "coin";
         public static final String ALL_REBATE = "all_rebate";
+        public static final String CASH_OUT_RESULT = "cash_out_result";
 
         //login
         public static final String LOGIN_TYPE = "type";
@@ -443,4 +444,9 @@ public class Constants {
     public static final String OSS_ENDPOINT = "oss-cn-shanghai.aliyuncs.com";
     public static final String BUCKET_NAME = "fanlixiaoshuo";
     public static final String BUCKET_URL = "https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/";
+
+    public static class CASH_OUT_WAY {
+        public static final int ALIPAY = 1;
+        public static final int UNION = 2;
+    }
 }

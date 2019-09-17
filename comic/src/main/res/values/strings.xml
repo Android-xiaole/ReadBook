@@ -386,5 +386,7 @@
     <string name="comic_my_rebate_btn_title">提取返利</string>
 
     <string name="comic_sort_cid_title">玄幻</string>
+    <string name="comic_desc_rebate_success">提取返利已经申请成功</string>
+    <string name="comic_rebate_empty_desc">您还没有任何返利呢，赶快去\n邀请好友下载APP看小说赚钱呀!</string>
 
 </resources>
