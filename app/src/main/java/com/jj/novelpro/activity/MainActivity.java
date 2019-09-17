@@ -59,6 +59,8 @@ import com.yanzhenjie.permission.runtime.Permission;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -170,16 +172,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 String channelCode = appData.getChannel();
                 //获取自定义数据
                 String bindData = appData.getData();
-                JsonObject jsonObject;
                 try {
-                    jsonObject = new JsonParser().parse(bindData).getAsJsonObject();
-                    if (jsonObject!=null){
-                        String invite_code = jsonObject.getAsJsonObject(Constants.SharedPrefKey.INVITE_CODE).getAsString();
-                        if (!TextUtils.isEmpty(invite_code)){
-                            SharedPreManger.getInstance().saveInvitecode(invite_code);
-                        }
+                    JSONObject object = new JSONObject(bindData);
+                    String invite_code = object.optString(Constants.SharedPrefKey.INVITE_CODE);
+                    if (!TextUtils.isEmpty(invite_code)){
+                        SharedPreManger.getInstance().saveInvitecode(invite_code);
                     }
-                }catch (IllegalStateException e){
+                } catch (JSONException e) {
+                    e.printStackTrace();
                     LogUtil.e("OpenInstall:appData转换json失败");
                 }
             }
