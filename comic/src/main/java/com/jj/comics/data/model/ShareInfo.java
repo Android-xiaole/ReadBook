@@ -1,7 +1,5 @@
 package com.jj.comics.data.model;
 
-import java.util.List;
-
 public class ShareInfo {
     private String title;
     private String author;

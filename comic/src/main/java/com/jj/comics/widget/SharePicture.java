@@ -2,6 +2,7 @@ package com.jj.comics.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,15 +18,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
+import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.ShareInfo;
+import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.ImageUtil;
+import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.QRCodeUtil;
 import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
+import com.jj.sdk.GlideApp;
 import com.nanchen.compresshelper.CompressHelper;
 
 import java.io.File;
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -39,6 +50,9 @@ public class SharePicture extends LinearLayout {
     //布局
     private LinearLayout top_linear;
     private LinearLayout ll_bottom;
+    private LinearLayout ll_author_type;
+    private LinearLayout ll_right;
+    private LinearLayout llContent;
     private ImageView iv_bookIcon;//封面
     private TextView tv_title;//标题
     private TextView tv_author;//作者
@@ -94,6 +108,7 @@ public class SharePicture extends LinearLayout {
     private void init(Context context) {
         this.mContext = context;
         picWidth = ScreenUtils.getDisplayMetrics().widthPixels;
+        picMargin = 40;
         rootView = LayoutInflater.from(context).inflate(R.layout.comic_share_view, this, false);
         initView();
     }
@@ -102,6 +117,9 @@ public class SharePicture extends LinearLayout {
     private void initView() {
         top_linear = rootView.findViewById(R.id.top_linear);
         ll_bottom = rootView.findViewById(R.id.ll_bottom);
+        ll_author_type = rootView.findViewById(R.id.ll_author_type);
+        ll_right = rootView.findViewById(R.id.ll_right);
+        llContent = rootView.findViewById(R.id.llContent);
         iv_bookIcon = rootView.findViewById(R.id.iv_bookIcon);
         tv_title = rootView.findViewById(R.id.tv_title);
         tv_author = rootView.findViewById(R.id.tv_author);
@@ -110,18 +128,17 @@ public class SharePicture extends LinearLayout {
         qrcode_img = rootView.findViewById(R.id.qrcode_img);
 
         layoutView(top_linear);
-        layoutView(iv_bookIcon);
-        layoutView(tv_title);
-        layoutView(tv_author);
-        layoutView(tv_type);
+//        layoutView(ll_right);
+//        layoutView(ll_author_type);
         layoutView(ll_bottom);
-        layoutView(qrcode_img);
+        layoutView(llContent);
+//        layoutView(qrcode_img);
 
         widthTop = top_linear.getMeasuredWidth();
         heightTop = top_linear.getMeasuredHeight();
 
 
-        widthContent = article_content.getMeasuredWidth();
+        widthContent = llContent.getMeasuredWidth();
         // 文字由于高度可变，所以这里不需要测量高度，后面会手动测量
 
         widthBottom = ll_bottom.getMeasuredWidth();
@@ -145,6 +162,20 @@ public class SharePicture extends LinearLayout {
 
     public void setData(ShareInfo info) {
         this.shareInfo = info;
+        tv_title.setText(shareInfo.getTitle());
+        tv_author.setText(shareInfo.getAuthor());
+        tv_type.setText(shareInfo.getType());
+        GlideApp.with(mContext).load(info.getCover()).into(iv_bookIcon);
+//        UserInfo userInfo = LoginHelper.getOnLineUser();
+        GlideApp.with(mContext).asBitmap().load("https://www.baidu.com/img/bd_logo1.png?where=super").into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
+                        "H", "1", Color.BLACK, Color.WHITE, resource, 0.2F, null);
+                qrcode_img.setImageBitmap(qrcode_bitmap);
+            }
+        });
+
     }
 
 

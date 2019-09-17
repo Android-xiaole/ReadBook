@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.ui.BaseActivity;
@@ -57,7 +58,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         ShareMenuAdapter shareMenuAdapter = new ShareMenuAdapter(R.layout.comic_share_dialog_item);
         List<ShareMenuModel> list = new ArrayList<>();
         list.add(new ShareMenuModel(R.drawable.icon_share_wechat, ShareMenuModel.ShareMenuTypeEnum.WECHAT));
-//        list.add(new ShareMenuModel(R.drawable.icon_share_friends, ShareMenuModel.ShareMenuTypeEnum.WECHATMOMENT));
+        list.add(new ShareMenuModel(R.drawable.icon_share_friends, ShareMenuModel.ShareMenuTypeEnum.WECHATMOMENT));
         list.add(new ShareMenuModel(R.drawable.icon_share_qq, ShareMenuModel.ShareMenuTypeEnum.QQ));
 //        list.add(new ShareMenuModel(R.drawable.icon_share_qq_space, ShareMenuModel.ShareMenuTypeEnum.QQZONE));
         list.add(new ShareMenuModel(R.drawable.icon_share_weibo, ShareMenuModel.ShareMenuTypeEnum.SINA));
@@ -98,9 +99,9 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         ShareMenuAdapter shareMenuAdapter = new ShareMenuAdapter(R.layout.comic_share_dialog_item);
         List<ShareMenuModel> list = new ArrayList<>();
         list.add(new ShareMenuModel(R.drawable.icon_share_wechat, ShareMenuModel.ShareMenuTypeEnum.WECHAT));
-//        list.add(new ShareMenuModel(R.drawable.icon_share_friends, ShareMenuModel.ShareMenuTypeEnum.WECHATMOMENT));
-        list.add(new ShareMenuModel(R.drawable.icon_share_qq, ShareMenuModel.ShareMenuTypeEnum.QQ));
+        list.add(new ShareMenuModel(R.drawable.icon_share_friends, ShareMenuModel.ShareMenuTypeEnum.WECHATMOMENT));
 //        list.add(new ShareMenuModel(R.drawable.icon_share_qq_space, ShareMenuModel.ShareMenuTypeEnum.QQZONE));
+        list.add(new ShareMenuModel(R.drawable.icon_share_qq, ShareMenuModel.ShareMenuTypeEnum.QQ));
         list.add(new ShareMenuModel(R.drawable.icon_share_weibo, ShareMenuModel.ShareMenuTypeEnum.SINA));
 //        list.add(new ShareMenuModel(R.drawable.icon_share_copy_link, ShareMenuModel.ShareMenuTypeEnum.COPYLINK));
 //        list.add(new ShareMenuModel(R.drawable.icon_share_report, ShareMenuModel.ShareMenuTypeEnum.REPORT));
@@ -126,19 +127,11 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             shareMessageModel = new ShareMessageModel();
             shareMessageModel.setShareTitle(activity.getString(R.string.comic_share_dialog_title));
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
-            shareMessageModel.setShareImgUrl(SharedPref.getInstance(activity).getString(Constants.SharedPrefKey.SHARE_IMG_KEY, activity.getString(R.string.comic_share_dialog_default_img)));
+            shareMessageModel.setShareImgUrl(Constants.CONTENT_URL);
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            String channel_name = Constants.CHANNEL_ID;
-            String signCode = "";
-            if (channel_name.contains("-")) {
-                String[] code = channel_name.split("-");
-                signCode = code[code.length - 1];
-            } else {
-                signCode = channel_name;
-            }
-            String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
-            shareMessageModel.setShareUrl(String.format(activity.getString(R.string.comic_share_dialog_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), uid, channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE + "&noShare=false");
+            String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE;
+            shareMessageModel.setShareUrl(shareUrl);
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -164,17 +157,30 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             case PHOTO://分享图片
                 ShareInfo shareInfo = new ShareInfo();
                 shareInfo.setTitle("测试");
-                shareInfo.setTitle("liu");
-                shareInfo.setContent("fadfadfsadfasda");
-                shareInfo.setCover("https://www.baidu.com/s?wd=%E4%BB%8A%E6%97%A5%E6%96%B0%E9%B2%9C%E4%BA%8B&tn=SE_Pclogo_6ysd4c7a&sa=ire_dl_gh_logo&rsv_dl=igh_logo_pc");
+                shareInfo.setAuthor("优婆璎珞");
+                shareInfo.setType("玄幻言情");
+                shareInfo.setContent("\n" +
+                        "                              一个身着红绿色相间锦缎罗裙的女孩站在凉亭边，可笑之极。有些呆滞的双眼惊慌的偷看了一眼亭内一身黑色暗纹绣蟒衣衫的男人。\n" +
+                        "\n" +
+                        "  对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三皇子。\n" +
+                        "\n" +
+                        "  他，马要成为她的夫君了，她虽然不太懂得这些男女之事，但是看到他的脸，她情不自禁的想要靠近……\n");
+                shareInfo.setCover(shareMessageModel.getShareImgUrl());
                 shareInfo.setKeywords("key1");
-                shareInfo.setQrcodeImg("https://www.baidu.com/s?wd=%E4%BB%8A%E6%97%A5%E6%96%B0%E9%B2%9C%E4%BA%8B&tn=SE_Pclogo_6ysd4c7a&sa=ire_dl_gh_logo&rsv_dl=igh_logo_pc");
+                shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
                 SharePicture sharePicture = new SharePicture(activity);
                 sharePicture.setData(shareInfo);
                 sharePicture.setListener(new SharePicture.Listener() {
                     @Override
                     public void onSuccess(String path) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
 
+                                ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                                shareImageDialog.show();
+                            }
+                        });
                     }
 
                     @Override
@@ -182,7 +188,6 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                         Log.i("share_picture", "error");
                     }
                 });
-//                ToastUtil.showToastShort("未实现");
                 sharePicture.startDraw();
                 break;
             case COPYLINK://复制链接

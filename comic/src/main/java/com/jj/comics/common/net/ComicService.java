@@ -91,7 +91,7 @@ public interface ComicService {
     String API_RECENT_UPDATES = "api/recent_updates";
     String API_CAROUSEL = "api/carousel";
     String API_HOT = "api/hot";
-    String API_SEARCH = "api/money";
+    String API_SEARCH = "api/search";
     String API_WATCHING = "api/watching";
     String MH_WXMP_WEBAPI_WX_PARAM = "mh.wxmp.webapi/wx/param";
     String API_SECTION_RECOMMENDED = "api/section_recommended";
@@ -269,7 +269,7 @@ public interface ComicService {
      * 获取根据关键字搜索到的漫画列表
      */
     @GET(API_SEARCH)
-    Observable<BookListResponse> getSearchComicListByKeywords(@Query("money") String keyWord);
+    Observable<BookListResponse> getSearchComicListByKeywords(@Query("search") String keyWord);
 
     /**
      * 获取大家都在看的漫画数据

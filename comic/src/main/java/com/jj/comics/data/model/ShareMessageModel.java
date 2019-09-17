@@ -3,6 +3,9 @@ package com.jj.comics.data.model;
 public class ShareMessageModel {
 
     private String shareTitle;//分享标题
+    private String bookTitle;//书籍标题
+    private String author;//作者
+    private String type;//作者
     private String shareContent;//分享内容
     private String shareUrl;//分享跳转链接
     private String shareImgUrl;//用户分享缩略图，只支持网络图片

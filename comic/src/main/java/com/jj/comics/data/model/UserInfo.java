@@ -4,10 +4,11 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
 import java.io.Serializable;
+
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
-public class UserInfo implements Serializable{
+public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = -5308893968273725711L;
     /**
@@ -57,15 +58,17 @@ public class UserInfo implements Serializable{
     private int status;
     private String create_time;
     private String update_time;
+    private String invite_code;
     private int delete_flag;
 
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
 
-    @Generated(hash = 1896268582)
+
+    @Generated(hash = 953407895)
     public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
             String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
-            String create_time, String update_time, int delete_flag, boolean isLogin) {
+            String create_time, String update_time, String invite_code, int delete_flag, boolean isLogin) {
         this.uid = uid;
         this.openid = openid;
         this.unionid = unionid;
@@ -81,6 +84,7 @@ public class UserInfo implements Serializable{
         this.status = status;
         this.create_time = create_time;
         this.update_time = update_time;
+        this.invite_code = invite_code;
         this.delete_flag = delete_flag;
         this.isLogin = isLogin;
     }
@@ -88,6 +92,7 @@ public class UserInfo implements Serializable{
     @Generated(hash = 1279772520)
     public UserInfo() {
     }
+    
 
     public long getUid() {
         return this.uid;
@@ -207,6 +212,14 @@ public class UserInfo implements Serializable{
 
     public void setUpdate_time(String update_time) {
         this.update_time = update_time;
+    }
+
+    public String getInvite_code() {
+        return invite_code;
+    }
+
+    public void setInvite_code(String invite_code) {
+        this.invite_code = invite_code;
     }
 
     public int getDelete_flag() {

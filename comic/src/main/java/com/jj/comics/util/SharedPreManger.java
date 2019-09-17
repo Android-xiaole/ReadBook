@@ -57,7 +57,7 @@ public class SharedPreManger {
      * 获取邀请码
      */
     public String getInvitecode(){
-        return sharedPref.getString(Constants.SharedPrefKey.INVITE_CODE,"PdaNYEBpq1FBSdfq");
+        return sharedPref.getString(Constants.SharedPrefKey.INVITE_CODE,"");
     }
 
 }

@@ -45,6 +45,8 @@ import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ShareMessageModel;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
@@ -230,7 +232,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 mCatalogMenu.closeDrawers();
                 for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
-                    if ((catalogAdapter.getData().get(position).getId()+"").equals(bookChapterBean.getId())){
+                    if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
                         mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
                     }
                 }
@@ -343,7 +345,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     public void onClick_ReadActivity(View view) {
         int i = view.getId();
         if (i == R.id.tv_sort) {
-            if (catalogAdapter.getData()==null||catalogAdapter.getData().size() == 0)return;
+            if (catalogAdapter.getData() == null || catalogAdapter.getData().size() == 0) return;
             tv_sort.setSelected(!tv_sort.isSelected());
             if (tv_sort.isSelected()) {
                 tv_sort.setText("正序");
@@ -364,8 +366,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         } else if (i == R.id.iv_back) {//topMenu的返回建
             finish();
         } else if (i == R.id.iv_batchBuy) {//全本购买
-            if (bookModel!=null&&catalogModel!=null){
-                SubscribeActivity.toSubscribe(this,bookModel,catalogModel);
+            if (bookModel != null && catalogModel != null) {
+                SubscribeActivity.toSubscribe(this, bookModel, catalogModel);
             }
         } else if (i == R.id.iv_collect) {//收藏
             if (LoginHelper.interruptLogin(this, null) && bookModel != null) {
@@ -387,7 +389,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                     getP().addOrRemoveShelf(bookModel, isCollect, false);
                 }
             }
-        } else if (i == R.id.iv_share||i == R.id.lin_makeMoney) {//分享按钮&赚钱按钮
+        } else if (i == R.id.iv_share || i == R.id.lin_makeMoney) {//分享按钮&赚钱按钮
             if (bookModel == null) return;
             if (shareDialog == null) {
                 shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
@@ -397,16 +399,19 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
             shareMessageModel.setShareContent(shareContent);
             shareMessageModel.setShareImgUrl(bookModel.getCover());
-            String channel_name = Constants.CHANNEL_ID;
-            String signCode = "";
-            if (channel_name.contains("-")) {
-                String[] code = channel_name.split("-");
-                signCode = code[code.length - 1];
-            } else {
-                signCode = channel_name;
+
+            UserInfo loginUser = LoginHelper.getOnLineUser();
+            if (loginUser == null) {
+                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(ReadComicActivity.this);
+                return;
             }
-            String sign = SignUtil.sign(Constants.PRODUCT_CODE + signCode);
-            shareMessageModel.setShareUrl(String.format(getString(R.string.comic_share_url), SharedPref.getInstance().getString(Constants.SharedPrefKey.SHARE_HOST_KEY, Constants.SharedPrefKey.SHARE_HOST), bookModel.getId(), channel_name, sign) + "&pid=" + Constants.PRODUCT_CODE);
+            String uid = loginUser == null ? "0" : loginUser.getUid() + "";
+            long chapterid = 0;
+            if (catalogAdapter.getData() != null && catalogAdapter.getData().size() > 0) {
+                chapterid = catalogAdapter.getData().get(0).getId();
+            }
+            String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + bookModel.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
+            shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBoolId(bookModel.getId());
             shareDialog.show(shareMessageModel);
         } else if (i == R.id.lin_catalogBtn) {//目录
@@ -485,7 +490,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
     @Override
     public void onLoadCatalogContentEnd() {
-        if (mPageView!=null)mPageView.setMove(true);
+        if (mPageView != null) mPageView.setMove(true);
     }
 
     /**
@@ -493,7 +498,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      */
     @Override
     public void onLoadChapterContent() {
-        if (mPageLoader.getPageStatus() == PageLoader.STATUS_FINISH||mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
+        if (mPageLoader.getPageStatus() == PageLoader.STATUS_FINISH || mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
             mPageLoader.openChapter();
         }
     }
@@ -541,13 +546,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                         getP().getCollectStatus(bookModel.getId());
                     }
                     if (bookModel != null && catalogModel != null && data != null) {
-                        getP().loadData(bookModel,catalogModel.getBook_id());
+                        getP().loadData(bookModel, catalogModel.getBook_id());
                     }
                     break;
                 case RequestCode.SUBSCRIBE_REQUEST_CODE:
                 case RequestCode.PAY_REQUEST_CODE:
                     if (bookModel != null && catalogModel != null && data != null) {
-                        getP().loadData(bookModel,catalogModel.getId());
+                        getP().loadData(bookModel, catalogModel.getId());
                     }
                     break;
             }
@@ -595,7 +600,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         MobclickAgent.onEventValue(this, Constants.UMEventId.EXIT_READ, map, duration);
         super.onDestroy();
         //上传阅读记录(只有已经下载之后的章节才会保存阅读记录)
-        if (bookModel != null && catalogModel != null&& BookManager.isChapterCached(catalogModel.getBook_id()+"",catalogModel.getChaptername())) {
+        if (bookModel != null && catalogModel != null && BookManager.isChapterCached(catalogModel.getBook_id() + "", catalogModel.getChaptername())) {
             getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder());
         }
     }

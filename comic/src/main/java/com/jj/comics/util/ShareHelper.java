@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.jj.base.BaseApplication;
@@ -30,6 +31,7 @@ import com.tencent.connect.share.QQShare;
 import com.tencent.connect.share.QzoneShare;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
@@ -48,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -89,6 +92,7 @@ public class ShareHelper {
 
     /**
      * 分享到微信
+     *
      * @link https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&lang=zh_CN
      */
     public void shareToWechat(final BaseActivity activity, final ShareMessageModel shareMessageModel) {
@@ -127,7 +131,7 @@ public class ShareHelper {
 //                        TencentHelper.getWxApi().sendReq(req);
 
                         //初始化一个 WXTextObject 对象，填写分享的文本内容
-                        String text = "【"+shareMessageModel.getShareTitle()+"】"+shareMessageModel.getShareUrl()+"复制这段链接，到系统浏览器打开";
+                        String text = "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl() + "复制这段链接，到系统浏览器打开";
                         WXTextObject textObj = new WXTextObject();
                         textObj.text = text;
 
@@ -178,25 +182,9 @@ public class ShareHelper {
 
                     @Override
                     public void onNext(File file) {
-//                        WXWebpageObject webpage = new WXWebpageObject();
-//                        webpage.webpageUrl = shareMessageModel.getShareUrl();
-//                        //用 WXWebpageObject 对象初始化一个 WXMediaMessage 对象
-//                        WXMediaMessage msg = new WXMediaMessage(webpage);
-//                        msg.title = shareMessageModel.getShareTitle();
-//                        msg.description = shareMessageModel.getShareContent();
-//                        msg.thumbData = bitmap2Bytes(url2Bitmap(file, shareMessageModel));
-//                        //构造一个Req
-//                        SendMessageToWX.Req req = new SendMessageToWX.Req();
-//                        req.transaction = buildTransaction("webpage");
-//                        req.message = msg;
-//                        req.scene = SendMessageToWX.Req.WXSceneTimeline;//场景值，分享到回话，也就是分享到微信
-//                        req.userOpenId = Constants.WX_APP_ID;
-//                        wxUmengEventId = "WeChatMomentsShare";
-//                        //调用api接口，发送数据到微信
-//                        TencentHelper.getWxApi().sendReq(req);
 
                         //初始化一个 WXTextObject 对象，填写分享的文本内容
-                        String text = "【"+shareMessageModel.getShareTitle()+"】"+shareMessageModel.getShareUrl()+"复制这段链接，到系统浏览器打开";
+                        String text = "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl() + "复制这段链接，到系统浏览器打开";
                         WXTextObject textObj = new WXTextObject();
                         textObj.text = text;
 
@@ -229,6 +217,7 @@ public class ShareHelper {
 
     /**
      * 分享到QQ
+     *
      * @link http://wiki.connect.qq.com/
      * @warn: 如果出现图片不显示的问题一般都是图片太大了
      */
@@ -384,6 +373,45 @@ public class ShareHelper {
     }
 
     /**
+     * 分享本地图片到微信
+     *
+     * @param activity
+     * @param path
+     */
+    public void shareImageToWechat(final BaseActivity activity, String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            Toast.makeText(activity, "文件不存在", Toast.LENGTH_SHORT).show();
+        }
+        if (!isWxInstall()) {
+            ToastUtil.showToastLong(activity.getString(R.string.comic_not_install_wx));
+            return;
+        }
+        activity.showProgress();
+        Bitmap bmp = BitmapFactory.decodeFile(path);
+
+        //初始化 WXImageObject 和 WXMediaMessage 对象
+        WXImageObject imgObj = new WXImageObject(bmp);
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = imgObj;
+
+        //设置缩略图
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp,  120, 120, true);
+        bmp.recycle();
+        int bytes = thumbBmp.getByteCount();
+        ByteBuffer buf = ByteBuffer.allocate(bytes);
+        thumbBmp.copyPixelsToBuffer(buf);
+        msg.thumbData = buf.array();
+
+        //构造一个Req
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("img");
+        req.message = msg;
+        //调用api接口，发送数据到微信
+        TencentHelper.getWxApi(Constants.WX_APP_ID_LOGIN()).sendReq(req);
+    }
+
+    /**
      * 获取下载图片的Observable对象
      *
      * @param imageUrl
@@ -411,7 +439,8 @@ public class ShareHelper {
         switch (wxShareEvent.errCode) {
             case BaseResp.ErrCode.ERR_OK:
                 result = "分享成功";
-                if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
+                if (shareMessageModel != null)
+                    TaskReporter.reportShare(shareMessageModel.getBoolId());
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = "分享取消";
@@ -445,7 +474,7 @@ public class ShareHelper {
             //分享成功
             if (shareTemFile != null && shareTemFile.exists()) shareTemFile.delete();
             ToastUtil.showToastShort("分享成功");
-            if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
+            if (shareMessageModel != null) TaskReporter.reportShare(shareMessageModel.getBoolId());
         }
 
         @Override
@@ -480,7 +509,8 @@ public class ShareHelper {
                 @Override
                 public void onWbShareSuccess() {
                     ToastUtil.showToastShort("分享成功");
-                    if (shareMessageModel!=null)TaskReporter.reportShare(shareMessageModel.getBoolId());
+                    if (shareMessageModel != null)
+                        TaskReporter.reportShare(shareMessageModel.getBoolId());
                     recycleBitmap(thumbBmp);
                 }
 
@@ -541,7 +571,7 @@ public class ShareHelper {
          * 而且分享的文件名不能重复，分享弹出的预览界面显示的图片会根据图片名称做缓存
          * @ps: 这里面坑是真的多
          */
-        shareTemFile = new File(BaseApplication.getApplication().getCacheDir().getPath(),"share_" + System.currentTimeMillis() + ".png");
+        shareTemFile = new File(BaseApplication.getApplication().getCacheDir().getPath(), "share_" + System.currentTimeMillis() + ".png");
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(shareTemFile);

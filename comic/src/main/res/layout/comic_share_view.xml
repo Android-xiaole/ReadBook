@@ -14,7 +14,7 @@
         <FrameLayout
             android:layout_width="@dimen/dp_85"
             android:layout_height="@dimen/dp_110"
-            android:layout_marginLeft="@dimen/dp_90"
+            android:layout_marginLeft="@dimen/dp_20"
             android:background="@drawable/bg_shadow">
 
             <ImageView
@@ -27,6 +27,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/ll_right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_25"
@@ -42,6 +43,7 @@
                 android:textSize="@dimen/dp_14" />
 
             <LinearLayout
+                android:id="@+id/ll_author_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_15"
@@ -85,6 +87,7 @@
                     android:layout_width="34dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/comic_share_key_shape"
+                    android:gravity="center"
                     android:text="都市"
                     android:textColor="@color/comic_a8adb3"
                     android:textSize="@dimen/dp_12" />
@@ -95,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:background="@drawable/comic_share_key_shape"
+                    android:gravity="center"
                     android:text="悬疑"
                     android:textColor="@color/comic_a8adb3"
                     android:textSize="@dimen/dp_12" />
@@ -103,11 +107,21 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/article_content"
+    <LinearLayout
+        android:id="@+id/llContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/article_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="
                               一个身着红绿色相间锦缎罗裙的女孩站在凉亭边，可笑之极。有些呆滞的双眼惊慌的偷看了一眼亭内一身黑色暗纹绣蟒衣衫的男人。
 
   对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三皇子。
@@ -126,6 +140,7 @@
   “啊，姐姐，我，错了……疼……”女孩慌张的带着哭腔，显然是受惯了侮辱，希望通过求饶来躲过这场屈辱
   宫女看了一眼三皇子，见他眼含笑，越发变本加厉的扯着嗓子叫道：“护卫，护卫在哪？这废物又来了，赶快赶出去，若是唐突了三皇子殿下，你们担当的起吗？
                         " />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_bottom"
@@ -149,5 +164,13 @@
                 android:layout_marginTop="@dimen/dp_4"
                 android:src="@drawable/icon" />
         </FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="识别二维码下载APP"
+            android:textColor="@color/comic_000000"
+            android:textSize="@dimen/dp_15"
+            android:layout_marginBottom="58dp"
+            android:textStyle="bold"/>
     </LinearLayout>
 </LinearLayout>

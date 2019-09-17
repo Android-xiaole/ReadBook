@@ -9,15 +9,15 @@
 
     <ImageView
         android:id="@+id/iv_shareIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
         tools:src = "@drawable/icon_share_qq"/>
 
     <TextView
         android:id="@+id/tv_shareName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_12"
         android:textSize="@dimen/dp_14"
         tools:text="QQ"/>
 
