@@ -73,4 +73,7 @@ public class RouterMap {
     public static final String COMIC_SORTLIST_ACTIVITY = "/ui/sort/SortListActivity";
     public static final String COMIC_CASHOUT_RESULT_ACTIVITY = "/ui/mine/CashOutResultActivity";
     public static final String COMIC_BOUGHT_ACTIVITY= "/ui/mine/BoughtActivity";
+    public static final String COMIC_HELP_ACTIVITY= "/ui/mine/HelpActivity";
+    public static final String COMIC_HELP_FISSION_ACTIVITY= "/ui/mine/HelpFissionActivity";
+    public static final String COMIC_HELP_RECHARGE_ACTIVITY= "/ui/mine/HelpRechargeActivity";
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/comic_f4f6f9"
+    android:orientation="vertical">
+
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/comic_mine_help"></com.jj.comics.widget.comic.toolbar.ComicToolBar>
+
+    <com.jj.comics.widget.UserItemView
+        android:id="@+id/btn_recharge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginTop="@dimen/dp_10"
+        app:bottom_line_visible="visible"
+        app:user_item_title="充值返利"></com.jj.comics.widget.UserItemView>
+
+    <com.jj.comics.widget.UserItemView
+        android:id="@+id/btn_fission"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        app:user_item_title="裂变返利"></com.jj.comics.widget.UserItemView>
+
+</LinearLayout>

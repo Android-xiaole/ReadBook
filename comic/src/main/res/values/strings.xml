@@ -320,6 +320,8 @@
     <string name="comic_mine_notification">消息公告</string>
     <string name="comic_mine_recharge">充值中心</string>
     <string name="comic_mine_help">帮助中心</string>
+    <string name="comic_mine_help_recharge">充值返利</string>
+    <string name="comic_mine_help_fission">裂变返利</string>
     <string name="comic_rich_list_title">土豪排行</string>
     <string name="comic_coin_text">金币</string>
     <string name="comic_daily_task_text">每日任务</string>
