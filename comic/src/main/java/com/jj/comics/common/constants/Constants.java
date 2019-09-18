@@ -11,7 +11,7 @@ public class Constants {
     public static final String PRODUCT_CODE = "jjmanhua2";//新产品
     public static String CHANNEL_ID = ResourceUtil.getAppRes(BaseApplication.getApplication(), "channel_id", "").toString();//老后台渠道号
 
-    public static String OPEN_INSTALL_URL = "https://app-uhm3lx.openinstall.io/js-test?";
+    public static String OPEN_INSTALL_URL = "http://share.sou89.cn/download.html?";
     public static String CONTENT_URL = "http://share.sou89.cn/?";
     public static String CHANNEL_ID_PHP() {
         return SharedPref.getInstance().getString("CHANNEL_ID_PHP", "");

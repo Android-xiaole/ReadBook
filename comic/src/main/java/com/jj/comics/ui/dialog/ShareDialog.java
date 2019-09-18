@@ -130,7 +130,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             shareMessageModel.setShareImgUrl(Constants.CONTENT_URL);
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE;
+            String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&invite_code=" + loginUser.getInvite_code() + "&name=" + loginUser.getNickname() + "&pic=" + loginUser.getAvatar();
             shareMessageModel.setShareUrl(shareUrl);
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
