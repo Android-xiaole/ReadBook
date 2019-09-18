@@ -2,8 +2,11 @@ package com.jj.comics.ui.mine.help;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.bumptech.glide.request.RequestOptions;
+import com.jj.base.imageloader.ILFactory;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
@@ -18,9 +21,18 @@ import butterknife.BindView;
 public class HelpFissionActivity extends BaseActivity {
     @BindView(R2.id.toolBar)
     ComicToolBar mToolBar;
+    @BindView(R2.id.iv_help)
+    ImageView mImageView;
     @Override
     protected void initData(Bundle savedInstanceState) {
         mToolBar.setTitleText("裂变返利");
+
+        RequestOptions options = new RequestOptions();
+        options.error(R.drawable.img_base_empty)
+                .encodeQuality(100);
+        ILFactory.getLoader()
+                .loadNet(mImageView,"http://fanli.jjmh668.cn/prd/help-fission.jpg",
+                        options);
     }
 
     @Override
