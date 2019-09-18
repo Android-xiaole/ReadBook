@@ -42,6 +42,7 @@ import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
+import com.jj.comics.widget.UserItemView;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -64,7 +65,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
 
     @BindView(R2.id.user_info_head_img)
     ImageView headImg;
-
+    @BindView(R2.id.user_nickname)
+    UserItemView nickName;
+    @BindView(R2.id.user_sex)
+    UserItemView mSex;
+    @BindView(R2.id.user_phone)
+    UserItemView phone;
+    @BindView(R2.id.user_setting)
+    UserItemView setting;
     private OSSResponse.DataBean mOssConfig;
 
     @Override
@@ -88,6 +96,16 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
                                 .placeholder(R.drawable.img_loading));
             }
+            //设置昵称
+            if (userInfo.getNickname() != null) {
+                nickName.setRight_title(userInfo.getNickname());
+            }
+            //设置性别
+            String sex = userInfo.getSex() == 1 ? "男" : "女";
+            mSex.setRight_title(sex);
+
+            //设置手机号
+            phone.setRight_title(userInfo.getMobile() + "");
         }
     }
 

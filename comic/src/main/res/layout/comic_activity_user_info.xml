@@ -15,45 +15,50 @@
     <com.jj.comics.widget.UserItemView
         android:id="@+id/user_head"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:head_img="@drawable/icon_user_avatar_default"
         app:head_img_visible="visible"
+        app:title_size="@dimen/dp_15"
         app:bottom_line_visible="visible"
         app:user_item_title="@string/comic_user_info_head_img" />
 
     <com.jj.comics.widget.UserItemView
         android:id="@+id/user_nickname"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:head_img="@drawable/icon_user_avatar_default"
         app:head_img_visible="gone"
+        app:title_size="@dimen/dp_15"
         app:bottom_line_visible="visible"
         app:user_item_title="@string/comic_user_info_nickname" />
 
     <com.jj.comics.widget.UserItemView
         android:id="@+id/user_sex"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:head_img="@drawable/icon_user_avatar_default"
         app:head_img_visible="gone"
+        app:title_size="@dimen/dp_15"
         app:bottom_line_visible="visible"
         app:user_item_title="@string/comic_user_info_sex" />
 
     <com.jj.comics.widget.UserItemView
         android:id="@+id/user_phone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:head_img="@drawable/icon_user_avatar_default"
         app:head_img_visible="gone"
+        app:title_size="@dimen/dp_15"
         app:bottom_line_visible="visible"
         app:user_item_title="@string/comic_user_info_iphone" />
 
     <com.jj.comics.widget.UserItemView
         android:id="@+id/user_setting"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:head_img="@drawable/icon_user_avatar_default"
         app:head_img_visible="gone"
+        app:title_size="@dimen/dp_15"
         app:bottom_line_visible="gone"
         app:user_item_title="@string/comic_user_info_setting" />
 </LinearLayout>
