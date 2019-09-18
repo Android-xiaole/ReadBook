@@ -24,15 +24,12 @@ public class UserInfoPresenter extends BasePresenter<BaseRepository, UserInfoCon
     @Override
     public void updateUserInfo(String avatar, String nickname, int sex) {
         UserRepository.getInstance().updateUserInfo(avatar, nickname, sex)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<UserInfoResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<UserInfoResponse>() {
+                .as(this.<UserInfo>bindLifecycle())
+                .subscribe(new ApiSubscriber2<UserInfo>() {
                     @Override
-                    public void onNext(UserInfoResponse response) {
-                        UserInfoResponse.DataBean data = response.getData();
-                        if (data != null) {
-                            getV().onImgUploadComplete(data.getBaseinfo().getAvatar());
+                    public void onNext(UserInfo userInfo) {
+                        if (userInfo != null) {
+                            getV().onImgUploadComplete(userInfo.getAvatar());
                         } else {
                             getV().onLoadFail(NetError.noDataError());
                         }

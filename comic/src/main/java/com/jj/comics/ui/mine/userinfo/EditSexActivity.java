@@ -13,6 +13,8 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
@@ -48,7 +50,6 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
                 if (femaleCheck.isChecked()) {
                     getP().updateUserInfo(null, null, 2);
                 }
-                finish();
             }
         });
 //        初始化性别
@@ -74,10 +75,6 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
         return new EditInfoPresenter();
     }
 
-    @Override
-    public void onLoadFail(NetError error) {
-        ToastUtil.showToastShort(error.getMessage());
-    }
 
     @OnClick({R2.id.check_male, R2.id.check_female})
     void onClick(View view) {
@@ -88,5 +85,13 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
             femaleCheck.setChecked(true);
             maleCheck.setChecked(false);
         }
+    }
+
+    @Override
+    public void onSuccess(UserInfo userInfo) {
+        ToastUtil.showToastShort("修改成功");
+        EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent(userInfo));
+        setResult(RESULT_OK);
+        finish();
     }
 }

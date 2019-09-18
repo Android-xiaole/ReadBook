@@ -66,7 +66,6 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
         mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item,null);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.base_yellow_ffd850));
-        mRefresh.setRefreshing(true);
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,8 +105,10 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
             }
         });
 
-        getP().getCollectionList(currentPage);
-        getP().loadRecommendData();
+        if (LoginHelper.getOnLineUser()!=null){
+            mRefresh.setRefreshing(true);
+            getP().getCollectionList(currentPage);
+        }
     }
 
     @Override

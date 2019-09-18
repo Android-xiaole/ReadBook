@@ -17,6 +17,8 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
@@ -53,7 +55,6 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
                 if (!nickName.isEmpty()) {
                     getP().updateUserInfo(null, nickName, -1);
                 }
-                finish();
             }
         });
         textView.setVisibility(View.VISIBLE);
@@ -73,11 +74,6 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
         return new EditInfoPresenter();
     }
 
-    @Override
-    public void onLoadFail(NetError error) {
-        ToastUtil.showToastShort(error.getMessage());
-    }
-
     @OnClick({R2.id.alter_nick_name, R2.id.edit_nick_name_tv})
     void onClick(View view) {
         if (view.getId() == R.id.alter_nick_name || view.getId() == R.id.edit_nick_name_tv) {
@@ -90,5 +86,13 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
                     (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.showSoftInput(editText, 0);
         }
+    }
+
+    @Override
+    public void onSuccess(UserInfo userInfo) {
+        ToastUtil.showToastShort("修改成功");
+        EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent(userInfo));
+        setResult(RESULT_OK);
+        finish();
     }
 }

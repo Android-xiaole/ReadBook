@@ -9,9 +9,12 @@ import com.jj.base.net.NetError;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.data.biz.user.UserRepository;
+import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
@@ -26,56 +29,46 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneContract.IBindPhoneView> implements BindPhoneContract.IBindPhonePresenter {
+public class ChangePhonePresenter extends BasePresenter<BaseRepository, ChangePhoneContract.IBindPhoneView> implements ChangePhoneContract.IBindPhonePresenter {
     private static final int SECOND = 60;
     boolean isDown = false;
 
 
     @Override
     public void alterPhone(String mobile, String verify) {
+        getV().showProgress();
         UserRepository.getInstance().alterMobile(getV().getClass().getName(), mobile, verify)
                 .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<ResponseModel>bindLifecycle())
-                .subscribe(new ApiSubscriber2<ResponseModel>() {
+                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
-                    public void onNext(ResponseModel responseModel) {
-                        getUserData();
-                        getV().alterSuccess(responseModel);
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        if (error.getType() == -108) {
-                            ToastUtil.showToastLong(error.getMessage() + "");
-                        } else
-                            ToastUtil.showToastLong(BaseApplication.getApplication().getString(R.string.comic_bind_phone_error_remind));
-                    }
-                });
-    }
-
-    @Override
-    public void getUserData() {
-
-        UserRepository.getInstance().getUserInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<UserInfoResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<UserInfoResponse>() {
-                    @Override
-                    public void onNext(UserInfoResponse responseModel) {
-                        LoginHelper.updateUser(responseModel.getData().getBaseinfo());
-//                        EventBus.getDefault().post(responseModel.getUser());
-                        EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent());
-                        getV().onUpdateUserInfo(responseModel.getData().getBaseinfo());
-//                        getV().fillData(responseModel.getUser());
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-//                        ToastUtil.showToastShort(getV().getContext(), error.getMessage());
-                        if (error.getType() == NetError.AuthError) {
-//                            EventBus.getDefault().post(getV());
-                            EventBusManager.sendLogoutEvent(new LogoutEvent());
+                    public ObservableSource<UserInfo> apply(LoginResponse loginResponse) throws Exception {
+                        //修改手机号码成功之后后台会刷新token
+                        if (loginResponse.getData() != null && loginResponse.getData().getUser_info() != null) {
+                            //刷新token
+                            SharedPreManger.getInstance().saveToken(loginResponse.getData().getBearer_token());
+                            //保存用户信息
+                            return UserRepository.getInstance().saveUser(loginResponse.getData().getUser_info());
+                        }else{
+                            return Observable.error(NetError.noDataError());
                         }
+                    }
+                })
+                .as(this.<UserInfo>bindLifecycle())
+                .subscribe(new ApiSubscriber2<UserInfo>() {
+                    @Override
+                    public void onNext(UserInfo userInfo) {
+                        getV().alterSuccess(userInfo);
+                    }
+
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
                     }
                 });
     }

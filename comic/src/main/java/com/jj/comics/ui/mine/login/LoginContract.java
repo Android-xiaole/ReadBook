@@ -24,7 +24,7 @@ public interface LoginContract {
         void getVerifyCode(String mobile);
 
         //验证码登录
-        void loginByVerifyCode(boolean isCheck, String phone, String psw);
+        void loginByVerifyCode(boolean isCheck, String phone, String psw,String inviteCode);
 
         //qq登录
         void qqLogin(boolean isCheck, BaseActivity loginActivity);

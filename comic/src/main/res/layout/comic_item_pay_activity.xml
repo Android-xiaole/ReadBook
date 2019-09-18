@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/dp_70"
+    android:layout_marginBottom="@dimen/dp_20"
+    android:layout_marginLeft="@dimen/dp_16"
+    android:layout_marginRight="@dimen/dp_16"
+    android:gravity="center_vertical"
+    android:background="@drawable/comic_shape_payactivity_item">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_21"
+        android:textSize="@dimen/dp_16"
+        android:textColor="@color/comic_6e7379"
+        tools:text = "30天VIP"/>
+    
+    <View
+        android:layout_width="@dimen/dp_1"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:background="@color/comic_a8adb3"/>
+
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_16"
+        android:paddingRight="@dimen/dp_16"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="68元"
+            android:textSize="18dp"
+            android:textColor="@color/comic_ffad70"
+            />
+
+        <TextView
+            android:id="@+id/tv_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="首冲双倍首冲双倍首冲双倍首冲双倍"
+            android:layout_marginTop="@dimen/dp_10"
+            android:textColor="@color/comic_a8adb3"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_toPay"
+        android:layout_width="@dimen/dp_76"
+        android:layout_height="@dimen/dp_34"
+        android:text="充值"
+        android:layout_marginRight="@dimen/dp_16"
+        android:gravity="center"
+        android:background="@drawable/comic_shape_payactivity_btn"
+        android:textColor="@color/comic_ffffff"/>
+
+</LinearLayout>

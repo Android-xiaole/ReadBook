@@ -14,23 +14,18 @@ import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
-import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.ui.dialog.DialogUtilForComic;
-import com.jj.comics.ui.dialog.RechargeNotifyDialog;
 import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.UpdateAutoBuyStatusEvent;
-import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -39,49 +34,50 @@ import org.greenrobot.eventbus.ThreadMode;
 public class SubscribeActivity extends BaseActivity<SubscribePresenter> implements SubscribeContract.ISubscribeView {
 
     private CustomFragmentDialog buyDialog;//购买弹窗
-    private BookCatalogModel catalogModel;
+    private long chapterId;
     private BookModel bookModel;
 
-    public static void toSubscribe(BaseActivity activity, BookModel bookModel,BookCatalogModel catalogModel) {
+    public static void toSubscribe(BaseActivity activity, BookModel bookModel, long chapterId) {
         ARouter.getInstance().build(RouterMap.COMIC_SUBSCRIBE_ACTIVITY)
-                .withSerializable(Constants.IntentKey.BOOK_MODEL,bookModel)
-                .withSerializable(Constants.IntentKey.BOOK_CATALOG_MODEL, catalogModel)
+                .withSerializable(Constants.IntentKey.BOOK_MODEL, bookModel)
+                .withSerializable(Constants.IntentKey.BOOK_CHAPTER_ID, chapterId)
                 .navigation(activity, RequestCode.SUBSCRIBE_REQUEST_CODE);
     }
 
     @Override
     public void initData(Bundle savedInstanceState) {
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
-        catalogModel = (BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CATALOG_MODEL);
+        chapterId = getIntent().getLongExtra(Constants.IntentKey.BOOK_CHAPTER_ID, 0);
         getP().getUserPayInfo();
     }
 
     @Override
     public void showDiaLog(PayInfo payInfo) {
-        if (bookModel == null||catalogModel == null){
+        if (bookModel == null) {
             finish();
             return;
         }
         if (buyDialog == null) {
             buyDialog = new CustomFragmentDialog();
         }
+        buyDialog.setCancelable(false);
         buyDialog.show(this, getSupportFragmentManager(), R.layout.comic_detail_pay_dialog);
         TextView tv_buyCoinNum = buyDialog.getDialog().findViewById(R.id.tv_buyCoinNum);
         TextView tv_myCoinNum = buyDialog.getDialog().findViewById(R.id.tv_myCoinNum);
         Button btn_pay = buyDialog.getDialog().findViewById(R.id.btn_pay);
         ImageView iv_buyTitle = buyDialog.getDialog().findViewById(R.id.iv_buyTitle);
 
-        tv_myCoinNum.setText(payInfo.getTotal_egold()+"");
-        tv_buyCoinNum.setText(catalogModel.getSaleprice() + "书币");
-        boolean canBuy = catalogModel.getSaleprice() < payInfo.getTotal_egold();
-        if (canBuy){
+        tv_myCoinNum.setText(payInfo.getTotal_egold() + "");
+        tv_buyCoinNum.setText(bookModel.getBatchprice() + "书币");
+        boolean canBuy = bookModel.getBatchprice() < payInfo.getTotal_egold();
+        if (canBuy) {
             btn_pay.setText("确认支付");
-        }else{
+        } else {
             btn_pay.setText("立即充值");
         }
-        if (bookModel.getBatchbuy()==2){//整本购买
+        if (bookModel.getBatchbuy() == 2) {//整本购买
             iv_buyTitle.setImageResource(R.drawable.icon_pay_dialog_buy_all);
-        }else{
+        } else {
             iv_buyTitle.setImageResource(R.drawable.icon_pay_dialog_buy);
         }
 
@@ -89,9 +85,9 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
             @Override
             public void onClick(View v) {
                 if (canBuy) {
-                    getP().subscribeComic(catalogModel.getBook_id(),catalogModel.getId());
+                    getP().subscribeComic(bookModel.getId(), chapterId);
                 } else {
-                    PayActivity.toPay(context, catalogModel.getBook_id());
+                    PayActivity.toPay(context,"1", bookModel.getId());
                 }
             }
         });
@@ -107,29 +103,20 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
 
     @Override
     public void onSubscribe(ResponseModel responseModel) {
-        hideProgress();
-        /*
-         1.通知阅读页面刷新目录列表
-         2.通知我的界面自动购买更新
-         */
-        EventBusManager.sendRefreshCatalogListBySubscribeEvent(new RefreshCatalogListBySubscribeEvent());
-        EventBusManager.sendUpdateAutoBuyStatusEvent(new UpdateAutoBuyStatusEvent());
-
+        if (bookModel.getBatchbuy() == 2){//整本购买
+            bookModel.setHas_batch_buy(1);//设置已经全本购买
+            EventBusManager.sendBatchBuyEvent(new BatchBuyEvent(bookModel));
+        }
         Intent intent = new Intent();
         //这里统一传递章节id处理就行了
-        intent.putExtra(Constants.IntentKey.ID, this.catalogModel.getId());
+        intent.putExtra(Constants.IntentKey.ID, bookModel.getId());
         setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     public void onSubscribeFail(NetError error) {
-        if (error.getType() == NetError.BalanceError || error.getType() == NetError.AuthError) {
-            PayActivity.toPay(this, catalogModel.getBook_id());
-        } else {
-            ToastUtil.showToastShort(getString(R.string.comic_subscribe_fail) + "：" + error.getMessage());
-        }
-        hideProgress();
+        ToastUtil.showToastShort(getString(R.string.comic_subscribe_fail) + "：" + error.getMessage());
     }
 
     /**
@@ -138,7 +125,7 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshCoinAndBtnStatus(PaySuccessEvent event) {
-        if (buyDialog!=null){
+        if (buyDialog != null) {
             getP().getUserPayInfo();
         }
     }

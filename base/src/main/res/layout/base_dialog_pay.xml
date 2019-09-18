@@ -92,7 +92,7 @@
         android:id="@+id/base_pay_dialog_wechat"
         android:layout_width="match_parent"
         android:layout_height="95dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:gravity="center">
 
         <ImageView
@@ -138,36 +138,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#e3e3e3" />
-
-    <LinearLayout
-        android:id="@+id/base_pay_dialog_huifubao"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/base_vip_pay_huifubao" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="@string/base_huifubao_pay"
-            android:textColor="@color/base_333333"
-            android:textSize="22dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="15dp"
-            android:src="@drawable/base_vip_pay_right" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

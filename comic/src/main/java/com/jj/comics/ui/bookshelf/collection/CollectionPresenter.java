@@ -63,37 +63,6 @@ public class CollectionPresenter extends BasePresenter<BaseRepository, Collectio
     }
 
     @Override
-    public void loadRecommendData() {
-//        getRecommendObservable()
-//                .as(this.<BookListResponse>bindLifecycle())
-//                .subscribe(new ApiSubscriber2<BookListResponse>() {
-//                    @Override
-//                    public void onNext(BookListResponse bookListResponse) {
-//                        List<BookModel> data = bookListResponse.getData();
-//                        if (data != null) {
-//                            getV().onLoadRecommendList(data);
-//                        } else {
-//                            getV().onLoadRecommendListFail(new NetError("DATA EMPTY",
-//                                    NetError.NoDataError));
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFail(NetError error) {
-//                        getV().onLoadRecommendListFail(error);
-//                    }
-//                });
-
-    }
-
-    private Observable<BookListResponse> getRecommendObservable() {
-        return ContentRepository.getInstance().getWatchingComicData(getV().getClass().getName())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    @Override
     public void toRead(final BookModel bookModel, final long chapterid) {
         getV().showProgress();
         Observable.just(chapterid)

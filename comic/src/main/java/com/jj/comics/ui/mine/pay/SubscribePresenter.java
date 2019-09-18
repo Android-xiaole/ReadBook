@@ -66,6 +66,12 @@ public class SubscribePresenter extends BasePresenter<BaseRepository, SubscribeC
                     protected void onFail(NetError error) {
                         getV().onSubscribeFail(error);
                     }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
+                    }
                 });
     }
 

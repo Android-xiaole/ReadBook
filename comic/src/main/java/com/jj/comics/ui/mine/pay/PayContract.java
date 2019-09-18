@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.jj.base.mvp.IView;
 import com.jj.comics.data.model.GoodsPriceModel;
 import com.jj.comics.data.model.PayCenterInfoResponse;
+import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.ProductPayTypeEnum;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.UserInfo;
@@ -15,10 +16,12 @@ public interface PayContract {
 
     interface IPayView extends IView {
         //加载支付页面的数据的回调
-        void fillData(List<PayCenterInfoResponse.PayCenterInfo> rechargeCoinList);
+        void fillData(List<PaySettingResponse.DataBean> rechargeCoinList);
 
-        //数据加载失败
-        void loadFail(String msg);
+//        //数据加载失败
+//        void loadFail(String msg);
+
+        void loadEnd();
 
         //支付失败的回调
         void payFail(String msg);
@@ -32,15 +35,14 @@ public interface PayContract {
 
     interface IPayPresenter {
         //获取支付页面的数据
-        void loadData();
+        void loadData(String type);
 
         //温馨提示
-        CharSequence getReminderText(Activity activity);
+        CharSequence getReminderText(String type);
 
         void payWx(Activity activity, long goodsId, long book_id);
 
         void payAli(Activity activity, long goodsId, long book_id);
 
-        void payHuifubao(Activity activity, long goodsId, long book_id);
     }
 }

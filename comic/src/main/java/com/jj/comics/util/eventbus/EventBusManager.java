@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import com.jj.base.utils.NetWorkUtil;
 import com.jj.comics.data.model.SearchModel;
+import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.BatteryReceiverEvent;
 import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
@@ -164,7 +165,18 @@ public class EventBusManager {
         EventBus.getDefault().post(logoutEvent);
     }
 
+    /**
+     * 发送支付成功的通知
+     * @param event
+     */
     public static void sendPaySuccessEvent(PaySuccessEvent event){
+        EventBus.getDefault().post(event);
+    }
+
+    /**
+     * 发送全本购买成功的通知,需要刷新bookmodel，控制全本购买icon的隐藏和显示
+     */
+    public static void sendBatchBuyEvent(BatchBuyEvent event){
         EventBus.getDefault().post(event);
     }
 

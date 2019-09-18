@@ -73,6 +73,64 @@ public class BookModel implements Serializable {
     private String total_share;//总的分享次数
     private int batchbuy;//''购买方式：1-章节售卖 2-整本售卖
     private int batchprice;//整本购买的价格
+    private int has_batch_buy;//是否已全本购买1是2否
+
+    //设置以下两个属性不写入表中
+    @Transient
+    private List<Integer> category_id;
+    @Transient
+    private boolean is_collect;//该字段只有在本周限免和下周预告页面服务端才会有返回值，别的地方不允许使用
+
+    //以下三个字段为数据库新增字段，临时插入的
+    private long userId;//用户id(如果userId=0代表阅读记录没有上传，不等于0表示上传成功)
+    private long create_time;//入库时间
+    private long update_time;//更新时间
+
+    @Generated(hash = 629917282)
+    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
+            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy, long userId,
+            long create_time, long update_time) {
+        this._id = _id;
+        this.id = id;
+        this.cover = cover;
+        this.title = title;
+        this.coverl = coverl;
+        this.coverl_index = coverl_index;
+        this.cover_index = cover_index;
+        this.model_img_url = model_img_url;
+        this.hot_const = hot_const;
+        this.intro = intro;
+        this.fullflag = fullflag;
+        this.lastvolume = lastvolume;
+        this.reviewnum = reviewnum;
+        this.goodnum = goodnum;
+        this.chapterid = chapterid;
+        this.order = order;
+        this.tag = tag;
+        this.author = author;
+        this.yesterday_share = yesterday_share;
+        this.allvisit = allvisit;
+        this.size = size;
+        this.total_share = total_share;
+        this.batchbuy = batchbuy;
+        this.batchprice = batchprice;
+        this.has_batch_buy = has_batch_buy;
+        this.userId = userId;
+        this.create_time = create_time;
+        this.update_time = update_time;
+    }
+
+    @Generated(hash = 1421733684)
+    public BookModel() {
+    }
+
+    public int getHas_batch_buy() {
+        return has_batch_buy;
+    }
+
+    public void setHas_batch_buy(int has_batch_buy) {
+        this.has_batch_buy = has_batch_buy;
+    }
 
     public String getYesterday_share() {
         return yesterday_share;
@@ -128,54 +186,6 @@ public class BookModel implements Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    //设置以下两个属性不写入表中
-    @Transient
-    private List<Integer> category_id;
-    @Transient
-    private boolean is_collect;//该字段只有在本周限免和下周预告页面服务端才会有返回值，别的地方不允许使用
-
-    //以下三个字段为数据库新增字段，临时插入的
-    private long userId;//用户id(如果userId=0代表阅读记录没有上传，不等于0表示上传成功)
-    private long create_time;//入库时间
-    private long update_time;//更新时间
-
-    @Generated(hash = 2054071114)
-    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
-            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, long userId, long create_time,
-            long update_time) {
-        this._id = _id;
-        this.id = id;
-        this.cover = cover;
-        this.title = title;
-        this.coverl = coverl;
-        this.coverl_index = coverl_index;
-        this.cover_index = cover_index;
-        this.model_img_url = model_img_url;
-        this.hot_const = hot_const;
-        this.intro = intro;
-        this.fullflag = fullflag;
-        this.lastvolume = lastvolume;
-        this.reviewnum = reviewnum;
-        this.goodnum = goodnum;
-        this.chapterid = chapterid;
-        this.order = order;
-        this.tag = tag;
-        this.author = author;
-        this.yesterday_share = yesterday_share;
-        this.allvisit = allvisit;
-        this.size = size;
-        this.total_share = total_share;
-        this.batchbuy = batchbuy;
-        this.batchprice = batchprice;
-        this.userId = userId;
-        this.create_time = create_time;
-        this.update_time = update_time;
-    }
-
-    @Generated(hash = 1421733684)
-    public BookModel() {
     }
 
     public String getModel_img_url() {

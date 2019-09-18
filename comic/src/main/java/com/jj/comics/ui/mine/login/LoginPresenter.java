@@ -176,7 +176,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     }
 
     @Override
-    public void loginByVerifyCode(boolean isCheck, String phone, String psw) {
+    public void loginByVerifyCode(boolean isCheck, String phone, String psw,String inviteCode) {
         if (!isCheck) {
             getV().showToastShort("请同意漫画服务协议");
             return;
@@ -189,12 +189,8 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             getV().showToastShort("请输入正确的手机号");
             return;
         }
-//        if (psw == null || psw.length() != 6) {
-//            getV().showToastShort("请输入6位验证码");
-//            return;
-//        }
         getV().showProgress();
-        UserRepository.getInstance().loginBySecurityCode(isCheck, phone, psw)
+        UserRepository.getInstance().loginBySecurityCode(phone, psw,inviteCode)
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override

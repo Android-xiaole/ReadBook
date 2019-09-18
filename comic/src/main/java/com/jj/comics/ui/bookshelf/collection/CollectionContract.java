@@ -34,8 +34,8 @@ public interface CollectionContract {
         //获取收藏列表
         void getCollectionList(int pageNum);
 
-        //获取为你推荐列表
-        void loadRecommendData();
+//        //获取为你推荐列表
+//        void loadRecommendData();
 
         //续看
         void toRead(final BookModel bookModel, final long chapterid);

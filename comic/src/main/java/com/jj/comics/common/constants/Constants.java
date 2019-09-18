@@ -111,6 +111,7 @@ public class Constants {
     public static class IntentKey {
 
         public static final String BOOK_ID = "bookId";
+        public static final String BOOK_CHAPTER_ID = "chapterId";
         public static final String BOOK_CATALOG_MODEL = "catalogModel";
         public static final String BOOK_MODEL = "bookModel";
         public static final String BOOK_INFO = "bookInfo";
@@ -138,6 +139,8 @@ public class Constants {
         public static final String COIN = "coin";
         public static final String ALL_REBATE = "all_rebate";
         public static final String CASH_OUT_RESULT = "cash_out_result";
+
+        public static final String PAY_TYPE = "type";
 
         //login
         public static final String LOGIN_TYPE = "type";

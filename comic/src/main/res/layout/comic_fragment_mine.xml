@@ -189,12 +189,20 @@
                     app:titleText="@string/comic_mine_notification" />
 
                 <com.jj.comics.widget.comic.MineItemView
-                    android:id="@+id/comic_mine_recharge"
+                    android:id="@+id/comic_mine_coin_pay"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_55"
                     android:gravity="center_vertical"
-                    app:iconResource="@drawable/mine_recharge"
-                    app:titleText="@string/comic_mine_recharge" />
+                    app:iconResource="@drawable/mine_chongzhi"
+                    app:titleText="书币充值" />
+
+                <com.jj.comics.widget.comic.MineItemView
+                    android:id="@+id/comic_mine_vip_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_55"
+                    android:gravity="center_vertical"
+                    app:iconResource="@drawable/mine_huiyuan"
+                    app:titleText="开通会员" />
 
                 <com.jj.comics.widget.comic.MineItemView
                     android:id="@+id/comic_mine_help"

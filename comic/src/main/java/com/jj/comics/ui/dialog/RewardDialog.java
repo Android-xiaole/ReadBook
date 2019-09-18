@@ -129,9 +129,10 @@ public class RewardDialog extends Dialog implements View.OnClickListener, BaseQu
                 if (!isBalanceEnough()) return;
                 reward();
             } else if (id == R.id.fl_toPay) {//我要充值
-                if (mContext instanceof Activity)
-                    PayActivity.toPay(mContext, contentId);
-                else {
+//                if (mContext instanceof Activity)
+//                    PayActivity.toPay(mContext, contentId);
+//                else
+                    {
                     ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).
                             withLong(Constants.IntentKey.BOOK_ID, contentId).navigation(mContext);
                 }
