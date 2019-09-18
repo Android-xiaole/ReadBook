@@ -39,11 +39,7 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
         toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-                String nickName = editText.getText().toString();
-                if (!nickName.isEmpty()) {
-                    getP().updateUserInfo(null, nickName, -1);
-                }
-                finish();
+
             }
 
             @Override
@@ -53,7 +49,11 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
 
             @Override
             public void onComicToolBarRightTextClick(View childView) {
-
+                String nickName = editText.getText().toString();
+                if (!nickName.isEmpty()) {
+                    getP().updateUserInfo(null, nickName, -1);
+                }
+                finish();
             }
         });
         textView.setVisibility(View.VISIBLE);

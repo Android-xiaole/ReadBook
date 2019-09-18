@@ -6,8 +6,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -18,15 +16,15 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
+import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 
 @Route(path = RouterMap.COMIC_BIND_PHONE_ACTIVITY)
-public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implements BindPhoneContract.IBindPhoneView, TextWatcher {
+public class ChangePhoneActivity extends BaseActivity<BindPhonePresenter> implements BindPhoneContract.IBindPhoneView, TextWatcher {
     @BindView(R2.id.comic_login_number)
     EditText mPhoneNumber;
     @BindView(R2.id.comic_login_pwd)
@@ -37,11 +35,34 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     @Override
     public void initData(Bundle savedInstanceState) {
         mPhoneNumber.addTextChangedListener(this);
+        ComicToolBar toolBar = findViewById(R.id.bind_phone_bar);
+        toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
+            @Override
+            public void onComicToolBarLeftIconClick(View childView) {
+                finish();
+            }
+
+            @Override
+            public void onComicToolBarRightIconClick(View childView) {
+
+            }
+
+            @Override
+            public void onComicToolBarRightTextClick(View childView) {
+                String pn = mPhoneNumber.getText().toString().trim();
+                String psw = mPassWord.getText().toString().trim();
+                if (TextUtils.isEmpty(pn) || TextUtils.isEmpty(psw)) {
+                    showToastShort(getString(R.string.comic_phone_code_error_remind));
+                } else {
+                    getP().alterPhone(pn, psw);
+                }
+            }
+        });
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.comic_activity_bind_phone;
+        return R.layout.comic_activity_change_phone;
     }
 
     @Override
@@ -49,20 +70,12 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
         return new BindPhonePresenter();
     }
 
-    @OnClick({R2.id.comic_btn_bind, R2.id.comic_login_code})
+    @OnClick({ R2.id.comic_login_code})
     public void dealOnClick(View view) {
         if (view.getId() == R.id.comic_login_code) {
             view.setEnabled(false);
             showProgress();
             getP().getCode(mPhoneNumber.getText().toString().trim());
-        } else if (view.getId() == R.id.comic_btn_bind) {
-            String pn = mPhoneNumber.getText().toString().trim();
-            String psw = mPassWord.getText().toString().trim();
-            if (TextUtils.isEmpty(pn) || TextUtils.isEmpty(psw)) {
-                showToastShort(getString(R.string.comic_phone_code_error_remind));
-            } else {
-                getP().alterPhone(pn, psw);
-            }
         }
     }
 

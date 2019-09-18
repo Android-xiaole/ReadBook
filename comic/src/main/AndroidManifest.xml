@@ -128,7 +128,7 @@
             android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
-            android:name=".ui.mine.settings.BindPhoneActivity"
+            android:name=".ui.mine.settings.ChangePhoneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
         <activity
