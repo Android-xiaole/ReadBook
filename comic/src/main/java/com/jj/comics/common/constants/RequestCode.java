@@ -16,6 +16,7 @@ public class RequestCode {
     public static final int Coupon_REQUEST_CODE = SETTING_REQUEST_CODE + 1;
     public static final int RICH_REQUEST_CODE = Coupon_REQUEST_CODE + 1;
     public static final int COMMENT_REQUEST_CODE = RICH_REQUEST_CODE + 1;
-    public static final int FEEDBACK_REQUEST_CODE = RICH_REQUEST_CODE + 1;//我的反馈跳转到意见反馈页面
-    public static final int MINE_REQUEST_CODE = RICH_REQUEST_CODE + 1;//我的页面跳转到意见反馈页面
+    public static final int FEEDBACK_REQUEST_CODE = COMMENT_REQUEST_CODE + 1;//我的反馈跳转到意见反馈页面
+    public static final int MINE_REQUEST_CODE = FEEDBACK_REQUEST_CODE + 1;//我的页面跳转到意见反馈页面
+    public static final int APPRENTICE_REQUEST_CODE = MINE_REQUEST_CODE + 1;//我的徒弟页面跳转登录
 }

@@ -1,10 +1,14 @@
 package com.jj.comics.ui.mine.apprentice;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.tabs.TabLayout;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
@@ -12,6 +16,11 @@ import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.ViewPagerAdapter;
+import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.ui.dialog.ShareDialog;
+import com.jj.comics.util.LoginHelper;
+import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import java.util.ArrayList;
 
@@ -23,9 +32,10 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
     TabLayout mTabLayout;
     @BindView(R2.id.vp_apprentice)
     ViewPager mViewPager;
+    @BindView(R2.id.toolBar)
+    ComicToolBar mToolBar;
     @Override
     protected void initData(Bundle savedInstanceState) {
-
         ArrayList<BaseFragment> fragments = new ArrayList<>();
         fragments.add(new TuziFragment());
         fragments.add(new TusunFragment());
@@ -35,6 +45,40 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOffscreenPageLimit(0);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mToolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
+            @Override
+            public void onComicToolBarLeftIconClick(View childView) {
+                finish();
+            }
+
+            @Override
+            public void onComicToolBarRightIconClick(View childView) {
+
+            }
+
+            @Override
+            public void onComicToolBarRightTextClick(View childView) {
+                if (LoginHelper.interruptLogin(ApprenticeActivity.this, null)) {
+                    share();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RequestCode.LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (LoginHelper.interruptLogin(ApprenticeActivity.this, null)) {
+                share();
+            }
+        }
+    }
+
+    private void share() {
+        ShareDialog shareDialog = new ShareDialog(ApprenticeActivity.this);
+        shareDialog.show();
     }
 
     @Override
