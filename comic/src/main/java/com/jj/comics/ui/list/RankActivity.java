@@ -3,9 +3,11 @@ package com.jj.comics.ui.list;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.tabs.TabLayout;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
@@ -19,7 +21,6 @@ import com.jj.comics.widget.CustomTab;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_RANK_ACTIVITY)

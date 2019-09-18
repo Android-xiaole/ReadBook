@@ -31,7 +31,7 @@ public class HelpRechargeActivity extends BaseActivity {
         options.error(R.drawable.img_base_empty)
                 .encodeQuality(100);
         ILFactory.getLoader()
-                .loadNet(mImageView,"http://fanli.jjmh668.cn/prd/help-recharge.jpg",
+                .loadNet(mImageView,"http://fanli.jjmh668.cn/prd/help-recharge.png",
                         options);
     }
     @Override

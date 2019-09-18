@@ -248,6 +248,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
+
         <receiver android:name=".broadcast.NetWorkReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

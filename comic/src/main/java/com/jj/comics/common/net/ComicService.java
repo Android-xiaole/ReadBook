@@ -49,6 +49,7 @@ import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.ShareParamModel;
+import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
@@ -1007,4 +1008,12 @@ public interface ComicService {
      */
     @GET("api/my_disciple")
     Observable<ApprenticeListResponse> getApprenticeList(@Query("page") int page, @Query("type") int type);
+
+    /**
+     * 获取分享推荐
+     *
+     * @return
+     */
+    @GET("api/recommend")
+    Observable<ShareRecommendResponse> getShareRecommend();
 }

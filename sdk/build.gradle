@@ -230,7 +230,7 @@ dependencies {
         exclude module: 'appcompat-v7'
         exclude module: 'design'
     }
-    api('com.gyf.immersionbar:immersionbar:2.3.3-beta15') {
+    api('com.gyf.immersionbar:immersionbar:3.0.0') {
         exclude group: 'com.android.support'
         exclude module: 'appcompat-v7'
         exclude module: 'design'

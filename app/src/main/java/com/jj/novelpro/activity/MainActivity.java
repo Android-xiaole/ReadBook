@@ -24,10 +24,7 @@ import com.fm.openinstall.listener.AppWakeUpAdapter;
 import com.fm.openinstall.model.AppData;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.CusNavigationCallback;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
@@ -67,6 +64,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import q.rorbin.badgeview.Badge;
@@ -175,7 +173,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 try {
                     JSONObject object = new JSONObject(bindData);
                     String invite_code = object.optString(Constants.SharedPrefKey.INVITE_CODE);
-                    if (!TextUtils.isEmpty(invite_code)){
+                    if (!TextUtils.isEmpty(invite_code)) {
                         SharedPreManger.getInstance().saveInvitecode(invite_code);
                     }
                 } catch (JSONException e) {
@@ -186,7 +184,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         });
         AndPermission.with(this)
                 .runtime()
-                .permission(Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.READ_PHONE_STATE)
+                .permission(Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE, Permission.READ_PHONE_STATE)
                 .onGranted(permissions -> {
                     // Storage permission are allowed.
                     getP().checkUpdate();
@@ -196,10 +194,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                     List<String> strings = Permission.transformText(getApplicationContext(), permissions);
                     StringBuffer sb = new StringBuffer();
                     for (String permission : strings) {
-                        sb.append(permission+"、");
+                        sb.append(permission + "、");
                     }
                     sb.deleteCharAt(sb.lastIndexOf("、"));
-                    ToastUtil.showToastShort("您已拒绝"+sb.toString()+"权限，可能导致App无法正常使用");
+                    ToastUtil.showToastShort("您已拒绝" + sb.toString() + "权限，可能导致App无法正常使用");
                 })
                 .start();
 
@@ -284,10 +282,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         .init();
                 break;
             case 2:
-                ImmersionBar.with(MainActivity.this)
+                ImmersionBar.with(this)
                         .reset()
-                        .statusBarDarkFont(true, 0.2f)
-                        .statusBarColor(R.color.base_color_ffffff)
+                        .statusBarDarkFont(false, 0.2f)
                         .init();
                 break;
             case 3:
@@ -304,6 +301,14 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         .statusBarColor(R.color.base_color_ffffff)
                         .init();
                 break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (LoginHelper.getOnLineUser() != null) {
+//            getP().getMessageSum();
         }
     }
 
@@ -342,22 +347,22 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //
 //    }
 
-    @OnClick({R2.id.btn_nav_featured,R2.id.btn_nav_classify,R2.id.btn_nav_money,
-            R2.id.btn_nav_shelf,R2.id.btn_nav_mine})
+    @OnClick({R2.id.btn_nav_featured, R2.id.btn_nav_classify, R2.id.btn_nav_money,
+            R2.id.btn_nav_shelf, R2.id.btn_nav_mine})
     void onClick(View v) {
         if (v.getId() == R.id.btn_nav_featured) {
             switchBtns(0);
             getP().switchFragment(0, currentIndex, mInterceptor);
-        }else if (v.getId() == R.id.btn_nav_classify) {
+        } else if (v.getId() == R.id.btn_nav_classify) {
             switchBtns(1);
             getP().switchFragment(1, currentIndex, mInterceptor);
-        }else if (v.getId() == R.id.btn_nav_money) {
+        } else if (v.getId() == R.id.btn_nav_money) {
             switchBtns(2);
             getP().switchFragment(2, currentIndex, mInterceptor);
-        }else if (v.getId() == R.id.btn_nav_shelf) {
+        } else if (v.getId() == R.id.btn_nav_shelf) {
             switchBtns(3);
             getP().switchFragment(3, currentIndex, mInterceptor);
-        }else if (v.getId() == R.id.btn_nav_mine) {
+        } else if (v.getId() == R.id.btn_nav_mine) {
             switchBtns(4);
             getP().switchFragment(4, currentIndex, mInterceptor);
         }
@@ -504,18 +509,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         return this;
     }
 
-//    @Override
-//    public void onGetTaskInfo(int count) {
-//        if (mBottomMine != null && count > 0) {
-//            badge.bindTarget(mBottomMine);
-//            badge.setShowShadow(false);
-//            badge.setBadgeNumber(count);
-//            SharedPref.getInstance().putInt(Constants.IntentKey.MESSAGE_SUM,count);
-//        } else {
-//            badge.hide(true);
-//        }
-//
-//    }
 
     //    @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCheck(int index) {

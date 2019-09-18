@@ -1,17 +1,12 @@
 package com.jj.comics.ui.recommend;
 
 
-import android.annotation.TargetApi;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseCommonFragment;
 import com.jj.base.utils.RouterMap;
@@ -23,7 +18,6 @@ import com.jj.comics.util.FRouterHelper;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.jessyan.autosize.utils.ScreenUtils;
 
 @Route(path = RouterMap.COMIC_HOME_FRAGMENT)
 public class HomeFragment extends BaseCommonFragment implements HomeContract.IHomeView{

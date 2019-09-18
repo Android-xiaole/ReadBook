@@ -24,7 +24,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.FileUtil;
@@ -37,15 +37,13 @@ import com.jj.comics.R2;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.EditTextFilterUtil;
-import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.IntentUtils;
+import com.jj.comics.util.LoginHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import anet.channel.util.StringUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 

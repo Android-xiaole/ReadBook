@@ -57,7 +57,7 @@ import io.reactivex.subscribers.ResourceSubscriber;
 public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IMainView> implements MainContract.IMainPresenter {
     private String fragmentPath[] = new String[]{RouterMap.COMIC_HOME_FRAGMENT,
             RouterMap.COMIC_SORT_FRAGMENT,
-            RouterMap.COMIC_SEARCH_FRAGMENT,
+            RouterMap.COMIC_MONEY_FRAGMENT,
             RouterMap.COMIC_BOOKCOLLECTION_FRAGMENT,
             RouterMap.COMIC_MINE_FRAGMENT};
 

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;

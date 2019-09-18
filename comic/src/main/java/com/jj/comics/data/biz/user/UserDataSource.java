@@ -25,6 +25,7 @@ import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.RewardHistoryResponse;
 import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
+import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -221,4 +222,10 @@ public interface UserDataSource {
      * @return
      */
     Observable<ApprenticeListResponse> getApprenticeList(int page, int type);
+
+    /**
+     * 获取分享推荐列表
+     * @return
+     */
+    Observable<ShareRecommendResponse> getShareRecommend();
 }

@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.jj.base.R;
 import com.jj.base.dialog.CustomProgressDialog;
 import com.jj.base.mvp.BasePresenter;
@@ -146,7 +146,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             if (dialog.isShowing()) dialog.dismiss();
             dialog = null;
         }
-        ImmersionBar.with(this).destroy();
         super.onDestroy();
         if (netReceiver != null) {
             unregisterReceiver(netReceiver);
