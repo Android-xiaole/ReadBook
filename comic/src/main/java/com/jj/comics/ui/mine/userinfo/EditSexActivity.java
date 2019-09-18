@@ -32,14 +32,6 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
 
-                if (maleCheck.isChecked()) {
-                    getP().updateUserInfo(null, null, 1);
-                }
-
-                if (femaleCheck.isChecked()) {
-                    getP().updateUserInfo(null, null, 2);
-                }
-                finish();
             }
 
             @Override
@@ -49,7 +41,14 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
 
             @Override
             public void onComicToolBarRightTextClick(View childView) {
+                if (maleCheck.isChecked()) {
+                    getP().updateUserInfo(null, null, 1);
+                }
 
+                if (femaleCheck.isChecked()) {
+                    getP().updateUserInfo(null, null, 2);
+                }
+                finish();
             }
         });
 //        初始化性别

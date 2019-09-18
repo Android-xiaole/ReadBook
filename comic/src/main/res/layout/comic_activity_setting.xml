@@ -15,16 +15,17 @@
     <com.jj.comics.widget.UserItemView
         android:id="@+id/setting_about"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         android:layout_marginTop="10dp"
         app:bottom_line_visible="visible"
         app:head_img_visible="gone"
+
         app:user_item_title="@string/comic_about_app" />
 
     <com.jj.comics.widget.UserItemView
         android:id="@+id/setting_clear_cache"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_60"
         app:bottom_line_visible="gone"
         app:head_img_visible="gone"
         app:right_text="3M"
