@@ -246,6 +246,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), model.getTitle()));
                 String shareContent = model.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(model.getIntro()));
                 shareMessageModel.setShareContent(shareContent);
+                shareMessageModel.setBookTitle(model.getTitle());
+                shareMessageModel.setAuthor(model.getAuthor());
                 shareMessageModel.setShareImgUrl(model.getCover());
                 UserInfo loginUser = LoginHelper.getOnLineUser();
                 if (loginUser == null) {

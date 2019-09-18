@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -31,12 +33,14 @@ import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
+import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.sdk.GlideApp;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.constraintlayout.solver.Metrics;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,8 +65,14 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
         lp.gravity = Gravity.BOTTOM;
         View contentView = View.inflate(context, R.layout.comic_share_image_dialog, null);
         setContentView(contentView);
-        ImageView shareImg= contentView.findViewById(R.id.share_image);
+        ImageView shareImg = contentView.findViewById(R.id.share_image);
         Bitmap bitmap = BitmapFactory.decodeFile(path);
+        Matrix matrix = new Matrix();
+        float width = ScreenUtils.getDisplayMetrics().density * 343;
+        float width2 = ScreenUtils.getDisplayMetrics().widthPixels;
+        float size = 0.9f;
+        matrix.setScale(size, size);
+        shareImg.setImageMatrix(matrix);
         shareImg.setImageBitmap(bitmap);
         RecyclerView rv_shareMenu = contentView.findViewById(R.id.rv_shareMenu);
         ShareMenuAdapter shareMenuAdapter = new ShareMenuAdapter(R.layout.comic_share_dialog_item);

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#00000000"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="bottom"
+    android:background="#00000000">
 
     <ImageView
         android:id="@+id/share_image"
-        android:layout_width="343dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:maxHeight="530dp"
-        android:layout_centerHorizontal="true"
+        android:maxWidth="343dp"
+        android:layout_weight="1"
         android:layout_marginLeft="@dimen/dp_18"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_15"
-        android:scaleType="fitStart"
+        android:scaleType="matrix"
         android:src="@drawable/icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_160"
         android:layout_below="@id/share_image"
-        android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/dp_20"
-        android:layout_marginBottom="@dimen/dp_20"
         android:background="@color/comic_ffffff"
         android:gravity="center_vertical"
         android:orientation="vertical">
@@ -51,4 +51,4 @@
             android:textColor="@color/comic_999999"
             android:textSize="@dimen/dp_16" />
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
