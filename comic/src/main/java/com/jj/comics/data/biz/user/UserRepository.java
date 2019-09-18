@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jj.base.BaseApplication;
 import com.jj.base.net.ComicApiImpl;
+import com.jj.base.net.NetError;
 import com.jj.base.net.RetryFunction2;
 import com.jj.base.utils.SharedPref;
 import com.jj.comics.common.constants.Constants;
@@ -28,6 +29,7 @@ import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
+import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
@@ -39,7 +41,9 @@ import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.reporter.ActionReporter;
+import com.jj.comics.widget.bookreadview.utils.Constant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -49,7 +53,9 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -122,10 +128,11 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<LoginResponse> loginBySecurityCode(boolean isCheck, String phone, String psw) {
+    public Observable<LoginResponse> loginBySecurityCode(String phone, String psw,String inviteCode) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, phone)
                 .addProperty(Constants.RequestBodyKey.LOGIN_CODE, psw)
+                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE,inviteCode)
                 .build();
         Observable<LoginResponse> compose = ComicApi.getApi().loginBySecurityCode(requestBody)
                 .retryWhen(new RetryFunction2())
@@ -396,19 +403,6 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<UserInfoResponse> updateUserInfo(String activityName, UserInfo userInfo) {
-        RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.USER, new Gson().toJsonTree(userInfo))
-                .build();
-
-        Observable<UserInfoResponse> compose = ComicApi.getApi().updateUserInfo(requestBody)
-                .compose(ComicApiImpl.<UserInfoResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2(activityName))
-                .subscribeOn(Schedulers.io());
-        return compose;
-    }
-
-    @Override
     public Observable<CommonStatusResponse> favorContent(long id) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.ID, id)
@@ -446,14 +440,14 @@ public class UserRepository implements UserDataSource {
      * @return
      */
     @Override
-    public Observable<ResponseModel> alterMobile(String activityName, String phone_number, String code) {
+    public Observable<LoginResponse> alterMobile(String activityName, String phone_number, String code) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.CODE, code)
                 .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phone_number)
                 .build();
 
-        Observable<ResponseModel> compose = ComicApi.getApi().alterMobile(requestBody)
-                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
+        Observable<LoginResponse> compose = ComicApi.getApi().alterMobile(requestBody)
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2(activityName))
                 .subscribeOn(Schedulers.io());
         return compose;
@@ -544,9 +538,9 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<PayCenterInfoResponse> getPayCenterInfo() {
-        return ComicApi.getApi().getPayCenterInfo("PAY_SETTING_APP")
-                .compose(ComicApiImpl.<PayCenterInfoResponse>getApiTransformer2())
+    public Observable<PaySettingResponse> getPayCenterInfo(String type) {
+        return ComicApi.getApi().getPayCenterInfo("android_paysetting",type)
+                .compose(ComicApiImpl.<PaySettingResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 
@@ -562,7 +556,7 @@ public class UserRepository implements UserDataSource {
 
 
     @Override
-    public Observable<UserInfoResponse> updateUserInfo(String avatar, String nickname, int sex) {
+    public Observable<UserInfo> updateUserInfo(String avatar, String nickname, int sex) {
         RequestBodyBuilder requestBodyBuilder = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.AVATAR, avatar)
                 .addProperty(Constants.RequestBodyKey.NICKNAME, nickname)
@@ -582,8 +576,23 @@ public class UserRepository implements UserDataSource {
         RequestBody requestBody = requestBodyBuilder.build();
 
         return ComicApi.getApi().updateUserInfo(requestBody)
-                .compose(ComicApiImpl.<UserInfoResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2());
+                .subscribeOn(Schedulers.io())
+                .compose(ComicApiImpl.<LoginResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2())
+                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
+                    @Override
+                    public ObservableSource<UserInfo> apply(LoginResponse loginResponse) throws Exception {
+                        //修改用户信息成功之后后台会刷新token
+                        if (loginResponse.getData() != null && loginResponse.getData().getUser_info() != null) {
+                            //刷新token
+                            SharedPreManger.getInstance().saveToken(loginResponse.getData().getBearer_token());
+                            //保存用户信息
+                            return UserRepository.getInstance().saveUser(loginResponse.getData().getUser_info());
+                        }else{
+                            return Observable.error(NetError.noDataError());
+                        }
+                    }
+                });
     }
 
     @Override

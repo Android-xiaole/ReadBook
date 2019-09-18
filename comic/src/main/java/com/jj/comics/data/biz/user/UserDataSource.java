@@ -17,6 +17,7 @@ import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
+import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
@@ -48,7 +49,7 @@ public interface UserDataSource {
     Observable<ResponseModel> getPhoneCode(String activityName, String mobile);
 
     //验证码登录
-    Observable<LoginResponse> loginBySecurityCode(boolean isCheck, String phone, String psw);
+    Observable<LoginResponse> loginBySecurityCode(String phone, String psw,String inviteCode);
 
     /**
      * 微信登录
@@ -129,9 +130,6 @@ public interface UserDataSource {
     //上传照片
     Observable<HeadImg> uploadImage(String activityName, MultipartBody.Part part, long userId);
 
-    //更新用户信息
-    Observable<UserInfoResponse> updateUserInfo(String activityName, UserInfo userInfo);
-
     //点赞内容
     Observable<CommonStatusResponse> favorContent(long id);
 
@@ -139,7 +137,7 @@ public interface UserDataSource {
     Observable<ResponseModel> bindMobile(String activityName, String mobile, String verify, String newMobile, String securityMobile);
 
     //修改手机号
-    Observable<ResponseModel> alterMobile(String activityName, String phone_number, String code);
+    Observable<LoginResponse> alterMobile(String activityName, String phone_number, String code);
 
     //获取用户阅读历史记录列表
     Observable<CollectionResponse> getHistoryList();
@@ -159,7 +157,7 @@ public interface UserDataSource {
     //评论点赞
     Observable<CommonStatusResponse> favorComment(long id, String type);
 
-    Observable<PayCenterInfoResponse> getPayCenterInfo();
+    Observable<PaySettingResponse> getPayCenterInfo(String type);
 
     Observable<ConsumeDetailListResponse> getConsumeDetail(long bookId);
 
@@ -168,7 +166,7 @@ public interface UserDataSource {
      *
      * @return
      */
-    Observable<UserInfoResponse> updateUserInfo(String avatar, String nickname, int sex);
+    Observable<UserInfo> updateUserInfo(String avatar, String nickname, int sex);
 
     /**
      * 我的返利列表

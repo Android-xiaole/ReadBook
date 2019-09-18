@@ -183,67 +183,6 @@ public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IM
 //                });
     }
 
-    @Override
-    public void getMessageSum() {
-        Observable<SignTaskResponse> signTaskResponseObservable = TaskRepository.getInstance()
-                .getSignTasks(getV().getClass().getName())
-                .subscribeOn(Schedulers.io());
-
-        Observable<SignAutoResponse> signAutoResponseObservable = TaskRepository.getInstance()
-                .signAuto()
-                .subscribeOn(Schedulers.io());
-
-        Observable<FeedbackStatusModel> feedbackStatusModelObservable = UserRepository.getInstance().getFeedbackStatus()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-        Observable.zip(signTaskResponseObservable,
-                signAutoResponseObservable,
-                feedbackStatusModelObservable,(t1, t2,t3) -> {
-            int count = 0;
-            SignTaskResponse.DataBean data = t1.getData();
-
-            List<SignTaskResponse.DataBean.TaskListBean> task_list = data.getTask_list();
-            for (SignTaskResponse.DataBean.TaskListBean taskListBean : task_list) {
-                if (taskListBean != null) {
-                    List<SignTaskResponse.DataBean.TaskListBean.ListBean> list = taskListBean.getList();
-                    if (list != null) {
-                        for(SignTaskResponse.DataBean.TaskListBean.ListBean listBean
-                                : list) {
-                            if (listBean != null) {
-                                if (listBean.getIs_take() == 1) {
-                                    count ++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            SignAutoResponse.DataBean signAutoResponse = t2.getData();
-            if (signAutoResponse != null) {
-                if (signAutoResponse.getIs_check() == 0) count++;
-            }
-
-            int notReadCnt = t3.getData().getNumber();
-            return count + notReadCnt;
-        }).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .as(this.bindLifecycle())
-            .subscribe(new ApiSubscriber2<Integer>() {
-                @Override
-                protected void onFail(NetError error) {
-//                    getV().showToastShort("" + error.getMessage());
-                }
-
-                @Override
-                public void onNext(Integer integer) {
-                    getV().onGetTaskInfo(integer);
-                }
-            });
-
-    }
-
     public void goDown(final String updateAppUrl) {
         getV().sendMessage(MainActivity.START_DOWNLOAD, null);
 

@@ -51,10 +51,10 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
         }
         getP().sendDelayedMessage(2);
 
-        UserInfo userInfo = new UserInfo();
-        userInfo.setNickname("GGGG");
-        SharedPreManger.getInstance().saveToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNTY4MjU0NDE4LCJleHAiOjE1OTk3OTA0MTgsIm5iZiI6MTU2ODI1NDQxOCwianRpIjoibTBwdnNXQkxzbXRlSkNqeiIsInN1YiI6Mjg1MzEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJ1aWQiOjI4NTMxLCJvcGVuaWQiOiIxNTcyMTQ3NTMzNyIsInVuaW9uaWQiOiIxNTcyMTQ3NTMzNyIsIm5pY2tuYW1lIjoiMTU3MjE0NzUzMzciLCJhdmF0YXIiOm51bGwsImFnZW50aWQiOjB9.dVGyp7R13rVpthOO85-3CSW11nm7vKgyMHkdqV57JQ8");
-        LoginHelper.updateUser(userInfo);
+//        UserInfo userInfo = new UserInfo();
+//        userInfo.setNickname("GGGG");
+//        SharedPreManger.getInstance().saveToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNTY4MjU0NDE4LCJleHAiOjE1OTk3OTA0MTgsIm5iZiI6MTU2ODI1NDQxOCwianRpIjoibTBwdnNXQkxzbXRlSkNqeiIsInN1YiI6Mjg1MzEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJ1aWQiOjI4NTMxLCJvcGVuaWQiOiIxNTcyMTQ3NTMzNyIsInVuaW9uaWQiOiIxNTcyMTQ3NTMzNyIsIm5pY2tuYW1lIjoiMTU3MjE0NzUzMzciLCJhdmF0YXIiOm51bGwsImFnZW50aWQiOjB9.dVGyp7R13rVpthOO85-3CSW11nm7vKgyMHkdqV57JQ8");
+//        LoginHelper.updateUser(userInfo);
 
     }
 

@@ -5,7 +5,9 @@ public class ShareMessageModel {
     private String shareTitle;//分享标题
     private String bookTitle;//书籍标题
     private String author;//作者
-    private String type;//作者
+    private String content;//作者
+    private String type;//分类
+    private String keys;//关键字
     private String shareContent;//分享内容
     private String shareUrl;//分享跳转链接
     private String shareImgUrl;//用户分享缩略图，只支持网络图片
@@ -64,5 +66,45 @@ public class ShareMessageModel {
      */
     public void setShareImgRes(int shareImgRes) {
         this.shareImgRes = shareImgRes;
+    }
+
+    public String getBookTitle() {
+        return bookTitle;
+    }
+
+    public void setBookTitle(String bookTitle) {
+        this.bookTitle = bookTitle;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getKeys() {
+        return keys;
+    }
+
+    public void setKeys(String keys) {
+        this.keys = keys;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

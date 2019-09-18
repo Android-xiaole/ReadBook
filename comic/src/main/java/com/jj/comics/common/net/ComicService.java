@@ -32,6 +32,7 @@ import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
+import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.PrePayOrderResponseAli;
 import com.jj.comics.data.model.PrePayOrderResponseHuifubao;
 import com.jj.comics.data.model.PrePayOrderResponseWx;
@@ -580,7 +581,7 @@ public interface ComicService {
      * @return
      */
     @POST(USER_ALTER_MOBILE)
-    Observable<ResponseModel> alterMobile(@Body RequestBody body);
+    Observable<LoginResponse> alterMobile(@Body RequestBody body);
 
     /**
      * 获取实时打赏用户的列表
@@ -890,7 +891,7 @@ public interface ComicService {
      * @return
      */
     @GET("api/app_pay_setting")
-    Observable<PayCenterInfoResponse> getPayCenterInfo(@Query("theme_type") String themeType);
+    Observable<PaySettingResponse> getPayCenterInfo(@Query("theme_type") String themeType, @Query("type") String type);
 
     /**
      * UID登录接口
@@ -919,7 +920,7 @@ public interface ComicService {
     Observable<OSSResponse> getOSSConfig();
 
     @POST("api/update_user")
-    Observable<UserInfoResponse> updateUserInfo(@Body RequestBody requestBody);
+    Observable<LoginResponse> updateUserInfo(@Body RequestBody requestBody);
 
     /**
      * 分享成功上报接口

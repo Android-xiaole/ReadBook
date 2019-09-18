@@ -8,7 +8,7 @@ public class EditInfoContract {
 
     interface IEditInfoView extends IView {
 
-        void onLoadFail(NetError error);
+        void onSuccess(UserInfo userInfo);
     }
 
     interface IEditInfoPresenter {

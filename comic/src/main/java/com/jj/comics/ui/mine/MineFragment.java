@@ -1,11 +1,8 @@
 package com.jj.comics.ui.mine;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,21 +14,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseCommonFragment;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.PayInfo;
-import com.jj.comics.data.model.SignAutoResponse;
-import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.ui.mine.login.LoginActivity;
+import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
-import com.jj.comics.util.eventbus.events.UpdateAutoBuyStatusEvent;
-import com.jj.comics.util.eventbus.events.UpdateSignStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.comic.MineItemView;
 import com.umeng.analytics.MobclickAgent;
@@ -46,15 +37,13 @@ import butterknife.OnClick;
  * 我的页面
  */
 @Route(path = RouterMap.COMIC_MINE_FRAGMENT)
-public class MineFragment extends BaseCommonFragment<MinePresenter> implements MineContract.IMineView, MineItemView.OnCheckedChangeListener {
+public class MineFragment extends BaseCommonFragment<MinePresenter> implements MineContract.IMineView {
     @BindView(R2.id.comic_mine_buy)
     MineItemView mineItemView_buy;
     @BindView(R2.id.comic_mine_history)
     MineItemView mineItemView_history;
     @BindView(R2.id.comic_mine_notification)
     MineItemView mineItemView_notification;
-    @BindView(R2.id.comic_mine_recharge)
-    MineItemView mineItemView_recharge;
     @BindView(R2.id.comic_mine_help)
     MineItemView mineItemView_help;
     @BindView(R2.id.mine_head_img)
@@ -80,48 +69,11 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         }
     }
 
-    /**
-     * 页面跳转限制
-     *
-     * @param route
-     */
-    private void navigationRoute(String route) {
-        if (LoginHelper.getOnLineUser() == null) {
-            ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getActivity());
-        } else {
-            ARouter.getInstance().build(route).navigation(getActivity());
-        }
-    }
-
-    private void navigationRoute(String route, int requestCode) {
-        if (LoginHelper.getOnLineUser() == null) {
-            ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getActivity(), requestCode);
-        } else {
-            ARouter.getInstance().build(route).navigation(getActivity(), requestCode);
-        }
-    }
-
     @Override
     public void onVisiable(boolean visiable) {
         super.onVisiable(visiable);
-        if (LoginHelper.getOnLineUser()!=null){
+        if (visiable&&LoginHelper.getOnLineUser()!=null){
             getP().getUserPayInfo();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case RequestCode.PAY_REQUEST_CODE:
-                    showProgress();
-                    getP().getUserInfo();
-                    break;
-                case RequestCode.MINE_REQUEST_CODE:
-                    getP().getFeedbackStatus();
-                    break;
-            }
         }
     }
 
@@ -158,8 +110,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mApprentice.setText(payInfo.getDisciple_num() + "");
     }
 
-    @OnClick({R2.id.mine_nickname,R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
-            R2.id.comic_mine_notification, R2.id.comic_mine_recharge, R2.id.comic_mine_help,
+    @OnClick({R2.id.comic_mine_coin_pay,R2.id.comic_mine_vip_pay,R2.id.mine_nickname,R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
+            R2.id.comic_mine_notification, R2.id.comic_mine_help,
             R2.id.edit_user_info,
             R2.id.btn_my_rebate, R2.id.btn_my_coin,R2.id.btn_my_apprentice})
     void onClick(View view) {
@@ -173,9 +125,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_HISTORY_ACTIVITY).navigation();
         } else if (view.getId() == R.id.comic_mine_notification) {
             ARouter.getInstance().build(RouterMap.COMIC_NOTIFICATION_ACTIVITY).navigation();
-        } else if (view.getId() == R.id.comic_mine_recharge) {
-            ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).navigation();
-        } else if (view.getId() == R.id.comic_mine_help) {
+        }else if (view.getId() == R.id.comic_mine_help) {
             ARouter.getInstance().build(RouterMap.COMIC_HELP_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.edit_user_info) {
             ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
@@ -193,40 +143,23 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
         }else if (view.getId() == R.id.btn_my_apprentice) {
             ARouter.getInstance().build(RouterMap.COMIC_MINE_APPRENTICE_ACTIVITY).navigation();
+        }else if (view.getId() == R.id.comic_mine_coin_pay){//书币充值
+            PayActivity.toPay(getActivity(),"1", 0);
+        }else if (view.getId() == R.id.comic_mine_vip_pay){//开通会员
+            PayActivity.toPay(getActivity(),"2", 0);
         }
-    }
-
-    /**
-     * 更新用户基本信息
-     *
-     * @param user
-     */
-    private void updateUserInfo(UserInfo user) {
-    }
-
-    /**
-     * 更新用户支付相关信息
-     *
-     * @param payInfo
-     */
-    private void updatePayInfo(PayInfo payInfo) {
     }
 
     /**
      * 刷新用户信息的通知
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshUserinfo(UpdateUserInfoEvent updateUserInfoEvent) {
-        getP().getUserInfo();
-    }
-
-    /**
-     * 签到成功的消息
-     *
-     * @param updateSignStatusEvent
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void signSuccessEvent(UpdateSignStatusEvent updateSignStatusEvent) {
+    public void refreshUserinfo(UpdateUserInfoEvent event) {
+        if (event.getUserInfo()!=null){
+            onGetUserInfo(event.getUserInfo());
+        }else{
+            getP().getUserInfo();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -245,14 +178,6 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton switchView, boolean isChecked) {
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void dealAutoBuy(UpdateAutoBuyStatusEvent updateAutoBuyStatusEvent) {
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -262,26 +187,5 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         return true;
     }
 
-
-    @Override
-    public void setCacheSize(String size) {
-    }
-
-    @Override
-    public void onGetFeedbackStatus(int unReadCount) {
-
-    }
-
-    @Override
-    public void fillSignAuto(SignAutoResponse response) {
-    }
-
-    @Override
-    public void onGetTaskInfo(int count) {
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void signSuccess(SignResponse response) {
-    }
 
 }

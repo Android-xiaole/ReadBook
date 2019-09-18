@@ -8,11 +8,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.dialog.GenerateImgProgressDialog;
 import com.jj.base.ui.BaseActivity;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
@@ -23,7 +22,6 @@ import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ShareHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 
@@ -38,6 +36,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
 
     private BaseActivity activity;
 
+    private Dialog dialog;
     public ShareDialog(BaseActivity context) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
@@ -125,11 +124,11 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (shareMessageModel == null) {
             shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle(activity.getString(R.string.comic_share_dialog_title));
+            shareMessageModel.setShareTitle("");
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
-            shareMessageModel.setShareImgUrl(Constants.CONTENT_URL);
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
+            shareMessageModel.setShareImgUrl(loginUser.getAvatar());
             String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&invite_code=" + loginUser.getInvite_code() + "&name=" + loginUser.getNickname() + "&pic=" + loginUser.getAvatar();
             shareMessageModel.setShareUrl(shareUrl);
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
@@ -155,14 +154,17 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
                 break;
             case PHOTO://分享图片
+                if (dialog == null) dialog = new GenerateImgProgressDialog(activity);
+                if (!dialog.isShowing()) dialog.show();
                 ShareInfo shareInfo = new ShareInfo();
-                shareInfo.setTitle("测试");
-                shareInfo.setAuthor("优婆璎珞");
-                shareInfo.setType("玄幻言情");
+                shareInfo.setTitle(shareMessageModel.getBookTitle());
+                shareInfo.setAuthor(shareMessageModel.getAuthor());
+                shareInfo.setType(shareMessageModel.getType());
+                shareInfo.setKeywords(shareMessageModel.getKeys());
                 shareInfo.setContent("\n" +
                         "                              一个身着红绿色相间锦缎罗裙的女孩站在凉亭边，可笑之极。有些呆滞的双眼惊慌的偷看了一眼亭内一身黑色暗纹绣蟒衣衫的男人。\n" +
                         "\n" +
-                        "  对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三皇子。\n" +
+                        "  对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三皇子。\n" +
                         "\n" +
                         "  他，马要成为她的夫君了，她虽然不太懂得这些男女之事，但是看到他的脸，她情不自禁的想要靠近……\n");
                 shareInfo.setCover(shareMessageModel.getShareImgUrl());
@@ -173,14 +175,9 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 sharePicture.setListener(new SharePicture.Listener() {
                     @Override
                     public void onSuccess(String path) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
-                                shareImageDialog.show();
-                            }
-                        });
+                        dialog.dismiss();
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                        shareImageDialog.show();
                     }
 
                     @Override

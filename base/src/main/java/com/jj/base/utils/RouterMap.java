@@ -51,7 +51,7 @@ public class RouterMap {
     public static final String COMIC_KEFU_ACTIVITY = "/ui/mine/KefuActivity";
     public static final String COMIC_EDIT_USER_INFO_ACTIVITY = "/ui/mine/EditUserInfoActivity";
     public static final String COMIC_CHECK_USER_INFO_ACTIVITY = "/ui/mine/CheckUserInfoActivity";
-    public static final String COMIC_BIND_PHONE_ACTIVITY = "/ui/mine/ChangePhoneActivity";
+    public static final String COMIC_CHANGE_PHONE_ACTIVITY = "/ui/mine/ChangePhoneActivity";
     public static final String COMIC_COUPON_CODE_ACTIVITY = "/ui/mine/CouponCodeActivity";
     public static final String COMIC_AGREEMENT_ACTIVITY = "/ui/mine/UserAgreementActivity";
     public static final String COMIC_NOTIFICATION_ACTIVITY = "/ui/mine/NotificationActivity";

@@ -35,9 +35,11 @@ import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
+import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 
@@ -196,26 +198,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             finish();
         } else if (id == R.id.iv_batchBuy) {//全本购买
             if (model == null) return;
-            if (buyDialog == null) {
-                buyDialog = new CustomFragmentDialog();
-            }
-            buyDialog.show(this, getSupportFragmentManager(), R.layout.comic_detail_pay_dialog);
-            TextView tv_buyCoinNum = buyDialog.getDialog().findViewById(R.id.tv_buyCoinNum);
-            TextView tv_myCoinNum = buyDialog.getDialog().findViewById(R.id.tv_myCoinNum);
-
-            tv_buyCoinNum.setText(model.getBatchprice() + "书币");
-            buyDialog.getDialog().findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    buyDialog.dismiss();
-                }
-            });
-            buyDialog.getDialog().findViewById(R.id.btn_pay).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ToastUtil.showToastShort("未实现");
-                }
-            });
+            SubscribeActivity.toSubscribe(this, model, 0);
         } else if (id == R.id.lin_addBook || id == R.id.iv_addBookTop) {//加入书架
             if (LoginHelper.interruptLogin(this, null)) {
                 if (isCollect) {
@@ -246,6 +229,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), model.getTitle()));
                 String shareContent = model.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(model.getIntro()));
                 shareMessageModel.setShareContent(shareContent);
+                shareMessageModel.setBookTitle(model.getTitle());
+                shareMessageModel.setAuthor(model.getAuthor());
                 shareMessageModel.setShareImgUrl(model.getCover());
                 UserInfo loginUser = LoginHelper.getOnLineUser();
                 if (loginUser == null) {
@@ -312,7 +297,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading));
 
-        if (model.getBatchbuy() == 2) {
+        if (model.getBatchbuy() == 2&&model.getHas_batch_buy()==2) {//可以全本购买并且没有全本购买过
             iv_batchBuy.setVisibility(View.VISIBLE);
         } else {
             iv_batchBuy.setVisibility(View.GONE);
@@ -439,6 +424,15 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             model.setOrder(event.getChapterorder());
             tv_read.setText(String.format(getString(R.string.comic_continue_read), event.getChapterorder()));
         }
+    }
+
+    /**
+     * 来自全本购买成功的通知，刷新全本购买的icon的显示状态
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshBatchIcon(BatchBuyEvent event) {
+        this.model = event.getBookModel();
+        iv_batchBuy.setVisibility(View.INVISIBLE);
     }
 
     @Override

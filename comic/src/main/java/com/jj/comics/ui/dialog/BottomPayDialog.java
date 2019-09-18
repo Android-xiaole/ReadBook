@@ -23,7 +23,6 @@ public class BottomPayDialog {
     private CancelOnClickListener cancelOnClickListener;
     private AliPayOnClickListener aliPayOnClickListener;
     private WeChatOnClickListener weChatOnClickListener;
-    private HuifubaoOnClickListener mHuifubaoOnClickListener;
     private PopupWindow mPopWindow;
 
     /**
@@ -32,8 +31,7 @@ public class BottomPayDialog {
     public void showBottomPop(final Activity activity, View parent,
                               final AliPayOnClickListener mAliPayOnClickListener,
                               WeChatOnClickListener mWeChatOnClickListener,
-                              final CancelOnClickListener mCancelClickListener,
-                              final HuifubaoOnClickListener huifubaoOnClickListener) {
+                              final CancelOnClickListener mCancelClickListener) {
         final View popView = View.inflate(activity, R.layout.base_dialog_pay, null);
         showAnimation(popView);//开启动画
         mPopWindow = new PopupWindow(popView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -59,12 +57,10 @@ public class BottomPayDialog {
         cancelOnClickListener = mCancelClickListener;
         weChatOnClickListener = mWeChatOnClickListener;
         aliPayOnClickListener = mAliPayOnClickListener;
-        mHuifubaoOnClickListener = huifubaoOnClickListener;
 
         ImageView cancel = popView.findViewById(R.id.base_pay_dialog_cancel);
         LinearLayout alipay = popView.findViewById(R.id.base_pay_dialog_alipay);
         LinearLayout wechat = popView.findViewById(R.id.base_pay_dialog_wechat);
-        LinearLayout huifubao = popView.findViewById(R.id.base_pay_dialog_huifubao);
         TextView only_alipay = popView.findViewById(R.id.only_alipay);
         TextView only_wechatpay = popView.findViewById(R.id.only_wechatpay);
         //如果没有获取到wxId则不显示微信支付
@@ -102,12 +98,6 @@ public class BottomPayDialog {
                 weChatOnClickListener.onClick(v);
             }
         });
-        huifubao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHuifubaoOnClickListener.onClick(v);
-            }
-        });
     }
 
     /**
@@ -143,10 +133,6 @@ public class BottomPayDialog {
     }
 
     public interface WeChatOnClickListener {
-        void onClick(View v);
-    }
-
-    public interface HuifubaoOnClickListener {
         void onClick(View v);
     }
 

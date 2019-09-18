@@ -14,17 +14,18 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 
-@Route(path = RouterMap.COMIC_BIND_PHONE_ACTIVITY)
-public class ChangePhoneActivity extends BaseActivity<BindPhonePresenter> implements BindPhoneContract.IBindPhoneView, TextWatcher {
+@Route(path = RouterMap.COMIC_CHANGE_PHONE_ACTIVITY)
+public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> implements ChangePhoneContract.IBindPhoneView, TextWatcher {
     @BindView(R2.id.comic_login_number)
     EditText mPhoneNumber;
     @BindView(R2.id.comic_login_pwd)
@@ -66,8 +67,8 @@ public class ChangePhoneActivity extends BaseActivity<BindPhonePresenter> implem
     }
 
     @Override
-    public BindPhonePresenter setPresenter() {
-        return new BindPhonePresenter();
+    public ChangePhonePresenter setPresenter() {
+        return new ChangePhonePresenter();
     }
 
     @OnClick({ R2.id.comic_login_code})
@@ -80,13 +81,11 @@ public class ChangePhoneActivity extends BaseActivity<BindPhonePresenter> implem
     }
 
     @Override
-    public void onUpdateUserInfo(UserInfo userInfo) {
-
-    }
-
-    @Override
-    public void alterSuccess(ResponseModel responseModel) {
-        ToastUtil.showToastShort(responseModel.getMessage());
+    public void alterSuccess(UserInfo userInfo) {
+        ToastUtil.showToastShort("修改成功");
+        EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent(userInfo));
+        setResult(RESULT_OK);
+        finish();
     }
 
     public void setCuntDownText(String text, boolean enable) {

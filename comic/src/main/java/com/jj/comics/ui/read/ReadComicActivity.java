@@ -54,6 +54,7 @@ import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.widget.bookreadview.PageLoader;
@@ -207,9 +208,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         //初始化阅读设置
         toggleNightModel(ReadSettingManager.getInstance().isNightMode());//设置是否夜间模式
         toggleEyeModel(ReadSettingManager.getInstance().isEyeModel());//设置是否护眼模式
-        sb_textSetting.setProgress(ScreenUtils.pxToSp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
+        sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
-        if (bookModel.getBatchbuy() == 2) {//可以全本购买
+        if (bookModel.getBatchbuy() == 2&&bookModel.getHas_batch_buy() == 2) {//可以全本购买并且没有购买
             iv_batchBuy.setVisibility(View.VISIBLE);
         } else {
             iv_batchBuy.setVisibility(View.GONE);
@@ -335,7 +336,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void getProgressOnFinally(BubbleSeekBar bubbleSeekBar, int progress, float progressFloat, boolean fromUser) {
-                mPageLoader.setTextSize(ScreenUtils.spToPx(progress));
+                mPageLoader.setTextSize(ScreenUtils.dpToPx(progress));
             }
         });
     }
@@ -367,7 +368,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             finish();
         } else if (i == R.id.iv_batchBuy) {//全本购买
             if (bookModel != null && catalogModel != null) {
-                SubscribeActivity.toSubscribe(this, bookModel, catalogModel);
+                SubscribeActivity.toSubscribe(this, bookModel, catalogModel.getId());
             }
         } else if (i == R.id.iv_collect) {//收藏
             if (LoginHelper.interruptLogin(this, null) && bookModel != null) {
@@ -523,12 +524,14 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     /**
-     * 来自订阅成功的通知,此时需要刷新目录列表
+     * 来自全本购买成功的通知，刷新全本购买的icon的显示状态
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void refreshCatalogListBySubscribe(RefreshCatalogListBySubscribeEvent refreshCatalogListBySubscribeEvent) {
-//        getP().getCatalogList(bookModel.getId());
+    public void refreshBatchIcon(BatchBuyEvent event) {
+        this.bookModel = event.getBookModel();
+        iv_batchBuy.setVisibility(View.INVISIBLE);
     }
+
 
     @Override
     public void onDismiss(DialogInterface dialog) {

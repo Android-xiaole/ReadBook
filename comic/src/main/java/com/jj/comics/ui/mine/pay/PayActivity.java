@@ -3,14 +3,11 @@ package com.jj.comics.ui.mine.pay;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,23 +17,18 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.Utils;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.mine.RechargeCoinAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
-import com.jj.comics.data.model.GoodsPriceModel;
-import com.jj.comics.data.model.PayCenterInfoResponse;
+import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.dialog.BottomPayDialog;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.util.eventbus.events.WxPayEvent;
-import com.jj.comics.util.reporter.ActionReporter;
-import com.jj.comics.widget.UniversalItemDecoration;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 import com.umeng.analytics.MobclickAgent;
 
@@ -47,11 +39,10 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
-import butterknife.OnClick;
 
 @Route(path = RouterMap.COMIC_PAY_ACTIVITY)
 public class PayActivity extends BaseActivity<PayPresenter> implements PayContract.IPayView {
@@ -59,102 +50,71 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     RecyclerView mShubiRecycler;
     @BindView(R2.id.pay_list_refresh)
     SwipeRefreshLayout mRefresh;
+    @BindView(R2.id.comic_tool_bar)
+    ComicToolBar toolBar;
     private RechargeCoinAdapter mShubiAdapter;
     private AlertDialog mPayFailDialog;
 
     private long mBookId = 0;
+    private String payType;//充值类型
+
+    /**
+     * @param activity 上下文
+     * @param type 充值类型[书币充值:1；会员充值:2]
+     * @param bookId BookModel的id
+     */
+    public static void toPay(Activity activity, String type,long bookId) {
+        ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY)
+                .withString(Constants.IntentKey.PAY_TYPE,type)
+                .withLong(Constants.IntentKey.BOOK_ID, bookId)
+                .navigation(activity, RequestCode.PAY_REQUEST_CODE);
+    }
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        payType = getIntent().getStringExtra(Constants.IntentKey.PAY_TYPE);
         mBookId = getIntent().getLongExtra(Constants.IntentKey.BOOK_ID, 0);
-        //上传访问充值中心事件
-        MobclickAgent.onEvent(this, Constants.UMEventId.ACCESS_REHARGE_CENTER);
-        mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
-        mShubiAdapter = new RechargeCoinAdapter(null);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        mShubiAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                if (mShubiAdapter.getItemViewType(position + mShubiAdapter.getHeaderLayoutCount()) == GoodsPriceModel.VIP)
-                    return 1;
-                return 2;
-            }
-        });
-        mShubiRecycler.setLayoutManager(layoutManager);
-        mShubiAdapter.bindToRecyclerView(mShubiRecycler);
-        ActionReporter.reportAction(ActionReporter.Event.PAY, null, null, null);
 
-        showProgress();
-        getP().loadData();
+        mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
+        mShubiRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mShubiAdapter = new RechargeCoinAdapter(R.layout.comic_item_pay_activity,payType);
+        mShubiAdapter.bindToRecyclerView(mShubiRecycler);
 
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getP().loadData();
+                getP().loadData(payType);
             }
         });
-        mShubiRecycler.addItemDecoration(new UniversalItemDecoration() {
+        mShubiAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public Decoration getItemOffsets(int position) {
-                Log.i("Decoration", "position: " + position + "size: " + mShubiAdapter.getItemCount());
-                ColorDecoration decoration = new ColorDecoration();
-                if (position == 0||position == mShubiAdapter.getItemCount()-1) {//头布局和脚布局
-//                    decoration.right = Utils.dip2px(PayActivity.this, 15);
-//                    decoration.left = Utils.dip2px(PayActivity.this, 15);
-                }else {
-                    if (mShubiAdapter.getData().get(position).getItemType() == 2) {
-                        if (position == 0) {
-                            decoration.top = Utils.dip2px(PayActivity.this, 15);
-                        }
-                        decoration.left = Utils.dip2px(PayActivity.this, 15);
-                        decoration.right = Utils.dip2px(PayActivity.this, 15);
-                        decoration.bottom = Utils.dip2px(PayActivity.this, 15);
-                    } else {
-                        if (mShubiAdapter.getData().get(0).getItemType() == 1){
-                            if (position == 0||position == 1) {
-                                decoration.top = Utils.dip2px(PayActivity.this, 15);
-                            }
-                        }
-                        decoration.left = Utils.dip2px(PayActivity.this, 15);
-                        decoration.right = Utils.dip2px(PayActivity.this, 10.5f);
-                        decoration.bottom = Utils.dip2px(PayActivity.this, 15);
-//                        if (position % 2 == 1 && position < mShubiAdapter.getItemCount() - 1) {
-//                            decoration.left = Utils.dip2px(PayActivity.this, 15);
-//                            decoration.right = Utils.dip2px(PayActivity.this, 10.5f);
-//                            decoration.bottom = Utils.dip2px(PayActivity.this, 15);
-//                        } else if (position % 2 == 0 && position < mShubiAdapter.getItemCount() - 2) {
-//                            decoration.right = Utils.dip2px(PayActivity.this, 15);
-//                            decoration.left = Utils.dip2px(PayActivity.this, 10.5f);
-//                            decoration.bottom = Utils.dip2px(PayActivity.this, 15);
-//                        }
-                    }
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.btn_toPay){
+                    PaySettingResponse.DataBean dataBean = mShubiAdapter.getData().get(position);
+                    showBottomDialog(view,dataBean.getId());
                 }
-                decoration.decorationColor = Color.WHITE;
-                return decoration;
             }
         });
-        mShubiAdapter.addHeaderView(getHeadView());
-        mShubiAdapter.addFooterView(getFooterView());
+
+        if (payType.equals("1")){
+            toolBar.setTitleText("书币充值");
+        }else if (payType.equals("2")){
+            toolBar.setTitleText("会员充值");
+        }
+        showProgress();
+        getP().loadData(payType);
     }
 
     private View getHeadView(){
         View head_view = View.inflate(this,R.layout.comic_pay_header,null);
+
         return head_view;
     }
 
     private View getFooterView(){
         View footView = View.inflate(this,R.layout.comic_pay_footer,null);
-        TextView pay_reminder = footView.findViewById(R.id.pay_reminder);
-        pay_reminder.setText(getReminderText());
-        footView.findViewById(R.id.pay_confirm_charge).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PayCenterInfoResponse.PayCenterInfo selectModel = mShubiAdapter.getSelect();
-                if (selectModel != null) {
-                    showBottomDialog(pay_reminder, selectModel.getId());
-                }
-            }
-        });
+        TextView tv_foot = footView.findViewById(R.id.pay_reminder);
+        tv_foot.setText(getP().getReminderText(payType));
         return footView;
     }
 
@@ -195,12 +155,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
             public void onClick(View v) {
                 bottomPayDialog.dismiss();
             }
-        }, new BottomPayDialog.HuifubaoOnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomPayDialog.dismiss();
-                getP().payHuifubao(PayActivity.this, goodsid, mBookId);
-            }
         });
     }
 
@@ -215,27 +169,20 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         EventBusManager.sendPaySuccessEvent(new PaySuccessEvent());
         AlertDialog payFailDialog = getPayFailDialog(true);
         if (payFailDialog != null && !payFailDialog.isShowing()) payFailDialog.show();
-
-//        if (!LoginHelper.getOnLineUser().getPaid()) {
-//            mShubiAdapter.setNewData(goodsPriceList, true);
-//        }
-        //支付成功后重新获取用户信息，刷新当前页面金币余额
-//        getP().getUserData();
     }
 
 
     @Override
-    public void fillData(List<PayCenterInfoResponse.PayCenterInfo> rechargeCoinList) {
+    public void fillData(List<PaySettingResponse.DataBean> rechargeCoinList) {
         if (mShubiAdapter.getFooterLayoutCount() <= 0)
             mShubiAdapter.addFooterView(getFooterView());
         mShubiAdapter.setNewData(rechargeCoinList);
-        if (mRefresh.isRefreshing()) mRefresh.setRefreshing(false);
-        hideProgress();
     }
 
     @Override
-    public void loadFail(String msg) {
-        ToastUtil.showToastShort(msg);
+    public void loadEnd() {
+        if (mRefresh.isRefreshing()) mRefresh.setRefreshing(false);
+        hideProgress();
     }
 
     /**
@@ -331,11 +278,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         return new PayPresenter();
     }
 
-    public static void toPay(Activity activity, long comicId) {
-        ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).
-                withLong(Constants.IntentKey.BOOK_ID, comicId).navigation(activity, RequestCode.PAY_REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -368,10 +310,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     }
 
-
-    public CharSequence getReminderText() {
-        return getP().getReminderText(this);
-    }
 
     @Override
     public boolean useEventBus() {

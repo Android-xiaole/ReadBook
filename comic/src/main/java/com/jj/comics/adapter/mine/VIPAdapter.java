@@ -99,13 +99,6 @@ public class VIPAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseV
             public void onClick(View v) {
                 bottomPayDialog.dismiss();
             }
-        }, new BottomPayDialog.HuifubaoOnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bottomPayDialog.dismiss();
-                ((VIPActivity) mContext).showProgress();
-                mVIPPresenter.payHuifubao((Activity) mContext, goodsid, 1);
-            }
         });
     }
 }

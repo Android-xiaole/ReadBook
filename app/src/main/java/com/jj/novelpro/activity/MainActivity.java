@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     public static final int DONE = DOWNING + 1;
     public static final int DOWN_FAIL = DONE + 1;
     private ProgressDialog mDialog;
-    private Badge badge;
+//    private Badge badge;
     private Handler mDownHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -207,7 +207,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 //        mBottomNavigationView.setItemIconTintList(null);
 //        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
 //        mBottomMine = mBottomNavigationView.findViewById(R.id.menu_home_mine);
-        badge = new QBadgeView(context);
+//        badge = new QBadgeView(context);
         ActionReporter.reportAction(ActionReporter.Event.START_APP, null, null, null);
         if (LoginHelper.getOnLineUser() != null) {
             ActionReporter.reportAction(ActionReporter.Event.LOGIN_START_APP, null, null, null);
@@ -304,14 +304,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                         .statusBarColor(R.color.base_color_ffffff)
                         .init();
                 break;
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (LoginHelper.getOnLineUser()!=null){
-            getP().getMessageSum();
         }
     }
 
@@ -512,18 +504,18 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         return this;
     }
 
-    @Override
-    public void onGetTaskInfo(int count) {
-        if (mBottomMine != null && count > 0) {
-            badge.bindTarget(mBottomMine);
-            badge.setShowShadow(false);
-            badge.setBadgeNumber(count);
-            SharedPref.getInstance().putInt(Constants.IntentKey.MESSAGE_SUM,count);
-        } else {
-            badge.hide(true);
-        }
-
-    }
+//    @Override
+//    public void onGetTaskInfo(int count) {
+//        if (mBottomMine != null && count > 0) {
+//            badge.bindTarget(mBottomMine);
+//            badge.setShowShadow(false);
+//            badge.setBadgeNumber(count);
+//            SharedPref.getInstance().putInt(Constants.IntentKey.MESSAGE_SUM,count);
+//        } else {
+//            badge.hide(true);
+//        }
+//
+//    }
 
     //    @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCheck(int index) {

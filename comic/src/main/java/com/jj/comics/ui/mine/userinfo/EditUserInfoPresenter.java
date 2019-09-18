@@ -230,26 +230,26 @@ public class EditUserInfoPresenter extends BasePresenter<BaseRepository, EditUse
 
     @Override
     public void updateUserInfo(UserInfo userInfo) {
-        UserRepository.getInstance().updateUserInfo(getV().getClass().getName(), userInfo)
-                .observeOn(AndroidSchedulers.mainThread())
-//                .as(AutoDispose.<ResponseModel>autoDisposable(AndroidLifecycleScopeProvider.from(getV().getLifecycle())))
-                .as(this.<UserInfoResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<UserInfoResponse>() {
-                    @Override
-                    public void onNext(UserInfoResponse responseModel) {
-                        UserInfo user = responseModel.getData().getBaseinfo();
-                        if (user != null) {
-                            LoginHelper.updateUser(user);
-                            getV().onUpdateUserInfoComplete(user, BaseApplication.getApplication().getString(R.string.comic_user_info_update_success_remind));
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        error.getMessage();
-                        getV().onUpdateUserInfoComplete(null, BaseApplication.getApplication().getString(R.string.comic_user_info_update_fail_remind));
-                    }
-                });
+//        UserRepository.getInstance().updateUserInfo(getV().getClass().getName(), userInfo)
+//                .observeOn(AndroidSchedulers.mainThread())
+////                .as(AutoDispose.<ResponseModel>autoDisposable(AndroidLifecycleScopeProvider.from(getV().getLifecycle())))
+//                .as(this.<UserInfoResponse>bindLifecycle())
+//                .subscribe(new ApiSubscriber2<UserInfoResponse>() {
+//                    @Override
+//                    public void onNext(UserInfoResponse responseModel) {
+//                        UserInfo user = responseModel.getData().getBaseinfo();
+//                        if (user != null) {
+//                            LoginHelper.updateUser(user);
+//                            getV().onUpdateUserInfoComplete(user, BaseApplication.getApplication().getString(R.string.comic_user_info_update_success_remind));
+//                        }
+//                    }
+//
+//                    @Override
+//                    protected void onFail(NetError error) {
+//                        error.getMessage();
+//                        getV().onUpdateUserInfoComplete(null, BaseApplication.getApplication().getString(R.string.comic_user_info_update_fail_remind));
+//                    }
+//                });
     }
 
 }

@@ -162,19 +162,33 @@ public class SharePicture extends LinearLayout {
 
     public void setData(ShareInfo info) {
         this.shareInfo = info;
-        tv_title.setText(shareInfo.getTitle());
-        tv_author.setText(shareInfo.getAuthor());
-        tv_type.setText(shareInfo.getType());
+        if (shareInfo.getTitle() != null) {
+            tv_title.setText(shareInfo.getTitle());
+        }
+
+        if (shareInfo.getAuthor() != null) {
+            tv_author.setText(shareInfo.getAuthor());
+        }
+        if (shareInfo.getType() != null) {
+            tv_type.setText(shareInfo.getType());
+        }
         GlideApp.with(mContext).load(info.getCover()).into(iv_bookIcon);
-//        UserInfo userInfo = LoginHelper.getOnLineUser();
-        GlideApp.with(mContext).asBitmap().load("https://www.baidu.com/img/bd_logo1.png?where=super").into(new SimpleTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
-                        "H", "1", Color.BLACK, Color.WHITE, resource, 0.2F, null);
-                qrcode_img.setImageBitmap(qrcode_bitmap);
-            }
-        });
+        UserInfo userInfo = LoginHelper.getOnLineUser();
+        if (userInfo.getAvatar() == null) {
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon);
+            Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
+                    "H", "1", Color.BLACK, Color.WHITE, bitmap, 0.2F, null);
+            qrcode_img.setImageBitmap(qrcode_bitmap);
+        } else {
+            GlideApp.with(mContext).asBitmap().load(userInfo.getAvatar()).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
+                            "H", "1", Color.BLACK, Color.WHITE, resource, 0.2F, null);
+                    qrcode_img.setImageBitmap(qrcode_bitmap);
+                }
+            });
+        }
 
     }
 
@@ -185,20 +199,8 @@ public class SharePicture extends LinearLayout {
     }
 
     private void downloadAllImage() {
-        //下载封面图生成二维码
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // 模拟下载图片的耗时操作
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                // 开始绘制view
-                draw();
-            }
-        }).start();
+        //下载封面图生成
+        draw();
     }
 
     private Bitmap getLinearLayoutBitmap(LinearLayout linearLayout, int w, int h) {

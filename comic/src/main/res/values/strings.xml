@@ -1,6 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="comic_reminder">温馨提示：\n1:人民币与金币的汇率为1元=100金币\n2:金币为此平台的虚拟货币，一经交易则无法进行退款处理\n3:若充值出现问题，请及时联系客服(QQ)</string>
+    <string name="comic_reminder2">充值规则说明：\n1. 用户充值任一档次的会员后可享受该档次对应的全站免费看书的权限。
+        \n2. 用户开通会员的生效时间是由支付成功时间至充值档位对应的时间之中。
+        \n3. 用户开通会员前若有金币留存，开通任意VIP会员后看书不会再消耗留存的金币，直至对应充值档位会员有效期失效为止。
+        \n4. 会员的有效时间可以叠加，若用户在购买68会员之后可再次购
+买188会员或365会员，会员的有效时间为第一次购买会员对应时间+第二次购买会员对应时间。会员可重复购买，无上限限制。
+    \n5. 用户开通任意会员后，仍然可以进行普通充值的购买，购买后
+账户金币增加同档位对应的金币，但是在书城内阅读不会进行金
+币消耗，直至会员失效为止。</string>
+    <string name="comic_reminder1">充值规则说明：
+    \n1. 1元=100书币
+        \n2. 书币充值可叠加，无上限。
+\n3. 书币消耗完无法阅读书籍。
+\n4. 书币留存小于小说单章的消耗数时无法阅读书籍。
+        \n5. vip用户阅读书籍不会消耗书币。
+</string>
     <string name="comic_reminder_new" tools:ignore="ExtraTranslation">温馨提示：\n1. 人民币与金币的汇率为1元=100金币。\n2. 金币为此平台的虚拟货币 , 一经交易则无法进行退款处理,无论是点错或者非本人充值,均无法进行退款处理，请知悉。\n3. 充值可能会有延迟,请耐心等待,若充值出现问题,请及时联系客服(个人中心-联系客服),我们将会为您解决。\n4. 十六周岁以下的未成年人在本平台进行任何的活动应事先取得家长或其法定监护人同意,还请自觉遵守\n5:若充值出现问题，请及时联系客服(QQ)</string>
     <string name="comic_pay_remind">1、请在微信内完成支付，支付成功页面自动跳转\n2、如果您未支付，请点击“去支付”完成支付\n3、如果您未安装微信6.0.2版本及以上版本客户端，请先安装并登陆微信完成支付</string>
 
@@ -374,7 +388,7 @@
     <string name="comic_user_info_head_img">头像</string>
     <string name="comic_user_info_nickname">昵称</string>
     <string name="comic_user_info_sex">性别</string>
-    <string name="comic_user_info_iphone">手机号</string>
+    <string name="comic_user_info_iphone">修改手机号</string>
     <string name="comic_user_info_title">个人信息</string>
     <string name="comic_user_info_setting">设置</string>
     <string name="comic_user_info_edit_nickname">修改昵称</string>

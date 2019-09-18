@@ -85,6 +85,10 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     protected void initData(Bundle savedInstanceState) {
         filePath = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath()
                 + File.separator + PackageUtil.getAppName(this) + File.separator;
+        updateUserinfo();
+    }
+
+    private void updateUserinfo(){
         UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo != null) {
             //设置头像
@@ -161,11 +165,11 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         }
                     }).start();
         } else if (view.getId() == R.id.user_nickname) {
-            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this);
+            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_sex) {
-            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this);
+            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_phone) {
-            ARouter.getInstance().build(RouterMap.COMIC_BIND_PHONE_ACTIVITY).navigation(UserInfoActivity.this);
+            ARouter.getInstance().build(RouterMap.COMIC_CHANGE_PHONE_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_setting) {
             ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
         }
@@ -174,6 +178,9 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK){
+            updateUserinfo();
+        }
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case RequestCode.OPEN_PIC_REQUEST_CODE:

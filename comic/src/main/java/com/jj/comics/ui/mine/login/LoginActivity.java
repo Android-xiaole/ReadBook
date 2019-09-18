@@ -21,6 +21,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 
@@ -54,9 +55,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             R2.id.comic_login_btn, R2.id.comic_login_code,R2.id.comic_login_agreement})
     void onClick(View view) {
         int i = view.getId();
-        if (i == R.id.comic_login_btn) {
-            getP().loginByVerifyCode(mCheckBox.isChecked(), mPhoneNumber.getText().toString().trim(), mPassWord.getText().toString().trim());
-        } else if (i == R.id.comic_login_code) {
+        if (i == R.id.comic_login_btn) {//手机号登录
+            getP().loginByVerifyCode(mCheckBox.isChecked(), mPhoneNumber.getText().toString().trim(), mPassWord.getText().toString().trim(), SharedPreManger.getInstance().getInvitecode());
+        } else if (i == R.id.comic_login_code) {//验证码
             String phoneNum = mPhoneNumber.getText().toString().trim();
             if (TextUtils.isEmpty(phoneNum)){
                 showToastShort("请输入手机号");
@@ -69,13 +70,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             view.setEnabled(false);
             showProgress();
             getP().getVerifyCode(phoneNum);
-        } else if (i == R.id.iv_qqLogin) {
+        } else if (i == R.id.iv_qqLogin) {//QQ登录
             getP().qqLogin(mCheckBox.isChecked(), LoginActivity.this);
-        } else if (i == R.id.iv_wxLogin) {
+        } else if (i == R.id.iv_wxLogin) {//微信登录
             getP().wxLogin(mCheckBox.isChecked());
-        } else if (i == R.id.iv_wbLogin) {
+        } else if (i == R.id.iv_wbLogin) {//微博登录
             getP().wbLogin(mCheckBox.isChecked(), LoginActivity.this);
-        } else if (i == R.id.comic_login_agreement) {
+        } else if (i == R.id.comic_login_agreement) {//用户协议
             //服务协议
             ARouter.getInstance().build(RouterMap.COMIC_AGREEMENT_ACTIVITY).navigation();
         }
