@@ -113,7 +113,7 @@ public class BoughtActivity extends BaseActivity<BoughtPresenter> implements Bou
         View view = LayoutInflater.from(this).inflate(R.layout.comic_empty_view, mRecycler,
                 false);
         ImageView img = view.findViewById(R.id.iv_empty_img);
-        img.setBackgroundResource(R.drawable.img_empty_read);
+        img.setBackgroundResource(R.drawable.img_empty_buy);
         TextView tvDesc = (TextView) view.findViewById(R.id.tv_empty_desc);
         tvDesc.setText("哦呵~您还没有购买过任何书籍\r\n赶快去看书吧~");
         return view;
