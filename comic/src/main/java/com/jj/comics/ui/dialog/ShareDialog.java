@@ -24,6 +24,7 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
+import com.jj.comics.widget.ShareUserPicture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,11 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     private BaseActivity activity;
 
     private Dialog dialog;
+    private boolean isShareUser = true;
     public ShareDialog(BaseActivity context) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
-
+        isShareUser = true;
         Window window = getWindow();
         if (window == null) {
             ToastUtil.showToastShort(context.getString(R.string.comic_window_null));
@@ -123,6 +125,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (shareMessageModel == null) {
+            isShareUser = true;
             shareMessageModel = new ShareMessageModel();
             shareMessageModel.setShareTitle("");
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
@@ -131,6 +134,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             shareMessageModel.setShareImgUrl(loginUser.getAvatar());
             String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&invite_code=" + loginUser.getInvite_code() + "&name=" + loginUser.getNickname() + "&pic=" + loginUser.getAvatar();
             shareMessageModel.setShareUrl(shareUrl);
+            shareMessageModel.setBookTitle(loginUser.getNickname());
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -156,6 +160,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             case PHOTO://分享图片
                 if (dialog == null) dialog = new GenerateImgProgressDialog(activity);
                 if (!dialog.isShowing()) dialog.show();
+
                 ShareInfo shareInfo = new ShareInfo();
                 shareInfo.setTitle(shareMessageModel.getBookTitle());
                 shareInfo.setAuthor(shareMessageModel.getAuthor());
@@ -170,22 +175,12 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 shareInfo.setCover(shareMessageModel.getShareImgUrl());
                 shareInfo.setKeywords("key1");
                 shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
-                SharePicture sharePicture = new SharePicture(activity);
-                sharePicture.setData(shareInfo);
-                sharePicture.setListener(new SharePicture.Listener() {
-                    @Override
-                    public void onSuccess(String path) {
-                        dialog.dismiss();
-                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
-                        shareImageDialog.show();
-                    }
 
-                    @Override
-                    public void onFail() {
-                        Log.i("share_picture", "error");
-                    }
-                });
-                sharePicture.startDraw();
+                if (isShareUser) {
+                    shareUserImg(shareInfo);
+                } else {
+                    shareContentImage(shareInfo);
+                }
                 break;
             case COPYLINK://复制链接
                 copyLink(shareMessageModel.getShareUrl());
@@ -195,6 +190,59 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 break;
         }
         dismiss();
+    }
+
+    private void shareContentImage(ShareInfo shareInfo) {
+        SharePicture sharePicture = new SharePicture(activity);
+        sharePicture.setData(shareInfo);
+        sharePicture.setListener(new SharePicture.Listener() {
+            @Override
+            public void onSuccess(String path) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                        shareImageDialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFail() {
+                Log.i("share_picture", "error");
+            }
+        });
+        sharePicture.startDraw();
+    }
+
+    /**
+     * 分享用户图片
+     *
+     * @param shareInfo
+     */
+    private void shareUserImg(ShareInfo shareInfo) {
+        ShareUserPicture shareUserPicture = new ShareUserPicture(activity);
+        shareUserPicture.setData(shareInfo);
+        shareUserPicture.setListener(new ShareUserPicture.Listener() {
+            @Override
+            public void onSuccess(String path) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                        shareImageDialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFail() {
+                Log.i("share_picture", "error");
+            }
+        });
+        shareUserPicture.startDraw();
     }
 
     /**
@@ -212,6 +260,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     }
 
     public void show(ShareMessageModel shareMessageModel) {
+        isShareUser = false;
         this.shareMessageModel = shareMessageModel;
         super.show();
     }

@@ -8,17 +8,27 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Environment;
 import android.text.Layout;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.jj.base.BaseApplication;
+import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.ShareInfo;
 import com.jj.comics.data.model.UserInfo;
@@ -38,28 +48,20 @@ import androidx.annotation.Nullable;
 /**
  * 分享图片页面
  */
-public class SharePicture extends LinearLayout {
+public class ShareUserPicture extends LinearLayout {
     private final String TAG = "SharePicture";
     private Context mContext;
     private View rootView;
     private ShareInfo shareInfo;
     //布局
     private LinearLayout top_linear;
-    private LinearLayout ll_bottom;
-    private LinearLayout ll_author_type;
-    private LinearLayout ll_right;
-    private LinearLayout llContent;
-    private ImageView iv_bookIcon;//封面
-    private TextView tv_title;//标题
-    private TextView tv_author;//作者
-    private TextView tv_type;//分类
-    private TextView article_content;//内容
-    private ImageView qrcode_img; // 二维码
-    private TextView keyword1; // 关键词1
-    private TextView keyword2; // 关键词2
+    private TextView nickName;//用户名
+    private ImageView qrcodeImg; // 二维码
+    private ImageView head_img; // 用户头像
 
     // 长图的宽度，默认为屏幕宽度
     private int picWidth;
+    private int picHeight;
     // 最终压缩后的长图宽度
     private int finalCompressLongPictureWidth;
     // 长图两边的间距
@@ -69,12 +71,6 @@ public class SharePicture extends LinearLayout {
     private int maxSingleImageRatio = 3;
     private int widthTop = 0;
     private int heightTop = 0;
-
-    private int widthContent = 0;
-    private int heightContent = 0;
-
-    private int widthBottom = 0;
-    private int heightBottom = 0;
 
     private Listener listener;
 
@@ -86,17 +82,17 @@ public class SharePicture extends LinearLayout {
         this.listener = listener;
     }
 
-    public SharePicture(Context context) {
+    public ShareUserPicture(Context context) {
         super(context);
         init(context);
     }
 
-    public SharePicture(Context context, @Nullable AttributeSet attrs) {
+    public ShareUserPicture(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public SharePicture(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ShareUserPicture(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -104,39 +100,21 @@ public class SharePicture extends LinearLayout {
     private void init(Context context) {
         this.mContext = context;
         picWidth = ScreenUtils.getDisplayMetrics().widthPixels;
+        picHeight = ScreenUtils.getDisplayMetrics().heightPixels;
         picMargin = 40;
-        rootView = LayoutInflater.from(context).inflate(R.layout.comic_share_view, this, false);
+        rootView = LayoutInflater.from(context).inflate(R.layout.comic_share_user_view, this, false);
         initView();
     }
 
     //初始化布局
     private void initView() {
         top_linear = rootView.findViewById(R.id.top_linear);
-        ll_bottom = rootView.findViewById(R.id.ll_bottom);
-        ll_author_type = rootView.findViewById(R.id.ll_author_type);
-        ll_right = rootView.findViewById(R.id.ll_right);
-        llContent = rootView.findViewById(R.id.llContent);
-        iv_bookIcon = rootView.findViewById(R.id.iv_bookIcon);
-        tv_title = rootView.findViewById(R.id.tv_title);
-        tv_author = rootView.findViewById(R.id.tv_author);
-        tv_type = rootView.findViewById(R.id.tv_type);
-        article_content = rootView.findViewById(R.id.article_content);
-        qrcode_img = rootView.findViewById(R.id.qrcode_img);
-
+        nickName = rootView.findViewById(R.id.nickname);
+        qrcodeImg = rootView.findViewById(R.id.qrcode_img);
+        head_img = rootView.findViewById(R.id.head_img);
         layoutView(top_linear);
-        layoutView(ll_bottom);
-        layoutView(llContent);
-
         widthTop = top_linear.getMeasuredWidth();
         heightTop = top_linear.getMeasuredHeight();
-
-
-        widthContent = llContent.getMeasuredWidth();
-        // 文字由于高度可变，所以这里不需要测量高度，后面会手动测量
-
-        widthBottom = ll_bottom.getMeasuredWidth();
-        heightBottom = ll_bottom.getMeasuredHeight();
-        Log.d(TAG, "drawLongPicture layout top view = " + widthTop + " × " + heightTop);
     }
 
     /**
@@ -147,8 +125,8 @@ public class SharePicture extends LinearLayout {
         int height = ScreenUtils.getDisplayMetrics().heightPixels;
 
         v.layout(0, 0, width, height);
-        int measuredWidth = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY);
-        int measuredHeight = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+        int measuredWidth = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+        int measuredHeight = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
         v.measure(measuredWidth, measuredHeight);
         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
     }
@@ -156,29 +134,34 @@ public class SharePicture extends LinearLayout {
     public void setData(ShareInfo info) {
         this.shareInfo = info;
         if (shareInfo.getTitle() != null) {
-            tv_title.setText(shareInfo.getTitle());
+            String title = shareInfo.getTitle();
+            if (title.length() > 5) {
+                title = title.substring(0, 5) + "...";
+            }
+            //设置昵称
+            String nickname = "您的好友 " + title + " 邀请";
+            SpannableString reminder = new SpannableString(nickname);
+            reminder.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff8124)), 5, 5 + title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            nickName.setText(reminder);
         }
 
-        if (shareInfo.getAuthor() != null) {
-            tv_author.setText(shareInfo.getAuthor());
-        }
-        if (shareInfo.getType() != null) {
-            tv_type.setText(shareInfo.getType());
-        }
-        GlideApp.with(mContext).load(info.getCover()).into(iv_bookIcon);
+        ILFactory.getLoader().loadNet(head_img, info.getCover(),
+                new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                        .placeholder(R.drawable.img_loading));
+
         UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo.getAvatar() == null) {
             Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon);
             Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
                     "H", "1", Color.BLACK, Color.WHITE, bitmap, 0.2F, null);
-            qrcode_img.setImageBitmap(qrcode_bitmap);
+            qrcodeImg.setImageBitmap(qrcode_bitmap);
         } else {
             GlideApp.with(mContext).asBitmap().load(userInfo.getAvatar()).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                     Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
                             "H", "1", Color.BLACK, Color.WHITE, resource, 0.2F, null);
-                    qrcode_img.setImageBitmap(qrcode_bitmap);
+                    qrcodeImg.setImageBitmap(qrcode_bitmap);
                 }
             });
         }
@@ -214,29 +197,16 @@ public class SharePicture extends LinearLayout {
     }
 
     private void draw() {
-        // 先绘制中间部分的文字，计算出文字所需的高度
-        String content = shareInfo.getContent();
-        TextPaint contentPaint = article_content.getPaint();
-        //contentPaint.setColor();
-        //contentPaint.setTextSize();
-        StaticLayout staticLayout =
-                new StaticLayout(content, contentPaint, (ScreenUtils.getDisplayMetrics().widthPixels - picMargin * 2),
-                        Layout.Alignment.ALIGN_NORMAL, 1.2F, 0, false);
-        heightContent = staticLayout.getHeight();
-
-        // 计算出最终生成的长图的高度 = 上、中、图片总高度、下等个个部分加起来
-        int allBitmapHeight = heightTop + heightContent + heightBottom;
-
 
         // 创建空白画布
         Bitmap.Config config = Bitmap.Config.ARGB_8888;
         Bitmap bitmapAll;
         try {
-            bitmapAll = Bitmap.createBitmap(picWidth, allBitmapHeight, config);
+            bitmapAll = Bitmap.createBitmap(picWidth, heightTop, config);
         } catch (Exception e) {
             e.printStackTrace();
             config = Bitmap.Config.RGB_565;
-            bitmapAll = Bitmap.createBitmap(picWidth, allBitmapHeight, config);
+            bitmapAll = Bitmap.createBitmap(picWidth, heightTop, config);
         }
         Canvas canvas = new Canvas(bitmapAll);
         canvas.drawColor(Color.WHITE);
@@ -244,22 +214,12 @@ public class SharePicture extends LinearLayout {
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setFilterBitmap(true);
-
-        // 绘制top view
-        canvas.drawBitmap(getLinearLayoutBitmap(top_linear, widthTop, heightTop), 0, 0, paint);
+        // 绘制view
+        canvas.drawBitmap(getLinearLayoutBitmap(top_linear, picWidth, heightTop), 0, 0, paint);
         canvas.save();
-
-        // 绘制content view
-        canvas.translate(ScreenUtils.dpToPx(20), heightTop);
-        staticLayout.draw(canvas);
 
         // 绘制图片view
         canvas.restore();
-
-
-        // 绘制bottom view
-        canvas.drawBitmap(getLinearLayoutBitmap(ll_bottom, widthBottom, heightBottom), 0,
-                (heightTop + heightContent + ScreenUtils.dpToPx(16)), paint);
 
         // 生成最终的文件，并压缩大小，这里使用的是：implementation 'com.github.nanchen2251:CompressHelper:1.0.5'
         try {
