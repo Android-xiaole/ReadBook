@@ -8,8 +8,6 @@ import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
-import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.eventbus.events.LogoutEvent;
 
 import java.util.List;
 
@@ -31,10 +29,6 @@ public class MoneyPresenter extends BasePresenter <BaseRepository, MoneyFragment
 
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                        if (error.getType() == NetError.AuthError){
-                            EventBusManager.sendLogoutEvent(new LogoutEvent());
-                        }
                     }
                 });
     }

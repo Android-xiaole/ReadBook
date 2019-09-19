@@ -92,6 +92,8 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
+                if (!LoginHelper.interruptLogin(getBaseActivity(),null)) return;
+
                 ShareRecommendResponse.DataBean model =
                         (ShareRecommendResponse.DataBean) adapter.getData().get(position);
 
@@ -123,6 +125,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
         mBtnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!LoginHelper.interruptLogin(getBaseActivity(),null)) return;
                 if (mDialog == null) mDialog = new ShareDialog(getBaseActivity());
                 mDialog.show();
             }
