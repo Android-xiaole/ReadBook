@@ -1,18 +1,20 @@
 package com.jj.comics.ui.money;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.request.RequestOptions;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseCommonFragment;
@@ -20,9 +22,12 @@ import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.money.ShareRecommendAdapter;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.PayInfo;
+import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.util.LoginHelper;
 
 import java.util.List;
@@ -54,6 +59,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
     @BindView(R2.id.cl_user_info)
     ConstraintLayout mClUserInfo;
     private ShareRecommendAdapter mAdapter;
+    private ShareDialog mDialog;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -78,6 +84,49 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ShareRecommendAdapter(R.layout.comic_item_share_recommend);
         mAdapter.bindToRecyclerView(mRecyclerView,false);
+
+        
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            private ShareMessageModel shareMessageModel;
+
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+                ShareRecommendResponse.DataBean model =
+                        (ShareRecommendResponse.DataBean) adapter.getData().get(position);
+
+                if (mDialog == null) {
+                    mDialog = new ShareDialog(getBaseActivity());
+                }
+
+                if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
+                shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), model.getTitle()));
+                String shareContent = model.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(model.getIntro()));
+                shareMessageModel.setShareContent(shareContent);
+                shareMessageModel.setBookTitle(model.getTitle());
+                shareMessageModel.setAuthor(model.getAuthor());
+                shareMessageModel.setShareImgUrl(model.getCover());
+                UserInfo loginUser = LoginHelper.getOnLineUser();
+                if (loginUser == null) {
+                    ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getBaseActivity());
+                    return;
+                }
+                String uid = loginUser == null ? "0" : loginUser.getUid() + "";
+                long chapterid = model.getChapterid();
+                String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
+                shareMessageModel.setShareUrl(shareUrl);
+                shareMessageModel.setBoolId(model.getId());
+                mDialog.show(shareMessageModel);
+            }
+        });
+
+        mBtnInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDialog == null) mDialog = new ShareDialog(getBaseActivity());
+                mDialog.show();
+            }
+        });
     }
 
     private void updateInfo() {
@@ -107,7 +156,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
 
     @Override
     public int getLayoutId() {
-        return R.layout.comic_activity_money;
+        return R.layout.comic_fragment_money;
     }
 
 
