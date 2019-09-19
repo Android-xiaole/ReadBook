@@ -33,7 +33,7 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
         toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-
+                finish();
             }
 
             @Override

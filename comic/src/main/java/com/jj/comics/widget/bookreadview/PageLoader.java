@@ -2,8 +2,10 @@ package com.jj.comics.widget.bookreadview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -12,6 +14,8 @@ import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.SuggestionSpan;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.jj.comics.R;
 import com.jj.comics.widget.bookreadview.bean.BookRecordBean;
@@ -80,6 +84,8 @@ public abstract class PageLoader {
 
     // 绘制电池的画笔
     private Paint mBatteryPaint;
+    //绘制左上角标题的笔
+    private Paint mTopTitlePaint;
     // 绘制提示的画笔
     private Paint mTipPaint;
     // 绘制标题的画笔
@@ -193,6 +199,14 @@ public abstract class PageLoader {
     }
 
     private void initPaint() {
+        //绘制左上角标题的笔
+        mTopTitlePaint = new Paint();
+        mTopTitlePaint.setColor(mContext.getResources().getColor(R.color.comic_a8adb3));
+        mTopTitlePaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
+        mTopTitlePaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
+        mTopTitlePaint.setAntiAlias(true);
+        mTopTitlePaint.setSubpixelText(true);
+
         // 绘制提示的画笔
         mTipPaint = new Paint();
         mTipPaint.setColor(mTextColor);
@@ -742,10 +756,10 @@ public abstract class PageLoader {
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
                         canvas.drawText(mChapterList.get(mCurChapterPos).getTitle()
-                                , mMarginWidth, tipTop, mTipPaint);
+                                , mMarginWidth, tipTop, mTopTitlePaint);
                     }
                 } else {
-                    canvas.drawText(mCurPage.title, mMarginWidth, tipTop, mTipPaint);
+                    canvas.drawText(mCurPage.title, mMarginWidth, tipTop, mTopTitlePaint);
                 }
 
                 /******绘制页码********/
@@ -906,7 +920,30 @@ public abstract class PageLoader {
                     top += interval;
                 }
             }
+
+            //绘制到每个章节的最后一页
+            if (mCurPage.position + 1 == mCurPageList.size()) {
+                View view = LayoutInflater.from(mContext).inflate(R.layout.comic_readview_chapter_btn, null);
+                layoutView(view);
+                Bitmap bitmap_btn = Bitmap.createBitmap(view.getMeasuredWidth(),view.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
+                Canvas c1 = new Canvas(bitmap_btn);
+                c1.drawColor(Color.WHITE);
+                view.draw(c1);
+                c1.save();
+                canvas.drawBitmap(bitmap_btn,mDisplayWidth/2,mDisplayHeight-view.getMeasuredHeight(),mTextPaint);
+            }
         }
+    }
+
+    /**
+     * 手动测量view宽高
+     */
+    private void layoutView(View v) {
+        v.layout(0, 0, mDisplayWidth, ScreenUtils.dpToPx(44));
+        int measuredWidth = View.MeasureSpec.makeMeasureSpec(mDisplayWidth, View.MeasureSpec.EXACTLY);
+        int measuredHeight = View.MeasureSpec.makeMeasureSpec(ScreenUtils.dpToPx(44), View.MeasureSpec.AT_MOST);
+        v.measure(measuredWidth, measuredHeight);
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
     }
 
     void prepareDisplay(int w, int h) {

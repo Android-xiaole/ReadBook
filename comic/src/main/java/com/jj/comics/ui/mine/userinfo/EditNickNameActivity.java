@@ -41,7 +41,7 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
         toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-
+                finish();
             }
 
             @Override

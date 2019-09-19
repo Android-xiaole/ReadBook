@@ -140,7 +140,9 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (model != null) {
-                    getP().toRead(model, catalogAdapter.getData().get(position).getId());
+                    long chapterId = catalogAdapter.getData().get(position).getId();
+                    catalogAdapter.notifyItem(chapterId);
+                    getP().toRead(model,chapterId);
                     mCatalogMenu.closeDrawers();
                 }
             }
@@ -380,6 +382,9 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         catalogAdapter.setNewData(catalogModels);
         tv_catalogNum.setText("共" + totalNum + "章");
         tv_catalogTitle.setText(catalogModels.get(catalogModels.size() - 1).getChaptername());
+        if (model!=null){
+            catalogAdapter.notifyItem(model.getChapterid());
+        }
     }
 
     public void toRead(BookModel bookModel, long chapterId) {
@@ -422,6 +427,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             model.setChapterid(event.getChapterid());
             model.setOrder(event.getChapterorder());
             tv_read.setText(String.format(getString(R.string.comic_continue_read), event.getChapterorder()));
+            catalogAdapter.notifyItem(model.getChapterid());
         }
     }
 

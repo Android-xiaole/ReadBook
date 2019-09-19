@@ -9,6 +9,8 @@ import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 
 import java.io.File;
 
@@ -29,6 +31,7 @@ public class UserInfoPresenter extends BasePresenter<BaseRepository, UserInfoCon
                     @Override
                     public void onNext(UserInfo userInfo) {
                         if (userInfo != null) {
+                            EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent(userInfo));
                             getV().onImgUploadComplete(userInfo.getAvatar());
                         } else {
                             getV().onLoadFail(NetError.noDataError());

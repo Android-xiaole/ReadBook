@@ -7,18 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,14 +24,12 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.google.android.material.appbar.AppBarLayout;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseCommonFragment;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.Utils;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
@@ -58,7 +52,6 @@ import com.jj.comics.ui.dialog.FreeGoldDialog;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.widget.bookreadview.utils.Constant;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -72,7 +65,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -181,122 +173,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         getP().loadPopShare(recentChannelFlag,false);
         getP().loadRecentlyComic(recentlyPage, recentChannelFlag, false);
 
-        if (LoginHelper.getOnLineUser()!=null){
-            //用户登录优选调用获取支付弹窗活动的信息
-            getP().getPayAction();
-        }else{
-            //获取广告推送消息
-            getP().getAdsPush_128();
-        }
-    }
-
-    private CustomFragmentDialog action1,action2,action3;
-    private void showAction1(int close_time,String price,String givePrice,long goodsId){
-        if (action1 == null)action1 = new CustomFragmentDialog();
-        action1.show(getActivity(),getChildFragmentManager(),R.layout.comic_dialog_countdown_action1);
-
-        TextView tv_price = action1.getDialog().findViewById(R.id.tv_price);
-        TextView tv_gicePrice = action1.getDialog().findViewById(R.id.tv_givePrice);
-        tv_price.setText(price);
-        tv_gicePrice.setText(givePrice);
-        TextView tv_time = action1.getDialog().findViewById(R.id.tv_time);
-        CountDownTimer timer = new CountDownTimer(close_time*1000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                tv_time.setText(millisUntilFinished/1000+"");
-            }
-
-            @Override
-            public void onFinish() {
-                action1.dismiss();
-            }
-        };
-        timer.start();
-
-        action1.addDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                action1.dismiss();
-                timer.cancel();
-            }
-        });
-        action1.getDialog().findViewById(R.id.tv_toPay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getP().payAli(goodsId);
-                action1.dismiss();
-            }
-        });
-        action1.getDialog().findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timer.cancel();
-                action1.dismiss();
-            }
-        });
-    }
-
-    private void showAction2(){
-        if (action2 == null)action2 = new CustomFragmentDialog();
-        action2.show(getActivity(),getChildFragmentManager(),R.layout.comic_dialog_countdown_action2);
-        TextView tv_time = action2.getDialog().findViewById(R.id.tv_time);
-        CountDownTimer timer = new CountDownTimer(80*1000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int sec = (int) (millisUntilFinished/1000);
-                String sec2 = sec%60<10?"0"+sec%60:sec%60+"";
-                tv_time.setText(sec/60+":"+sec2);
-            }
-
-            @Override
-            public void onFinish() {
-                action2.dismiss();
-            }
-        };
-        timer.start();
-
-        action2.getDialog().findViewById(R.id.tv_toPay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        action2.getDialog().findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                action2.dismiss();
-            }
-        });
-    }
-
-    private void showAction3(){
-        if (action3 == null)action3 = new CustomFragmentDialog();
-        action3.show(getActivity(),getChildFragmentManager(),R.layout.comic_dialog_countdown_action3);
-        TextView tv_time = action3.getDialog().findViewById(R.id.tv_time);
-        CountDownTimer timer = new CountDownTimer(80*1000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int sec = (int) (millisUntilFinished/1000);
-                String sec2 = sec%60<10?"0"+sec%60:sec%60+"";
-                tv_time.setText(sec/60+":"+sec2);
-            }
-
-            @Override
-            public void onFinish() {
-            }
-        };
-        timer.start();
-
-        action3.getDialog().findViewById(R.id.tv_toPay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        action3.getDialog().findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                action3.dismiss();
-            }
-        });
     }
 
     @Override
@@ -822,52 +698,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onGetPayAction(PayActionResponse.DataBean.PayinfoBean payinfoBean,int close_time) {
-        showAction1(close_time,payinfoBean.getPrice(),payinfoBean.getGiveprice(),payinfoBean.getId());
-    }
-
-    @Override
-    public void onPaySuccess() {
-        showPayDialog(true);
-    }
-
-    @Override
-    public void payFail(String result) {
-        showPayDialog(false);
-    }
-
-    private androidx.appcompat.app.AlertDialog payDialog;
-    /**
-     * 展示支付结果的弹窗
-     * @param isSuc
-     * @return
-     */
-    private androidx.appcompat.app.AlertDialog showPayDialog(boolean isSuc) {
-        if (payDialog == null) {
-            payDialog = new androidx.appcompat.app.AlertDialog.Builder(getActivity(), R.style.comic_Dialog_no_title).create();
-            final Window dialogWindow = payDialog.getWindow();
-            WindowManager.LayoutParams attributes = dialogWindow.getAttributes();
-            attributes.gravity = Gravity.CENTER;
-            attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-            attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
-            dialogWindow.setAttributes(attributes);
-            payDialog.setCancelable(false);
-            payDialog.show();
-            dialogWindow.setContentView(R.layout.comic_pay_fail);
-            ImageView payResult = dialogWindow.findViewById(R.id.par_result);
-            if (isSuc) {
-                payResult.setImageResource(R.drawable.pay_suc);
-            } else {
-                payResult.setImageResource(R.drawable.bg_comic_dialog_vippay_zhifushibai);
-            }
-            dialogWindow.findViewById(R.id.comic_pay_fail_dismiss).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    payDialog.dismiss();
-                }
-            });
-
-        }
-        return payDialog;
     }
 
     @Override

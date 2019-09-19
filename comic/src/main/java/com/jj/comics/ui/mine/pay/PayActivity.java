@@ -1,19 +1,16 @@
 package com.jj.comics.ui.mine.pay;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
@@ -38,7 +35,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -53,7 +49,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @BindView(R2.id.comic_tool_bar)
     ComicToolBar toolBar;
     private RechargeCoinAdapter mShubiAdapter;
-    private AlertDialog mPayFailDialog;
+    private CustomFragmentDialog mPayDialog;
 
     private long mBookId = 0;
     private String payType;//充值类型
@@ -90,7 +86,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view.getId() == R.id.btn_toPay){
-                    PaySettingResponse.DataBean dataBean = mShubiAdapter.getData().get(position);
+                    PaySettingResponse.DataBeanX.DataBean dataBean = mShubiAdapter.getData().get(position);
                     showBottomDialog(view,dataBean.getId());
                 }
             }
@@ -107,14 +103,11 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     private View getHeadView(){
         View head_view = View.inflate(this,R.layout.comic_pay_header,null);
-
         return head_view;
     }
 
     private View getFooterView(){
         View footView = View.inflate(this,R.layout.comic_pay_footer,null);
-        TextView tv_foot = footView.findViewById(R.id.pay_reminder);
-        tv_foot.setText(getP().getReminderText(payType));
         return footView;
     }
 
@@ -167,16 +160,18 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     public void onPaySuccess() {
         hideProgress();
         EventBusManager.sendPaySuccessEvent(new PaySuccessEvent());
-        AlertDialog payFailDialog = getPayFailDialog(true);
-        if (payFailDialog != null && !payFailDialog.isShowing()) payFailDialog.show();
+        showPayDialog(true);
     }
 
-
     @Override
-    public void fillData(List<PaySettingResponse.DataBean> rechargeCoinList) {
-        if (mShubiAdapter.getFooterLayoutCount() <= 0)
-            mShubiAdapter.addFooterView(getFooterView());
-        mShubiAdapter.setNewData(rechargeCoinList);
+    public void fillData(PaySettingResponse response) {
+        if (response.getData()!=null&&response.getData().getData()!=null&&response.getData().getData().size()!=0){
+            mShubiAdapter.setNewData(response.getData().getData());
+            View footerView = getFooterView();
+            mShubiAdapter.setFooterView(footerView);
+            TextView tv_des = footerView.findViewById(R.id.tv_des);
+            tv_des.setText(response.getData().getDescribe());
+        }
     }
 
     @Override
@@ -204,7 +199,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     public void wxPay(WxPayEvent baseResp) {
         int errCode = baseResp.errCode;
         if (errCode == 0) {
-//            showToastShort(getString(R.string.comic_pay_success));
             onPaySuccess();
         } else {
             //微信支付失败 弹窗提示
@@ -216,56 +210,26 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     public void payFail(String msg) {
         hideProgress();
         showToastShort(msg);
-        AlertDialog payFailDialog = getPayFailDialog(false);
-        if (payFailDialog != null && !payFailDialog.isShowing()) payFailDialog.show();
+        showPayDialog(false);
     }
 
-    private AlertDialog getPayFailDialog(boolean isSuc) {
-        if (mPayFailDialog == null) {
-            mPayFailDialog = new AlertDialog.Builder(this, R.style.comic_Dialog_no_title).create();
-//            ImmersionBar.with(context, mPayFailDialog)
-//                    .statusBarColor(R.color.base_color_ffd850)
-//                    .init();
-            final Window dialogWindow = mPayFailDialog.getWindow();
-            mPayFailDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-//                    ImmersionBar.with(context, mPayFailDialog).destroy();
-                }
-            });
-//            mPayFailDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//                @Override
-//                public void onShow(DialogInterface dialog) {
-//                    if (dialogWindow.getDecorView().findViewById(android.R.id.content) != null)
-//                }
-//            });
-
-
-            WindowManager.LayoutParams attributes = dialogWindow.getAttributes();
-
-            attributes.gravity = Gravity.CENTER;
-            attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-            attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-            dialogWindow.setAttributes(attributes);
-            mPayFailDialog.setCancelable(false);
-            mPayFailDialog.show();
-            dialogWindow.setContentView(R.layout.comic_pay_fail);
-            ImageView payResult = dialogWindow.findViewById(R.id.par_result);
-            if (isSuc) {
-                payResult.setImageResource(R.drawable.pay_suc);
-            } else {
-                payResult.setImageResource(R.drawable.bg_comic_dialog_vippay_zhifushibai);
-            }
-            dialogWindow.findViewById(R.id.comic_pay_fail_dismiss).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mPayFailDialog.dismiss();
-                }
-            });
-
+    private void showPayDialog(boolean isSuc) {
+        if (mPayDialog == null) {
+            mPayDialog = new CustomFragmentDialog();
         }
-        return mPayFailDialog;
+        mPayDialog.show(this,getSupportFragmentManager(),R.layout.comic_pay_fail,R.style.comic_dialog_window_transparent);
+        mPayDialog.getDialog().findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPayDialog.dismiss();
+            }
+        });
+        ImageView payResult =  mPayDialog.getDialog().findViewById(R.id.pay_result);
+        if (isSuc) {
+            payResult.setImageResource(R.drawable.pay_suc);
+        } else {
+            payResult.setImageResource(R.drawable.bg_comic_dialog_vippay_zhifushibai);
+        }
     }
 
     @Override

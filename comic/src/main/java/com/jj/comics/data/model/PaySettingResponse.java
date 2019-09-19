@@ -8,89 +8,119 @@ import java.util.List;
 public class PaySettingResponse extends ResponseModel{
 
 
-    private List<DataBean> data;
+    /**
+     * data : {"data":[{"id":334549600668291100,"title":null,"description":"安卓端充值一","price":"0.01","type":1,"goods_count":1,"config":["首充双倍"]},{"id":334553509579264000,"title":null,"description":"安卓金币充值2","price":"0.02","type":1,"goods_count":2,"config":[]}],"describe":"1. 1元=100书币\\r\\n2. 书币充值可叠加，无上限。\\r\\n3. 书币消耗完无法阅读书籍。\\r\\n4. 书币留存小于小说单章的消耗数时无法阅读书籍。\\r\\n5. vip用户阅读书籍不会消耗书币。"}
+     */
 
-    public List<DataBean> getData() {
+    private DataBeanX data;
+
+    public DataBeanX getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBeanX data) {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBeanX {
         /**
-         * id : 333378491205881860
-         * title :
-         * description : 充会会员送金币
-         * price : 365.00
-         * type : 2
-         * goods_count : 3000
-         * config : ["",""]
+         * data : [{"id":334549600668291100,"title":null,"description":"安卓端充值一","price":"0.01","type":1,"goods_count":1,"config":["首充双倍"]},{"id":334553509579264000,"title":null,"description":"安卓金币充值2","price":"0.02","type":1,"goods_count":2,"config":[]}]
+         * describe : 1. 1元=100书币\r\n2. 书币充值可叠加，无上限。\r\n3. 书币消耗完无法阅读书籍。\r\n4. 书币留存小于小说单章的消耗数时无法阅读书籍。\r\n5. vip用户阅读书籍不会消耗书币。
          */
 
-        private long id;
-        private String title;
-        private String description;
-        private String price;//价格
-        private int type;
-        private int goods_count;//'充值可得金币数量或会员天数
-        private List<String> config;//描述
+        private String describe;
+        private List<DataBean> data;
 
-        public long getId() {
-            return id;
+        public String getDescribe() {
+            return describe;
         }
 
-        public void setId(long id) {
-            this.id = id;
+        public void setDescribe(String describe) {
+            this.describe = describe;
         }
 
-        public String getTitle() {
-            return title;
+        public List<DataBean> getData() {
+            return data;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setData(List<DataBean> data) {
+            this.data = data;
         }
 
-        public String getDescription() {
-            return description;
-        }
+        public static class DataBean {
+            /**
+             * id : 334549600668291100
+             * title : null
+             * description : 安卓端充值一
+             * price : 0.01
+             * type : 1
+             * goods_count : 1
+             * config : ["首充双倍"]
+             */
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+            private long id;
+            private Object title;
+            private String description;
+            private String price;
+            private int type;
+            private int goods_count;
+            private List<String> config;
 
-        public String getPrice() {
-            return price;
-        }
+            public long getId() {
+                return id;
+            }
 
-        public void setPrice(String price) {
-            this.price = price;
-        }
+            public void setId(long id) {
+                this.id = id;
+            }
 
-        public int getType() {
-            return type;
-        }
+            public Object getTitle() {
+                return title;
+            }
 
-        public void setType(int type) {
-            this.type = type;
-        }
+            public void setTitle(Object title) {
+                this.title = title;
+            }
 
-        public int getGoods_count() {
-            return goods_count;
-        }
+            public String getDescription() {
+                return description;
+            }
 
-        public void setGoods_count(int goods_count) {
-            this.goods_count = goods_count;
-        }
+            public void setDescription(String description) {
+                this.description = description;
+            }
 
-        public List<String> getConfig() {
-            return config;
-        }
+            public String getPrice() {
+                return price;
+            }
 
-        public void setConfig(List<String> config) {
-            this.config = config;
+            public void setPrice(String price) {
+                this.price = price;
+            }
+
+            public int getType() {
+                return type;
+            }
+
+            public void setType(int type) {
+                this.type = type;
+            }
+
+            public int getGoods_count() {
+                return goods_count;
+            }
+
+            public void setGoods_count(int goods_count) {
+                this.goods_count = goods_count;
+            }
+
+            public List<String> getConfig() {
+                return config;
+            }
+
+            public void setConfig(List<String> config) {
+                this.config = config;
+            }
         }
     }
 }

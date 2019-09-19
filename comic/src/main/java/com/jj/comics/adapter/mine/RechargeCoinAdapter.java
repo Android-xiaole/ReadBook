@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.comics.R;
 import com.jj.comics.data.model.PaySettingResponse;
 
-public class RechargeCoinAdapter extends BaseQuickAdapter<PaySettingResponse.DataBean, BaseViewHolder> {
+public class RechargeCoinAdapter extends BaseQuickAdapter<PaySettingResponse.DataBeanX.DataBean, BaseViewHolder> {
 
     private String payType;
 
@@ -17,7 +17,7 @@ public class RechargeCoinAdapter extends BaseQuickAdapter<PaySettingResponse.Dat
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, PaySettingResponse.DataBean item) {
+    protected void convert(BaseViewHolder helper, PaySettingResponse.DataBeanX.DataBean item) {
         if (payType.equals("1")){//书币充值
             helper.setText(R.id.tv_title,item.getGoods_count()+"书币");
         }else if (payType.equals("2")){//会员充值

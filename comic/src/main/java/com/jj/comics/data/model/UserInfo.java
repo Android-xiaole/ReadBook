@@ -60,15 +60,16 @@ public class UserInfo implements Serializable {
     private String update_time;
     private String invite_code;
     private int delete_flag;
+    private int is_vip;//表示用户是否是vip
 
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
 
 
-    @Generated(hash = 953407895)
+    @Generated(hash = 1000830217)
     public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
             String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
-            String create_time, String update_time, String invite_code, int delete_flag, boolean isLogin) {
+            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, boolean isLogin) {
         this.uid = uid;
         this.openid = openid;
         this.unionid = unionid;
@@ -86,6 +87,7 @@ public class UserInfo implements Serializable {
         this.update_time = update_time;
         this.invite_code = invite_code;
         this.delete_flag = delete_flag;
+        this.is_vip = is_vip;
         this.isLogin = isLogin;
     }
 
@@ -236,6 +238,14 @@ public class UserInfo implements Serializable {
 
     public void setIsLogin(boolean isLogin) {
         this.isLogin = isLogin;
+    }
+
+    public int getIs_vip() {
+        return this.is_vip;
+    }
+
+    public void setIs_vip(int is_vip) {
+        this.is_vip = is_vip;
     }
 
 }

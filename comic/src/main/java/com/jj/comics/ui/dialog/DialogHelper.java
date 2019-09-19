@@ -229,16 +229,16 @@ public class DialogHelper {
      * 失败提醒对话框
      */
     public void showPayFail() {
-        final Dialog dialog = new Dialog(mContext, R.style.comic_Dialog_no_title);
-        dialog.setContentView(R.layout.comic_pay_fail);
-        dialog.setCancelable(false);
-
-        dialog.findViewById(R.id.comic_pay_fail_dismiss).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+//        final Dialog dialog = new Dialog(mContext, R.style.comic_Dialog_no_title);
+//        dialog.setContentView(R.layout.comic_pay_fail);
+//        dialog.setCancelable(false);
+//
+//        dialog.findViewById(R.id.comic_pay_fail_dismiss).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
     }
 
     /**

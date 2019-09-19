@@ -3,18 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:id="@+id/rootView"
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/par_result"
+        android:id="@+id/pay_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/bg_comic_dialog_vippay_zhifushibai" />
 
-    <ImageView
-        android:id="@+id/comic_pay_fail_dismiss"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
-        android:src="@drawable/icon_comic_dialog_login_tuichu" />
 </LinearLayout>

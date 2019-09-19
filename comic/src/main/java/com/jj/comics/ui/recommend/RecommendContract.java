@@ -42,10 +42,6 @@ public interface RecommendContract {
 
         void onGetPayAction(PayActionResponse.DataBean.PayinfoBean payinfoBean,int close_time);
 
-        void onPaySuccess();
-
-        void payFail(String result);
-
         void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList);
 
         void onLoadPopShareFail(NetError netError);
@@ -74,8 +70,5 @@ public interface RecommendContract {
         //获取banner
         void getBanner();
 
-        void getPayAction();
-
-        void payAli(long goodsId);
     }
 }

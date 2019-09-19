@@ -49,7 +49,6 @@ public class PayUtils {
 
                     @Override
                     protected void onFail(NetError error) {
-                        String message = error.getMessage();
                         ToastUtil.showToastLong(error.getMessage());
                         ((BaseActivity)activity).hideProgress();
                     }

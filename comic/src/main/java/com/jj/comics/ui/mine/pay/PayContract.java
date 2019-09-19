@@ -16,7 +16,7 @@ public interface PayContract {
 
     interface IPayView extends IView {
         //加载支付页面的数据的回调
-        void fillData(List<PaySettingResponse.DataBean> rechargeCoinList);
+        void fillData(PaySettingResponse response);
 
 //        //数据加载失败
 //        void loadFail(String msg);

@@ -60,4 +60,18 @@ public class SharedPreManger {
         return sharedPref.getString(Constants.SharedPrefKey.INVITE_CODE,"");
     }
 
+    /**
+     * 保存自动购买状态
+     */
+    public void saveAutoBuyStatus(boolean isAutoBuy){
+        sharedPref.putBoolean(Constants.SharedPrefKey.AUTO_BUY,isAutoBuy);
+    }
+
+    /**
+     * 获取自动购买状态
+     */
+    public boolean getAutoBuyStatus(){
+        return sharedPref.getBoolean(Constants.SharedPrefKey.AUTO_BUY,false);
+    }
+
 }

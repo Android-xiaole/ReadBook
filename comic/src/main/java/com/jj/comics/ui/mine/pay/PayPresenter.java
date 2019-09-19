@@ -51,11 +51,7 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
 
                     @Override
                     public void onNext(PaySettingResponse response) {
-                        if (response.getData() != null&&response.getData().size() != 0) {
-                            getV().fillData(response.getData());
-                        } else {
-                            ToastUtil.showToastShort("没有数据");
-                        }
+                        getV().fillData(response);
                     }
 
                     @Override
@@ -150,9 +146,9 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
     @Override
     public CharSequence getReminderText(String payType) {
         SpannableString reminder;
-        if (payType.equals("1")){//书币充值
+        if (payType.equals("1")) {//书币充值
             reminder = new SpannableString(BaseApplication.getApplication().getString(R.string.comic_reminder1));
-        }else {//会员充值
+        } else {//会员充值
             reminder = new SpannableString(BaseApplication.getApplication().getString(R.string.comic_reminder2));
         }
         reminder.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_333333)), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

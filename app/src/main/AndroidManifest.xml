@@ -39,9 +39,14 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+
+        <!--解决9.0系统的手机上出现Didn't find class "org.apache.http.client.methods.HttpPost"异常-->
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
         <activity
             android:name="com.jj.novelpro.activity.SplashActivity"
             android:screenOrientation="portrait">

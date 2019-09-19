@@ -16,6 +16,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.widget.UserItemView;
@@ -43,11 +44,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    SharedPref.getInstance(SettingActivity.this).putBoolean(Constants.SharedPrefKey.AUTO_BUY, true);
-                } else {
-                    SharedPref.getInstance(SettingActivity.this).putBoolean(Constants.SharedPrefKey.AUTO_BUY, false);
-                }
+                SharedPreManger.getInstance().saveAutoBuyStatus(isChecked);
             }
         });
     }

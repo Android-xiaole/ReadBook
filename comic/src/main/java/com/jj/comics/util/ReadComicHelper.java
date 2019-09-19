@@ -11,6 +11,7 @@ import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
@@ -58,16 +59,23 @@ public class ReadComicHelper {
                                 return Observable.empty();
                             }
                         }else if (response.getCode() == 1002){//未购买
-                            //如果用户是自动购买就直接调用购买接口,并且支持分章节购买
-                            if (SharedPref.getInstance().getBoolean(Constants.SharedPrefKey.AUTO_BUY, false)&&bookModel.getBatchbuy() == 1) {
+                            UserInfo onLineUser = LoginHelper.getOnLineUser();
+                            /**
+                             * 可以自动购分以下几种情况
+                             * 1.vip用户并且支持章节购买（后台需要做分成统计）
+                             * 2.非vip用户开启了自动购买并且支持分章节购买
+                             */
+                            if ((onLineUser.getIs_vip()==1&&bookModel.getBatchbuy() == 1)||(SharedPreManger.getInstance().getAutoBuyStatus()&&bookModel.getBatchbuy() == 1)) {
                                 return UserRepository.getInstance().subscribe(bookModel.getId(),chapterid)
                                         .flatMap(new Function<CommonStatusResponse, ObservableSource<BookCatalogModel>>() {
                                             @Override
                                             public ObservableSource<BookCatalogModel> apply(CommonStatusResponse subResponse) throws Exception {
                                                 if (subResponse.getCode() == 1000&&subResponse.getData().getStatus()){//订阅成功
-                                                    ToastUtil.showToastShort("订阅成功");
+                                                    if (onLineUser.getIs_vip()!=1){
+                                                        ToastUtil.showToastShort("订阅成功");
+                                                    }
                                                     //发送刷新目录列表的通知
-                                                    EventBusManager.sendRefreshCatalogListBySubscribeEvent(new RefreshCatalogListBySubscribeEvent());
+//                                                    EventBusManager.sendRefreshCatalogListBySubscribeEvent(new RefreshCatalogListBySubscribeEvent());
                                                     //再次请求章节内容接口
                                                     return ContentRepository.getInstance().getCatalogContent(bookModel.getId(),chapterid)
                                                             .flatMap(new Function<BookCatalogContentResponse, ObservableSource<BookCatalogModel>>() {

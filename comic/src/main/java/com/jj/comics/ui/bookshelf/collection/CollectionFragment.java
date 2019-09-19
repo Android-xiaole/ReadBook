@@ -69,6 +69,10 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (LoginHelper.getOnLineUser()==null){
+                    mRefresh.setRefreshing(false);
+                    return;
+                }
                 currentPage = 1;
                 getP().getCollectionList(currentPage);
             }

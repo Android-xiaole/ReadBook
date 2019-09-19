@@ -141,6 +141,10 @@
         <item name="android:backgroundDimAmount">0.65</item>  <!--背景透明度-->
     </style>
 
+    <style name="comic_dialog_window_transparent">
+        <item name="android:windowBackground">@android:color/transparent</item> <!--背景透明-->
+    </style>
+
     <style name="comic_Dialog_push_bg">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowNoTitle">true</item>
