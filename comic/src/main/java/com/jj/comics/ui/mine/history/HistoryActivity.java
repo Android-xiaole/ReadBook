@@ -139,21 +139,12 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
     }
 
     private View getEmptyView() {
-        View view = LayoutInflater.from(this).inflate(R.layout.comic_empty_view_btn, mRecycler,
+        View view = LayoutInflater.from(this).inflate(R.layout.comic_empty_view, mRecycler,
                 false);
         ImageView img = view.findViewById(R.id.iv_empty_img);
         img.setBackgroundResource(R.drawable.img_empty_read);
         TextView tvDesc = (TextView) view.findViewById(R.id.tv_empty_desc);
         tvDesc.setText("哦呵~您还没有看过任何书籍\r\n赶快去看书吧~");
-        TextView btnAction = (TextView) view.findViewById(R.id.btn_empty_action);
-        btnAction.setText(R.string.comic_go_read);
-        btnAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBusManager.sendChangeTabBarEvent(new ChangeTabBarEvent(1));
-                finish();
-            }
-        });
         return view;
     }
 }
