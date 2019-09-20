@@ -24,9 +24,6 @@ public interface RecommendContract {
 
         void onLoadRecentlyComicFail(NetError netError);
 
-        //免费金币活动查询成功
-        void onFreeGoldChecked();
-
         //获取广告推送
         void adsPush(Push push);
 
@@ -55,9 +52,6 @@ public interface RecommendContract {
         void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel);
 
         void loadPopShare(int channelFlag,boolean changeChannel);
-
-        //检查获取免费金币
-        void checkFreeGoldStatus();
 
         //查询广告推送
         void getAdsPush_Comic();

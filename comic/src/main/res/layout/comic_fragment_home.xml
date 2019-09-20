@@ -15,8 +15,7 @@
         android:visibility="gone"
         android:id="@+id/fl_toolBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:layout_below="@id/fake_statusbar_view">
+        android:layout_height="@dimen/dp_50">
 
         <View
             android:id="@+id/view_toolbarBg"

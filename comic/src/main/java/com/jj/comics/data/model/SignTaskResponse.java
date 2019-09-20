@@ -4,7 +4,6 @@ import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.jj.base.mvp.IModel;
 import com.jj.base.net.NetError;
-import com.jj.comics.adapter.mine.WelfareItemAdapter;
 
 import java.util.List;
 

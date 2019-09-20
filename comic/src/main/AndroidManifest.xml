@@ -4,11 +4,6 @@
 
     <application>
         <activity
-            android:name=".ui.recommend.RecommendLoadMoreActovity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
             android:name=".ui.detail.ComicDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
@@ -46,18 +41,12 @@
         <activity
             android:name=".ui.mine.login.BindPhoneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.mine.pay.SubscribeActivity"
             android:theme="@style/Comic.NoTitleTranslucentTheme" />
-        <activity
-            android:name=".ui.list.RankActivity"
-            android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.recommend.FreeListActivity"
-            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.mine.settings.AboutActivity"
@@ -68,16 +57,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.search.SearchActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.mine.VIPActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.welfare.WelfareActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.mine.RewardActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -104,45 +83,14 @@
         <activity
             android:name=".ui.search.SearchResultActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.mine.FeedbackActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.MyFeedBackActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.KefuActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-
-        <activity
-            android:name=".ui.mine.userinfo.EditUserInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
-            android:name=".ui.mine.userinfo.CheckUserInfoActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
             android:name=".ui.mine.settings.ChangePhoneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
-        <activity
-            android:name=".ui.mine.settings.CouponCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
             android:name=".ui.mine.settings.UserAgreementActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
-
-        <activity
-            android:name=".ui.recommend.RichManRankActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
@@ -214,9 +162,9 @@
             android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
-        android:name=".ui.mine.rebate.cashout.DoCashOutActivity"
-        android:screenOrientation="portrait"
-        android:theme="@style/Comic.AppTheme.Base" />
+            android:name=".ui.mine.rebate.cashout.DoCashOutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
             android:name=".ui.mine.rebate.cashout.CashOutResultActivitry"

@@ -19,6 +19,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -38,7 +45,6 @@ import com.jj.comics.adapter.recommend.RecommendAdapter;
 import com.jj.comics.adapter.recommend.RecommendChildAdapter;
 import com.jj.comics.common.callback.OnScrollListenerWithButton;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
@@ -48,10 +54,8 @@ import com.jj.comics.data.model.Push;
 import com.jj.comics.data.model.SectionModel;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
-import com.jj.comics.ui.dialog.FreeGoldDialog;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
-import com.jj.comics.util.LoginHelper;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -64,12 +68,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.OnClick;
 import me.jessyan.autosize.utils.ScreenUtils;
@@ -447,26 +445,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         //点击事件友盟统计
         getP().umengOnEvent(from, model);
         DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
-    }
-
-    private FreeGoldDialog freeGoldDialog;
-
-    @Override
-    public void onFreeGoldChecked() {
-        if (freeGoldDialog == null) freeGoldDialog = new FreeGoldDialog();
-        freeGoldDialog.show(getChildFragmentManager(), new DialogUtilForComic.OnDialogClick() {
-            @Override
-            public void onConfirm() {
-                ToastUtil.showToastShort(getResources().getString(R.string.comic_get_success_remind));
-            }
-
-            @Override
-            public void onRefused() {
-                ToastUtil.showToastShort(getResources().getString(R.string.comic_get_success_remind));
-            }
-
-        });
-
     }
 
     @Override

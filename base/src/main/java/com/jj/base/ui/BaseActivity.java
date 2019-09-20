@@ -21,7 +21,6 @@ import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.PushAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -66,10 +65,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             p.attachV(this);
             getLifecycle().addObserver(p);
         }
-
-//        该方法是【友盟+】Push后台进行日活统计及多维度推送的必调用方法
-        PushAgent.getInstance(context).onAppStart();
-//        initData(savedInstanceState);
 
         if (isImmersionBarEnabled()) {
             initImmersionBar();

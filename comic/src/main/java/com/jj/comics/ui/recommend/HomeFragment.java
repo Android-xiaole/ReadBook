@@ -32,8 +32,7 @@ public class HomeFragment extends BaseCommonFragment implements HomeContract.IHo
     FrameLayout home_share;
     private FRouterHelper mFRouterHelper;
     private int current = -1;
-    private String fragmentPath[] = new String[]{RouterMap.COMIC_RECOMMEND_FRAGMENT,
-            RouterMap.COMIC_RECENTLY_FRAGMENT};
+    private String fragmentPath[] = new String[]{RouterMap.COMIC_RECOMMEND_FRAGMENT};
 
 
     @Override

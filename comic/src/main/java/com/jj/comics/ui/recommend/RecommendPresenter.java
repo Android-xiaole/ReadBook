@@ -144,26 +144,6 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
 
 
     @Override
-    public void checkFreeGoldStatus() {
-        TaskRepository.getInstance().presentGold()
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<CommonStatusResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
-                    @Override
-                    public void onNext(CommonStatusResponse response) {
-                        if (response.getData() != null && response.getData().getStatus()) {
-                            getV().onFreeGoldChecked();
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-                });
-    }
-
-    @Override
     public void getAdsPush_128() {
         ProductRepository.getInstance().getAdsPush(getV().getClass().getName(), Constants.AD_ID_133)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -236,30 +216,18 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                     @Override
                     public void onNext(Push push) {
                         if (push == null || push.getId() == null || !push.getId().equals(Constants.AD_ID_132)) {
-                            //获取免费金币
-                            if (LoginHelper.getOnLineUser() != null) {
-                                checkFreeGoldStatus();
-                            }
                             return;
                         }
                         if (!SharedPref.getInstance().getString("ad_push_id", "").equals(push.getText1())) {
                             SharedPref.getInstance().putBoolean("main_push", false);
                             getV().adsPush(push);
                         } else {
-                            //获取免费金币
-                            if (LoginHelper.getOnLineUser() != null) {
-                                checkFreeGoldStatus();
-                            }
                         }
                         SharedPref.getInstance().putString("ad_push_id", push.getText1());
                     }
 
                     @Override
                     protected void onFail(NetError error) {
-                        //获取免费金币
-                        if (LoginHelper.getOnLineUser() != null) {
-                            checkFreeGoldStatus();
-                        }
                     }
                 });
 

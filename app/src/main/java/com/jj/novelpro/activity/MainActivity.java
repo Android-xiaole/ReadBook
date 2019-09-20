@@ -67,8 +67,6 @@ import androidx.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import q.rorbin.badgeview.Badge;
-import q.rorbin.badgeview.QBadgeView;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 

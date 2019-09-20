@@ -41,7 +41,7 @@ public class Constants {
     }//wxc0bcd7b1f2639665
 
     //友盟相关参数
-    public static final String UMENG_APPKEY = "5caeae7b570df330b1001159";
+    public static final String UMENG_APPKEY = "5d6ddc203fc19593b4000cd4";
     public static final String UMENG_MESSAGE_SECRET = "7e609230d58fae2e255602b6b89a5163";
     //小米推送相关参数
     public static final String MI_APPID = "2882303761517940112";

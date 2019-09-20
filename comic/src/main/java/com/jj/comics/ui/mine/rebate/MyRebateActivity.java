@@ -53,7 +53,7 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     ComicToolBar mToolBar;
     private ViewPagerAdapter mViewPagerAdapter;
 
-    private PayInfo mPayInfo = null;
+    private PayInfo mPayInfo = new PayInfo();
 
     @Override
     protected void initData(Bundle savedInstanceState) {

@@ -2,12 +2,12 @@ package com.jj.novelpro.app;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.app.Notification;
 import android.content.Context;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.widget.RemoteViews;
+
+import androidx.multidex.MultiDex;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.model.LazyHeaders;
@@ -32,29 +32,13 @@ import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
-import com.jj.novelpro.R;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;
 import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
-import com.tencent.stat.StatConfig;
-import com.tencent.stat.StatService;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
-import com.umeng.message.IUmengRegisterCallback;
-import com.umeng.message.PushAgent;
-import com.umeng.message.UmengMessageHandler;
-import com.umeng.message.UmengNotificationClickHandler;
-import com.umeng.message.entity.UMessage;
 
-import org.android.agoo.huawei.HuaWeiRegister;
-import org.android.agoo.xiaomi.MiPushRegistar;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import androidx.core.app.NotificationCompat;
-import androidx.multidex.MultiDex;
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -107,8 +91,6 @@ public class ComicApplication extends BaseApplication {
 
         initHttp();
 
-        initHuawei();
-        initMi();
         initUmeng();
         configUnits();
 
@@ -226,36 +208,6 @@ public class ComicApplication extends BaseApplication {
                 });
     }
 
-    private void initHuawei() {
-        //华为推送通道注册
-        /**
-         * 华为对后台进程做了诸多限制。若使用一键清理，应用的channel进程被清除，将接收不到推送。
-         * 为了增加推送的送达率，可选择接入华为托管弹窗功能。通知将由华为系统托管弹出，点击通知栏将跳转到指定的Activity。
-         * 该Activity需继承自UmengNotifyClickActivity，同时实现父类的onMessage方法，对该方法的intent参数进一步解析即可，该方法异步调用，不阻塞主线程（与小米弹窗使用方式相同）
-         * 参考：https://developer.umeng.com/docs/66632/detail/98589
-         */
-        /**
-         * 注意:
-         对于EMUI 4.1及以下版本系统，若要使用华为弹窗功能，则需在华为设备上的【手机管家】App中，开启应用的“自启动权限”。
-         使用华为弹窗下发的通知，将只能被统计到通知的【打开数】，而该条通知的【收到数】、【忽略数】将无法被统计到。
-         */
-        HuaWeiRegister.register(this);
-    }
-
-    private void initMi() {
-        //小米推送通道注册
-        /**
-         * 小米对后台进程做了诸多限制。若使用一键清理，应用的channel进程被清除，将接收不到推送。
-         * 为了增加推送的送达率，可选择接入小米托管弹窗功能。通知将由小米系统托管弹出，点击通知栏将跳转到指定的Activity。
-         * 该Activity需继承自UmengNotifyClickActivity，同时实现父类的onMessage方法，对该方法的intent参数进一步解析即可，该方法异步调用，不阻塞主线程。
-         * 参考：https://developer.umeng.com/docs/66632/detail/98589
-         */
-        /**
-         * **注意:**
-         使用小米系统通道下发的消息，将只能被统计到消息的【打开数】，而该条消息的【收到数】、【忽略数】将无法被统计到。
-         */
-        MiPushRegistar.register(this, Constants.MI_APPID, Constants.MI_APPKEY);
-    }
 
     private void initUmeng() {
         //场景类型设置
@@ -267,90 +219,15 @@ public class ComicApplication extends BaseApplication {
          */
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         //禁止默认的页面统计功能
-        MobclickAgent.openActivityDurationTrack(false);
         UMConfigure.init(this,
                 Constants.UMENG_APPKEY,
                 Constants.CHANNEL_ID,
-                UMConfigure.DEVICE_TYPE_PHONE,
-                Constants.UMENG_MESSAGE_SECRET);
+                UMConfigure.DEVICE_TYPE_PHONE,null);
         UMConfigure.setLogEnabled(Constants.DEBUG);
         UMConfigure.setEncryptEnabled(false);
-        //获取消息推送代理示例
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        //注册推送服务，每次调用register方法都会回调该接口
-        mPushAgent.register(new IUmengRegisterCallback() {
+        // 选用LEGACY_AUTO页面采集模式
+        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.LEGACY_MANUAL);
 
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回deviceToken deviceToken是推送消息的唯一标志
-                LogUtil.e("注册成功：deviceToken：-------->  " + deviceToken);
-            }
-
-            @Override
-            public void onFailure(String s, String s1) {
-                LogUtil.e("注册失败：-------->  " + "s:" + s + ",s1:" + s1);
-            }
-        });
-        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-            /**
-             * 通知的回调方法
-             * @param context
-             * @param msg
-             */
-            @Override
-            public void dealWithNotificationMessage(Context context, UMessage msg) {
-                //调用super则会走通知展示流程，不调用super则不展示通知
-                super.dealWithNotificationMessage(context, msg);
-                LogUtil.e("接收到消息：-------->  " + new Gson().toJson(msg));
-            }
-
-            @Override
-            public Notification getNotification(Context context, UMessage msg) {
-                switch (msg.builder_id) {
-                    case 0:
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(),
-                                R.layout.notification_view_simple);
-                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
-                        myNotificationView.setTextViewText(R.id.notification_text, msg.text);
-                        myNotificationView.setTextViewText(R.id.notification_time, new SimpleDateFormat(Constants.DateFormat.HM).format(new Date()));
-                        myNotificationView.setImageViewBitmap(R.id.notification_large_icon,
-                                getLargeIcon(context, msg));
-                        builder.setContent(myNotificationView)
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setTicker(msg.ticker)
-                                .setPriority(NotificationCompat.PRIORITY_MAX)
-                                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                                .setAutoCancel(true)
-                                .setDefaults(Notification.DEFAULT_ALL);
-                        return builder.build();
-                    default:
-                        //默认为0，若填写的builder_id并不存在，也使用默认。
-                        return super.getNotification(context, msg);
-                }
-            }
-
-        };
-        mPushAgent.setMessageHandler(messageHandler);
-
-        /**
-         * UmengNotificationClickHandler是在BroadcastReceiver中被调用，
-         * 因此若需启动Activity，
-         * 需为Intent添加Flag：Intent.FLAG_ACTIVITY_NEW_TASK，
-         * 否则无法启动Activity。
-         */
-        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
-            @Override
-            public void dealWithCustomAction(Context context, UMessage msg) {
-                LogUtil.e("点击消息：-------->  " + new Gson().toJson(msg));
-            }
-        };
-        mPushAgent.setNotificationClickHandler(notificationClickHandler);
-
-        // [可选]设置是否打开debug输出，上线时请关闭，Logcat标签为"MtaSDK"
-        StatConfig.setDebugEnable(true);
-        // 基础统计API
-        StatService.registerActivityLifecycleCallbacks(getApplication());
     }
 
     /**

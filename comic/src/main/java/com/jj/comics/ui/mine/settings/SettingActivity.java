@@ -11,17 +11,14 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.SharedPref;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.common.constants.Constants;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.widget.UserItemView;
-import com.tencent.stat.StatMultiAccount;
-import com.tencent.stat.StatService;
+import com.tencent.wxop.stat.StatService;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -99,11 +96,6 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                     updateLoginStatus();
                     //最后发送退出登录的通知
                     EventBusManager.sendLogoutEvent(new LogoutEvent());
-
-                    //腾讯账号统计
-                    // 注销时调用
-                    StatService.removeMultiAccount(context, StatMultiAccount.AccountType.PHONE_NO);
-
                     finish();
                 }
             });

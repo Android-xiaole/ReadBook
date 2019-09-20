@@ -39,11 +39,10 @@ import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.stat.StatMultiAccount;
-import com.tencent.stat.StatService;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+import com.tencent.wxop.stat.StatService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -101,9 +100,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     public ObservableSource<UserInfo> apply(UidLoginResponse uidLoginResponse) throws Exception {
                         if (uidLoginResponse.getData()!=null&&uidLoginResponse.getData().getUser_info()!=null){
                             UserInfo user_info = uidLoginResponse.getData().getUser_info();
-                            //腾讯统计登录用户统计
-                            tecentLoginStat(StatMultiAccount.AccountType.CUSTOM,
-                                    user_info.getUid() + "");
                             MobclickAgent.onEvent(BaseApplication.getApplication(),
                                     Constants.UMEventId.UID_LOGIN);
                             SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, uidLoginResponse.getData().getBearer_token());
@@ -197,9 +193,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                         if (responseModel.getData() != null && responseModel.getData().getUser_info() != null) {
                             UserInfo user_info = responseModel.getData().getUser_info();
-                            //腾讯统计登录用户统计
-                            tecentLoginStat(StatMultiAccount.AccountType.PHONE_NO,
-                                    user_info.getMobile() + "");
                             MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
                             SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, responseModel.getData().getBearer_token());
                             return UserRepository.getInstance().saveUser(responseModel.getData().getUser_info());
@@ -262,9 +255,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                                     @Override
                                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                                         return dealLoginResponse(responseModel);
-                                        //腾讯统计登录用户统计
-//                                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_QQ,
-//                                                user_info.getUid() + "");
 //                                        MobclickAgent.onEvent(BaseApplication.getApplication(),
 //                                                Constants.UMEventId.QQ_LOGIN);
                                     }
@@ -357,16 +347,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         }
     }
 
-    private void tecentLoginStat(StatMultiAccount.AccountType accountType, String value) {
-        // 登陆时调用
-        StatMultiAccount account = new StatMultiAccount(accountType, value);
-        long time = System.currentTimeMillis() / 1000;
-        // 登陆时间，单秒为秒
-        account.setLastTimeSec(time);
-        // 过期时间
-        account.setExpireTimeSec(time + 24 * 60);
-        StatService.reportMultiAccount((BaseActivity) getV(), account);
-    }
 
     private WbAuthListener getWbAuthListener() {
         if (mWbAuthListener == null)
@@ -401,9 +381,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                         return dealLoginResponse(responseModel);
-//                        //腾讯统计登录用户统计
-//                        tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIXIN,
-//                                user_info.getUid() + "");
 //                        MobclickAgent.onEvent(BaseApplication.getApplication(),
 //                                Constants.UMEventId.WX_LOGIN);
                     }
@@ -424,8 +401,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                 if (user_info!=null){
                     //保存token
                     SharedPreManger.getInstance().saveToken(data.getBearer_token());
-//                    //腾讯统计登录用户统计
-//                    tecentLoginStat(StatMultiAccount.AccountType.OPEN_WEIBO,user_info.getUid() + "");
 //                    //UM登录统计
 //                    MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
                     //最后保存用户信息到数据库

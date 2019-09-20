@@ -1,11 +1,12 @@
 package com.jj.comics.data.model;
 
+
 import java.util.List;
 
 public class RebateListResponse extends ResponseModel {
 
     /**
-     * data : {"total_num":2,"data":[{"id":2,"amount":"1.00","balance":"50.00","profit_uid":28531,"profit_user":"1","create_time":"1970-01-01 15:55:31","desc":"返利"},{"id":1,"amount":"1.00","balance":"100.00","profit_uid":28531,"profit_user":"1","create_time":"1970-01-01 08:00:00","desc":"返利"}]}
+     * data : {"total_num":1,"data":[{"id":4869893669664392,"amount":"0.03","balance":"0.00","profit_uid":4869828161392168,"profit_user":"18512132376","create_time":"2019-09-20 14:25:26","desc":"返利"}]}
      */
 
     private DataBeanX data;
@@ -20,8 +21,8 @@ public class RebateListResponse extends ResponseModel {
 
     public static class DataBeanX {
         /**
-         * total_num : 2
-         * data : [{"id":2,"amount":"1.00","balance":"50.00","profit_uid":28531,"profit_user":"1","create_time":"1970-01-01 15:55:31","desc":"返利"},{"id":1,"amount":"1.00","balance":"100.00","profit_uid":28531,"profit_user":"1","create_time":"1970-01-01 08:00:00","desc":"返利"}]
+         * total_num : 1
+         * data : [{"id":4869893669664392,"amount":"0.03","balance":"0.00","profit_uid":4869828161392168,"profit_user":"18512132376","create_time":"2019-09-20 14:25:26","desc":"返利"}]
          */
 
         private int total_num;
@@ -45,19 +46,19 @@ public class RebateListResponse extends ResponseModel {
 
         public static class RebateModel {
             /**
-             * id : 2
-             * amount : 1.00
-             * balance : 50.00
-             * profit_uid : 28531
-             * profit_user : 1
-             * create_time : 1970-01-01 15:55:31
+             * id : 4869893669664392
+             * amount : 0.03
+             * balance : 0.00
+             * profit_uid : 4869828161392168
+             * profit_user : 18512132376
+             * create_time : 2019-09-20 14:25:26
              * desc : 返利
              */
 
             private long id;
             private String amount;
             private String balance;
-            private int profit_uid;
+            private long profit_uid;
             private String profit_user;
             private String create_time;
             private String desc;
@@ -86,11 +87,11 @@ public class RebateListResponse extends ResponseModel {
                 this.balance = balance;
             }
 
-            public int getProfit_uid() {
+            public long getProfit_uid() {
                 return profit_uid;
             }
 
-            public void setProfit_uid(int profit_uid) {
+            public void setProfit_uid(long profit_uid) {
                 this.profit_uid = profit_uid;
             }
 

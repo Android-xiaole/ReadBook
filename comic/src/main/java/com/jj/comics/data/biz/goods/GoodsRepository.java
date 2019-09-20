@@ -10,7 +10,6 @@ import com.jj.comics.data.model.PrePayOrderResponseHuifubao;
 import com.jj.comics.data.model.PrePayOrderResponseWx;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.RewardGiftsResponse;
-import com.jj.comics.data.model.VIPListResponse;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -28,10 +27,6 @@ public class GoodsRepository implements GoodsDataSource {
         return INSTANCE;
     }
 
-    @Override
-    public Observable<VIPListResponse> getVIPList(String retryTag) {
-        return ComicApi.getApi().getVIPList().retryWhen(new RetryFunction2(retryTag));
-    }
 
     @Override
     public Observable<ResponseModel> goldExchange(long userId,String code) {

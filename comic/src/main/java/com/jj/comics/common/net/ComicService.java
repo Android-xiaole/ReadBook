@@ -30,7 +30,6 @@ import com.jj.comics.data.model.NotificationListResponse;
 import com.jj.comics.data.model.NotificationResponse;
 import com.jj.comics.data.model.OSSResponse;
 import com.jj.comics.data.model.PayActionResponse;
-import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.PrePayOrderResponseAli;
@@ -57,7 +56,6 @@ import com.jj.comics.data.model.SortListResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.data.model.UserInfoResponse;
-import com.jj.comics.data.model.VIPListResponse;
 import com.jj.comics.data.model.WxModel;
 
 import java.util.HashMap;
@@ -811,9 +809,6 @@ public interface ComicService {
 
     /****************************************以下 是Goods 模块 ***************************************************************************/
 
-
-    @GET(API_MEMBERCENTER)
-    Observable<VIPListResponse> getVIPList();
 
     /**
      * 获取当前产品带的打赏礼物列表

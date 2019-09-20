@@ -22,11 +22,8 @@ import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.CashOutResponse;
 import com.jj.comics.ui.dialog.BottomCashOutDialog;
-import com.jj.comics.ui.recommend.RecommendLoadMoreContract;
 
 import butterknife.BindView;
-
-import static com.jj.base.utils.RouterMap.COMIC_CASHOUT_RESULT_ACTIVITY;
 
 @Route(path = RouterMap.COMIC_DOCASHOUT_ACTIVITY)
 public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implements DoCashOutContract.IDoCashOutView {

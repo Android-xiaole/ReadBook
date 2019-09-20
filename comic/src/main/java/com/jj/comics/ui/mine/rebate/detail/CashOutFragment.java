@@ -34,10 +34,11 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
 
     private int currentPage = 1;
     private CashOutListAdapter mCashOutListAdapter;
-
+    private boolean created = false;
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        created = true;
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setRefreshing(true);
         mCashOutListAdapter = new CashOutListAdapter(R.layout.comic_item_cash_out);
@@ -47,15 +48,18 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
         mCashOutListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mCashOutListAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mCashOutListAdapter.setEmptyView(getEmptyView());
-//        getP().getCashOutList(currentPage);
+        getP().getCashOutList(currentPage);
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-        mRefreshLayout.setRefreshing(true);
-        currentPage = 1;
-        getP().getCashOutList(currentPage);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (created && isVisibleToUser) {
+            mRefreshLayout.setRefreshing(true);
+            currentPage = 1;
+            getP().getCashOutList(currentPage);
+        }
     }
 
     @Override

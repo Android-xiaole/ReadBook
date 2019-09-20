@@ -33,10 +33,11 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
 
     private int currentPage = 1;
     private RebateListAdapter mRebateAdapter;
-
+    private boolean created = false;
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        created = true;
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshLayout.setRefreshing(true);
         mRebateAdapter = new RebateListAdapter(R.layout.comic_item_rebate_detail);
@@ -45,17 +46,20 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
         mRebateAdapter.bindToRecyclerView(mRecyclerView,true);
         mRebateAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mRebateAdapter.setOnLoadMoreListener(this,mRecyclerView);
-//        getP().getRebateList(currentPage);
         mRebateAdapter.setEmptyView(getEmptyView());
+        getP().getRebateList(currentPage);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mRefreshLayout.setRefreshing(true);
-        currentPage = 1;
-        getP().getRebateList(currentPage);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (created && isVisibleToUser) {
+            mRefreshLayout.setRefreshing(true);
+            currentPage = 1;
+            getP().getRebateList(currentPage);
+        }
     }
+
 
     @Override
     public int getLayoutId() {
