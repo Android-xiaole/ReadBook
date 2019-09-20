@@ -173,6 +173,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         getP().loadPopShare(recentChannelFlag,false);
         getP().loadRecentlyComic(recentlyPage, recentChannelFlag, false);
 
+        switchTvs(0);
     }
 
     @Override
@@ -228,49 +229,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         return headView;
     }
 
-    /**
-     * 分类button按钮头布局
-     *
-     * @return
-     */
-    private View getHeaderViewBtns() {
-        View view = getLayoutInflater().inflate(R.layout.comic_header_recommond_btns,
-                (ViewGroup) rv_recently.getParent(), false);
-        view.findViewById(R.id.btn_recommond_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//              showToastShort("榜单");
-                ARouter.getInstance().build(RouterMap.COMIC_RANK_ACTIVITY).navigation();
-            }
-        });
-
-        view.findViewById(R.id.btn_gold_center).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (LoginHelper.getOnLineUser() == null) {
-                    ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getActivity());
-                } else {
-                    ARouter.getInstance().build(RouterMap.COMIC_GOLD_CENTER_ACTIVITY).navigation(getActivity());
-                }
-            }
-        });
-        view.findViewById(R.id.btn_free_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ARouter.getInstance().build(RouterMap.COMIC_FREE_LIST_ACTIVITY).navigation(getActivity());
-            }
-        });
-
-        view.findViewById(R.id.btn_pay_rank).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//              showToastShort("ops~功能暂未开放!");
-                ARouter.getInstance().build(RouterMap.COMIC_RICHMANRANK_ACTIVITY).navigation(getActivity(), RequestCode.RICH_REQUEST_CODE);
-            }
-        });
-
-        return view;
-    }
 
     /**
      * 获取专区内容头布局
@@ -415,7 +373,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 break;
             case 2:
                 mTvFeatured.setTextColor(getResources().getColor(R.color.comic_a8adb3));
-                mTvFeatured.getPaint().setFakeBoldText(true);
+                mTvFeatured.getPaint().setFakeBoldText(false);
                 mTvFeatured.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
                 mTvMan.setTextColor(getResources().getColor(R.color.comic_a8adb3));
                 mTvMan.getPaint().setFakeBoldText(false);

@@ -26,8 +26,7 @@
                 android:paddingBottom="@dimen/dp_14"
                 android:text="精选"
                 android:textColor="@color/comic_ffad70"
-                android:textSize="@dimen/dp_18"
-                android:textStyle="bold" />
+                android:textSize="@dimen/dp_18" />
 
             <TextView
                 android:id="@+id/recommend_man"
