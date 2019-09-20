@@ -10,6 +10,8 @@
         android:layout_height="@dimen/dp_48"
         android:background="@color/comic_ffffff"
         android:gravity="center_vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
 
@@ -28,6 +30,8 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_15"
             android:layout_weight="1"
+            android:cursorVisible="true"
+            android:textCursorDrawable="@null"
             android:background="@drawable/comic_search_search_bg"
             android:drawableRight="@drawable/icon_search_search"
             android:drawablePadding="@dimen/dp_10"
@@ -37,14 +41,15 @@
             android:maxLength="10"
             android:singleLine="true"
             android:textColorHint="@color/comic_999999"
-            android:textCursorDrawable="@android:color/black"
             android:textSize="@dimen/dp_14" />
 
         <TextView
+            android:id="@+id/search_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_19"
             android:text="取消"
+            android:textColor="@color/comic_979ba2"
             android:textSize="@dimen/dp_16" />
     </LinearLayout>
 

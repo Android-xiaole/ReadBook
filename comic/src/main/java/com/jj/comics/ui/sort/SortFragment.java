@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,6 +53,10 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
 
     @BindView(R2.id.female_text)
     TextView female_text;
+    @BindView(R2.id.female)
+    LinearLayout female;
+    @BindView(R2.id.male)
+    LinearLayout male;
 
     private String name = "1";
 
@@ -97,13 +102,19 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
         if (maleSelected) {
             male_vertical.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_ffad70));
             male_text.setTextColor(getActivity().getResources().getColor(R.color.comic_ffad70));
-            female_vertical.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_353a40));
             female_text.setTextColor(getActivity().getResources().getColor(R.color.comic_353a40));
+            female.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_f4f6f9));
+            male.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_ffffff));
+            female_vertical.setVisibility(View.GONE);
+            male_vertical.setVisibility(View.VISIBLE);
         } else {
-            male_vertical.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_353a40));
             male_text.setTextColor(getActivity().getResources().getColor(R.color.comic_353a40));
             female_vertical.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_ffad70));
             female_text.setTextColor(getActivity().getResources().getColor(R.color.comic_ffad70));
+            female.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_ffffff));
+            male.setBackgroundColor(getActivity().getResources().getColor(R.color.comic_f4f6f9));
+            male_vertical.setVisibility(View.GONE);
+            female_vertical.setVisibility(View.VISIBLE);
         }
     }
 

@@ -38,12 +38,14 @@
             android:id="@+id/sort"
             android:layout_width="56dp"
             android:layout_height="match_parent"
+            android:background="@color/comic_f4f6f9"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/male"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@color/comic_ffffff"
                 android:gravity="center_vertical">
 
                 <TextView

@@ -56,15 +56,17 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mCoins;
     @BindView(R2.id.mine_apprentice)
     TextView mApprentice;
-
+    @BindView(R2.id.is_vip)
+    ImageView mVip;
     private int mCoin = 99999;
 
     private PayInfo mPayInfo;
+
     @Override
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
         MobclickAgent.onEvent(getContext(), Constants.UMEventId.ACCESS_USER_CENTER);
-        if (LoginHelper.getOnLineUser()!=null){
+        if (LoginHelper.getOnLineUser() != null) {
             getP().getUserInfo();
         }
     }
@@ -72,7 +74,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @Override
     public void onVisiable(boolean visiable) {
         super.onVisiable(visiable);
-        if (visiable&&LoginHelper.getOnLineUser()!=null){
+        if (visiable && LoginHelper.getOnLineUser() != null) {
             getP().getUserPayInfo();
         }
     }
@@ -98,8 +100,18 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
                     new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
         }
-        //设置昵称
-        mNickname.setText(userInfo.getNickname());
+        String nickName = userInfo.getNickname();
+        if (nickName != null && nickName.length() > 5) {
+            nickName = nickName.substring(0, 5) + "...";
+            //设置昵称
+            mNickname.setText(nickName);
+        }
+
+        if (userInfo.getIs_vip() == 1) {
+            mVip.setImageResource(R.drawable.mine_vip);
+        } else {
+            mVip.setImageResource(R.drawable.mine_vip_gray);
+        }
     }
 
     @Override
@@ -110,13 +122,13 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mApprentice.setText(payInfo.getDisciple_num() + "");
     }
 
-    @OnClick({R2.id.comic_mine_coin_pay,R2.id.comic_mine_vip_pay,R2.id.mine_nickname,R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
+    @OnClick({R2.id.comic_mine_coin_pay, R2.id.comic_mine_vip_pay, R2.id.mine_nickname, R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
             R2.id.comic_mine_notification, R2.id.comic_mine_help,
             R2.id.edit_user_info,
-            R2.id.btn_my_rebate, R2.id.btn_my_coin,R2.id.btn_my_apprentice})
+            R2.id.btn_my_rebate, R2.id.btn_my_coin, R2.id.btn_my_apprentice})
     void onClick(View view) {
-        if (view.getId() == R.id.mine_head_img||view.getId() == R.id.mine_nickname) {
-            if (LoginHelper.getOnLineUser() == null){
+        if (view.getId() == R.id.mine_head_img || view.getId() == R.id.mine_nickname) {
+            if (LoginHelper.getOnLineUser() == null) {
                 ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(getActivity());
             }
         } else if (view.getId() == R.id.comic_mine_buy) {
@@ -125,28 +137,30 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_HISTORY_ACTIVITY).navigation();
         } else if (view.getId() == R.id.comic_mine_notification) {
             ARouter.getInstance().build(RouterMap.COMIC_NOTIFICATION_ACTIVITY).navigation();
-        }else if (view.getId() == R.id.comic_mine_help) {
+        } else if (view.getId() == R.id.comic_mine_help) {
             ARouter.getInstance().build(RouterMap.COMIC_HELP_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.edit_user_info) {
-            ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
+            if (LoginHelper.getOnLineUser() == null) {
+                ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
+            }
         } else if (view.getId() == R.id.btn_my_coin) {
             ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong(Constants.IntentKey.COIN, mCoin).navigation();
         } else if (view.getId() == R.id.btn_my_rebate) {
-            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
-        }else if (view.getId() == R.id.btn_my_coin) {
+            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO, mPayInfo).navigation();
+        } else if (view.getId() == R.id.btn_my_coin) {
             int egold = 0;
             if (mPayInfo != null) {
                 egold = mPayInfo.getTotal_egold();
             }
-            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withInt(Constants.IntentKey.COIN,egold).navigation();
-        }else if (view.getId() == R.id.btn_my_rebate) {
-            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO,mPayInfo).navigation();
-        }else if (view.getId() == R.id.btn_my_apprentice) {
+            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withInt(Constants.IntentKey.COIN, egold).navigation();
+        } else if (view.getId() == R.id.btn_my_rebate) {
+            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO, mPayInfo).navigation();
+        } else if (view.getId() == R.id.btn_my_apprentice) {
             ARouter.getInstance().build(RouterMap.COMIC_MINE_APPRENTICE_ACTIVITY).navigation();
-        }else if (view.getId() == R.id.comic_mine_coin_pay){//书币充值
-            PayActivity.toPay(getActivity(),"1", 0);
-        }else if (view.getId() == R.id.comic_mine_vip_pay){//开通会员
-            PayActivity.toPay(getActivity(),"2", 0);
+        } else if (view.getId() == R.id.comic_mine_coin_pay) {//书币充值
+            PayActivity.toPay(getActivity(), "1", 0);
+        } else if (view.getId() == R.id.comic_mine_vip_pay) {//开通会员
+            PayActivity.toPay(getActivity(), "2", 0);
         }
     }
 
@@ -155,9 +169,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserinfo(UpdateUserInfoEvent event) {
-        if (event.getUserInfo()!=null){
+        if (event.getUserInfo() != null) {
             onGetUserInfo(event.getUserInfo());
-        }else{
+        } else {
             getP().getUserInfo();
         }
     }

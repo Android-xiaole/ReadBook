@@ -30,7 +30,7 @@ public class NovelListFragment extends BaseFragment {
         }
         novel_list_recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         novel_list_recycler.setHasFixedSize(true);
-        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
+        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 1);
         adapter_recently.bindToRecyclerView(novel_list_recycler,true);
         adapter_recently.setNewData(bookModels);
     }

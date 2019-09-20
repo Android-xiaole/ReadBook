@@ -77,7 +77,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
             }
         });
 
-        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
+        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 1);
         rv_searchResult.setNestedScrollingEnabled(false);
         rv_searchResult.setHasFixedSize(true);
         rv_searchResult.setLayoutManager(new LinearLayoutManager(this));
@@ -100,11 +100,15 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
     }
 
 
-    @OnClick({R2.id.search_result_back})
+    @OnClick({R2.id.search_result_back,R2.id.search_cancel})
     void dealClick(View view) {
         int id = view.getId();
         if (id == R.id.search_result_back) {
             finish();
+        } else if (view.getId() == R.id.search_cancel) {
+            et_search.setText("");
+            et_search.setFocusable(true);
+            et_search.setFocusableInTouchMode(true);
         }
     }
 

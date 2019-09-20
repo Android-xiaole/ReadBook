@@ -28,6 +28,7 @@
             android:layout_width="@dimen/dp_35"
             android:layout_height="@dimen/dp_35"
             android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/dp_20"
             android:src="@drawable/icon_user_avatar_default" />
 
         <TextView

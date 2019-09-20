@@ -117,7 +117,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
         rv_recently.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_recently.setHasFixedSize(true);
-        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
+        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 2);
         adapter_recently.bindToRecyclerView(rv_recently,true);
         adapter_recently.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override

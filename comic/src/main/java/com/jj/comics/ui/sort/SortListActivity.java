@@ -50,7 +50,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
 
         novel_list_recycler.setLayoutManager(new LinearLayoutManager(this));
         novel_list_recycler.setHasFixedSize(true);
-        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate);
+        adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 1);
         adapter_recently.bindToRecyclerView(novel_list_recycler, true);
         adapter_recently.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override

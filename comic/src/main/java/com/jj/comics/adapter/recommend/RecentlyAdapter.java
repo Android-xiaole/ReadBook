@@ -1,6 +1,8 @@
 package com.jj.comics.adapter.recommend;
 
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,9 +17,11 @@ import com.jj.comics.R;
 import com.jj.comics.data.model.BookModel;
 
 public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
+    private int mType = 1;// 1 表示有连载状态  2 表示没有
 
-    public RecentlyAdapter(int layoutResId) {
+    public RecentlyAdapter(int layoutResId, int type) {
         super(layoutResId);
+        mType = type;
     }
 
     @Override
@@ -34,8 +38,25 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
                             .error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
             helper.<TextView>getView(R.id.tv_recently_name).setText(item.getTitle());
-            helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             helper.<TextView>getView(R.id.tv_recently_author).setText(item.getAuthor());
+            if (mType == 1) {
+                helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
+                String content = item.getIntro();
+                if (content != null && content.length() > 30) {
+                    content = content.substring(0, 30) + "......";
+                }
+                helper.<TextView>getView(R.id.tv_recently_desc).setText(content);
+                if (item.getFullflag() == 0) {
+                    helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#FE4C68"));
+                    helper.<TextView>getView(R.id.tv_update_status).setText("连载中");
+                } else {
+                    helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#FFAD70"));
+                    helper.<TextView>getView(R.id.tv_update_status).setText("已完结");
+                }
+            } else {
+                helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.GONE);
+                helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
+            }
         }
 
     }
