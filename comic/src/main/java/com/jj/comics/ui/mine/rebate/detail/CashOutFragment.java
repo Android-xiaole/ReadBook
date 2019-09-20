@@ -45,7 +45,6 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mCashOutListAdapter.bindToRecyclerView(mRecyclerView, true);
-        mCashOutListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mCashOutListAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mCashOutListAdapter.setEmptyView(getEmptyView());
         getP().getCashOutList(currentPage);
@@ -85,6 +84,7 @@ public class CashOutFragment extends BaseVPFragment<CashOutPresenter> implements
         mRefreshLayout.setRefreshing(false);
         if (currentPage == 1) {
             mCashOutListAdapter.setNewData(list);
+            mCashOutListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         } else {
             mCashOutListAdapter.addData(list);
         }

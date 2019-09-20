@@ -44,7 +44,6 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mRebateAdapter.bindToRecyclerView(mRecyclerView,true);
-        mRebateAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mRebateAdapter.setOnLoadMoreListener(this,mRecyclerView);
         mRebateAdapter.setEmptyView(getEmptyView());
         getP().getRebateList(currentPage);
@@ -83,6 +82,7 @@ public class RebateFragment extends BaseVPFragment<RebatePresenter> implements R
         mRefreshLayout.setRefreshing(false);
         if (currentPage == 1) {
             mRebateAdapter.setNewData(list);
+            mRebateAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         }else{
             mRebateAdapter.addData(list);
         }
