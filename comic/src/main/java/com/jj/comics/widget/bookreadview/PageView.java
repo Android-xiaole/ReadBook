@@ -17,6 +17,7 @@ import com.jj.comics.widget.bookreadview.animation.ScrollPageAnim;
 import com.jj.comics.widget.bookreadview.animation.SimulationPageAnim;
 import com.jj.comics.widget.bookreadview.animation.SlidePageAnim;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
+import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 
 
 /**
@@ -223,7 +224,7 @@ public class PageView extends View {
                 }
 
                 // 如果滑动了，则进行翻页。
-                if (isMove&&canMove&&mPageLoader.getPageStatus() == PageLoader.STATUS_FINISH) {
+                if (isMove) {
                     mPageAnim.onTouchEvent(event);
                 }
                 break;
@@ -242,6 +243,41 @@ public class PageView extends View {
                         }
                         return true;
                     }
+                    //只能点击上一章
+                    if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_LAST){
+                        RectF rectF = getRectF(mPageLoader.tv_last_chapter);
+                        if (rectF.contains(x,y)){
+                            if (mTouchListener != null) {
+                                mTouchListener.clickLastChapter();
+                            }
+                            return true;
+                        }
+                    }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT){
+                        //只能点击下一章
+                        RectF rectF = getRectF(mPageLoader.tv_next_chapter);
+                        if (rectF.contains(x,y)){
+                            if (mTouchListener != null) {
+                                mTouchListener.clickNextChapter();
+                            }
+                            return true;
+                        }
+                    }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT_LAST){
+                        //两个按钮都可以点击
+                        RectF rectF_last = getRectF(mPageLoader.tv_last_chapter);
+                        if (rectF_last.contains(x,y)){
+                            if (mTouchListener != null) {
+                                mTouchListener.clickLastChapter();
+                            }
+                            return true;
+                        }
+                        RectF rectF_next = getRectF(mPageLoader.tv_next_chapter);
+                        if (rectF_next.contains(x,y)){
+                            if (mTouchListener != null) {
+                                mTouchListener.clickNextChapter();
+                            }
+                            return true;
+                        }
+                    }
                 }
                 mPageAnim.onTouchEvent(event);
                 break;
@@ -249,17 +285,8 @@ public class PageView extends View {
         return true;
     }
 
-    private boolean canMove = true;//设置是否允许滑动
-
-    /**
-     * 控制加载器是否可以滑动（如果存在收费章节会弹出订阅界面，如果不及时禁止滑动会导致弹出多个订阅界面）
-     * @param canMove
-     */
-    public void setMove(boolean canMove){
-        this.canMove = canMove;
-        if (!canMove){
-            mPageAnim.abortAnim();
-        }
+    private RectF getRectF(View view){
+        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(65),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(65));
     }
 
     /**
@@ -386,5 +413,9 @@ public class PageView extends View {
         void nextPage();
 
         void cancel();
+
+        void clickNextChapter();//点击了下一章按钮
+
+        void clickLastChapter();//点击了上一章按钮
     }
 }

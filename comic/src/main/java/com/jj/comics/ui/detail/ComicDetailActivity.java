@@ -199,7 +199,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             finish();
         } else if (id == R.id.iv_batchBuy) {//全本购买
             if (model == null) return;
-            SubscribeActivity.toSubscribe(this, model, 0);
+            SubscribeActivity.toSubscribe(this, model, model.getBatchprice(),0);
         } else if (id == R.id.lin_addBook || id == R.id.iv_addBookTop) {//加入书架
             if (LoginHelper.interruptLogin(this, null)) {
                 if (isCollect) {
@@ -298,10 +298,15 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading));
 
-        if (model.getBatchbuy() == 2&&model.getHas_batch_buy()==2) {//可以全本购买并且没有全本购买过
-            iv_batchBuy.setVisibility(View.VISIBLE);
-        } else {
+        if (LoginHelper.getOnLineUser()!=null&&LoginHelper.getOnLineUser().getIs_vip() == 1){
+            //已登录用户如果又是VIP用户，全本购买icon隐藏
             iv_batchBuy.setVisibility(View.GONE);
+        }else{
+            if (model.getBatchbuy() == 2&&model.getHas_batch_buy()==2) {//可以全本购买并且没有全本购买过
+                iv_batchBuy.setVisibility(View.VISIBLE);
+            } else {
+                iv_batchBuy.setVisibility(View.GONE);
+            }
         }
 
         tv_title.setText(model.getTitle());
@@ -437,7 +442,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshBatchIcon(BatchBuyEvent event) {
         this.model = event.getBookModel();
-        iv_batchBuy.setVisibility(View.INVISIBLE);
+        iv_batchBuy.setVisibility(View.GONE);
     }
 
     @Override

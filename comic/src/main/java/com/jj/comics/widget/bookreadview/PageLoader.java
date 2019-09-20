@@ -16,7 +16,9 @@ import android.text.TextPaint;
 import android.text.style.SuggestionSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.widget.bookreadview.bean.BookRecordBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
@@ -62,6 +64,11 @@ public abstract class PageLoader {
     private static final int DEFAULT_MARGIN_WIDTH = 17;
     private static final int DEFAULT_TIP_SIZE = 12;
     private static final int EXTRA_TITLE_SIZE = 4;
+    //切换章节按钮的显示状态
+    public static final int CAN_NOTHING = 0;//默认都不可点击
+    public static final int CAN_NEXT_LAST = 1;//上一章和下一章都可点击
+    public static final int CAN_NEXT= 2;//只能点击下一章
+    public static final int CAN_LAST = 3;//只能点击上一章
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
@@ -103,11 +110,20 @@ public abstract class PageLoader {
 
     private Disposable mPreLoadDisp;
 
+    public View mBottomBar;//底部切换章节的布局view
+    public TextView tv_last_chapter;//上一章按钮
+    public TextView tv_next_chapter;//下一章按钮
+    private View view_fgt;//介于上一章下一章中间的分割条
+    private Canvas canvas_bottombar;
+    private Bitmap bitmap_bottombar;
+
     /*****************params**************************/
     // 当前的状态
     protected int mStatus = STATUS_LOADING;
     // 判断章节列表是否加载完成
     protected boolean isChapterListPrepare;
+    //标记章节按钮显示状态
+    private int mChapterButtonStatus = CAN_NOTHING;
 
     // 是否打开过章节
     private boolean isChapterOpen;
@@ -166,6 +182,15 @@ public abstract class PageLoader {
         initPageView();
         // 初始化书籍
         prepareBook();
+        //初始化底部切换章节button
+//        initBottomBar();
+    }
+
+    private void initBottomBar() {
+        mBottomBar = LayoutInflater.from(mContext).inflate(R.layout.comic_readview_chapter_btn, null);
+        tv_last_chapter = mBottomBar.findViewById(R.id.tv_last_chapter);
+        tv_next_chapter = mBottomBar.findViewById(R.id.tv_next_chapter);
+        view_fgt = mBottomBar.findViewById(R.id.view_fgt);
     }
 
     private void initData() {
@@ -514,6 +539,13 @@ public abstract class PageLoader {
      */
     public int getPageStatus() {
         return mStatus;
+    }
+
+    /**
+     * 获取切换章节按钮显示状态
+     */
+    public int getChapterButtonStatus(){
+        return mChapterButtonStatus;
     }
 
     /**
@@ -921,16 +953,35 @@ public abstract class PageLoader {
                 }
             }
 
-            //绘制到每个章节的最后一页
+            //绘制到每个章节的最后一页，开始绘制底部切换章节按钮
             if (mCurPage.position + 1 == mCurPageList.size()) {
-                View view = LayoutInflater.from(mContext).inflate(R.layout.comic_readview_chapter_btn, null);
-                layoutView(view);
-                Bitmap bitmap_btn = Bitmap.createBitmap(view.getMeasuredWidth(),view.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
-                Canvas c1 = new Canvas(bitmap_btn);
-                c1.drawColor(Color.WHITE);
-                view.draw(c1);
-                c1.save();
-                canvas.drawBitmap(bitmap_btn,mDisplayWidth/2,mDisplayHeight-view.getMeasuredHeight(),mTextPaint);
+                initBottomBar();
+                if (mCurChapterPos == 0){
+                    //这是第一章，应该隐藏上一章的按钮
+                    mChapterButtonStatus = CAN_NEXT;
+                    tv_next_chapter.setVisibility(View.VISIBLE);
+                    tv_last_chapter.setVisibility(View.GONE);
+                    view_fgt.setVisibility(View.GONE);
+                }else if (mCurChapterPos == mChapterList.size()-1){
+                    //这是最后一章，应该隐藏下一章
+                    mChapterButtonStatus = CAN_LAST;
+                    tv_last_chapter.setVisibility(View.VISIBLE);
+                    tv_next_chapter.setVisibility(View.GONE);
+                    view_fgt.setVisibility(View.GONE);
+                }else{
+                    //中间章节两个按钮都要显示
+                    mChapterButtonStatus = CAN_NEXT_LAST;
+                    tv_last_chapter.setVisibility(View.VISIBLE);
+                    tv_next_chapter.setVisibility(View.VISIBLE);
+                    view_fgt.setVisibility(View.VISIBLE);
+                }
+                layoutView(mBottomBar);
+                bitmap_bottombar = Bitmap.createBitmap(mBottomBar.getMeasuredWidth(),mBottomBar.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
+                canvas_bottombar = new Canvas(bitmap_bottombar);
+                mBottomBar.draw(canvas_bottombar);
+                canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85),null);
+            }else{
+                mChapterButtonStatus = CAN_NOTHING;
             }
         }
     }
@@ -939,8 +990,8 @@ public abstract class PageLoader {
      * 手动测量view宽高
      */
     private void layoutView(View v) {
-        v.layout(0, 0, mDisplayWidth, ScreenUtils.dpToPx(44));
-        int measuredWidth = View.MeasureSpec.makeMeasureSpec(mDisplayWidth, View.MeasureSpec.EXACTLY);
+        v.layout(0, 0, ScreenUtils.getDisplayMetrics().widthPixels, ScreenUtils.dpToPx(44));
+        int measuredWidth = View.MeasureSpec.makeMeasureSpec(ScreenUtils.getDisplayMetrics().widthPixels, View.MeasureSpec.EXACTLY);
         int measuredHeight = View.MeasureSpec.makeMeasureSpec(ScreenUtils.dpToPx(44), View.MeasureSpec.AT_MOST);
         v.measure(measuredWidth, measuredHeight);
         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
@@ -997,21 +1048,30 @@ public abstract class PageLoader {
                 mCurPage = prevPage;
                 mPageView.drawNextPage();
                 return true;
+            }else{
+                /*
+                    没有上一页就相当于滑动到章节头部
+                    因为这里有个章节页数显示的问题，需要这么设置
+                 */
+                mCurPage.position = 0;
+                drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
-        if (!hasPrevChapter()) {
-            return false;
-        }
-
-        mCancelPage = mCurPage;
-        if (parsePrevChapter()) {
-            mCurPage = getPrevLastPage();
-        } else {
-            mCurPage = new TxtPage();
-        }
-        mPageView.drawNextPage();
-        return true;
+        //下面是自动加载上一章的代码，项目暂时不需要
+//        if (!hasPrevChapter()) {
+//            return false;
+//        }
+//
+//        mCancelPage = mCurPage;
+//        if (parsePrevChapter()) {
+//            mCurPage = getPrevLastPage();
+//        } else {
+//            mCurPage = new TxtPage();
+//        }
+//        mPageView.drawNextPage();
+//        return true;
+        return false;
     }
 
     /**
@@ -1069,22 +1129,35 @@ public abstract class PageLoader {
                 mCurPage = nextPage;
                 mPageView.drawNextPage();
                 return true;
+            }else{
+                //没有下一页就相当于滑动到底部
+                if (mCurChapterPos == 0){
+                    mChapterButtonStatus = CAN_NEXT;
+                }else if (mCurChapterPos == mChapterList.size()-1){
+                    mChapterButtonStatus = CAN_LAST;
+                }else {
+                    mChapterButtonStatus = CAN_NEXT_LAST;
+                }
+                mCurPage.position = mCurPageList.size()-1;
+                drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
-        if (!hasNextChapter()) {
-            return false;
-        }
+        //下面是自动加载下一章的代码，暂时项目不需要就禁止掉
+//        if (!hasNextChapter()) {
+//            return false;
+//        }
 
-        mCancelPage = mCurPage;
-        // 解析下一章数据
-        if (parseNextChapter()) {
-            mCurPage = mCurPageList.get(0);
-        } else {
-            mCurPage = new TxtPage();
-        }
-        mPageView.drawNextPage();
-        return true;
+//        mCancelPage = mCurPage;
+//        // 解析下一章数据
+//        if (parseNextChapter()) {
+//            mCurPage = mCurPageList.get(0);
+//        } else {
+//            mCurPage = new TxtPage();
+//        }
+//        mPageView.drawNextPage();
+//        return true;
+        return false;
     }
 
     private boolean hasNextChapter() {
@@ -1361,6 +1434,9 @@ public abstract class PageLoader {
                     showTitle = false;
                 }
             }
+            // TODO: 2019-09-20 这里解决底部按钮和文本内容可能重合的问题
+//            //读取完文本之后获取最后一页
+//            TxtPage lastPage = pages.get(pages.size() - 1);
 
             if (lines.size() != 0) {
                 //创建Page

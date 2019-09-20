@@ -36,10 +36,12 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
     private CustomFragmentDialog buyDialog;//购买弹窗
     private long chapterId;
     private BookModel bookModel;
+    private int bookPrice;//购买价格
 
-    public static void toSubscribe(BaseActivity activity, BookModel bookModel, long chapterId) {
+    public static void toSubscribe(BaseActivity activity, BookModel bookModel,int price,long chapterId) {
         ARouter.getInstance().build(RouterMap.COMIC_SUBSCRIBE_ACTIVITY)
                 .withSerializable(Constants.IntentKey.BOOK_MODEL, bookModel)
+                .withInt(Constants.IntentKey.BOOK_PRICE,price)
                 .withSerializable(Constants.IntentKey.BOOK_CHAPTER_ID, chapterId)
                 .navigation(activity, RequestCode.SUBSCRIBE_REQUEST_CODE);
     }
@@ -48,6 +50,7 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
     public void initData(Bundle savedInstanceState) {
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
         chapterId = getIntent().getLongExtra(Constants.IntentKey.BOOK_CHAPTER_ID, 0);
+        bookPrice = getIntent().getIntExtra(Constants.IntentKey.BOOK_PRICE,0);
         getP().getUserPayInfo();
     }
 
@@ -68,8 +71,8 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
         ImageView iv_buyTitle = buyDialog.getDialog().findViewById(R.id.iv_buyTitle);
 
         tv_myCoinNum.setText(payInfo.getTotal_egold() + "");
-        tv_buyCoinNum.setText(bookModel.getBatchprice() + "书币");
-        boolean canBuy = bookModel.getBatchprice() < payInfo.getTotal_egold();
+        tv_buyCoinNum.setText(bookPrice + "书币");
+        boolean canBuy = bookPrice < payInfo.getTotal_egold();
         if (canBuy) {
             btn_pay.setText("确认支付");
         } else {

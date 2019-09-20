@@ -210,10 +210,15 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         toggleEyeModel(ReadSettingManager.getInstance().isEyeModel());//设置是否护眼模式
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
-        if (bookModel.getBatchbuy() == 2&&bookModel.getHas_batch_buy() == 2) {//可以全本购买并且没有购买
-            iv_batchBuy.setVisibility(View.VISIBLE);
-        } else {
+        if (LoginHelper.getOnLineUser()!=null&&LoginHelper.getOnLineUser().getIs_vip() == 1){
+            //已登录用户如果又是VIP用户，全本购买icon隐藏
             iv_batchBuy.setVisibility(View.GONE);
+        }else{
+            if (bookModel.getBatchbuy() == 2&&bookModel.getHas_batch_buy() == 2) {//可以全本购买并且没有购买
+                iv_batchBuy.setVisibility(View.VISIBLE);
+            } else {
+                iv_batchBuy.setVisibility(View.GONE);
+            }
         }
         //加载章节目录列表
         getP().getCatalogList(bookModel.getId());
@@ -277,7 +282,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 /*
                    这里返回需要加载的章节
                  */
-                mPageView.setMove(false);
                 getP().loadData(bookModel, Long.parseLong(requestChapter.getChapterId()));
             }
 
@@ -288,12 +292,10 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void onPageCountChange(int count) {
-
             }
 
             @Override
             public void onPageChange(int pos) {
-
             }
         });
         //阅读页控件的点击事件监听
@@ -310,17 +312,25 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void prePage() {
-
             }
 
             @Override
             public void nextPage() {
-
             }
 
             @Override
             public void cancel() {
 
+            }
+
+            @Override
+            public void clickNextChapter() {
+                mPageLoader.skipNextChapter();
+            }
+
+            @Override
+            public void clickLastChapter() {
+                mPageLoader.skipPreChapter();
             }
         });
         sb_textSetting.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {
@@ -368,7 +378,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             finish();
         } else if (i == R.id.iv_batchBuy) {//全本购买
             if (bookModel != null && catalogModel != null) {
-                SubscribeActivity.toSubscribe(this, bookModel, catalogModel.getId());
+                SubscribeActivity.toSubscribe(this, bookModel,bookModel.getBatchprice(), catalogModel.getId());
             }
         } else if (i == R.id.iv_collect) {//收藏
             if (LoginHelper.interruptLogin(this, null) && bookModel != null) {
@@ -491,7 +501,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
     @Override
     public void onLoadCatalogContentEnd() {
-        if (mPageView != null) mPageView.setMove(true);
+
     }
 
     /**

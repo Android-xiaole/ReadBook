@@ -74,6 +74,7 @@ public class BookModel implements Serializable {
     private int batchbuy;//''购买方式：1-章节售卖 2-整本售卖
     private int batchprice;//整本购买的价格
     private int has_batch_buy;//是否已全本购买1是2否
+    private int update_chapter_time;//章节目录更新时间（可以用来判断是否需要去刷新章节目录缓存）
 
     //设置以下两个属性不写入表中
     @Transient
@@ -86,10 +87,10 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 629917282)
+    @Generated(hash = 422267733)
     public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
-            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy, long userId,
-            long create_time, long update_time) {
+            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy, int update_chapter_time,
+            long userId, long create_time, long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -115,6 +116,7 @@ public class BookModel implements Serializable {
         this.batchbuy = batchbuy;
         this.batchprice = batchprice;
         this.has_batch_buy = has_batch_buy;
+        this.update_chapter_time = update_chapter_time;
         this.userId = userId;
         this.create_time = create_time;
         this.update_time = update_time;
@@ -362,5 +364,13 @@ public class BookModel implements Serializable {
 
     public void setUpdate_time(long update_time) {
         this.update_time = update_time;
+    }
+
+    public int getUpdate_chapter_time() {
+        return this.update_chapter_time;
+    }
+
+    public void setUpdate_chapter_time(int update_chapter_time) {
+        this.update_chapter_time = update_chapter_time;
     }
 }
