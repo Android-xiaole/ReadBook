@@ -387,6 +387,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mTvMoney.setSelected(false);
                 mTvShelf.setSelected(false);
                 mTvMine.setSelected(false);
+                mTvMoney.setVisibility(View.INVISIBLE);
                 break;
             case 1:
                 mIvFeatured.setSelected(false);
@@ -400,6 +401,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mTvMoney.setSelected(false);
                 mTvShelf.setSelected(false);
                 mTvMine.setSelected(false);
+                mTvMoney.setVisibility(View.INVISIBLE);
                 break;
             case 2:
                 mIvFeatured.setSelected(false);
@@ -413,6 +415,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mTvMoney.setSelected(true);
                 mTvShelf.setSelected(false);
                 mTvMine.setSelected(false);
+                mTvMoney.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 mIvFeatured.setSelected(false);
@@ -426,6 +429,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mTvMoney.setSelected(false);
                 mTvShelf.setSelected(true);
                 mTvMine.setSelected(false);
+                mTvMoney.setVisibility(View.INVISIBLE);
                 break;
             case 4:
                 mIvFeatured.setSelected(false);
@@ -439,6 +443,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 mTvMoney.setSelected(false);
                 mTvShelf.setSelected(false);
                 mTvMine.setSelected(true);
+                mTvMoney.setVisibility(View.INVISIBLE);
                 break;
         }
     }
