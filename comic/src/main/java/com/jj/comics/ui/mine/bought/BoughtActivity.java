@@ -22,6 +22,7 @@ import com.jj.comics.data.model.BoughtResponse;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
+import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import java.util.List;
 
@@ -34,11 +35,14 @@ public class BoughtActivity extends BaseActivity<BoughtPresenter> implements Bou
     SwipeRefreshLayout mRefresh;
     @BindView(R2.id.recyclerView)
     RecyclerView mRecycler;
+    @BindView(R2.id.comic_tool_bar)
+    ComicToolBar toolBar;
     private BoughtAdapter mAdapter;
     private int currentPage = 1;
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+        toolBar.setTitleText("我的购买");
         mAdapter = new BoughtAdapter(R.layout.comic_bought_item);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecycler);
