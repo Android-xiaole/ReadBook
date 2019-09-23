@@ -62,10 +62,10 @@ public class ReadComicHelper {
                             UserInfo onLineUser = LoginHelper.getOnLineUser();
                             /**
                              * 可以自动购分以下几种情况
-                             * 1.vip用户并且支持章节购买（后台需要做分成统计）
+                             * 1.vip用户（后台需要做分成统计）
                              * 2.非vip用户开启了自动购买并且支持分章节购买
                              */
-                            if ((onLineUser.getIs_vip()==1&&bookModel.getBatchbuy() == 1)||(SharedPreManger.getInstance().getAutoBuyStatus()&&bookModel.getBatchbuy() == 1)) {
+                            if ((onLineUser.getIs_vip()==1)||(SharedPreManger.getInstance().getAutoBuyStatus()&&bookModel.getBatchbuy() == 1)) {
                                 return UserRepository.getInstance().subscribe(bookModel.getId(),chapterid)
                                         .flatMap(new Function<CommonStatusResponse, ObservableSource<BookCatalogModel>>() {
                                             @Override
