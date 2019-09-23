@@ -148,8 +148,11 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
     }
 
     private void hidKeyBoard(Activity activity) {
-        ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+        View currentFocus = activity.getCurrentFocus();
+        if (currentFocus != null) {
+            ((InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE))
+                    .hideSoftInputFromWindow(currentFocus.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 }
