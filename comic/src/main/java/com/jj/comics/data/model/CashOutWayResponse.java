@@ -1,9 +1,11 @@
 package com.jj.comics.data.model;
 
+
 public class CashOutWayResponse extends ResponseModel {
 
+
     /**
-     * data : {"alipay":true,"bank":true}
+     * data : {"alipay":{"status":false,"information":{"account_number":"","opener":""}},"bank":{"status":false,"information":{"account_number":"","opener":"","opening_bank":""}}}
      */
 
     private DataBean data;
@@ -18,27 +20,28 @@ public class CashOutWayResponse extends ResponseModel {
 
     public static class DataBean {
         /**
-         * alipay : true
-         * bank : true
+         * alipay : {"status":false,"information":{"account_number":"","opener":""}}
+         * bank : {"status":false,"information":{"account_number":"","opener":"","opening_bank":""}}
          */
 
-        private boolean alipay;
-        private boolean bank;
+        private AlipayBean alipay;
+        private BankBean bank;
 
-        public boolean isAlipay() {
+        public AlipayBean getAlipay() {
             return alipay;
         }
 
-        public void setAlipay(boolean alipay) {
+        public void setAlipay(AlipayBean alipay) {
             this.alipay = alipay;
         }
 
-        public boolean isBank() {
+        public BankBean getBank() {
             return bank;
         }
 
-        public void setBank(boolean bank) {
+        public void setBank(BankBean bank) {
             this.bank = bank;
         }
+
     }
 }

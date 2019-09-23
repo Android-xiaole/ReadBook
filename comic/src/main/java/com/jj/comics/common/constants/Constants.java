@@ -145,6 +145,10 @@ public class Constants {
         //login
         public static final String LOGIN_TYPE = "type";
         public static final String LOGIN_OPENID = "openid";
+        //添加提现方式
+        public static final String CASH_OUT_ALI = "ali";
+        public static final String CASH_OUT_BANK = "bank";
+        public static final String CASH_OUT_WAY = "way";
 
     }
 

@@ -10,7 +10,11 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.AlipayBean;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 
@@ -25,10 +29,20 @@ public class AddCashOutWayAliActivity extends BaseActivity<AddCashOutWayAliPrese
     @Override
     protected void initData(Bundle savedInstanceState) {
 
+        Serializable ali = getIntent().getSerializableExtra(Constants.IntentKey.CASH_OUT_ALI);
+        if (ali != null && ali instanceof AlipayBean) {
+            AlipayBean alipayBean = (AlipayBean) ali;
+            AlipayBean.InformationBean information = alipayBean.getInformation();
+            if (information != null) {
+                mEtAccount.setText(information.getAccount_number());
+                mEtName.setText(information.getOpener());
+            }
+        }
+
         mToolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-
+                finish();
             }
 
             @Override

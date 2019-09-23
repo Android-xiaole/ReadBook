@@ -22,6 +22,9 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.ViewPagerAdapter;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.AlipayBean;
+import com.jj.comics.data.model.BankBean;
+import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.ui.mine.rebate.detail.CashOutFragment;
 import com.jj.comics.ui.mine.rebate.detail.RebateFragment;
@@ -54,6 +57,8 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     private ViewPagerAdapter mViewPagerAdapter;
 
     private PayInfo mPayInfo = new PayInfo();
+
+    private boolean canCashOut = false;
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -91,12 +96,17 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
         super.onResume();
         showProgress();
         getP().getMyRebateInfo();
+        getP().getWayStatus();
     }
 
     @OnClick({R2.id.btn_rebate_cash_out})
     void onClick(View view) {
         if (view.getId() == R.id.btn_rebate_cash_out) {
-            ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount()).navigation();
+            if (canCashOut) {
+                ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount()).navigation();
+            }else {
+                ARouter.getInstance().build(RouterMap.COMIC_CASHOUTWAY_ACTIVITY).navigation();
+            }
         }
     }
 
@@ -129,5 +139,20 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     public void onGetMyRebateInfoFail(NetError error) {
         hideProgress();
         showToastShort(error.getMessage());
+    }
+
+    @Override
+    public void onGetCashOutWayStatus(CashOutWayResponse response) {
+        hideProgress();
+        if (response != null && response.getData() != null) {
+            CashOutWayResponse.DataBean data = response.getData();
+            AlipayBean mAlipay = data.getAlipay();
+            BankBean mBank = data.getBank();
+            if (mAlipay != null && mAlipay.isStatus() && mBank != null && mBank.isStatus()) {
+               canCashOut = true;
+            }else {
+                canCashOut = false;
+            }
+        }
     }
 }

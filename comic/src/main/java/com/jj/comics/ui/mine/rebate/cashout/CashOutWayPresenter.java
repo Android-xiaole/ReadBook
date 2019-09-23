@@ -21,13 +21,13 @@ public class CashOutWayPresenter extends BasePresenter<BaseRepository,CashOutWay
                 .subscribe(new ApiSubscriber2<CashOutWayResponse>() {
                     @Override
                     protected void onFail(NetError error) {
-                        getV().onGetCashOutWayStatus(false,false);
+                        getV().onGetCashOutWayStatus(null);
                     }
 
                     @Override
                     public void onNext(CashOutWayResponse cashOutWayResponse) {
                         CashOutWayResponse.DataBean data = cashOutWayResponse.getData();
-                        getV().onGetCashOutWayStatus(data.isAlipay(),data.isBank());
+                        getV().onGetCashOutWayStatus(cashOutWayResponse);
                     }
                 });
     }

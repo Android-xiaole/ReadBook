@@ -10,7 +10,12 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.BankBean;
+import com.jj.comics.data.model.CashOutWayResponse;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
+
+import java.io.Serializable;
 
 import butterknife.BindView;
 
@@ -26,10 +31,20 @@ public class AddCashOutWayUnionActivity extends BaseActivity<AddCashOutWayUnionP
     ComicToolBar mToolBar;
     @Override
     protected void initData(Bundle savedInstanceState) {
+        Serializable bank = getIntent().getSerializableExtra(Constants.IntentKey.CASH_OUT_BANK);
+        if (bank != null && bank instanceof BankBean) {
+            BankBean bankBean = (BankBean) bank;
+            BankBean.InformationBeanX information = bankBean.getInformation();
+            if (information != null) {
+                mEtAccount.setText(information.getAccount_number());
+                mEtBank.setText(information.getOpening_bank());
+                mEtName.setText(information.getOpener());
+            }
+        }
         mToolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
             public void onComicToolBarLeftIconClick(View childView) {
-
+                finish();
             }
 
             @Override
