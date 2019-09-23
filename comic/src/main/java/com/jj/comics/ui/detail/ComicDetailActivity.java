@@ -151,9 +151,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         long id = getId();
         if (id > 0) {
             getP().getComicDetail(id);
+            getP().getCollectStatus(id);
         }
-        getP().getCollectStatus(id);
-        getP().getCatalogList(id);
     }
 
     @Override
@@ -295,6 +294,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
      */
     @Override
     public void onLoadComicDetail(BookModel model) {
+        getP().getCatalogList(model);
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading));
 

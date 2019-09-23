@@ -243,6 +243,12 @@ public class PageView extends View {
                         }
                         return true;
                     }
+                    /**
+                     * TODO: 2019-09-23 这里有一个可能存在的BUG
+                     * 就是当用户没有滑动到该章节底部并且切换章节按钮显示，此时点击按钮并不会触发点击事件，
+                     * 因为当向上滑动的时候会绘制上一页内容此时会将ChapterButtonStatus状态置为CAN_NOTHING，不可点击
+                     * 目前没有很好的解决方案
+                      */
                     //只能点击上一章
                     if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_LAST){
                         RectF rectF = getRectF(mPageLoader.tv_last_chapter);

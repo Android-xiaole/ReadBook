@@ -1434,10 +1434,8 @@ public abstract class PageLoader {
                     showTitle = false;
                 }
             }
-            // TODO: 2019-09-20 这里解决底部按钮和文本内容可能重合的问题
-//            //读取完文本之后获取最后一页
-//            TxtPage lastPage = pages.get(pages.size() - 1);
 
+            //填充最后一页
             if (lines.size() != 0) {
                 //创建Page
                 TxtPage page = new TxtPage();
@@ -1448,6 +1446,29 @@ public abstract class PageLoader {
                 pages.add(page);
                 //重置Lines
                 lines.clear();
+            }
+            // TODO: 2019-09-20 这里解决底部按钮和文本内容可能重合的问题
+            //读取完文本之后获取最后一页
+            showTitle = true;
+            TxtPage lastPage = pages.get(pages.size() - 1);
+            //获取最够一页的内容高度
+            float contentHei;
+            if (showTitle){
+                contentHei = lastPage.lines.size()*(mTextPaint.getTextSize()+mTextInterval)+mTitlePara+mTitleInterval+mTitlePaint.getTextSize();
+            }else{
+                contentHei = lastPage.lines.size()*mTextPaint.getTextSize();
+            }
+            //获取底部按钮需要的高度
+            int btnHei = ScreenUtils.dpToPx(44+68);
+            //如果内容高度加上按钮需要高度大于内容页面可用高度，那就新增一页
+            if ((contentHei+btnHei)>mVisibleHeight){
+                //创建Page
+                TxtPage page = new TxtPage();
+                page.position = pages.size();
+                page.title = StringUtils.convertCC(chapter.getTitle(), mContext);
+                page.lines = new ArrayList<>();
+                page.titleLines = 0;
+                pages.add(page);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

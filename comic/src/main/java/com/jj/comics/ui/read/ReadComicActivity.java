@@ -221,7 +221,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             }
         }
         //加载章节目录列表
-        getP().getCatalogList(bookModel.getId());
+        getP().getCatalogList(bookModel);
         if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
@@ -555,7 +555,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             switch (requestCode) {
                 case RequestCode.LOGIN_REQUEST_CODE:
                     if (bookModel != null) {
-                        getP().getCatalogList(bookModel.getId());
+                        getP().getCatalogList(bookModel);
                         getP().getCollectStatus(bookModel.getId());
                     }
                     if (bookModel != null && catalogModel != null && data != null) {
