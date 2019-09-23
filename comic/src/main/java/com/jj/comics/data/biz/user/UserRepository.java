@@ -546,13 +546,14 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable getConsumeDetail(long bookId) {
+    public Observable<ConsumeDetailListResponse> getConsumeDetail(long bookId) {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("articleid", bookId)
                 .build();
         return ComicApi.getApi().getConsumeDetail(body)
                 .compose(ComicApiImpl.<ConsumeDetailListResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2());
+                .retryWhen(new RetryFunction2())
+                .subscribeOn(Schedulers.io());
     }
 
 

@@ -194,12 +194,12 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
      * 获取目录列表
      */
     @Override
-    public void getCatalogList(long bookId) {
+    public void getCatalogList(BookModel bookModel) {
         if (getV() == null)return;
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
         }
-        ContentRepository.getInstance().getCacheCatalogList(bookId)
+        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {

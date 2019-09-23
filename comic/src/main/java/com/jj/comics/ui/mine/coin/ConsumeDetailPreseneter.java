@@ -20,6 +20,7 @@ public class ConsumeDetailPreseneter extends BasePresenter<BaseRepository,Consum
         UserRepository.getInstance()
                 .getConsumeDetail(bookid)
                 .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
                 .subscribe(new ApiSubscriber2<ConsumeDetailListResponse>() {
                     @Override
                     protected void onFail(NetError error) {

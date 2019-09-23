@@ -18,11 +18,12 @@ public interface ComicCacheProviders {
     /**
      * 获取目录的缓存接口
      * @param observable
-     * @param bookId 这个一定要传bookId，对应缓存每本书的目录，缓存时间设置的是2分钟
+     * @param bookId 这个一定要传bookId，对应缓存每本书的目录
+//     * @param isUpdate 是否需要更新true:更新，清楚缓存重新请求接口
      * @return
      */
     @ProviderKey("CatalogCache")
-    @LifeCache(duration = Constants.CACHE_TIME, timeUnit = TimeUnit.MILLISECONDS)
+//    @LifeCache(duration = Constants.CACHE_TIME, timeUnit = TimeUnit.MILLISECONDS)//不设置缓存时间默认永久
     Observable<BookCatalogListResponse> getCatalogList(Observable<BookCatalogListResponse> observable,DynamicKey bookId);
 
     @ProviderKey("BookSectionListCache")

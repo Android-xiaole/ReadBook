@@ -11,6 +11,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.widget.UserItemView;
 
 import butterknife.BindView;
@@ -39,8 +40,7 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     @OnClick({R2.id.btn_recharge,R2.id.comic_coin_recharge_history,R2.id.comic_coin_consume_history})
     void onClick(View view) {
         if (view.getId() == R.id.btn_recharge) {
-            showToastShort("跳转充值中心");
-            ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY).navigation();
+            PayActivity.toPay(this,"1",0);
         }else if (view.getId() == R.id.comic_coin_consume_history) {
             ARouter.getInstance().build(RouterMap.COMIC_CONSUME_RECORD_ACTIVITY).navigation();
         }else if (view.getId() == R.id.comic_coin_recharge_history) {

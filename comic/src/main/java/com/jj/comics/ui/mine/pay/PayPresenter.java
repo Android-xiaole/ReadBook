@@ -41,8 +41,9 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
     @Override
     public void loadData(String type) {
         UserRepository.getInstance().getPayCenterInfo(type)
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
                 .subscribe(new ApiSubscriber2<PaySettingResponse>() {
                     @Override
                     protected void onFail(NetError error) {
