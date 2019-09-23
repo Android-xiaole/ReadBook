@@ -72,7 +72,7 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
 
         tv_myCoinNum.setText(payInfo.getTotal_egold() + "");
         tv_buyCoinNum.setText(bookPrice + "书币");
-        boolean canBuy = bookPrice < payInfo.getTotal_egold();
+        boolean canBuy = payInfo.getTotal_egold() >= bookPrice ;
         if (canBuy) {
             btn_pay.setText("确认支付");
         } else {

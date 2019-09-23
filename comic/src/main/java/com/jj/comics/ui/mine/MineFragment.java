@@ -103,9 +103,9 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         String nickName = userInfo.getNickname();
         if (nickName != null && nickName.length() > 5) {
             nickName = nickName.substring(0, 5) + "...";
-            //设置昵称
-            mNickname.setText(nickName);
         }
+        //设置昵称
+        mNickname.setText(nickName);
 
         if (userInfo.getIs_vip() == 1) {
             mVip.setImageResource(R.drawable.mine_vip);
@@ -140,7 +140,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         } else if (view.getId() == R.id.comic_mine_help) {
             ARouter.getInstance().build(RouterMap.COMIC_HELP_ACTIVITY).navigation(getActivity());
         } else if (view.getId() == R.id.edit_user_info) {
-            if (LoginHelper.getOnLineUser() == null) {
+            if (LoginHelper.getOnLineUser() != null) {
                 ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
             }
         } else if (view.getId() == R.id.btn_my_coin) {
