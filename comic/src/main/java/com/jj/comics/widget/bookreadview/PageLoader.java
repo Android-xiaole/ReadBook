@@ -1449,14 +1449,16 @@ public abstract class PageLoader {
             }
             // TODO: 2019-09-20 这里解决底部按钮和文本内容可能重合的问题
             //读取完文本之后获取最后一页
-            showTitle = true;
+            showTitle = true;//默认显示标题（方便后期会有不显示标题这种设置）
             TxtPage lastPage = pages.get(pages.size() - 1);
-            //获取最够一页的内容高度
+            //获取最后一页的内容高度
             float contentHei;
             if (showTitle){
+                //如果展示标题，内容高度=(字体单位大小+行间距)*行数+标题离顶部间距+标题行间距+标题字体单位大小
                 contentHei = lastPage.lines.size()*(mTextPaint.getTextSize()+mTextInterval)+mTitlePara+mTitleInterval+mTitlePaint.getTextSize();
             }else{
-                contentHei = lastPage.lines.size()*mTextPaint.getTextSize();
+                //如果不展示标题，内容高度=(字体单位大小+行间距)*行数+标题离顶部间距
+                contentHei = lastPage.lines.size()*(mTextPaint.getTextSize()+mTextInterval)+mTitlePara;
             }
             //获取底部按钮需要的高度
             int btnHei = ScreenUtils.dpToPx(44+68);
