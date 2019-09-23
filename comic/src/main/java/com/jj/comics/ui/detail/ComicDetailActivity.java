@@ -112,11 +112,15 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private DaoHelper daoHelper;
 
     private ShareDialog shareDialog;//分享弹窗
-    private CustomFragmentDialog buyDialog;//购买弹窗
     private NormalNotifyDialog removeCollectDialog;//移除收藏提示弹窗
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        ImmersionBar.with(this)
+                .reset()
+                .statusBarDarkFont(true, 0.2f)
+                .statusBarColor(R.color.base_color_ffffff)
+                .init();
         daoHelper = new DaoHelper();
 
         rv_recommendList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -481,4 +485,5 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         }
         super.onBackPressed();
     }
+
 }
