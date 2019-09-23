@@ -60,7 +60,6 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mApprentice;
     @BindView(R2.id.is_vip)
     ImageView mVip;
-    private int mCoin = 99999;
 
     private PayInfo mPayInfo;
 
@@ -68,17 +67,17 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
         MobclickAgent.onEvent(getContext(), Constants.UMEventId.ACCESS_USER_CENTER);
-        if (LoginHelper.getOnLineUser() != null) {
+        if (LoginHelper.interruptLogin(getActivity(),null)) {
             getP().getUserInfo();
+            getP().getUserPayInfo();
         }
-
-        LoginHelper.interruptLogin(getActivity(),null);
     }
 
     @Override
     public void onVisiable(boolean visiable) {
         super.onVisiable(visiable);
         if (visiable && LoginHelper.getOnLineUser() != null) {
+            getP().getUserInfo();
             getP().getUserPayInfo();
         }
     }
@@ -106,9 +105,6 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
                             .placeholder(R.drawable.img_loading));
         }
         String nickName = userInfo.getNickname();
-        if (nickName != null && nickName.length() > 5) {
-            nickName = nickName.substring(0, 5) + "...";
-        }
         //设置昵称
         mNickname.setText(nickName);
 
@@ -129,7 +125,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
 
     @OnClick({R2.id.comic_mine_coin_pay, R2.id.comic_mine_vip_pay, R2.id.mine_nickname, R2.id.mine_head_img, R2.id.comic_mine_buy, R2.id.comic_mine_history,
             R2.id.comic_mine_notification, R2.id.comic_mine_help,
-            R2.id.edit_user_info,
+            R2.id.rl_edit_user_info,
             R2.id.btn_my_rebate, R2.id.btn_my_coin, R2.id.btn_my_apprentice})
     void onClick(View view) {
         if (view.getId() == R.id.mine_head_img || view.getId() == R.id.mine_nickname) {
@@ -144,14 +140,10 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             ARouter.getInstance().build(RouterMap.COMIC_NOTIFICATION_ACTIVITY).navigation();
         } else if (view.getId() == R.id.comic_mine_help) {
             ARouter.getInstance().build(RouterMap.COMIC_HELP_ACTIVITY).navigation(getActivity());
-        } else if (view.getId() == R.id.edit_user_info) {
+        } else if (view.getId() == R.id.rl_edit_user_info) {
             if (LoginHelper.getOnLineUser() != null) {
                 ARouter.getInstance().build(RouterMap.COMIC_USERINFO_ACTIVITY).navigation(getActivity());
             }
-        } else if (view.getId() == R.id.btn_my_coin) {
-            ARouter.getInstance().build(RouterMap.COMIC_MYCOIN_ACTIVITY).withLong(Constants.IntentKey.COIN, mCoin).navigation();
-        } else if (view.getId() == R.id.btn_my_rebate) {
-            ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO, mPayInfo).navigation();
         } else if (view.getId() == R.id.btn_my_coin) {
             int egold = 0;
             if (mPayInfo != null) {
