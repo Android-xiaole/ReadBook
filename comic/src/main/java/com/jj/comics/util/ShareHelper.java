@@ -216,6 +216,67 @@ public class ShareHelper {
     }
 
     /**
+     * 分享图片到朋友圈
+     */
+    public void shareImageToWechatMoment(final BaseActivity activity, String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            Toast.makeText(activity, "文件不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!isWxInstall()) {
+            ToastUtil.showToastLong(activity.getString(R.string.comic_not_install_wx));
+            return;
+        }
+        activity.showProgress();
+        Bitmap bmp = BitmapFactory.decodeFile(path);
+
+        //初始化 WXImageObject 和 WXMediaMessage 对象
+        WXImageObject imgObj = new WXImageObject(bmp);
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = imgObj;
+
+        //设置缩略图
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 120, 120, true);
+        bmp.recycle();
+        int bytes = thumbBmp.getByteCount();
+        ByteBuffer buf = ByteBuffer.allocate(bytes);
+        thumbBmp.copyPixelsToBuffer(buf);
+        msg.thumbData = buf.array();
+
+        //构造一个Req
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("img");
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        req.message = msg;
+        //调用api接口，发送数据到微信
+        TencentHelper.getWxApi(Constants.WX_APP_ID_LOGIN()).sendReq(req);
+    }
+
+    /**
+     * 分享图片到QQ
+     * @param activity
+     * @param path
+     */
+    public void shareImageToQQ(final BaseActivity activity, final String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            Toast.makeText(activity, "文件不存在", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!isQQInstall()) {
+            ToastUtil.showToastLong("请安装QQ客户端后分享");
+            return;
+        }
+        Bundle params = new Bundle();
+        params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_IMAGE);// 设置分享类型为纯图片分享
+        params.putString(QQShare.SHARE_TO_QQ_IMAGE_LOCAL_URL, path);// 需要分享的本地图片URL
+        // 分享操作要在主线程中完成
+        TencentHelper.getTencent().shareToQQ(activity, params, new BaseUiListener());
+    }
+
+    /**
      * 分享到QQ
      *
      * @link http://wiki.connect.qq.com/
@@ -396,7 +457,7 @@ public class ShareHelper {
         msg.mediaObject = imgObj;
 
         //设置缩略图
-        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp,  120, 120, true);
+        Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, 120, 120, true);
         bmp.recycle();
         int bytes = thumbBmp.getByteCount();
         ByteBuffer buf = ByteBuffer.allocate(bytes);

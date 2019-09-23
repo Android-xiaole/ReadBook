@@ -210,11 +210,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         toggleEyeModel(ReadSettingManager.getInstance().isEyeModel());//设置是否护眼模式
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
-        if (LoginHelper.getOnLineUser()!=null&&LoginHelper.getOnLineUser().getIs_vip() == 1){
+        if (LoginHelper.getOnLineUser() != null && LoginHelper.getOnLineUser().getIs_vip() == 1) {
             //已登录用户如果又是VIP用户，全本购买icon隐藏
             iv_batchBuy.setVisibility(View.GONE);
-        }else{
-            if (bookModel.getBatchbuy() == 2&&bookModel.getHas_batch_buy() == 2) {//可以全本购买并且没有购买
+        } else {
+            if (bookModel.getBatchbuy() == 2 && bookModel.getHas_batch_buy() == 2) {//可以全本购买并且没有购买
                 iv_batchBuy.setVisibility(View.VISIBLE);
             } else {
                 iv_batchBuy.setVisibility(View.GONE);
@@ -378,7 +378,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             finish();
         } else if (i == R.id.iv_batchBuy) {//全本购买
             if (bookModel != null && catalogModel != null) {
-                SubscribeActivity.toSubscribe(this, bookModel,bookModel.getBatchprice(), catalogModel.getId());
+                SubscribeActivity.toSubscribe(this, bookModel, bookModel.getBatchprice(), catalogModel.getId());
             }
         } else if (i == R.id.iv_collect) {//收藏
             if (LoginHelper.interruptLogin(this, null) && bookModel != null) {
@@ -401,30 +401,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 }
             }
         } else if (i == R.id.iv_share || i == R.id.lin_makeMoney) {//分享按钮&赚钱按钮
-            if (bookModel == null) return;
-            if (shareDialog == null) {
-                shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
-            }
-            if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
-            String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
-            shareMessageModel.setShareContent(shareContent);
-            shareMessageModel.setShareImgUrl(bookModel.getCover());
-
-            UserInfo loginUser = LoginHelper.getOnLineUser();
-            if (loginUser == null) {
-                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(ReadComicActivity.this);
-                return;
-            }
-            String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            long chapterid = 0;
-            if (catalogAdapter.getData() != null && catalogAdapter.getData().size() > 0) {
-                chapterid = catalogAdapter.getData().get(0).getId();
-            }
-            String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + bookModel.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
-            shareMessageModel.setShareUrl(shareUrl);
-            shareMessageModel.setBoolId(bookModel.getId());
-            shareDialog.show(shareMessageModel);
+            getP().getFirstChapterContent(bookModel, catalogAdapter.getData().get(0).getId());
         } else if (i == R.id.lin_catalogBtn) {//目录
             if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
                 mCatalogMenu.openDrawer(GravityCompat.START);
@@ -497,6 +474,48 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             }
         }
 
+    }
+
+    @Override
+    public void shareImage(final String content) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (bookModel == null) return;
+                if (shareDialog == null) {
+                    shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
+                }
+                if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
+                shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
+                String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
+                shareMessageModel.setShareContent(content);
+                if (content.length() > 500) {
+                    shareMessageModel.setShareContent(content.substring(0, 500) + "...");
+                }
+                shareMessageModel.setShareImgUrl(bookModel.getCover());
+
+                UserInfo loginUser = LoginHelper.getOnLineUser();
+                if (loginUser == null) {
+                    ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(ReadComicActivity.this);
+                    return;
+                }
+                String uid = loginUser == null ? "0" : loginUser.getUid() + "";
+                long chapterid = 0;
+                if (catalogAdapter.getData() != null && catalogAdapter.getData().size() > 0) {
+                    chapterid = catalogAdapter.getData().get(0).getId();
+                }
+                String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + bookModel.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
+                shareMessageModel.setShareUrl(shareUrl);
+                shareMessageModel.setBoolId(bookModel.getId());
+                shareMessageModel.setBookTitle(bookModel.getTitle());
+                shareMessageModel.setAuthor(bookModel.getAuthor());
+                if (bookModel.getTag() != null && bookModel.getTag().size() > 0) {
+                    String type = bookModel.getTag().get(0);
+                    shareMessageModel.setType(type);
+                }
+                shareDialog.show(shareMessageModel);
+            }
+        });
     }
 
     @Override

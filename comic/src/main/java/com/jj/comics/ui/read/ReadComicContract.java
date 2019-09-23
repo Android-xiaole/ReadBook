@@ -25,6 +25,7 @@ public interface ReadComicContract {
 
         void fillCollectStatus(CommonStatusResponse response);
 
+        void shareImage(String content);
     }
 
     interface IReadComicPresenter {

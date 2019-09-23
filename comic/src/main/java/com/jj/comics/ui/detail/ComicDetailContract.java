@@ -25,12 +25,15 @@ public interface ComicDetailContract {
 
         //获取目录列表的回调
         void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum);
+
+        //分享截图
+        void shareImage(String content);
     }
 
     interface IDetailPresenter {
 
         //收藏或者取消收藏的操作
-        void addOrRemoveCollect(BookModel model,boolean collectByCurrUser);
+        void addOrRemoveCollect(BookModel model, boolean collectByCurrUser);
 
 
         //获取漫画详情
@@ -38,7 +41,7 @@ public interface ComicDetailContract {
 
 
         //跳转到阅读页面
-        void toRead(BookModel bookModel,long chapterid);
+        void toRead(BookModel bookModel, long chapterid);
 
         //获取收藏状态
         void getCollectStatus(long id);

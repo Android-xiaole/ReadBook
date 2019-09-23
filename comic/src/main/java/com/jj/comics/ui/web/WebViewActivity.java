@@ -41,17 +41,20 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void initData(Bundle savedInstanceState) {
         initWebView();
+
+        String url = getIntent().getStringExtra("url");
+        webView.loadUrl(url);
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
 //                LogUtils.e(newProgress);
-                if (view_progress == null){
+                if (view_progress == null) {
                     return;
                 }
                 view_progress.setVisibility(View.VISIBLE);
                 ViewGroup.LayoutParams layoutParams = view_progress.getLayoutParams();
-                layoutParams.width = Utils.getScreenWidth(WebViewActivity.this) * newProgress/100;
+                layoutParams.width = Utils.getScreenWidth(WebViewActivity.this) * newProgress / 100;
                 view_progress.setLayoutParams(layoutParams);
 //                LogUtils.e("宽度："+layoutParams.width);
                 if (newProgress == 100) {
@@ -62,7 +65,7 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                if (toolBar == null){
+                if (toolBar == null) {
                     return;
                 }
                 toolBar.setTitleText(title);
@@ -78,28 +81,14 @@ public class WebViewActivity extends BaseActivity {
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                String url = view.getUrl();
-
-//                try {
-//                    String url = "alipays://platformapi/startapp?" + data;
-//                    Uri uri = Uri.parse(url);
-//                    Intent intent;
-//                    intent = Intent.parseUri(url,
-//                            Intent.URI_INTENT_SCHEME);
-//                    intent.addCategory("android.intent.category.BROWSABLE");
-//                    intent.setComponent(null);
-//                    // intent.setSelector(null);
-//                    startActivity(intent);
-//
-//                } catch (Exception e) {
-//
-//                }
-                return super.shouldOverrideUrlLoading(view, request);
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("alipays://")) {
+                    startActivity(new Intent("android.intent.action.VIEW", Uri.parse(url)));
+                    finish();
+                }
+                return super.shouldOverrideUrlLoading(view, url);
             }
         });
-        String url = getIntent().getStringExtra("url");
-        webView.loadUrl(url);
     }
 
     @Override

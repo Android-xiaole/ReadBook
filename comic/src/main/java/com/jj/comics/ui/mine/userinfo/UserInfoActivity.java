@@ -196,9 +196,6 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                     if (FileUtil.readFile(file) > 0) {
                         ossUploadFile(path);
                         ILFactory.getLoader().loadFile(headImg, file, new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
-                        UserInfo loginUser = LoginHelper.getOnLineUser();
-                        if (loginUser != null) getP().uploadImage(loginUser, file, filePath);
-
                     }
                     break;
             }

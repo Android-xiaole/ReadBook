@@ -111,10 +111,10 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
                 ShareHelper.getInstance().shareImageToWechat(activity, mPath);
                 break;
             case WECHATMOMENT://分享朋友圈
-                ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
+                ShareHelper.getInstance().shareImageToWechatMoment(activity, mPath);
                 break;
             case QQ://分享QQ
-                ShareHelper.getInstance().shareToQQ(activity, shareMessageModel);
+                ShareHelper.getInstance().shareImageToQQ(activity, mPath);
                 break;
             case QQZONE://分享QQ空间
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);

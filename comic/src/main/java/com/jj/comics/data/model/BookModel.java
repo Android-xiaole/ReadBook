@@ -66,6 +66,7 @@ public class BookModel implements Serializable {
     @SerializedName(value = "tag", alternate = {"category", "category_name"})
     private List<String> tag;
 
+    private String keywords;//关键字
     private String author;//作者
     private String yesterday_share;
     private String allvisit;//阅读人数
@@ -87,10 +88,10 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 422267733)
+    @Generated(hash = 1238961071)
     public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
-            int goodnum, long chapterid, int order, List<String> tag, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy, int update_chapter_time,
-            long userId, long create_time, long update_time) {
+            int goodnum, long chapterid, int order, List<String> tag, String keywords, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy,
+            int update_chapter_time, long userId, long create_time, long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -108,6 +109,7 @@ public class BookModel implements Serializable {
         this.chapterid = chapterid;
         this.order = order;
         this.tag = tag;
+        this.keywords = keywords;
         this.author = author;
         this.yesterday_share = yesterday_share;
         this.allvisit = allvisit;
@@ -372,5 +374,13 @@ public class BookModel implements Serializable {
 
     public void setUpdate_chapter_time(int update_chapter_time) {
         this.update_chapter_time = update_chapter_time;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }

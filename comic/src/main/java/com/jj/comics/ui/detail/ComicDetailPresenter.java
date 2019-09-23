@@ -1,9 +1,11 @@
 package com.jj.comics.ui.detail;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
+import com.jj.base.net.ApiSubscriber;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
@@ -22,10 +24,20 @@ import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.ReadComicHelper;
+import com.jj.comics.widget.bookreadview.utils.BookRepository;
 
+import org.reactivestreams.Publisher;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,11 +45,85 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
+import okhttp3.ResponseBody;
 
 
-class ComicDetailPresenter extends BasePresenter<BaseRepository,
-        ComicDetailContract.IDetailView> implements ComicDetailContract.IDetailPresenter {
+class ComicDetailPresenter extends BasePresenter<BaseRepository,ComicDetailContract.IDetailView> implements ComicDetailContract.IDetailPresenter {
+    /**
+     * 获取首章节内容
+     *
+     * @param bookModel
+     * @param chapterId
+     */
+    public void getFirstChapterContent(BookModel bookModel, long chapterId) {
+        ContentRepository.getInstance().getCatalogContent(bookModel.getId(), chapterId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber2<BookCatalogContentResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
 
+                    @Override
+                    public void onNext(BookCatalogContentResponse bookCatalogContentResponse) {
+                        if (bookCatalogContentResponse != null && bookCatalogContentResponse.getData().getNow() != null) {
+                            ComicApi.getApi().downloadFile(bookCatalogContentResponse.getData().getNow().getContent() + Constants.IDENTIFICATION_IGNORE)
+                                    .subscribeOn(Schedulers.io())
+                                    .flatMap(new Function<ResponseBody, Publisher<File>>() {
+                                        @Override
+                                        public Publisher<File> apply(ResponseBody responseBody) throws Exception {
+                                            try {
+                                                File file = BookRepository.getInstance().saveChapterFile(bookCatalogContentResponse.getData().getNow().getBook_id() + "", bookCatalogContentResponse.getData().getNow().getChaptername() + "", responseBody.byteStream());
+                                                return Flowable.just(file);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                                return Flowable.error(new NetError("IOException", NetError.OtherError));
+                                            }
+                                        }
+                                    })
+                                    .subscribe(new ApiSubscriber<File>() {
+                                        @Override
+                                        public void onNext(File file) {
+                                            String content = "";
+                                            try {
+                                                InputStream instream = new FileInputStream(file);
+                                                if (instream != null) {
+                                                    InputStreamReader inputreader
+                                                            = new InputStreamReader(instream, "UTF-8");
+                                                    BufferedReader buffreader = new BufferedReader(inputreader);
+                                                    String line = "";
+                                                    //分行读取
+                                                    while ((line = buffreader.readLine()) != null) {
+                                                        content += line + "\n";
+                                                    }
+                                                    instream.close();//关闭输入流
+                                                }
+                                                getV().shareImage(content);
+                                            } catch (java.io.FileNotFoundException e) {
+                                                Log.d("TestFile", "The File doesn't not exist.");
+                                            } catch (IOException e) {
+                                                Log.d("TestFile", e.getMessage());
+                                            }
+                                        }
+
+
+                                        @Override
+                                        protected void onFail(NetError error) {
+                                            ToastUtil.showToastShort(error.getMessage());
+                                        }
+
+                                        @Override
+                                        protected void onEnd() {
+                                            super.onEnd();
+                                            getV().hideProgress();
+                                        }
+                                    });
+                        } else {
+                            ToastUtil.showToastShort(bookCatalogContentResponse.getMessage());
+                        }
+                    }
+                });
+    }
 
     /**
      * 加载漫画

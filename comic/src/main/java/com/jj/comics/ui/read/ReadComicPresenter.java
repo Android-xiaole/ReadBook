@@ -1,5 +1,7 @@
 package com.jj.comics.ui.read;
 
+import android.util.Log;
+
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber;
@@ -13,6 +15,7 @@ import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
@@ -22,18 +25,22 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
-import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
 
 import org.reactivestreams.Publisher;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -44,9 +51,85 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
     private ApiSubscriber2<BookCatalogModel> subscriber;
     private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
 
+    /**
+     * 获取首章节内容
+     *
+     * @param bookModel
+     * @param chapterId
+     */
+    public void getFirstChapterContent(BookModel bookModel, long chapterId) {
+        ContentRepository.getInstance().getCatalogContent(bookModel.getId(), chapterId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new ApiSubscriber2<BookCatalogContentResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(BookCatalogContentResponse bookCatalogContentResponse) {
+                        if (bookCatalogContentResponse != null && bookCatalogContentResponse.getData().getNow() != null) {
+                            ComicApi.getApi().downloadFile(bookCatalogContentResponse.getData().getNow().getContent() + Constants.IDENTIFICATION_IGNORE)
+                                    .subscribeOn(Schedulers.io())
+                                    .flatMap(new Function<ResponseBody, Publisher<File>>() {
+                                        @Override
+                                        public Publisher<File> apply(ResponseBody responseBody) throws Exception {
+                                            try {
+                                                File file = BookRepository.getInstance().saveChapterFile(bookCatalogContentResponse.getData().getNow().getBook_id() + "", bookCatalogContentResponse.getData().getNow().getChaptername() + "", responseBody.byteStream());
+                                                return Flowable.just(file);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                                return Flowable.error(new NetError("IOException", NetError.OtherError));
+                                            }
+                                        }
+                                    })
+                                    .subscribe(new ApiSubscriber<File>() {
+                                        @Override
+                                        public void onNext(File file) {
+                                            String content = "";
+                                                try {
+                                                    InputStream instream = new FileInputStream(file);
+                                                    if (instream != null) {
+                                                        InputStreamReader inputreader
+                                                                = new InputStreamReader(instream, "UTF-8");
+                                                        BufferedReader buffreader = new BufferedReader(inputreader);
+                                                        String line = "";
+                                                        //分行读取
+                                                        while ((line = buffreader.readLine()) != null) {
+                                                            content += line + "\n";
+                                                        }
+                                                        instream.close();//关闭输入流
+                                                    }
+                                                    getV().shareImage(content);
+                                                } catch (java.io.FileNotFoundException e) {
+                                                    Log.d("TestFile", "The File doesn't not exist.");
+                                                } catch (IOException e) {
+                                                    Log.d("TestFile", e.getMessage());
+                                                }
+                                            }
+
+
+                                        @Override
+                                        protected void onFail(NetError error) {
+                                            ToastUtil.showToastShort(error.getMessage());
+                                        }
+
+                                        @Override
+                                        protected void onEnd() {
+                                            super.onEnd();
+                                            getV().hideProgress();
+                                        }
+                                    });
+                        } else {
+                            ToastUtil.showToastShort(bookCatalogContentResponse.getMessage());
+                        }
+                    }
+                });
+    }
+
     public void loadData(BookModel bookModel, long chapterId) {
-        if (getV() instanceof ReadComicActivity){
-            getV().showProgress((ReadComicActivity)getV());
+        if (getV() instanceof ReadComicActivity) {
+            getV().showProgress((ReadComicActivity) getV());
         }
         /*
         这里加载的内容时候需要取消上一个subscriber事件，保证一时间只有一个章节内容加载
@@ -92,10 +175,11 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
 
     /**
      * 下载小说txt文件，并缓存
+     *
      * @param catalogModel
      */
-    private void downloadFile(BookCatalogModel catalogModel){
-        ComicApi.getApi().downloadFile(catalogModel.getContent()+Constants.IDENTIFICATION_IGNORE)
+    private void downloadFile(BookCatalogModel catalogModel) {
+        ComicApi.getApi().downloadFile(catalogModel.getContent() + Constants.IDENTIFICATION_IGNORE)
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, Publisher<File>>() {
                     @Override
@@ -105,7 +189,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                             return Flowable.just(file);
                         } catch (IOException e) {
                             e.printStackTrace();
-                            return Flowable.error(new NetError("IOException",NetError.OtherError));
+                            return Flowable.error(new NetError("IOException", NetError.OtherError));
                         }
                     }
                 })
@@ -205,7 +289,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData(),response.getData().getTotal_num());
+                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num());
                     }
 
                     @Override
@@ -223,13 +307,13 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
     }
 
     @Override
-    public void uploadReadRecord(final BookModel bookModel, final long chapterId,final int chapterorder) {
+    public void uploadReadRecord(final BookModel bookModel, final long chapterId, final int chapterorder) {
         final UserInfo loginUser = LoginHelper.getOnLineUser();
         //现将model以userId = 0的状态下保存到本地，代表未上传
-        daoHelper.insertOrUpdateRecord(bookModel, 0, chapterId,chapterorder);
+        daoHelper.insertOrUpdateRecord(bookModel, 0, chapterId, chapterorder);
         if (loginUser == null) {
             //未登录直接发送通知，不要去做上传处理，因为没有token
-            EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId,chapterorder));
+            EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId, chapterorder));
             return;
         }
         List<BookModel> bookModels = new ArrayList<>();
@@ -241,7 +325,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     @Override
                     public void onNext(CommonStatusResponse commonStatusResponse) {
                         //上传成功之后直接删除
-                        if (commonStatusResponse.getData().getStatus()){
+                        if (commonStatusResponse.getData().getStatus()) {
                             daoHelper.delete(bookModel);
                         }
                     }
@@ -252,7 +336,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
 
                     @Override
                     protected void onEnd() {
-                        EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId,chapterorder));
+                        EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId, chapterorder));
                     }
                 });
     }

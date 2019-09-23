@@ -166,12 +166,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 shareInfo.setAuthor(shareMessageModel.getAuthor());
                 shareInfo.setType(shareMessageModel.getType());
                 shareInfo.setKeywords(shareMessageModel.getKeys());
-                shareInfo.setContent("\n" +
-                        "                              一个身着红绿色相间锦缎罗裙的女孩站在凉亭边，可笑之极。有些呆滞的双眼惊慌的偷看了一眼亭内一身黑色暗纹绣蟒衣衫的男人。\n" +
-                        "\n" +
-                        "  对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三对他那双黑色的眸子，仿若一把利刃一般，能将人刺穿。女孩被吓得赶紧低下头，双手紧紧的绞着衣袖，却仍忍不住频频抬头看向这个俊朗无双的三皇子。\n" +
-                        "\n" +
-                        "  他，马要成为她的夫君了，她虽然不太懂得这些男女之事，但是看到他的脸，她情不自禁的想要靠近……\n");
+                shareInfo.setContent(shareMessageModel.getShareContent());
                 shareInfo.setCover(shareMessageModel.getShareImgUrl());
                 shareInfo.setKeywords("key1");
                 shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
