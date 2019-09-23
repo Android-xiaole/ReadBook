@@ -2,6 +2,7 @@ package com.jj.comics.ui.mine.pay;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,8 +21,10 @@ import com.jj.comics.adapter.mine.RechargeCoinAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.PaySettingResponse;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.dialog.BottomPayDialog;
+import com.jj.comics.ui.web.WebActivity;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
@@ -38,6 +41,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_PAY_ACTIVITY)
@@ -56,12 +60,12 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     /**
      * @param activity 上下文
-     * @param type 充值类型[书币充值:1；会员充值:2]
-     * @param bookId BookModel的id
+     * @param type     充值类型[书币充值:1；会员充值:2]
+     * @param bookId   BookModel的id
      */
-    public static void toPay(Activity activity, String type,long bookId) {
+    public static void toPay(Activity activity, String type, long bookId) {
         ARouter.getInstance().build(RouterMap.COMIC_PAY_ACTIVITY)
-                .withString(Constants.IntentKey.PAY_TYPE,type)
+                .withString(Constants.IntentKey.PAY_TYPE, type)
                 .withLong(Constants.IntentKey.BOOK_ID, bookId)
                 .navigation(activity, RequestCode.PAY_REQUEST_CODE);
     }
@@ -73,7 +77,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
         mShubiRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mShubiAdapter = new RechargeCoinAdapter(R.layout.comic_item_pay_activity,payType);
+        mShubiAdapter = new RechargeCoinAdapter(R.layout.comic_item_pay_activity, payType);
         mShubiAdapter.bindToRecyclerView(mShubiRecycler);
 
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,29 +89,29 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         mShubiAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId() == R.id.btn_toPay){
+                if (view.getId() == R.id.btn_toPay) {
                     PaySettingResponse.DataBeanX.DataBean dataBean = mShubiAdapter.getData().get(position);
-                    showBottomDialog(view,dataBean.getId());
+                    showBottomDialog(view, dataBean.getId());
                 }
             }
         });
 
-        if (payType.equals("1")){
+        if (payType.equals("1")) {
             toolBar.setTitleText("书币充值");
-        }else if (payType.equals("2")){
+        } else if (payType.equals("2")) {
             toolBar.setTitleText("会员充值");
         }
         showProgress();
         getP().loadData(payType);
     }
 
-    private View getHeadView(){
-        View head_view = View.inflate(this,R.layout.comic_pay_header,null);
+    private View getHeadView() {
+        View head_view = View.inflate(this, R.layout.comic_pay_header, null);
         return head_view;
     }
 
-    private View getFooterView(){
-        View footView = View.inflate(this,R.layout.comic_pay_footer,null);
+    private View getFooterView() {
+        View footView = View.inflate(this, R.layout.comic_pay_footer, null);
         return footView;
     }
 
@@ -130,7 +134,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                         MobclickAgent.onEvent(PayActivity.this, Constants.UMEventId.HAS_ALIPAY, "未安装");
                     }
 //                    getP().goPay(ProductPayTypeEnum.AliPay, goodsid, PayActivity.this);
-                    getP().payAli(PayActivity.this, goodsid, mBookId);
+                    getP().payAliTL(PayActivity.this, goodsid, mBookId);
                 }
             }
         }, new BottomPayDialog.WeChatOnClickListener() {
@@ -165,7 +169,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     @Override
     public void fillData(PaySettingResponse response) {
-        if (response.getData()!=null&&response.getData().getData()!=null&&response.getData().getData().size()!=0){
+        if (response.getData() != null && response.getData().getData() != null && response.getData().getData().size() != 0) {
             mShubiAdapter.setNewData(response.getData().getData());
             View footerView = getFooterView();
             mShubiAdapter.setFooterView(footerView);
@@ -188,6 +192,12 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @Override
     public void onGetUserData(UserInfo user) {
         EventBusManager.sendUpdateUserInfoEvent(new UpdateUserInfoEvent());
+    }
+
+    @Override
+    public void onGetTLPayInfo(TLPayResponse response) {
+        String data = response.getData();
+        ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY).withString(WebActivity.URL_KEY,data).navigation();
     }
 
     /**
@@ -217,14 +227,14 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         if (mPayDialog == null) {
             mPayDialog = new CustomFragmentDialog();
         }
-        mPayDialog.show(this,getSupportFragmentManager(),R.layout.comic_pay_fail,R.style.comic_dialog_window_transparent);
+        mPayDialog.show(this, getSupportFragmentManager(), R.layout.comic_pay_fail, R.style.comic_dialog_window_transparent);
         mPayDialog.getDialog().findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mPayDialog.dismiss();
             }
         });
-        ImageView payResult =  mPayDialog.getDialog().findViewById(R.id.pay_result);
+        ImageView payResult = mPayDialog.getDialog().findViewById(R.id.pay_result);
         if (isSuc) {
             payResult.setImageResource(R.drawable.pay_suc);
         } else {

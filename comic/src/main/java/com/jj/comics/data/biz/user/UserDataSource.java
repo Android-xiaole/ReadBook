@@ -26,6 +26,7 @@ import com.jj.comics.data.model.RewardHistoryResponse;
 import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -228,4 +229,10 @@ public interface UserDataSource {
      * @return
      */
     Observable<ShareRecommendResponse> getShareRecommend();
+
+    /**
+     * 通联支付宝
+     * @return
+     */
+    Observable<TLPayResponse> getTLPay(long goods_id,long book_id);
 }

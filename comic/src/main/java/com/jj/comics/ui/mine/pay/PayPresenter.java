@@ -19,6 +19,7 @@ import com.jj.comics.data.biz.goods.GoodsRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.PrePayOrderResponseAli;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.PayUtils;
 import com.jj.comics.util.reporter.ActionReporter;
@@ -137,6 +138,31 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
                 });
 
 
+    }
+
+    @Override
+    public void payAliTL(Activity activity, long goodsId, long book_id) {
+        UserRepository.getInstance().getTLPay(goodsId,book_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new ApiSubscriber2<TLPayResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(TLPayResponse response) {
+                        getV().onGetTLPayInfo(response);
+                    }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().loadEnd();
+                    }
+                });
     }
 
     /**

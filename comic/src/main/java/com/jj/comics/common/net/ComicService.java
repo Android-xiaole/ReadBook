@@ -53,6 +53,7 @@ import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.SignResponse;
 import com.jj.comics.data.model.SignTaskResponse;
 import com.jj.comics.data.model.SortListResponse;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -1011,4 +1012,8 @@ public interface ComicService {
      */
     @GET("api/recommend")
     Observable<ShareRecommendResponse> getShareRecommend();
+
+
+    @POST("api/alipay_app")
+    Observable<TLPayResponse> getTLPay(@Body RequestBody body);
 }

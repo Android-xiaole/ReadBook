@@ -150,6 +150,9 @@ public class Constants {
         public static final String CASH_OUT_BANK = "bank";
         public static final String CASH_OUT_WAY = "way";
 
+
+        public static final String TL_PAY = "tlpay";
+
     }
 
     //SharedPreferences存值key

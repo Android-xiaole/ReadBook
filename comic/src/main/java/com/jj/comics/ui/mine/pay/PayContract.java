@@ -8,6 +8,7 @@ import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.ProductPayTypeEnum;
 import com.jj.comics.data.model.RechargeCoinResponse;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UserInfo;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public interface PayContract {
 
         //获取用户信息的回调
         void onGetUserData(UserInfo userInfo);
+
+        void onGetTLPayInfo(TLPayResponse response);
     }
 
     interface IPayPresenter {
@@ -44,5 +47,6 @@ public interface PayContract {
 
         void payAli(Activity activity, long goodsId, long book_id);
 
+        void payAliTL(Activity activity, long goodsId, long book_id);
     }
 }

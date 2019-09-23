@@ -38,6 +38,7 @@ import com.jj.comics.data.model.RewardHistoryResponse;
 import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
+import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -669,6 +670,17 @@ public class UserRepository implements UserDataSource {
     public Observable<ShareRecommendResponse> getShareRecommend() {
         return ComicApi.getApi().getShareRecommend()
                 .compose(ComicApiImpl.<ShareRecommendResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<TLPayResponse> getTLPay(long goods_id,long book_id) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("goods_id", goods_id)
+                .addProperty("book_id", book_id)
+                .build();
+        return ComicApi.getApi().getTLPay(body)
+                .compose(ComicApiImpl.<TLPayResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

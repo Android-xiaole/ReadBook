@@ -19,13 +19,15 @@ import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_WEB_ACTIVITY)
 public class WebActivity extends BaseActivity<WebPresenter> implements WebContract.IWebView{
+    public static final String URL_KEY = "url";
     @BindView(R2.id.webView)
     WebView mWebView;
     private NormalNotifyDialog mDialog;
 
+
     @Override
     public void initData(Bundle savedInstanceState) {
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.comic_yellow_ffd850), 77);
+
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         // 开启 DOM storage API 功能
@@ -39,7 +41,9 @@ public class WebActivity extends BaseActivity<WebPresenter> implements WebContra
         webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.setWebViewClient(getP().mClient);
         showProgress();
-        mWebView.loadUrl(getIntent().getStringExtra("url"));
+        String stringExtra = getIntent().getStringExtra(URL_KEY);
+//        stringExtra = "https://www.baidu.com";
+        mWebView.loadUrl(stringExtra);
     }
 
     @Override

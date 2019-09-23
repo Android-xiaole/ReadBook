@@ -80,24 +80,26 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = view.getUrl();
+
+//                try {
+//                    String url = "alipays://platformapi/startapp?" + data;
+//                    Uri uri = Uri.parse(url);
+//                    Intent intent;
+//                    intent = Intent.parseUri(url,
+//                            Intent.URI_INTENT_SCHEME);
+//                    intent.addCategory("android.intent.category.BROWSABLE");
+//                    intent.setComponent(null);
+//                    // intent.setSelector(null);
+//                    startActivity(intent);
+//
+//                } catch (Exception e) {
+//
+//                }
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });
         String url = getIntent().getStringExtra("url");
-//        startActivity(new Intent("android.intent.action.VIEW", Uri.parse(url)));
-
-        Intent intent1 = new Intent("android.intent.action.VIEW", Uri.parse("weixin://dl/business" +
-                "/?ticket=t852de9efd9b540df8b355699d4f2ed63"));
-        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent1);
-
-//        Intent intent = new Intent(Intent.ACTION_MAIN,Uri.parse(url));
-//        ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-//        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.setComponent(cmp);
-//        startActivity(intent);
-//        webView.loadUrl(url);
+        webView.loadUrl(url);
     }
 
     @Override
