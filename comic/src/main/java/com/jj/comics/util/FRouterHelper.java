@@ -38,7 +38,8 @@ public class FRouterHelper {
         return mMap.get(fragmentPath);
     }
 
-    public void switchFragment(final Object object, @IntRange(from = 0) final int index,
+    public void switchFragment(final Object object,
+                               @IntRange(from = 0) final int index,
                                @IntRange(from = 0) final int current, final int containerId, final CusNavigationCallback callback) {
         if (index == current) return;
         final Context context = getContext(object);
@@ -82,8 +83,8 @@ public class FRouterHelper {
                     }
                 }
 
-                FragmentTransaction fragmentTransaction = getFragmentManager(object).beginTransaction();
                 getFragmentManager(object).executePendingTransactions();//这个方法是确保fragment.isAdded()值同步
+                FragmentTransaction fragmentTransaction = getFragmentManager(object).beginTransaction();
                 if (currentFragment != null)
                     fragmentTransaction.hide(currentFragment);
                 if (targetFragment.isAdded()) {
@@ -109,10 +110,11 @@ public class FRouterHelper {
         if (!(object instanceof FragmentActivity) && !(object instanceof Fragment)) {
             throw new IllegalArgumentException("host must be FragmentActivity or fragment,please change first argument to FragmentActivity or fragment");
         }
-        if (object instanceof FragmentActivity)
+        if (object instanceof FragmentActivity) {
             manager = ((FragmentActivity) object).getSupportFragmentManager();
-        else
+        }else {
             manager = ((Fragment) object).getChildFragmentManager();
+        }
         return manager;
     }
 

@@ -11,10 +11,12 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -31,24 +33,23 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
+import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.common.net.download.DownInfo;
+import com.jj.comics.data.model.UpdateModelProxy;
+import com.jj.comics.ui.detail.DetailActivityHelper;
+import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
+import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
+import com.jj.comics.util.eventbus.events.LogoutEvent;
+import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.novelpro.R;
 import com.jj.novelpro.R2;
 import com.jj.novelpro.present.MainContract;
 import com.jj.novelpro.present.MainPresenter;
-import com.jj.comics.common.constants.Constants;
-import com.jj.comics.util.reporter.ActionReporter;
-import com.jj.comics.common.constants.RequestCode;
-import com.jj.comics.data.model.UpdateModelProxy;
-import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
-import com.jj.comics.util.eventbus.events.LogoutEvent;
-import com.jj.comics.common.net.download.DownInfo;
-import com.jj.comics.ui.detail.DetailActivityHelper;
-import com.jj.comics.util.IntentUtils;
-import com.jj.comics.util.RegularUtil;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.analytics.MobclickAgent;
 import com.yanzhenjie.permission.AndPermission;
@@ -62,17 +63,13 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import static android.view.KeyEvent.KEYCODE_BACK;
 
 @Route(path = RouterMap.COMIC_MAIN_ACTIVITY)
-public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.IMainView,
-        BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.IMainView {
     //    @BindView(R2.id.radioGroup)
 //    RadioGroup mRadioGroup;
 //    @BindView(R2.id.bv_home_navigation)
@@ -100,6 +97,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @BindView(R2.id.tv_nav_mine)
     TextView mTvMine;
 
+    @BindView(R2.id.btn_nav_featured)
+    RelativeLayout btn_nav_featured;
+    @BindView(R2.id.btn_nav_classify)
+    RelativeLayout btn_nav_classify;
+    @BindView(R2.id.btn_nav_money)
+    RelativeLayout btn_nav_money;
+    @BindView(R2.id.btn_nav_shelf)
+    RelativeLayout btn_nav_shelf;
+    @BindView(R2.id.btn_nav_mine)
+    RelativeLayout btn_nav_mine;
 
     private int currentIndex = -1;
     private int preIndex = -1;
@@ -231,7 +238,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
             @Override
             public void onLost(Postcard postcard) {
-                setCheck(currentIndex);
+                switchPage(currentIndex);
                 preIndex = (int) postcard.getTag();
             }
 
@@ -243,7 +250,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
             @Override
             public void onInterrupt(Postcard postcard) {
-                setCheck(currentIndex);
+                switchPage(currentIndex);
                 preIndex = (int) postcard.getTag();
             }
         };
@@ -252,8 +259,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
         int index = savedInstanceState == null ? 0 : savedInstanceState.getInt(Constants.IntentKey.INDEX, 0);
 
-        switchBtns(index);
-        getP().switchFragment(index, currentIndex, mInterceptor);
+        switchPage(index);
         getP().checkUpdate();
 //        ARouter.getInstance().build(RouterMap.COMIC_ABOUT_ACTIVITY).navigation(this);
         if (getIntent() != null) {
@@ -349,21 +355,22 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             R2.id.btn_nav_shelf, R2.id.btn_nav_mine})
     void onClick(View v) {
         if (v.getId() == R.id.btn_nav_featured) {
-            switchBtns(0);
-            getP().switchFragment(0, currentIndex, mInterceptor);
+            switchPage(0);
         } else if (v.getId() == R.id.btn_nav_classify) {
-            switchBtns(1);
-            getP().switchFragment(1, currentIndex, mInterceptor);
+            switchPage(1);
         } else if (v.getId() == R.id.btn_nav_money) {
-            switchBtns(2);
-            getP().switchFragment(2, currentIndex, mInterceptor);
+            switchPage(2);
         } else if (v.getId() == R.id.btn_nav_shelf) {
-            switchBtns(3);
-            getP().switchFragment(3, currentIndex, mInterceptor);
+            switchPage(3);
         } else if (v.getId() == R.id.btn_nav_mine) {
-            switchBtns(4);
-            getP().switchFragment(4, currentIndex, mInterceptor);
+            if (LoginHelper.interruptLogin(MainActivity.this,null))
+                switchPage(4);
         }
+    }
+
+    public void switchPage(int i) {
+        switchBtns(i);
+        getP().switchFragment(i, currentIndex, mInterceptor);
     }
 
     private void switchBtns(int index) {
@@ -436,27 +443,27 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.menu_home_featured:
-                getP().switchFragment(0, currentIndex, mInterceptor);
-                return true;
-            case R.id.menu_home_classify:
-                getP().switchFragment(1, currentIndex, mInterceptor);
-                return true;
-            case R.id.menu_home_money:
-                getP().switchFragment(2, currentIndex, mInterceptor);
-                return true;
-            case R.id.menu_home_bookshelf:
-                getP().switchFragment(3, currentIndex, mInterceptor);
-                return true;
-            case R.id.menu_home_mine:
-                getP().switchFragment(4, currentIndex, mInterceptor);
-                return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//        switch (menuItem.getItemId()) {
+//            case R.id.menu_home_featured:
+//                getP().switchFragment(0, currentIndex, mInterceptor);
+//                return true;
+//            case R.id.menu_home_classify:
+//                getP().switchFragment(1, currentIndex, mInterceptor);
+//                return true;
+//            case R.id.menu_home_money:
+//                getP().switchFragment(2, currentIndex, mInterceptor);
+//                return true;
+//            case R.id.menu_home_bookshelf:
+//                getP().switchFragment(3, currentIndex, mInterceptor);
+//                return true;
+//            case R.id.menu_home_mine:
+//                getP().switchFragment(4, currentIndex, mInterceptor);
+//                return true;
+//        }
+//        return false;
+//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -471,10 +478,10 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RequestCode.LOGIN_REQUEST_CODE:
-                    setCheck(preIndex);
+                    switchPage(preIndex);
                     break;
                 case RequestCode.RICH_REQUEST_CODE:
-                    setCheck(1);
+                    switchPage(1);
                     break;
             }
         }
@@ -507,34 +514,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         return this;
     }
 
-
-    //    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void setCheck(int index) {
-        switch (index) {
-//            case 0:
-//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_featured);
-//                break;
-//            case 1:
-//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_classify);
-//                break;
-//            case 2:
-//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_money);
-//                break;
-//            case 3:
-//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_bookshelf);
-//                break;
-//            case 4:
-//                mBottomNavigationView.setSelectedItemId(R.id.menu_home_mine);
-//                break;
-        }
-//        if (CommonUtil.checkValid(mRadioGroup.getChildCount(), index) && mRadioGroup.getChildAt(index) instanceof RadioButton) {
-//            ((RadioButton) mRadioGroup.getChildAt(index)).setChecked(true);
-//        }
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void setCheck(ChangeTabBarEvent refresh) {
-        setCheck(refresh.getIndex());
+        switchPage(refresh.getIndex());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -544,7 +526,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     public void exitLogin() {
         preIndex = -1;
-        setCheck(0);
+        switchPage(0);
     }
 
     @Override

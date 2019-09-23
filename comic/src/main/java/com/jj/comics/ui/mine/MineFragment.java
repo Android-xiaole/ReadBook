@@ -21,6 +21,8 @@ import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
@@ -69,6 +71,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         if (LoginHelper.getOnLineUser() != null) {
             getP().getUserInfo();
         }
+
+        LoginHelper.interruptLogin(getActivity(),null);
     }
 
     @Override
@@ -78,6 +82,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
             getP().getUserPayInfo();
         }
     }
+
 
     @Override
     public int getLayoutId() {
@@ -200,6 +205,4 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public boolean useEventBus() {
         return true;
     }
-
-
 }
