@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/comic_f4f6f9"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/comic_f4f6f9">
+
 
     <com.youth.banner.Banner
         android:id="@+id/recommend_banner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_115"
-        android:layout_marginBottom="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_10"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_5"
         app:indicator_drawable_selected="@drawable/comic_banner_select"
         app:indicator_drawable_unselected="@drawable/comic_banner_unselect"
         app:indicator_height="@dimen/dp_5"
