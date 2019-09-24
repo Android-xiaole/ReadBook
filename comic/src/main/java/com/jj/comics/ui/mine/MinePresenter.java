@@ -63,10 +63,7 @@ public class MinePresenter extends BasePresenter<BaseRepository, MineContract.IM
 
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                        if (error.getType() == NetError.AuthError){
-                            EventBusManager.sendLogoutEvent(new LogoutEvent());
-                        }
+                        getV().showToastShort("更新金币失败，返回个人中心查看！");
                     }
                 });
     }
