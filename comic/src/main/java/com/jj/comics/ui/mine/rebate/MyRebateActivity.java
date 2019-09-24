@@ -105,11 +105,16 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     void onClick(View view) {
         if (view.getId() == R.id.btn_rebate_cash_out) {
             if (canCashOut) {
-                ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY)
-                        .withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount())
-                        .withBoolean(Constants.IntentKey.CASH_OUT_ALI,mAlipay != null && mAlipay.isStatus())
-                        .withBoolean(Constants.IntentKey.CASH_OUT_BANK,mBank != null && mBank.isStatus())
-                        .navigation();
+                if (mPayInfo != null && mPayInfo.getCan_drawout_amount() > 0) {
+                    ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY)
+                            .withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount())
+                            .withBoolean(Constants.IntentKey.CASH_OUT_ALI,mAlipay != null && mAlipay.isStatus())
+                            .withBoolean(Constants.IntentKey.CASH_OUT_BANK,mBank != null && mBank.isStatus())
+                            .navigation();
+                }else {
+                    showToastShort("暂无可提现金额！");
+                }
+
             }else {
                 ARouter.getInstance().build(RouterMap.COMIC_CASHOUTWAY_ACTIVITY).navigation();
             }
