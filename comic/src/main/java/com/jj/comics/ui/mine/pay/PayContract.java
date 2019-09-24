@@ -34,6 +34,8 @@ public interface PayContract {
         void onGetUserData(UserInfo userInfo);
 
         void onGetTLPayInfo(TLPayResponse response);
+
+        void onGetAliTLTradeStatus(boolean trade);
     }
 
     interface IPayPresenter {
@@ -48,5 +50,7 @@ public interface PayContract {
         void payAli(Activity activity, long goodsId, long book_id);
 
         void payAliTL(Activity activity, long goodsId, long book_id);
+
+        void getAlilTLStatus(String tradeNo);
     }
 }

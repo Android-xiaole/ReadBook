@@ -27,6 +27,7 @@ import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
+import com.jj.comics.data.model.TLPayStatusResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -235,4 +236,10 @@ public interface UserDataSource {
      * @return
      */
     Observable<TLPayResponse> getTLPay(long goods_id,long book_id);
+
+    /**
+     * 获取通联支付宝订单状态
+     * @return
+     */
+    Observable<TLPayStatusResponse> getTLPayStatus(String tradeNo);
 }

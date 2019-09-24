@@ -20,5 +20,6 @@ public class RequestCode {
     public static final int MINE_REQUEST_CODE = FEEDBACK_REQUEST_CODE + 1;//我的页面跳转到意见反馈页面
     public static final int APPRENTICE_REQUEST_CODE = MINE_REQUEST_CODE + 1;//我的徒弟页面跳转登录
     public static final int USERINFO_REQUEST_CODE = APPRENTICE_REQUEST_CODE + 1;//个人信息页面跳转到别的页面
+    public static final int TL_ALI_REQUEST_CODE = USERINFO_REQUEST_CODE + 1;//充值中心跳转通联支付
 
 }

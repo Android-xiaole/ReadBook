@@ -39,6 +39,7 @@ import com.jj.comics.data.model.RichDataResponse;
 import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
+import com.jj.comics.data.model.TLPayStatusResponse;
 import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
@@ -681,6 +682,16 @@ public class UserRepository implements UserDataSource {
                 .build();
         return ComicApi.getApi().getTLPay(body)
                 .compose(ComicApiImpl.<TLPayResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<TLPayStatusResponse> getTLPayStatus(String tradeNo) {
+        RequestBody body = new RequestBodyBuilder()
+                .addProperty("out_trade_no", tradeNo)
+                .build();
+        return ComicApi.getApi().getTLPayStatus(body)
+                .compose(ComicApiImpl.<TLPayStatusResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }
