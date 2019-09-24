@@ -10,13 +10,11 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jj.comics.R;
-import com.jj.comics.common.constants.Constants;
 
 public class BottomCashOutDialog {
 
@@ -26,7 +24,7 @@ public class BottomCashOutDialog {
     /**
      * 从底部弹出popupwindow
      */
-    public void showBottomPop(final Activity activity, View parent,
+    public void showBottomPop(final Activity activity, View parent,boolean ali,boolean bank,
                               final DialogOnClickListener onClickListener) {
         final View popView = View.inflate(activity, R.layout.comic_dialog_cash_out, null);
         showAnimation(popView);//开启动画
@@ -53,8 +51,11 @@ public class BottomCashOutDialog {
         mOnClickListener = onClickListener;
 
         TextView cancel = popView.findViewById(R.id.pay_dialog_cancel);
-        LinearLayout alipay = popView.findViewById(R.id.base_pay_dialog_alipay);
-        LinearLayout union = popView.findViewById(R.id.base_pay_dialog_union);
+        LinearLayout mAlipay = popView.findViewById(R.id.base_pay_dialog_alipay);
+        LinearLayout mUnion = popView.findViewById(R.id.base_pay_dialog_union);
+
+        if (!ali) mAlipay.setVisibility(View.GONE);
+        if (!bank) mUnion.setVisibility(View.GONE);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,14 +64,14 @@ public class BottomCashOutDialog {
             }
         });
 
-        alipay.setOnClickListener(new View.OnClickListener() {
+        mAlipay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.onAliClick(v);
             }
         });
 
-        union.setOnClickListener(new View.OnClickListener() {
+        mUnion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.onUnionClick(v);

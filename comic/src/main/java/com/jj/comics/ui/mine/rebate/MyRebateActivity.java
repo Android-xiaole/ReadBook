@@ -59,6 +59,8 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     private PayInfo mPayInfo = new PayInfo();
 
     private boolean canCashOut = false;
+    private AlipayBean mAlipay;
+    private BankBean mBank;
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -103,7 +105,11 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
     void onClick(View view) {
         if (view.getId() == R.id.btn_rebate_cash_out) {
             if (canCashOut) {
-                ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY).withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount()).navigation();
+                ARouter.getInstance().build(RouterMap.COMIC_DOCASHOUT_ACTIVITY)
+                        .withFloat(Constants.IntentKey.ALL_REBATE, mPayInfo.getCan_drawout_amount())
+                        .withBoolean(Constants.IntentKey.CASH_OUT_ALI,mAlipay != null && mAlipay.isStatus())
+                        .withBoolean(Constants.IntentKey.CASH_OUT_BANK,mBank != null && mBank.isStatus())
+                        .navigation();
             }else {
                 ARouter.getInstance().build(RouterMap.COMIC_CASHOUTWAY_ACTIVITY).navigation();
             }
@@ -146,9 +152,9 @@ public class MyRebateActivity extends BaseActivity<MyRebatePrenenter> implements
         hideProgress();
         if (response != null && response.getData() != null) {
             CashOutWayResponse.DataBean data = response.getData();
-            AlipayBean mAlipay = data.getAlipay();
-            BankBean mBank = data.getBank();
-            if (mAlipay != null && mAlipay.isStatus() && mBank != null && mBank.isStatus()) {
+            mAlipay = data.getAlipay();
+            mBank = data.getBank();
+            if (mAlipay != null && mAlipay.isStatus() || mBank != null && mBank.isStatus()) {
                canCashOut = true;
             }else {
                 canCashOut = false;

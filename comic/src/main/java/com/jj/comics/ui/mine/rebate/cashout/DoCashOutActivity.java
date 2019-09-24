@@ -46,12 +46,17 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         float rebate = getIntent().getFloatExtra(Constants.IntentKey.ALL_REBATE, 0);
         mEtSum.setHint("可提取" + rebate);
 
+        boolean ali = getIntent().getBooleanExtra(Constants.IntentKey.CASH_OUT_ALI, false);
+        boolean bank = getIntent().getBooleanExtra(Constants.IntentKey.CASH_OUT_BANK, false);
+
+
         mBtnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hidKeyBoard(DoCashOutActivity.this);
                 mBottomCashOutDialog = new BottomCashOutDialog();
-                mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView, new BottomCashOutDialog.DialogOnClickListener() {
+                mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView,ali,bank,
+                        new BottomCashOutDialog.DialogOnClickListener() {
                     @Override
                     public void onAliClick(View v) {
                         getP().cashOut(Constants.CASH_OUT_WAY.ALIPAY, mParsedSum);

@@ -17,8 +17,8 @@
             android:id="@+id/head_img"
             android:layout_width="@dimen/dp_86"
             android:layout_height="@dimen/dp_86"
-            android:layout_marginTop="196dp"
-            android:src="@drawable/logo" />
+            android:layout_marginTop="@dimen/dp_230"
+            android:src="@drawable/bg_avatar" />
 
         <TextView
             android:id="@+id/nickname"
