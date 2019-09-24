@@ -37,6 +37,8 @@ public class AddCashOutWayUnionActivity extends BaseActivity<AddCashOutWayUnionP
             BankBean.InformationBeanX information = bankBean.getInformation();
             if (information != null) {
                 mEtAccount.setText(information.getAccount_number());
+                mEtAccount.setFocusable(true);
+                mEtAccount.setSelection(information.getAccount_number().length());
                 mEtBank.setText(information.getOpening_bank());
                 mEtName.setText(information.getOpener());
             }

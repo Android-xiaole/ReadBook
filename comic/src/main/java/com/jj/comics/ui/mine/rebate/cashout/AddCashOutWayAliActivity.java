@@ -35,6 +35,8 @@ public class AddCashOutWayAliActivity extends BaseActivity<AddCashOutWayAliPrese
             AlipayBean.InformationBean information = alipayBean.getInformation();
             if (information != null) {
                 mEtAccount.setText(information.getAccount_number());
+                mEtAccount.setFocusable(true);
+                mEtAccount.setSelection(information.getAccount_number().length());
                 mEtName.setText(information.getOpener());
             }
         }
