@@ -27,6 +27,8 @@ import com.jj.comics.adapter.ImagePagerAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.youth.banner.listener.OnBannerListener;
 
+import net.frakbot.jumpingbeans.JumpingBeans;
+
 import java.util.ArrayList;
 
 import androidx.viewpager.widget.ViewPager;
@@ -39,10 +41,15 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     TextView mSplashChannel;
     @BindView(R2.id.guide)
     ViewPager mGuide;
+    @BindView(R2.id.tv_loading)
+    TextView tv_loading;
     private ImagePagerAdapter mPagerAdapter;
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        JumpingBeans.with(tv_loading)
+                .appendJumpingDots()
+                .build();
         StatService.setAppChannel(getApplicationContext(), Constants.CHANNEL_ID, true);
         StatService.start(this);
         if (Constants.DEBUG) {

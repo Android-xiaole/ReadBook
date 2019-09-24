@@ -40,6 +40,7 @@ import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
+import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -469,6 +470,19 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         this.model = event.getBookModel();
         iv_batchBuy.setVisibility(View.GONE);
     }
+
+    /**
+     * 来自loading界面登录成功的通知，需要去刷新改页面数据
+     * @return
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshDetailActivityDataEvent(RefreshDetailActivityDataEvent event) {
+        if (model==null)return;
+        showProgress();
+        getP().getComicDetail(model.getId());
+        getP().getCollectStatus(model.getId());
+    }
+
 
     @Override
     public boolean useEventBus() {

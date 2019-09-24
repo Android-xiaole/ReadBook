@@ -13,6 +13,7 @@ import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicFavorStatusEvent;
+import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 import com.jj.comics.util.eventbus.events.RefreshRewardRecordListEvent;
 import com.jj.comics.util.eventbus.events.UpdateAutoBuyStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
@@ -180,4 +181,10 @@ public class EventBusManager {
         EventBus.getDefault().post(event);
     }
 
+    /**
+     * 发送loading界面登录成功后刷新详情页面相关数据的通知
+     */
+    public static void sendRefreshDetailActivityData(RefreshDetailActivityDataEvent event){
+        EventBus.getDefault().post(event);
+    }
 }

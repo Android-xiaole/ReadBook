@@ -5,6 +5,7 @@ public class RouterMap {
     public static final int NEED_PAY = 1002;
 
     public static final String COMIC_DETAIL_ACTIVITY = "/ui/ComicDetailActivity";
+    public static final String COMIC_LOADING_ACTIVITY = "/ui/LoadingActivity";
     public static final String COMIC_DETAIL_BOOKINFO_ACTIVITY = "/ui/detail/BookInfoActivity";
     public static final String COMIC_MAIN_ACTIVITY = "/app/activity/MainActivity";
     public static final String COMIC_TYPELIST_ACTIVITY = "/ui/recommend_list/TypeListActivity";

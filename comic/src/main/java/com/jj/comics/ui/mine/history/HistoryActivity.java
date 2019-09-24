@@ -40,7 +40,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,null);
+        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,CommonBookListAdapter.NAME_HISTORY);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecycler);
         mAdapter.setEmptyView(getEmptyView());

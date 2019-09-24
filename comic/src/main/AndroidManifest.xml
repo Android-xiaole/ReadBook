@@ -9,6 +9,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
+        <activity android:name=".ui.detail.LoadingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base"/>
+
         <activity
             android:name=".ui.detail.BookInfoActivity"
             android:screenOrientation="portrait"

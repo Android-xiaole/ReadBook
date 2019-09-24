@@ -41,7 +41,7 @@ public class CommonBookListAdapter extends SimpleBaseAdapter<BookModel> {
             }else{
                 helper.setText(R.id.tv_item_history_progress, "更新至："+item.getLastvolume_name());
             }
-        }else if (pageName.equals(NAME_COLLECTION)){//来自于阅读历史页面
+        }else if (pageName.equals(NAME_HISTORY)){//来自于阅读历史页面
             helper.setText(R.id.tv_item_history_progress,"阅读至："+item.getChaptername());
         }
         ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_item_history_cover), item.getCover(),

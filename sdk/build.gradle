@@ -239,4 +239,9 @@ dependencies {
     api 'com.aliyun.dpa:oss-android-sdk:+'
     implementation files('libs/OpenInstall_v2.3.0.jar')
     implementation files('libs/core-3.3.0.jar')
+
+    //svg动画加载
+    api 'com.github.yyued:SVGAPlayer-Android:2.0.0'
+    //跳动字体效果
+    api 'net.frakbot:jumpingbeans:1.3.0'
 }

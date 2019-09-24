@@ -63,7 +63,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
         lp.topMargin = statusBarHeight;
         rootView.setLayoutParams(lp);
 
-        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,null);
+        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,CommonBookListAdapter.NAME_COLLECTION);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.base_yellow_ffd850));
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

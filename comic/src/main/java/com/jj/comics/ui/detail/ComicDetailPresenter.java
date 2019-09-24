@@ -159,53 +159,56 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,ComicDetailContr
 
     @Override
     public void toRead(final BookModel bookModel, final long chapterid) {
-        getV().showProgress();
-        Observable.just(chapterid)
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Function<Long, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(Long chapterid) throws Exception {
-                        if (chapterid == 0){//没有阅读记录就默认取章节目录的第一张
-                            /*
-                                这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
-                                另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
-                             */
-                            return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
-                                    .subscribeOn(Schedulers.io())
-                                    .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
-                                        @Override
-                                        public ObservableSource<Long> apply(BookCatalogListResponse response) throws Exception {
-                                            return Observable.just(response.getData().getData().get(0).getId());
-                                        }
-                                    });
-                        }else{
-                            return Observable.just(chapterid);
-                        }
-                    }
-                }).flatMap(new Function<Long, ObservableSource<BookCatalogModel>>() {
-            @Override
-            public ObservableSource<BookCatalogModel> apply(Long chapterid) throws Exception {
-                return ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(),bookModel,chapterid)
-                        .subscribeOn(Schedulers.io());
-            }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .as(this.<BookCatalogModel>bindLifecycle())
-                .subscribe(new ComicSubscriber<BookCatalogModel>() {
-                    @Override
-                    public void onNext(BookCatalogModel catalogModel) {
-                        ReadComicActivity.toRead((Activity) getV(),bookModel,catalogModel);
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    protected void onEnd() {
-                        getV().hideProgress();
-                    }
-                });
+        if (getV() instanceof Activity){
+            LoadingActivity.toLoading((Activity)getV(),bookModel,chapterid);
+        }
+//        getV().showProgress();
+//        Observable.just(chapterid)
+//                .subscribeOn(Schedulers.io())
+//                .flatMap(new Function<Long, ObservableSource<Long>>() {
+//                    @Override
+//                    public ObservableSource<Long> apply(Long chapterid) throws Exception {
+//                        if (chapterid == 0){//没有阅读记录就默认取章节目录的第一张
+//                            /*
+//                                这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
+//                                另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
+//                             */
+//                            return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
+//                                    .subscribeOn(Schedulers.io())
+//                                    .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
+//                                        @Override
+//                                        public ObservableSource<Long> apply(BookCatalogListResponse response) throws Exception {
+//                                            return Observable.just(response.getData().getData().get(0).getId());
+//                                        }
+//                                    });
+//                        }else{
+//                            return Observable.just(chapterid);
+//                        }
+//                    }
+//                }).flatMap(new Function<Long, ObservableSource<BookCatalogModel>>() {
+//            @Override
+//            public ObservableSource<BookCatalogModel> apply(Long chapterid) throws Exception {
+//                return ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(),bookModel,chapterid)
+//                        .subscribeOn(Schedulers.io());
+//            }
+//        }).observeOn(AndroidSchedulers.mainThread())
+//                .as(this.<BookCatalogModel>bindLifecycle())
+//                .subscribe(new ComicSubscriber<BookCatalogModel>() {
+//                    @Override
+//                    public void onNext(BookCatalogModel catalogModel) {
+//                        ReadComicActivity.toRead((Activity) getV(),bookModel,catalogModel);
+//                    }
+//
+//                    @Override
+//                    protected void onFail(NetError error) {
+//                        ToastUtil.showToastShort(error.getMessage());
+//                    }
+//
+//                    @Override
+//                    protected void onEnd() {
+//                        getV().hideProgress();
+//                    }
+//                });
     }
 
     @Override

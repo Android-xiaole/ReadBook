@@ -1,14 +1,9 @@
 package com.jj.comics.ui.detail;
 
-import android.app.Activity;
-
 import com.jj.base.mvp.IView;
-import com.jj.base.net.ApiSubscriber2;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 
 import java.util.List;
 
