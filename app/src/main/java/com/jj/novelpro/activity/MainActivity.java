@@ -478,6 +478,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case RequestCode.LOGIN_REQUEST_CODE:
+                    if (preIndex != 2) preIndex = 4;
                     switchPage(preIndex);
                     break;
                 case RequestCode.RICH_REQUEST_CODE:
@@ -521,6 +522,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void dealTokenUseless(LogoutEvent logoutEvent) {
+        switchPage(0);
         getP().dealTokenUseLess();
     }
 
