@@ -16,7 +16,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.bookshelf.BookShelfAdapter;
+import com.jj.comics.adapter.bookshelf.CommonBookListAdapter;
 import com.jj.comics.common.callback.GlideOnScrollListener;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
@@ -51,7 +51,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
     @BindView(R2.id.rv_with_delete)
     RecyclerView mRecycler;
 
-    private BookShelfAdapter mAdapter;
+    private CommonBookListAdapter mAdapter;
     private int currentPage = 1;
     private NormalNotifyDialog deleteDialog;//删除收藏的弹窗
 
@@ -63,7 +63,7 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
         lp.topMargin = statusBarHeight;
         rootView.setLayoutParams(lp);
 
-        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item,null);
+        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,null);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.base_yellow_ffd850));
         mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -633,7 +633,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         super.onDestroy();
         //上传阅读记录(只有已经下载之后的章节才会保存阅读记录)
         if (bookModel != null && catalogModel != null && BookManager.isChapterCached(catalogModel.getBook_id() + "", catalogModel.getChaptername())) {
-            getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder());
+            getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder(),catalogModel.getChaptername());
         }
     }
 

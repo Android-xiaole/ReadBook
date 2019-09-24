@@ -56,10 +56,12 @@ public class BookModel implements Serializable {
     private String hot_const;
     private String intro;
     private int fullflag;
-    private String lastvolume;
+    private String lastvolume;//最新章节，暂时这个字段后台不给了，所以不要使用！
+    private String lastvolume_name;
     private int reviewnum;
     private int goodnum;
-    private long chapterid;
+    private long chapterid;//阅读历史章节id
+    private String chaptername;//阅读历史章节名称
     @SerializedName(value = "order", alternate = {"read_chapter"})
     private int order;
     @Convert(converter = StringConverter.class, columnType = String.class)
@@ -88,10 +90,10 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 1238961071)
-    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, int reviewnum,
-            int goodnum, long chapterid, int order, List<String> tag, String keywords, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy, int batchprice, int has_batch_buy,
-            int update_chapter_time, long userId, long create_time, long update_time) {
+    @Generated(hash = 1187940897)
+    public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, String lastvolume_name,
+            int reviewnum, int goodnum, long chapterid, String chaptername, int order, List<String> tag, String keywords, String author, String yesterday_share, String allvisit, String size, String total_share, int batchbuy,
+            int batchprice, int has_batch_buy, int update_chapter_time, long userId, long create_time, long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -104,9 +106,11 @@ public class BookModel implements Serializable {
         this.intro = intro;
         this.fullflag = fullflag;
         this.lastvolume = lastvolume;
+        this.lastvolume_name = lastvolume_name;
         this.reviewnum = reviewnum;
         this.goodnum = goodnum;
         this.chapterid = chapterid;
+        this.chaptername = chaptername;
         this.order = order;
         this.tag = tag;
         this.keywords = keywords;
@@ -126,6 +130,22 @@ public class BookModel implements Serializable {
 
     @Generated(hash = 1421733684)
     public BookModel() {
+    }
+
+    public String getChaptername() {
+        return chaptername;
+    }
+
+    public void setChaptername(String chaptername) {
+        this.chaptername = chaptername;
+    }
+
+    public String getLastvolume_name() {
+        return lastvolume_name;
+    }
+
+    public void setLastvolume_name(String lastvolume_name) {
+        this.lastvolume_name = lastvolume_name;
     }
 
     public int getHas_batch_buy() {

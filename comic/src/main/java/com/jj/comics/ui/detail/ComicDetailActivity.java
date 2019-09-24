@@ -204,6 +204,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             if (model == null) return;
             SubscribeActivity.toSubscribe(this, model, model.getBatchprice(), 0);
         } else if (id == R.id.lin_addBook || id == R.id.iv_addBookTop) {//加入书架
+            if (model == null)return;
             if (LoginHelper.interruptLogin(this, null)) {
                 if (isCollect) {
                     if (removeCollectDialog == null)
@@ -299,6 +300,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         tv_shareNum.setText(model.getTotal_share() + "次");
         tv_wordsNum.setText(model.getSize() + "字");
         tv_info.setText(model.getIntro());
+        tv_catalogTitle.setText("更新至："+model.getLastvolume_name());
 
         if (model.getTag() != null && model.getTag().size() > 0) {
             tv_type.setText(model.getTag().get(0));
@@ -370,7 +372,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     public void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum) {
         catalogAdapter.setNewData(catalogModels);
         tv_catalogNum.setText("共" + totalNum + "章");
-        tv_catalogTitle.setText(catalogModels.get(catalogModels.size() - 1).getChaptername());
         if (model != null) {
             catalogAdapter.notifyItem(model.getChapterid());
         }

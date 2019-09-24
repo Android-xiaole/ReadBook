@@ -92,27 +92,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         }
     }
 
-    public void uidLogin(String uid){
-        UserRepository.getInstance().uidLogin(uid)
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<UidLoginResponse, ObservableSource<UserInfo>>() {
-                    @Override
-                    public ObservableSource<UserInfo> apply(UidLoginResponse uidLoginResponse) throws Exception {
-                        if (uidLoginResponse.getData()!=null&&uidLoginResponse.getData().getUser_info()!=null){
-                            UserInfo user_info = uidLoginResponse.getData().getUser_info();
-                            MobclickAgent.onEvent(BaseApplication.getApplication(),
-                                    Constants.UMEventId.UID_LOGIN);
-                            SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, uidLoginResponse.getData().getBearer_token());
-                            return UserRepository.getInstance().saveUser(user_info);
-                        }else{
-                            return Observable.error(new NetError("code:"+uidLoginResponse.getCode()+"\n用户信息不存在",uidLoginResponse.getCode()));
-                        }
-                    }
-                })
-                .as(bindLifecycle())
-                .subscribe(new LoginApiSubscriber());
-    }
-
     @Override
     public void getVerifyCode(String mobile) {
         UserRepository.getInstance().getSecurityCode(getV().getClass().getName(), mobile)
@@ -192,9 +171,8 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                         if (responseModel.getData() != null && responseModel.getData().getUser_info() != null) {
-                            UserInfo user_info = responseModel.getData().getUser_info();
                             MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
-                            SharedPref.getInstance().putString(Constants.SharedPrefKey.TOKEN, responseModel.getData().getBearer_token());
+                            SharedPreManger.getInstance().saveToken(responseModel.getData().getBearer_token());
                             return UserRepository.getInstance().saveUser(responseModel.getData().getUser_info());
                         }
                         return Observable.error(NetError.noDataError());

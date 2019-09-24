@@ -171,8 +171,9 @@ public class DaoHelper<T> {
      * @param userId       用户id
      * @param chapterid    章节id
      * @param chapterorder 阅读至多少话
+     * @param chaptername  章节名称
      */
-    public void insertOrUpdateRecord(BookModel model, long userId, long chapterid, int chapterorder) {
+    public void insertOrUpdateRecord(BookModel model, long userId, long chapterid, int chapterorder,String chaptername) {
         BookModel localBookModel = queryBookModelByBookidAndUid(model.getId(), userId);
         if (localBookModel != null) {
             //如果本地存在这本书，就设置主键去执行更新操作

@@ -13,7 +13,7 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.bookshelf.BookShelfAdapter;
+import com.jj.comics.adapter.bookshelf.CommonBookListAdapter;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.detail.DetailActivityHelper;
 
@@ -31,7 +31,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
     SwipeRefreshLayout mRefresh;
     @BindView(R2.id.recyclerView)
     RecyclerView mRecycler;
-    private BookShelfAdapter mAdapter;
+    private CommonBookListAdapter mAdapter;
 
     @Override
     public void onClick(View v) {
@@ -40,7 +40,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        mAdapter = new BookShelfAdapter(R.layout.comic_bookshelf_item,null);
+        mAdapter = new CommonBookListAdapter(R.layout.comic_bookshelf_item,null);
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecycler);
         mAdapter.setEmptyView(getEmptyView());

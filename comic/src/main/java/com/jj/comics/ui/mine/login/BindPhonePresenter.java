@@ -9,6 +9,7 @@ import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.util.SharedPreManger;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -51,6 +52,7 @@ public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneC
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse loginResponse) throws Exception {
                         if (loginResponse.getData()!=null&&loginResponse.getData().getUser_info()!=null){
+                            SharedPreManger.getInstance().saveToken(loginResponse.getData().getBearer_token());
                             return UserRepository.getInstance().saveUser(loginResponse.getData().getUser_info());
                         }else{
                             return Observable.error(NetError.noDataError());

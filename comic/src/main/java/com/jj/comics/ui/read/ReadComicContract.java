@@ -40,7 +40,7 @@ public interface ReadComicContract {
         void getCollectStatus(long id);
 
         //上传阅读历史记录
-        void uploadReadRecord(BookModel bookModel, long chapterid,int chapterorder);
+        void uploadReadRecord(BookModel bookModel, long chapterid,int chapterorder,String chaptername);
 
     }
 }
