@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -49,29 +50,35 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         boolean ali = getIntent().getBooleanExtra(Constants.IntentKey.CASH_OUT_ALI, false);
         boolean bank = getIntent().getBooleanExtra(Constants.IntentKey.CASH_OUT_BANK, false);
 
-
         mBtnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hidKeyBoard(DoCashOutActivity.this);
-                mBottomCashOutDialog = new BottomCashOutDialog();
-                mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView,ali,bank,
-                        new BottomCashOutDialog.DialogOnClickListener() {
-                    @Override
-                    public void onAliClick(View v) {
-                        getP().cashOut(Constants.CASH_OUT_WAY.ALIPAY, mParsedSum);
-                    }
+                if (mParsedSum <= 0) {
+                    mTvNotice.setVisibility(View.VISIBLE);
+                    mTvNotice.setText("提现金额非法");
+                    mBtnOut.setClickable(false);
+                    mBtnOut.setBackgroundColor(getResources().getColor(R.color.comic_cccccc));
+                }else {
+                    mBottomCashOutDialog = new BottomCashOutDialog();
+                    mBottomCashOutDialog.showBottomPop(DoCashOutActivity.this, mView,ali,bank,
+                            new BottomCashOutDialog.DialogOnClickListener() {
+                                @Override
+                                public void onAliClick(View v) {
+                                    getP().cashOut(Constants.CASH_OUT_WAY.ALIPAY, mParsedSum);
+                                }
 
-                    @Override
-                    public void onUnionClick(View v) {
-                        getP().cashOut(Constants.CASH_OUT_WAY.UNION, mParsedSum);
-                    }
+                                @Override
+                                public void onUnionClick(View v) {
+                                    getP().cashOut(Constants.CASH_OUT_WAY.UNION, mParsedSum);
+                                }
 
-                    @Override
-                    public void onCancelClick(View v) {
-                        mBottomCashOutDialog.dismiss();
-                    }
-                });
+                                @Override
+                                public void onCancelClick(View v) {
+                                    mBottomCashOutDialog.dismiss();
+                                }
+                            });
+                }
             }
         });
 
@@ -90,7 +97,8 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
         mEtSum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                mEtSum.setTextSize(TypedValue.COMPLEX_UNIT_DIP,20);
+                mEtSum.setTextColor(getResources().getColor(R.color.comic_333333));
             }
 
             @Override
@@ -101,7 +109,10 @@ public class DoCashOutActivity extends BaseActivity<DoCashOutPresenter> implemen
             @Override
             public void afterTextChanged(Editable s) {
                 String string = s.toString();
-                if (TextUtils.isEmpty(string)) return;
+                if (TextUtils.isEmpty(string)) {
+                    mEtSum.setTextSize(TypedValue.COMPLEX_UNIT_DIP,15);
+                    return;
+                }
                 mParsedSum = 0;
                 try {
                     mParsedSum = Float.parseFloat(string);
