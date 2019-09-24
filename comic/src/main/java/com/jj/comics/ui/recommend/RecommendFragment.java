@@ -328,24 +328,21 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         }else if (view.getId()  == R.id.recommend_search) {
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
         }else if (view.getId()  == R.id.recommend_featured) {
-            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL;
-            switchTvs(0);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,true);
-            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL,1, false,true);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL, 0);
         }else if (view.getId()  == R.id.recommend_man) {
-            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN;
-            switchTvs(1);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,true);
-            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN,1, false,true);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN, 1);
         }else if (view.getId()  == R.id.recommend_woman) {
-            recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN;
-            switchTvs(2);
-            getP().loadRecentlyComic(1,Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
-            getP().loadPopShare(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,true);
-            getP().loadData(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN,1, false,true);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN, 2);
         }
+    }
+
+    private void switchChannel(int channelFlag, int index) {
+        recentChannelFlag = channelFlag;
+        switchTvs(index);
+        rv_recently.smoothScrollToPosition(0);
+        getP().loadRecentlyComic(1,channelFlag,true);
+        getP().loadPopShare(channelFlag,true);
+        getP().loadData(channelFlag,1, false,true);
     }
 
     private void switchTvs(int index) {
