@@ -98,7 +98,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
                         BookListDataResponse.DataBean data = response.getData();
                         if (data != null) {
                             List<BookModel> bookModels = data.getData();
-                            if (bookModels != null) {
+                            if (bookModels != null && bookModels.size() > 0) {
                                 getV().onLoadRecentlyComicSuccess(changeChannel,bookModels);
                             } else {
                                 getV().onLoadRecentlyComicFail(NetError.noDataError());

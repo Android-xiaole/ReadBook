@@ -56,6 +56,7 @@ import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
+import com.jj.comics.widget.RecommendLoadMoreView;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -119,6 +120,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         rv_recently.setHasFixedSize(true);
         adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 2);
         adapter_recently.bindToRecyclerView(rv_recently,true);
+        adapter_recently.setLoadMoreView(new RecommendLoadMoreView());
         adapter_recently.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
@@ -190,6 +192,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 //            }
 //        }
     }
+
 
     /**
      * 横幅广告轮播头布局

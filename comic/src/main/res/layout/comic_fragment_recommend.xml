@@ -32,10 +32,10 @@
                 android:id="@+id/recommend_man"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/recommend_featured"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingTop="@dimen/dp_14"
                 android:paddingBottom="@dimen/dp_14"
-                android:layout_toRightOf="@id/recommend_featured"
                 android:text="男频"
                 android:textColor="@color/comic_a8adb3"
                 android:textSize="@dimen/dp_16" />
@@ -44,10 +44,10 @@
                 android:id="@+id/recommend_woman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/recommend_man"
                 android:paddingLeft="@dimen/dp_16"
                 android:paddingTop="@dimen/dp_14"
                 android:paddingBottom="@dimen/dp_14"
-                android:layout_toRightOf="@id/recommend_man"
                 android:text="女频"
                 android:textColor="@color/comic_a8adb3"
                 android:textSize="@dimen/dp_16" />
