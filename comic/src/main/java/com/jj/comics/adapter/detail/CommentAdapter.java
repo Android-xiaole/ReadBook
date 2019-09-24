@@ -29,8 +29,8 @@ public class CommentAdapter extends BaseQuickAdapter<CommentListResponse.DataBea
         super(layoutResId);
         daoHelper = new DaoHelper();
         options = new RequestOptions()
-                .placeholder(R.drawable.icon)
-                .error(R.drawable.icon);
+                .placeholder(R.drawable.ic_launcher)
+                .error(R.drawable.ic_launcher);
     }
 
     @Override

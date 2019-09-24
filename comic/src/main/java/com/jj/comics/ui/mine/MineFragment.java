@@ -97,7 +97,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     public void onGetUserInfo(UserInfo userInfo) {
         //设置头像
         if (TextUtils.isEmpty(userInfo.getAvatar())) {
-            ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+            ILFactory.getLoader().loadResource(headImg, R.drawable.bg_avatar,
                     new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
         } else {
             ILFactory.getLoader().loadNet(headImg, userInfo.getAvatar(),
@@ -179,7 +179,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         mCoins.setText("0");
         mRebate.setText("0");
         mApprentice.setText("0");
-        ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+        ILFactory.getLoader().loadResource(headImg, R.drawable.bg_avatar,
                 new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
     }
 

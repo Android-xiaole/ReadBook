@@ -447,103 +447,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
     }
 
-    @Override
-    public void adsPush(final Push push) {
-        final CustomFragmentDialog dialog = new CustomFragmentDialog();
-        dialog.show(getActivity(), getChildFragmentManager(), R.layout.comic_dialog_push_book, R.style.comic_Dialog_push_bg);
-        ImageView close = dialog.getDialog().findViewById(R.id.close);
-        ImageView bookDetail = dialog.getDialog().findViewById(R.id.push);
-        if (push.getImg() != null && !"".equals(push.getImg())) {
-            ILFactory.getLoader().loadNet(bookDetail, push.getImg()
-                    , new RequestOptions().error(R.drawable.push_book));
-        } else {
-            bookDetail.setImageResource(R.drawable.push_book);
-        }
-        dialog.getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    return true;
-                }
-                return false;
-            }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        bookDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DetailActivityHelper.toDetail(getActivity(), push.getText1(), "首页推送");
-                dialog.dismiss();
-            }
-        });
-    }
 
     private NormalNotifyDialog normalNotifyDialog;
-
-    @Override
-    public void onAdsPush_133(final Push push) {
-        if (push != null && push.getId() != null && push.getId().equals(Constants.AD_ID_133)) {
-            if (normalNotifyDialog == null) {
-                normalNotifyDialog = new NormalNotifyDialog();
-            }
-            normalNotifyDialog.show(getChildFragmentManager(), push.getText2(), push.getText3(),
-                    new DialogUtilForComic.OnDialogClick() {
-                @Override
-                public void onConfirm() {
-                    String text1 = push.getText1();
-                    if (!TextUtils.isEmpty(text1)) {
-                        switch (push.getMode()) {
-                            case "1"://手动下载，调用系统浏览器加载
-                                Uri uri = Uri.parse(text1);
-                                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                startActivity(intent);
-                                break;
-                            case "2"://自动下载，调用应用内下载并在下载完成后安装
-                                int lastIndexOf = text1.lastIndexOf(".apk");
-                                if (lastIndexOf == -1) {
-                                    onAdsPush_128_fail(new NetError("下载链接错误", NetError.OtherError));
-                                    return;
-                                }
-                                AndPermission.with(getActivity())
-                                        .runtime()
-                                        .permission(Permission.WRITE_EXTERNAL_STORAGE)
-                                        .onGranted(new Action<List<String>>() {
-                                            @Override
-                                            public void onAction(List<String> data) {
-                                                getP().goDown(text1);
-                                            }
-                                        })
-                                        .onDenied(new Action<List<String>>() {
-                                            @Override
-                                            public void onAction(List<String> data) {
-                                                ToastUtil.showToastShort("存储权限获取失败，无法下载");
-                                            }
-                                        });
-                                break;
-                            case "3"://无需下载，调用应用内webview加载网页
-                                ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY)
-                                        .withString("url", text1)
-                                        .navigation(getActivity());
-                                break;
-                        }
-                    }
-                    getP().getAdsPush_Comic();
-                }
-
-                @Override
-                public void onRefused() {
-                    getP().getAdsPush_Comic();
-                }
-            });
-        } else {
-            getP().getAdsPush_Comic();
-        }
-    }
 
     public static final int START_DOWNLOAD = 1;
     public static final int DOWNING = START_DOWNLOAD + 1;
@@ -630,15 +535,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     @Override
     public void getBannerFail() {
         mRefresh.setRefreshing(false);
-    }
-
-    @Override
-    public void onGetPayAction(PayActionResponse.DataBean.PayinfoBean payinfoBean,int close_time) {
-    }
-
-    @Override
-    public void onAdsPush_128_fail(NetError netError) {
-        getP().getAdsPush_Comic();
     }
 
 }

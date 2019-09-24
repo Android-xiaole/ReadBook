@@ -181,14 +181,6 @@ public class Constants {
         public static final String INVITE_CODE = "invite_code";//通过openinstall传过来的邀请码
     }
 
-    //获取网络数据 传参key字段名
-    //首页漫画推荐
-    public static final String AD_ID_132 = "132";
-    //首页弹窗提醒
-    public static final String AD_ID_133 = "133";
-    //客服联系方式
-    public static final String AD_ID_129 = "129";
-
     public static class RequestBodyKey {
         /**
          * -------------------php api key-------------------------

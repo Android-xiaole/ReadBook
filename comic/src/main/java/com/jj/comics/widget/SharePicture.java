@@ -168,7 +168,7 @@ public class SharePicture extends LinearLayout {
         GlideApp.with(mContext).load(info.getCover()).into(iv_bookIcon);
         UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo.getAvatar() == null) {
-            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon);
+            Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher);
             Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
                     "H", "1", Color.BLACK, Color.WHITE, bitmap, 0.2F, null);
             qrcode_img.setImageBitmap(qrcode_bitmap);

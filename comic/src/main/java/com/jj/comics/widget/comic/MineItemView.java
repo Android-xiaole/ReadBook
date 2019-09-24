@@ -53,7 +53,8 @@ public class MineItemView extends LinearLayout implements CompoundButton.OnCheck
         switch_autoBuy.setOnCheckedChangeListener(this);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MineItemView);
 
-        int iconResourceId = typedArray.getResourceId(R.styleable.MineItemView_iconResource, R.drawable.icon);
+        int iconResourceId = typedArray.getResourceId(R.styleable.MineItemView_iconResource,
+                R.drawable.ic_launcher);
         iv_icon.setImageResource(iconResourceId);
 
         String titleText = typedArray.getString(R.styleable.MineItemView_titleText);

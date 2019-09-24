@@ -60,7 +60,6 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
                 if (bookModel == null) return;
 
                 if (view.getId() == R.id.content) {
-//                    getP().toRead(mAdapter.getData().get(position), mAdapter.getData().get(position).getChapterid());
                     DetailActivityHelper.toDetail(HistoryActivity.this,
                             bookModel.getId(),
                             "历史列表");

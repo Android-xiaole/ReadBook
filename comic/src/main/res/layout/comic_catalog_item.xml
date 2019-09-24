@@ -21,7 +21,6 @@
             android:id="@+id/iv_isPaid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_comic_catalog_vipzhangjie"
             tools:contentDescription="标记是否付费"
             tools:visibility="visible" />
     </FrameLayout>

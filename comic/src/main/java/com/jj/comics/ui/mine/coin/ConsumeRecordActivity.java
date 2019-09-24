@@ -57,7 +57,7 @@ public class ConsumeRecordActivity extends BaseActivity<ConsumeRecordPresenter> 
         mAdapter = new ComsumeRecordAdapter(R.layout.comic_item_consume_record);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
-        mAdapter.setEmptyImgSrc(R.drawable.img_weixiaofei, true);
+        mAdapter.setEmptyImgSrc(R.drawable.img_empty_buy, true);
         mAdapter.disableLoadMoreIfNotFullPage();
         mAdapter.isUseEmpty(true);
         //加载更多

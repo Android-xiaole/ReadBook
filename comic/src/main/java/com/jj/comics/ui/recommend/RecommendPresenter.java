@@ -1,61 +1,34 @@
 package com.jj.comics.ui.recommend;
 
-import android.app.Activity;
 import android.app.Application;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.alipay.sdk.app.PayTask;
 import com.jj.base.BaseApplication;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.FileUtil;
 import com.jj.base.utils.PackageUtil;
-import com.jj.base.utils.SharedPref;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.common.net.download.DownLoadManager;
 import com.jj.comics.common.net.download.DownloadProgressListener;
 import com.jj.comics.data.biz.content.ContentRepository;
-import com.jj.comics.data.biz.goods.GoodsRepository;
-import com.jj.comics.data.biz.pruduct.ProductRepository;
-import com.jj.comics.data.biz.task.TaskRepository;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookListPopShareResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.data.model.PayActionResponse;
-import com.jj.comics.data.model.PrePayOrderResponseAli;
-import com.jj.comics.data.model.Push;
-import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.PayUtils;
-import com.jj.comics.util.reporter.ActionReporter;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.ResourceSubscriber;
-import io.rx_cache2.DynamicKey;
-import io.rx_cache2.EvictDynamicKey;
-import retrofit2.HttpException;
 
 public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendContract.IRecommendView> implements RecommendContract.IRecommendPresenter {
 
@@ -143,28 +116,6 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
 
 
 
-    @Override
-    public void getAdsPush_128() {
-        ProductRepository.getInstance().getAdsPush(getV().getClass().getName(), Constants.AD_ID_133)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<Push>bindLifecycle())
-                .subscribe(new ApiSubscriber2<Push>() {
-
-                    @Override
-                    public void onNext(Push push) {
-                        try {
-                            getV().onAdsPush_133(push);
-                        } catch (Exception e) {
-                            getV().onAdsPush_128_fail(new NetError(e, NetError.OtherError));
-                        }
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        getV().onAdsPush_128_fail(error);
-                    }
-                });
-    }
 
     public void goDown(final String updateAppUrl) {
         getV().sendMessage(RecommendFragment.START_DOWNLOAD, null);
@@ -204,65 +155,7 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
         }, downFile);
     }
 
-    /**
-     * 获取广告推送
-     */
-    @Override
-    public void getAdsPush_Comic() {
-        ProductRepository.getInstance().getAdsPush(getV().getClass().getName(), Constants.AD_ID_132)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<Push>bindLifecycle())
-                .subscribe(new ApiSubscriber2<Push>() {
-                    @Override
-                    public void onNext(Push push) {
-                        if (push == null || push.getId() == null || !push.getId().equals(Constants.AD_ID_132)) {
-                            return;
-                        }
-                        if (!SharedPref.getInstance().getString("ad_push_id", "").equals(push.getText1())) {
-                            SharedPref.getInstance().putBoolean("main_push", false);
-                            getV().adsPush(push);
-                        } else {
-                        }
-                        SharedPref.getInstance().putString("ad_push_id", push.getText1());
-                    }
 
-                    @Override
-                    protected void onFail(NetError error) {
-                    }
-                });
-
-    }
-
-    /**
-     * 获取支付活动弹窗信息
-     */
-    public void getPayAction(){
-        ProductRepository.getInstance().getPayAction()
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(bindLifecycle())
-                .subscribe(new ApiSubscriber2<PayActionResponse>() {
-
-                    @Override
-                    public void onNext(PayActionResponse payActionResponse) {
-                        PayActionResponse.DataBean data = payActionResponse.getData();
-                        if (data!=null){
-                            PayActionResponse.DataBean.PayinfoBean payinfo = data.getPayinfo();
-                            if (data.getIs_alert() != 0&&payinfo!=null){
-                                getV().onGetPayAction(payinfo,data.getClose_time());
-                                return;
-                            }
-                        }
-                        getAdsPush_128();
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        //失败就去调用别的弹窗接口
-                        getAdsPush_128();
-                    }
-                });
-
-    }
 
     @Override
     public void umengOnEvent(String from, BookModel model) {

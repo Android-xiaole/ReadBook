@@ -49,7 +49,7 @@ public class ConsumeDetailActivity extends BaseActivity<ConsumeDetailPreseneter>
         mAdapter = new ComsumeDetailAdapter(R.layout.comic_item_consume_detail);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
-        mAdapter.setEmptyImgSrc(R.drawable.img_weixiaofei, true);
+        mAdapter.setEmptyImgSrc(R.drawable.img_empty_buy, true);
         mAdapter.isUseEmpty(true);
 
         mBookId = getIntent().getLongExtra(Constants.IntentKey.BOOK_ID, -1);

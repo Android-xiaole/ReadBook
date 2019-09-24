@@ -139,7 +139,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
         }
-        shareMessageModel.setShareImgRes(R.drawable.icon);//默认展示的分享图片
+        shareMessageModel.setShareImgRes(R.drawable.ic_launcher);//默认展示的分享图片
         ShareMenuModel shareMenuModel = (ShareMenuModel) adapter.getData().get(position);
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信

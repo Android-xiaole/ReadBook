@@ -23,7 +23,7 @@
         android:layout_below="@id/pay_header_huangguan"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/icon_user_avatar_default" />
+        android:src="@drawable/bg_avatar" />
 
     <TextView
         android:id="@+id/pay_header_name"

@@ -49,7 +49,7 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
         helper.setText(R.id.item_recommend_title, value).setTag(R.id.item_recommend_title, value);
 
         ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.item_recommend_icon), item.getImage1()
-                , new RequestOptions().error(R.drawable.icon_recommend_navigation_home).placeholder(R.drawable.icon_recommend_navigation_home));
+                , new RequestOptions());
 
         helper.addOnClickListener(R.id.tv_loadMore);
 

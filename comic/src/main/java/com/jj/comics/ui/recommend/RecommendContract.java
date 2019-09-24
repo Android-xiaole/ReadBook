@@ -24,12 +24,7 @@ public interface RecommendContract {
 
         void onLoadRecentlyComicFail(NetError netError);
 
-        //获取广告推送
-        void adsPush(Push push);
 
-        void onAdsPush_133(Push push);
-
-        void onAdsPush_128_fail(NetError netError);
 
         void sendMessage(int what, Object info);
 
@@ -37,7 +32,6 @@ public interface RecommendContract {
 
         void getBannerFail();
 
-        void onGetPayAction(PayActionResponse.DataBean.PayinfoBean payinfoBean,int close_time);
 
         void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList);
 
@@ -53,10 +47,6 @@ public interface RecommendContract {
 
         void loadPopShare(int channelFlag,boolean changeChannel);
 
-        //查询广告推送
-        void getAdsPush_Comic();
-
-        void getAdsPush_128();
 
         //友盟统计事件
         void umengOnEvent(String from, BookModel model);

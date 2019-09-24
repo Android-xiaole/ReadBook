@@ -57,7 +57,7 @@ public class RechargeRecordActivity extends BaseActivity<RechargeRecordPresenter
 //        mRecyclerView.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL,
 //                Utils.dip2px(this, 1), getResources().getColor(R.color.comic_efefef)));
         mAdapter.bindToRecyclerView(mRecyclerView, true, false);
-        mAdapter.setEmptyImgSrc(R.drawable.img_weichongzhi, true);
+        mAdapter.setEmptyImgSrc(R.drawable.img_empty_buy, true);
         mAdapter.isUseEmpty(true);
         mAdapter.disableLoadMoreIfNotFullPage();
         //加载更多数据

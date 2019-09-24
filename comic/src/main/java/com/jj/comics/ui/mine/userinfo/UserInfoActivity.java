@@ -95,7 +95,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         if (userInfo != null) {
             //设置头像
             if (TextUtils.isEmpty(userInfo.getAvatar())) {
-                ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+                ILFactory.getLoader().loadResource(headImg, R.drawable.bg_avatar,
                         new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
             } else {
                 ILFactory.getLoader().loadNet(headImg, userInfo.getAvatar(),
@@ -128,7 +128,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     @Override
     public void onImgUploadComplete(String headImgUrl) {
         if (TextUtils.isEmpty(headImgUrl)) {
-            ILFactory.getLoader().loadResource(headImg, R.drawable.icon_user_avatar_default,
+            ILFactory.getLoader().loadResource(headImg, R.drawable.bg_avatar,
                     new RequestOptions().transforms(new CenterCrop(), new CircleCrop()));
         } else {
             ILFactory.getLoader().loadNet(headImg, headImgUrl,
