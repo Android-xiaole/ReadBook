@@ -44,7 +44,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter.bindToRecyclerView(mRecycler);
         mAdapter.setEmptyView(getEmptyView());
-
+        mAdapter.isUseEmpty(true);
 //        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
