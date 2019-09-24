@@ -11,6 +11,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.widget.UserItemView;
 
@@ -49,6 +50,13 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        showProgress();
+        getP().getUserPayInfo();
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.comic_activity_my_coin;
     }
@@ -56,5 +64,11 @@ public class MyCoinActivity extends BaseActivity<MyCoinPresenter> implements MyC
     @Override
     public MyCoinPresenter setPresenter() {
         return new MyCoinPresenter();
+    }
+
+    @Override
+    public void onGetUserPayInfo(PayInfo payInfo) {
+        hideProgress();
+        mTvCoin.setText(payInfo.getTotal_egold() + "");
     }
 }

@@ -2,9 +2,12 @@ package com.jj.comics.ui.mine.pay;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.dialog.CustomFragmentDialog;
+import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
@@ -35,14 +39,18 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import java.time.temporal.ValueRange;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
+
+import static com.jj.comics.common.constants.RequestCode.TL_ALI_REQUEST_CODE;
 
 @Route(path = RouterMap.COMIC_PAY_ACTIVITY)
 public class PayActivity extends BaseActivity<PayPresenter> implements PayContract.IPayView {
@@ -54,9 +62,13 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     ComicToolBar toolBar;
     private RechargeCoinAdapter mShubiAdapter;
     private CustomFragmentDialog mPayDialog;
+    private CustomFragmentDialog mPayProgressDialog;
 
     private long mBookId = 0;
     private String payType;//充值类型
+    private int GET_TL_STATUS_COUNT = 0;
+    private String tlTradeNo;
+    private TimerTask mTask = null;
 
     /**
      * @param activity 上下文
@@ -196,99 +208,173 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     @Override
     public void onGetTLPayInfo(TLPayResponse response) {
-        String data = response.getData();
-        ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY).withString(WebActivity.URL_KEY,data).navigation();
-    }
-
-    /**
-     * 微信支付的回调
-     *
-     * @param baseResp
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void wxPay(WxPayEvent baseResp) {
-        int errCode = baseResp.errCode;
-        if (errCode == 0) {
-            onPaySuccess();
-        } else {
-            //微信支付失败 弹窗提示
-            payFail(baseResp.errCode + ":" + baseResp.msg);
-        }
-    }
-
-    @Override
-    public void payFail(String msg) {
-        hideProgress();
-        showToastShort(msg);
-        showPayDialog(false);
-    }
-
-    private void showPayDialog(boolean isSuc) {
-        if (mPayDialog == null) {
-            mPayDialog = new CustomFragmentDialog();
-        }
-        mPayDialog.show(this, getSupportFragmentManager(), R.layout.comic_pay_fail, R.style.comic_dialog_window_transparent);
-        mPayDialog.getDialog().findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPayDialog.dismiss();
+        TLPayResponse.DataBean data = response.getData();
+        String pay_content = "";
+        if (data != null) {
+            pay_content = data.getPay_content();
+            tlTradeNo = data.getOut_trade_no();
+            if (TextUtils.isEmpty(pay_content) || TextUtils.isEmpty(tlTradeNo)) {
+                showToastShort("获取支付宝支付链接或订单号失败，请重试！");
+            } else {
+                ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY)
+                        .withString(WebActivity.URL_KEY, pay_content)
+                        .navigation(PayActivity.this, TL_ALI_REQUEST_CODE);
             }
-        });
-        ImageView payResult = mPayDialog.getDialog().findViewById(R.id.pay_result);
-        if (isSuc) {
-            payResult.setImageResource(R.drawable.pay_suc);
-        } else {
-            payResult.setImageResource(R.drawable.bg_comic_dialog_vippay_zhifushibai);
         }
+
     }
 
     @Override
-    public int getLayoutId() {
-        return R.layout.comic_activity_pay;
-    }
+    public void onGetAliTLTradeStatus(boolean trade) {
+        GET_TL_STATUS_COUNT++;
 
-    @Override
-    public PayPresenter setPresenter() {
-        return new PayPresenter();
-    }
+        if (trade) {
+            onPaySuccess();
+            showPayProgress(false);
+        } else {
+            //延时重试
+            if (mTask == null) {
+                mTask = new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getP().getAlilTLStatus(tlTradeNo);
+                                LogUtil.d("GET_TL_STATUS_COUNT:::" + GET_TL_STATUS_COUNT);
+                            }
+                        });
+                    }
+                };
+                new Timer().schedule(mTask, 3000, 3000);
+            }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+
+            if (GET_TL_STATUS_COUNT == 3) {
+                showPayProgress(false);
+                showPayDialog(false);
+                if (mTask != null) mTask.cancel();
+            }
+        }
+
+
+        }
+
+        /**
+         * 微信支付的回调
+         *
+         * @param baseResp
+         */
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        public void wxPay (WxPayEvent baseResp){
+            int errCode = baseResp.errCode;
+            if (errCode == 0) {
+                onPaySuccess();
+            } else {
+                //微信支付失败 弹窗提示
+                payFail(baseResp.errCode + ":" + baseResp.msg);
+            }
+        }
+
+        @Override
+        public void payFail (String msg){
+            hideProgress();
+            showToastShort(msg);
+            showPayDialog(false);
+        }
+
+        private void showPayProgress ( boolean show){
+            if (show) {
+                if (mPayProgressDialog == null) {
+                    mPayProgressDialog = new CustomFragmentDialog();
+                    mPayProgressDialog.setCancelable(false);
+                }
+                mPayProgressDialog.show(this, getSupportFragmentManager(), R.layout.comic_layout_dilog_progress,
+                        R.style.base_dialogTransparent);
+            } else {
+                if (mPayProgressDialog != null) mPayProgressDialog.dismiss();
+            }
+        }
+
+
+        private void showPayDialog ( boolean isSuc){
+            if (mPayDialog == null) {
+                mPayDialog = new CustomFragmentDialog();
+            }
+            mPayDialog.show(this, getSupportFragmentManager(), R.layout.comic_pay_fail, R.style.comic_dialog_window_transparent);
+            mPayDialog.getDialog().findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPayDialog.dismiss();
+                }
+            });
+            ImageView payResult = mPayDialog.getDialog().findViewById(R.id.pay_result);
+            if (isSuc) {
+                payResult.setImageResource(R.drawable.pay_suc);
+            } else {
+                payResult.setImageResource(R.drawable.bg_comic_dialog_vippay_zhifushibai);
+            }
+        }
+
+        @Override
+        public int getLayoutId () {
+            return R.layout.comic_activity_pay;
+        }
+
+        @Override
+        public PayPresenter setPresenter () {
+            return new PayPresenter();
+        }
+
+        @Override
+        protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
 //            switch (requestCode) {
 //                case RequestCode.WEB_REQUEST_CODE:
 //                    isGotoPay = true;
 //                    break;
 //            }
 
-        } else if (resultCode == RESULT_CANCELED) {
+            } else if (resultCode == RESULT_CANCELED) {
 //            switch (requestCode) {
 //                case RequestCode.WEB_REQUEST_CODE:
 //                    isGotoPay = false;
 //                    showToastShort(this, "您取消了支付");
 //                    break;
 //            }
-        } else if (requestCode == 0x1020) {
-            String respCode = data.getExtras().getString("respCode");
-            String respMessage = data.getExtras().getString("respMessage");
-            showToastShort(respCode + ":" + respMessage);
+            }
 
-            // respCode 值说明
-            // "1"：成功，
-            // "-1"：失败，
-            // "0"：取消，
-            // "-2"：错误，
-            // "-3"：未知
+            if (requestCode == 0x1020) {
+                String respCode = data.getExtras().getString("respCode");
+                String respMessage = data.getExtras().getString("respMessage");
+                showToastShort(respCode + ":" + respMessage);
+
+                // respCode 值说明
+                // "1"：成功，
+                // "-1"：失败，
+                // "0"：取消，
+                // "-2"：错误，
+                // "-3"：未知
+            } else if (requestCode == TL_ALI_REQUEST_CODE) {
+                showPayProgress(true);
+                getP().getAlilTLStatus(tlTradeNo);
+            }
         }
 
+        @Override
+        protected void onDestroy () {
+            super.onDestroy();
+            mPayDialog = null;
+            mPayProgressDialog = null;
+            if (mTask != null) mTask.cancel();
+            mTask = null;
+        }
+
+        @Override
+        public boolean useEventBus () {
+            return true;
+        }
+
+
     }
-
-
-    @Override
-    public boolean useEventBus() {
-        return true;
-    }
-
-
-}

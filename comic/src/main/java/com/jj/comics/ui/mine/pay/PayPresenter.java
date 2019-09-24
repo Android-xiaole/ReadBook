@@ -20,6 +20,7 @@ import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.PrePayOrderResponseAli;
 import com.jj.comics.data.model.TLPayResponse;
+import com.jj.comics.data.model.TLPayStatusResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.PayUtils;
 import com.jj.comics.util.reporter.ActionReporter;
@@ -161,6 +162,31 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
                     protected void onEnd() {
                         super.onEnd();
                         getV().loadEnd();
+                    }
+                });
+    }
+
+    @Override
+    public void getAlilTLStatus(String tradeNo) {
+        UserRepository.getInstance()
+                .getTLPayStatus(tradeNo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new ApiSubscriber2<TLPayStatusResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        getV().onGetAliTLTradeStatus(false);
+                    }
+
+                    @Override
+                    public void onNext(TLPayStatusResponse tlPayStatusResponse) {
+                        TLPayStatusResponse.DataBean data = tlPayStatusResponse.getData();
+                        if (data == null) {
+                            getV().onGetAliTLTradeStatus(false);
+                        }else {
+                            getV().onGetAliTLTradeStatus(data.isStatus());
+                        }
                     }
                 });
     }

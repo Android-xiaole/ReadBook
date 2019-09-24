@@ -20,7 +20,8 @@ public class LogFormat {
     static final int JSON_INDENT = 4;
     static final int XML_INDENT = 4;
 
-    private static final char VERTICAL_BORDER_CHAR = '║';
+//    private static final char VERTICAL_BORDER_CHAR = '║';
+    private static final char VERTICAL_BORDER_CHAR = ' ';
 
     // Length: 100.
     private static final String TOP_HORIZONTAL_BORDER =
