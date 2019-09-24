@@ -25,8 +25,8 @@ public class BookShelfAdapter extends BaseItemDraggableAdapter<BookModel,BaseVie
     protected void convert(BaseViewHolder helper, BookModel item) {
         helper.setText(R.id.tv_item_history_title, item.getTitle());
         helper.setText(R.id.tv_item_history_time, DateHelper.formatSecLong(item.getUpdate_time()));
-        if (item.getFullflag() == 1){
-            helper.setText(R.id.tv_item_history_progress, "阅读到第"+item.getOrder()+"章");
+        if (item.getFullflag() == 1){//已完结
+            helper.setText(R.id.tv_item_history_progress, "已完结");
         }else{
             helper.setText(R.id.tv_item_history_progress, String.format(mContext.getString(R.string.comic_bookshelf_record_format), item.getOrder()));
         }
