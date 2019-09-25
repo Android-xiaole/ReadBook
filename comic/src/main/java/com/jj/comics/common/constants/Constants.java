@@ -65,7 +65,7 @@ public class Constants {
     public static final String CACHE_PATH = BaseApplication.getApplication().getCacheDir().getAbsolutePath();
 
     //    public static String HOST = "cartoon-novel.jishusaice.cn";
-    public static final String HOST_TEST = "cartoon-novel.513a3m.cn";//测试环境域名
+    public static final String HOST_TEST = "cartoon-novel.ds7j0i.cn";//测试环境域名
     public static final String HOST_APP_CONFIG = "cartoon_novel.langd88.cn";//获取app配置
     //cartoon-novel.txread.net
     // cartoon-novel.jishusaice.cn

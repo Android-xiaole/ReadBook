@@ -23,9 +23,11 @@ import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
+/**
+ * 用户修改手机号
+ */
 @Route(path = RouterMap.COMIC_CHANGE_PHONE_ACTIVITY)
-public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> implements ChangePhoneContract.IBindPhoneView, TextWatcher {
+public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> implements ChangePhoneContract.IBindPhoneView {
     @BindView(R2.id.comic_login_number)
     EditText mPhoneNumber;
     @BindView(R2.id.comic_login_pwd)
@@ -35,7 +37,6 @@ public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        mPhoneNumber.addTextChangedListener(this);
         ComicToolBar toolBar = findViewById(R.id.bind_phone_bar);
         toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
@@ -71,9 +72,18 @@ public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> impl
         return new ChangePhonePresenter();
     }
 
-    @OnClick({ R2.id.comic_login_code})
+    @OnClick({R2.id.comic_login_code})
     public void dealOnClick(View view) {
         if (view.getId() == R.id.comic_login_code) {
+            String phoneNum = mPhoneNumber.getText().toString().trim();
+            if (TextUtils.isEmpty(phoneNum)){
+                showToastShort("请输入手机号");
+                return;
+            }
+            if (!RegularUtil.isMobile(phoneNum)) {
+                showToastShort("请输入正确的手机号");
+                return;
+            }
             view.setEnabled(false);
             showProgress();
             getP().getCode(mPhoneNumber.getText().toString().trim());
@@ -103,28 +113,5 @@ public class ChangePhoneActivity extends BaseActivity<ChangePhonePresenter> impl
         if (!getP().isDown) {
             mCode.setEnabled(RegularUtil.isMobile(mPhoneNumber.getText().toString().trim()));
         }
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        onTextChanged();
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mPhoneNumber != null) {
-            mPhoneNumber.removeTextChangedListener(this);
-        }
-        super.onDestroy();
     }
 }

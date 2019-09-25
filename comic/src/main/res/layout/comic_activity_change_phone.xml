@@ -91,7 +91,6 @@
                     android:layout_marginLeft="@dimen/dp_5"
                     android:layout_marginRight="@dimen/dp_16"
                     android:background="@drawable/comic_code_shape"
-                    android:enabled="false"
                     android:gravity="center"
                     android:text="@string/comic_get_code"
                     android:textAppearance="@style/comic_code"

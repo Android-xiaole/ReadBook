@@ -92,14 +92,11 @@ public class ChangePhonePresenter extends BasePresenter<BaseRepository, ChangePh
                 }, new Function<Throwable, ObservableSource<Long>>() {
                     @Override
                     public ObservableSource<Long> apply(Throwable throwable) throws Exception {
-                        getV().showToastShort(BaseApplication.getApplication().getString(R.string.comic_code_fail));
+                        getV().showToastShort(throwable.getMessage());
                         getV().hideProgress();
                         if (isDown) return Observable.empty();
                         isDown = true;
-                        return Observable.intervalRange(0, SECOND + 1, 0, 1, TimeUnit.SECONDS)
-                                .observeOn(AndroidSchedulers.mainThread())
-//                                .compose(getV().<Long>bindUntilEvent(ActivityEvent.DESTROY))
-                                ;
+                        return Observable.empty();
                     }
                 }, new Callable<ObservableSource<Long>>() {
                     @Override
@@ -131,19 +128,4 @@ public class ChangePhonePresenter extends BasePresenter<BaseRepository, ChangePh
                 .as(this.<Long>bindLifecycle())
                 .subscribe();
     }
-
-//    @Override
-//    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//    }
-//
-//    @Override
-//    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//    }
-//
-//    @Override
-//    public void afterTextChanged(Editable s) {
-//        getV().onTextChanged();
-//    }
 }
