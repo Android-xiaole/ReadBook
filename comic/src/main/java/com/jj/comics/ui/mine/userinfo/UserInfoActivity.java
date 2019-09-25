@@ -90,7 +90,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         updateUserinfo();
     }
 
-    private void updateUserinfo(){
+    private void updateUserinfo() {
         UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo != null) {
             //设置头像
@@ -107,8 +107,15 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                 nickName.setRight_title(userInfo.getNickname());
             }
             //设置性别
-            String sex = userInfo.getSex() == 1 ? "男" : "女";
-            mSex.setRight_title(sex);
+            int sex = userInfo.getSex();
+            if (sex == 1) {
+                mSex.setRight_title("男");
+            } else if (sex == 2) {
+                mSex.setRight_title("女");
+            } else {
+                mSex.setRight_title("未知");
+            }
+
 
             //设置手机号
             phone.setRight_title(userInfo.getMobile() + "");
@@ -167,11 +174,11 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
                         }
                     }).start();
         } else if (view.getId() == R.id.user_nickname) {
-            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
+            ARouter.getInstance().build(RouterMap.COMIC_EDITNICKNAME_ACTIVITY).navigation(UserInfoActivity.this, RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_sex) {
-            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
+            ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this, RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_phone) {
-            ARouter.getInstance().build(RouterMap.COMIC_CHANGE_PHONE_ACTIVITY).navigation(UserInfoActivity.this,RequestCode.USERINFO_REQUEST_CODE);
+            ARouter.getInstance().build(RouterMap.COMIC_CHANGE_PHONE_ACTIVITY).navigation(UserInfoActivity.this, RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_setting) {
             ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
         }
@@ -180,7 +187,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             updateUserinfo();
         }
         if (resultCode == Activity.RESULT_OK) {
