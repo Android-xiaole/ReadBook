@@ -509,6 +509,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 shareMessageModel.setBoolId(bookModel.getId());
                 shareMessageModel.setBookTitle(bookModel.getTitle());
                 shareMessageModel.setAuthor(bookModel.getAuthor());
+                shareMessageModel.setKeys(bookModel.getKeywords());
                 if (bookModel.getTag() != null && bookModel.getTag().size() > 0) {
                     String type = bookModel.getTag().get(0);
                     shareMessageModel.setType(type);

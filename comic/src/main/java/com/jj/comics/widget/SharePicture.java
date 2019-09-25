@@ -120,6 +120,8 @@ public class SharePicture extends LinearLayout {
         tv_title = rootView.findViewById(R.id.tv_title);
         tv_author = rootView.findViewById(R.id.tv_author);
         tv_type = rootView.findViewById(R.id.tv_type);
+        keyword1 = rootView.findViewById(R.id.keyword1);
+        keyword2 = rootView.findViewById(R.id.keyword2);
         article_content = rootView.findViewById(R.id.article_content);
         qrcode_img = rootView.findViewById(R.id.qrcode_img);
 
@@ -164,6 +166,18 @@ public class SharePicture extends LinearLayout {
         }
         if (shareInfo.getType() != null) {
             tv_type.setText(shareInfo.getType());
+        }
+        if (info.getKeywords() != null) {
+            String[] keys = info.getKeywords().split(",");
+            if (keys.length == 1) {
+                keyword1.setVisibility(View.VISIBLE);
+                keyword1.setText(keys[0]);
+            } else {
+                keyword1.setVisibility(View.VISIBLE);
+                keyword2.setVisibility(View.VISIBLE);
+                keyword1.setText(keys[0]);
+                keyword2.setText(keys[1]);
+            }
         }
         GlideApp.with(mContext).load(info.getCover()).into(iv_bookIcon);
         UserInfo userInfo = LoginHelper.getOnLineUser();

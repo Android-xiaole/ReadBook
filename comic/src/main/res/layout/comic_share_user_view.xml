@@ -11,13 +11,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/share_user_bg"
         android:gravity="center_horizontal"
+        android:minHeight="603dp"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/head_img"
             android:layout_width="@dimen/dp_86"
             android:layout_height="@dimen/dp_86"
-            android:layout_marginTop="@dimen/dp_230"
+            android:layout_marginTop="198dp"
             android:src="@drawable/bg_avatar" />
 
         <TextView

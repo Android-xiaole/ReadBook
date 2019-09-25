@@ -86,7 +86,7 @@
 
                 <TextView
                     android:id="@+id/keyword1"
-                    android:layout_width="34dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/comic_share_key_shape"
                     android:gravity="center"
@@ -96,7 +96,7 @@
 
                 <TextView
                     android:id="@+id/keyword2"
-                    android:layout_width="34dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_10"
                     android:background="@drawable/comic_share_key_shape"
