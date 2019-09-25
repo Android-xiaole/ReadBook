@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.TencentHelper;
 import com.jj.comics.util.eventbus.events.WxPayEvent;
@@ -75,7 +76,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                 String pay_info = LoginHelper.getOnLineUser().getUid() + "&" + ((PayResp) baseResp).prepayId + "&" + baseResp.errCode;
                 ActionReporter.reportAction(ActionReporter.Event.PAY_RESULT, pay_info, null, null);
             }
-            MobclickAgent.onEvent(this, Constants.UMEventId.PAY_RESULT, "" + baseResp.errCode + ": " + baseResp.errStr);
+            MobclickAgent.onEvent(this, UmEventID.PAY_RESULT, "" + baseResp.errCode + ": " + baseResp.errStr);
         }
         finish();
     }

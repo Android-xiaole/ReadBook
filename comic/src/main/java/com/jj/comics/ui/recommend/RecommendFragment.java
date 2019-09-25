@@ -164,7 +164,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 String from = "最近更新";
                 BookModel model = adapter_recently.getData().get(position);
                 //点击事件友盟统计
-                getP().umengOnEvent(from, model);
                 DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
             }
         });
@@ -282,7 +281,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 if (data != null) {
                     BookModel model = (BookModel) data.get(position);
                     if (model != null) {
-                        getP().umengOnEvent("popShare", model);
                         DetailActivityHelper.toDetail(getActivity(), model.getId(), "popShare");
                     }
                 }
@@ -445,7 +443,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     @Override
     public void onItemClick(BookModel model, String from) {
         //点击事件友盟统计
-        getP().umengOnEvent(from, model);
         DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
     }
 

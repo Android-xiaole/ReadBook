@@ -156,37 +156,6 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
     }
 
 
-
-    @Override
-    public void umengOnEvent(String from, BookModel model) {
-        Application application = BaseApplication.getApplication();
-        if (!TextUtils.isEmpty(from)) {
-            switch (from) {
-                case "本周头牌":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.WEEK_TOP, model.getId() + " : " + model.getTitle());
-                    break;
-                case "宅男专区":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.OTAKU_DISTRICT, model.getId() + " : " + model.getTitle());
-                    break;
-                case "少女恋爱":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.GRIL_LOVE, model.getId() + " : " + model.getTitle());
-                    break;
-                case "抢看新作":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.NEW_COMIC, model.getId() + " : " + model.getTitle());
-                    break;
-                case "惊悚悬疑":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.TERROR_COMIC, model.getId() + " : " + model.getTitle());
-                    break;
-                case "banner":
-                    MobclickAgent.onEvent(application, Constants.UMEventId.CLICK_BANNER, model.getId() + " : " + model.getTitle());
-                    break;
-                default:
-                    break;
-            }
-        }
-
-    }
-
     @Override
     public void getBanner() {
         ContentRepository.getInstance()

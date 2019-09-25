@@ -3,13 +3,15 @@ package com.jj.comics.ui.mine.pay;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -24,6 +26,7 @@ import com.jj.comics.R2;
 import com.jj.comics.adapter.mine.RechargeCoinAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UserInfo;
@@ -39,12 +42,6 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import java.time.temporal.ValueRange;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -141,9 +138,9 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 if (goodsid != -1) {
                     showProgress();
                     if (PackageUtil.isAliPayInstalled(PayActivity.this)) {
-                        MobclickAgent.onEvent(PayActivity.this, Constants.UMEventId.HAS_ALIPAY, "已安装");
+                        MobclickAgent.onEvent(PayActivity.this, UmEventID.HAS_ALIPAY, "已安装");
                     } else {
-                        MobclickAgent.onEvent(PayActivity.this, Constants.UMEventId.HAS_ALIPAY, "未安装");
+                        MobclickAgent.onEvent(PayActivity.this, UmEventID.HAS_ALIPAY, "未安装");
                     }
 //                    getP().goPay(ProductPayTypeEnum.AliPay, goodsid, PayActivity.this);
                     getP().payAliTL(PayActivity.this, goodsid, mBookId);

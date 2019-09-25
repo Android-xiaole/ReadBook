@@ -36,6 +36,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.ui.detail.DetailActivityHelper;
@@ -216,9 +217,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         }
         ActionReporter.reportAction(ActionReporter.Event.LOGIN_START_APP, null, null, null);
         if (PackageUtil.isAliPayInstalled(MainActivity.this)) {
-            MobclickAgent.onEvent(MainActivity.this, Constants.UMEventId.USER_INSTALL_ALIPAY, "已安装支付宝");
+            MobclickAgent.onEvent(MainActivity.this, UmEventID.HAS_ALIPAY, "已安装支付宝");
         } else {
-            MobclickAgent.onEvent(MainActivity.this, Constants.UMEventId.USER_INSTALL_ALIPAY, "未安装支付宝");
+            MobclickAgent.onEvent(MainActivity.this, UmEventID.HAS_ALIPAY, "未安装支付宝");
         }
 //        getP().getUserData();
         //bugly自动检查更新

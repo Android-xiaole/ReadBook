@@ -15,15 +15,14 @@ public interface RecommendContract {
     interface IRecommendView extends IView {
 
         //填充数据
-        void fillData(boolean changeChannel,List<BookListRecommondResponse.DataBean> data);
+        void fillData(boolean changeChannel, List<BookListRecommondResponse.DataBean> data);
 
         //加载数据失败
         void getDataFail(NetError error);
 
-        void onLoadRecentlyComicSuccess(boolean changeChannel,List<BookModel> bookModelList);
+        void onLoadRecentlyComicSuccess(boolean changeChannel, List<BookModel> bookModelList);
 
         void onLoadRecentlyComicFail(NetError netError);
-
 
 
         void sendMessage(int what, Object info);
@@ -33,23 +32,20 @@ public interface RecommendContract {
         void getBannerFail();
 
 
-        void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList);
+        void onLoadPopShareSucc(boolean changeChannel, List<BookModel> bookModelList);
 
         void onLoadPopShareFail(NetError netError);
     }
 
     interface IRecommendPresenter {
         //记载推荐数据
-        void loadData(int channelFlag,int pageNum, boolean evict,boolean changeChannel);
+        void loadData(int channelFlag, int pageNum, boolean evict, boolean changeChannel);
 
         //获取最近更新数据
-        void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel);
+        void loadRecentlyComic(int pageNum, int channelFlag, boolean changeChannel);
 
-        void loadPopShare(int channelFlag,boolean changeChannel);
+        void loadPopShare(int channelFlag, boolean changeChannel);
 
-
-        //友盟统计事件
-        void umengOnEvent(String from, BookModel model);
 
         //获取banner
         void getBanner();

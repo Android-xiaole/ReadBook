@@ -229,7 +229,8 @@ public class ComicApplication extends BaseApplication {
         UMConfigure.setEncryptEnabled(false);
         // 选用LEGACY_AUTO页面采集模式
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.LEGACY_MANUAL);
-
+        // 支持在子进程中统计自定义事件
+        UMConfigure.setProcessEvent(true);
     }
 
     /**

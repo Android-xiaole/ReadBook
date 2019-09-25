@@ -10,6 +10,8 @@ import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.jj.base.BaseApplication;
 import com.jj.base.log.LogUtil;
 import com.jj.base.mvp.BasePresenter;
@@ -17,13 +19,11 @@ import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
-import com.jj.base.utils.SharedPref;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
@@ -42,7 +42,6 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
-import com.tencent.wxop.stat.StatService;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -53,11 +52,8 @@ import org.json.JSONObject;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.Nullable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableConverter;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -77,7 +73,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
         @Override
         protected void onFail(NetError error) {
-            if (getV()!=null){
+            if (getV() != null) {
                 getV().showToastShort(error.getMessage());
                 getV().hideProgress();
             }
@@ -85,7 +81,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
         @Override
         public void onNext(UserInfo UserInfo) {
-            if (getV()!=null){
+            if (getV() != null) {
                 getV().hideProgress();
                 getV().setResultAndFinish();
             }
@@ -151,12 +147,12 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     }
 
     @Override
-    public void loginByVerifyCode(boolean isCheck, String phone, String psw,String inviteCode) {
+    public void loginByVerifyCode(boolean isCheck, String phone, String psw, String inviteCode) {
         if (!isCheck) {
             getV().showToastShort("请同意漫画服务协议");
             return;
         }
-        if (TextUtils.isEmpty(phone)){
+        if (TextUtils.isEmpty(phone)) {
             getV().showToastShort("请输入手机号");
             return;
         }
@@ -165,13 +161,12 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             return;
         }
         getV().showProgress();
-        UserRepository.getInstance().loginBySecurityCode(phone, psw,inviteCode)
+        UserRepository.getInstance().loginBySecurityCode(phone, psw, inviteCode)
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
                         if (responseModel.getData() != null && responseModel.getData().getUser_info() != null) {
-                            MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
                             SharedPreManger.getInstance().saveToken(responseModel.getData().getBearer_token());
                             return UserRepository.getInstance().saveUser(responseModel.getData().getUser_info());
                         }
@@ -208,7 +203,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     这个监听里面使用V需要判空的原因是，当activity长期置于后台被回收时候（虽然数据被保存下来），但onDestory里面会销毁V
                     所以当再次回调回来的时候发现原来的V为null
                      */
-                    if (getV()!=null)getV().showProgress();
+                    if (getV() != null) getV().showProgress();
                     /**
                      * {
                      "ret":0,
@@ -224,7 +219,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     Log.d("GGGGGGG", "GGGGGGG" + SystemClock.currentThreadTimeMillis() + "---" + Thread.currentThread().getId());
                     JSONObject jsonObject = (JSONObject) o;
                     try {
-                        MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.QQ_LOGIN);
                         UserRepository.getInstance().qqLogin(jsonObject.getString(
                                 "openid"), jsonObject.getString(
                                 "access_token"))
@@ -244,13 +238,13 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
                 @Override
                 public void onError(UiError uiError) {
-                    if (getV()!=null)getV().hideProgress();
+                    if (getV() != null) getV().hideProgress();
                     LogUtil.e("QQ登录错误" + uiError.errorCode + "  " + uiError.errorMessage + "  " + uiError.errorDetail);
                 }
 
                 @Override
                 public void onCancel() {
-                    if (getV()!=null)getV().hideProgress();
+                    if (getV() != null) getV().hideProgress();
                     LogUtil.e("QQ登录取消");
                 }
             };
@@ -286,7 +280,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             if (oauth2AccessToken.isSessionValid()) {
                 AccessTokenKeeper.writeAccessToken(BaseApplication.getApplication(), oauth2AccessToken);
                 //上传微博登录事件
-                MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.WB_LOGIN);
                 UserRepository.getInstance()
                         .wbLogin(oauth2AccessToken.getToken(), oauth2AccessToken.getUid())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -369,14 +362,15 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
     /**
      * 处理三方登录返回的数据
+     *
      * @return
      */
-    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse){
+    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse) {
         LoginResponse.DataBean data = loginResponse.getData();
-        if (data!=null){
-            if (data.isIs_binding()){//绑定了手机号
+        if (data != null) {
+            if (data.isIs_binding()) {//绑定了手机号
                 UserInfo user_info = loginResponse.getData().getUser_info();
-                if (user_info!=null){
+                if (user_info != null) {
                     //保存token
                     SharedPreManger.getInstance().saveToken(data.getBearer_token());
 //                    //UM登录统计
@@ -384,8 +378,8 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                     //最后保存用户信息到数据库
                     return UserRepository.getInstance().saveUser(user_info);
                 }
-            }else{//未绑定手机号码,跳转到绑定号码的页面
-                BindPhoneActivity.toBindPhoneActivity(data.getType(),data.getOpenid(),(LoginActivity)getV());
+            } else {//未绑定手机号码,跳转到绑定号码的页面
+                BindPhoneActivity.toBindPhoneActivity(data.getType(), data.getOpenid(), (LoginActivity) getV());
                 return Observable.empty();
             }
         }

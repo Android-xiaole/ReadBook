@@ -21,13 +21,10 @@ import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.mine.pay.PayActivity;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.comic.MineItemView;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -66,7 +63,6 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     @Override
     public void initData(Bundle savedInstanceState) {
         //上传访问我的界面  key为accessUserCenter
-        MobclickAgent.onEvent(getContext(), Constants.UMEventId.ACCESS_USER_CENTER);
         if (LoginHelper.interruptLogin(getActivity(),null)) {
             getP().getUserInfo();
             getP().getUserPayInfo();

@@ -626,11 +626,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @Override
     protected void onDestroy() {
         unregisterReceiver(mReceiver);
-        HashMap<String, String> map = new HashMap<>();
-        map.put(Constants.UMEventId.EXIT_READ, bookModel.getId() + " : " + bookModel.getTitle());
-        int duration = (int) (mTotalLeaveTime / 1000);
-        LogUtil.e("退出阅读界面：" + duration);
-        MobclickAgent.onEventValue(this, Constants.UMEventId.EXIT_READ, map, duration);
         super.onDestroy();
         //上传阅读记录(只有已经下载之后的章节才会保存阅读记录)
         if (bookModel != null && catalogModel != null && BookManager.isChapterCached(catalogModel.getBook_id() + "", catalogModel.getChaptername())) {
@@ -654,16 +649,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         mTotalLeaveTime += currentTimeMillis - mTimeRecord;
         mReadStartTime = 0;
         mTimeRecord = 0;
-        Map<String, String> map = new HashMap<>();
-        if (catalogModel != null) {
-            map.put("comicId", catalogModel.getId() + "");
-            map.put("catalogName", catalogModel.getChaptername());
-        }
-        if (bookModel != null) {
-            map.put("mainId", bookModel.getId() + "");
-            map.put("title", bookModel.getTitle());
-        }
-        MobclickAgent.onEventValue(this, Constants.UMEventId.READ_TIME, map, duration);
     }
 
     @Override
