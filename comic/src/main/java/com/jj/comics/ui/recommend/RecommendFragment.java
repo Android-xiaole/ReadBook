@@ -329,11 +329,11 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             rv_recently.smoothScrollToPosition(0);
         }else if (view.getId()  == R.id.recommend_search) {
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
-        }else if (view.getId()  == R.id.recommend_featured) {
+        }else if (view.getId()  == R.id.recommend_featured && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL) {
             switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL, 0);
-        }else if (view.getId()  == R.id.recommend_man) {
+        }else if (view.getId()  == R.id.recommend_man && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN) {
             switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN, 1);
-        }else if (view.getId()  == R.id.recommend_woman) {
+        }else if (view.getId()  == R.id.recommend_woman && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN) {
             switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN, 2);
         }
     }
@@ -342,7 +342,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         recentChannelFlag = channelFlag;
         switchTvs(index);
         mLayoutManager.scrollToPositionWithOffset(0,0);
-//        rv_recently.smoothScrollToPosition(0);
         getP().loadRecentlyComic(1,channelFlag,true);
         getP().loadPopShare(channelFlag,true);
         getP().loadData(channelFlag,1, false,true);

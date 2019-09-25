@@ -3,7 +3,6 @@ package com.jj.comics.ui.mine.notify;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,6 +17,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.ui.web.WebViewActivity;
+
 
 import butterknife.BindView;
 
@@ -116,5 +116,8 @@ public class NotificationDetailActivity extends BaseActivity<NotificationDetailP
         mTvTitle.setText(title);
         mWebView.setVisibility(View.VISIBLE);
         mWebView.loadData(html,"text/html","utf-8");
+
+//        Document document = Jsoup.parse(html);
+//        mWebView.loadData(document.html(),"text/html","utf-8");
     }
 }
