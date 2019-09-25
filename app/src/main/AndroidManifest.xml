@@ -227,9 +227,15 @@
         <receiver
             android:name="com.jj.comics.jpush.PushReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false"
+            android:process=":remote">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_CLICK_ACTION" />
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>

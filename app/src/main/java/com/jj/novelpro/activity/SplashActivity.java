@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baidu.mobstat.StatService;
 import com.gyf.immersionbar.BarHide;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
+@Route(path = RouterMap.COMIC_SPLASH_ACTIVITY)
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashContract.ISplashView {
     @BindView(R2.id.splash_version)
     TextView mSplashVersion;

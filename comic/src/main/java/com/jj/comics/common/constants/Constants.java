@@ -107,6 +107,8 @@ public class Constants {
     public static final String BUGLY_APPID = "242baaf3a5";
     public static final boolean BUGLY_APPID_DEBUG = false;
 
+    public static boolean ISLIVE_MAIN = false;//标记MainActivity是否存活
+
     //activity间相互传值的key
     public static class IntentKey {
 
@@ -152,6 +154,7 @@ public class Constants {
 
 
         public static final String TL_PAY = "tlpay";
+        public static final String IS_JPUSH = "isJpush";
 
     }
 

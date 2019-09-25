@@ -110,6 +110,8 @@ public class ComicApplication extends BaseApplication {
         EventBusHelper.init();
         //初始化极光推送
         JPushInterface.init(this);
+        // 设置开启日志
+        JPushInterface.setDebugMode(Constants.DEBUG);
 
 //        DoraemonKit.install(getApplication());
 

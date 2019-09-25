@@ -14,7 +14,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
-import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
@@ -36,7 +35,6 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
@@ -115,6 +113,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private ShareDialog shareDialog;//分享弹窗
     private NormalNotifyDialog removeCollectDialog;//移除收藏提示弹窗
     private long chapterid = 0;
+
+    private boolean isJPush = false;//标记是否是极光推送跳转过来的
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -491,6 +491,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     long getId() {
         long id = 0;
+        isJPush = getIntent().getBooleanExtra(Constants.IntentKey.IS_JPUSH,false);
         if (getIntent().getLongExtra(Constants.IntentKey.ID, 0) != 0) {
             id = getIntent().getLongExtra(Constants.IntentKey.ID, 0);
         } else {
@@ -521,4 +522,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         super.onBackPressed();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isJPush&&!Constants.ISLIVE_MAIN){
+            ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
+        }
+    }
 }

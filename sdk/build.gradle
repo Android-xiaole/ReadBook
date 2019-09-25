@@ -225,12 +225,8 @@ dependencies {
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     //JPush
-    api 'cn.jiguang.sdk:jpush:3.3.4'
-
-    //
-    api 'cn.jiguang.sdk:jcore:2.1.2'
-
-    //
+    api 'cn.jiguang.sdk:jpush:3.3.6'
+    api 'cn.jiguang.sdk:jcore:2.1.4'
 
     //侧滑删除
     api 'com.github.anzaizai:EasySwipeMenuLayout:1.1.4'

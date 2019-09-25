@@ -154,16 +154,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             }
         }
     };
-    private BottomNavigationItemView mBottomMine;
 
     @Override
     protected void initImmersionBar() {
         ImmersionBar.with(MainActivity.this).init();
     }
 
-
     @Override
     public void initData(Bundle savedInstanceState) {
+        Constants.ISLIVE_MAIN = true;
         //获取唤醒参数
         OpenInstall.getWakeUp(getIntent(), wakeUpAdapter);
         //获取OpenInstall安装数据
@@ -575,6 +574,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     protected void onDestroy() {
         super.onDestroy();
         wakeUpAdapter = null;
+        Constants.ISLIVE_MAIN = false;
     }
 
     AppWakeUpAdapter wakeUpAdapter = new AppWakeUpAdapter() {
