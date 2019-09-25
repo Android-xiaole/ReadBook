@@ -92,6 +92,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     @BindView(R2.id.recommend_woman)
     TextView mTvWoman;
 
+    private LinearLayoutManager mLayoutManager;
     private RecentlyAdapter adapter_recently;//最近更新adapter
     private RecyclerView rv_content;//头部内容加载recyclerview
     private RecyclerView rv_popShare;//头部内容加载recyclerview
@@ -116,7 +117,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
         mRefresh.setOnRefreshListener(this);
 
-        rv_recently.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        rv_recently.setLayoutManager(mLayoutManager);
         rv_recently.setHasFixedSize(true);
         adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 2);
         adapter_recently.bindToRecyclerView(rv_recently,true);
@@ -339,7 +341,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     private void switchChannel(int channelFlag, int index) {
         recentChannelFlag = channelFlag;
         switchTvs(index);
-        rv_recently.smoothScrollToPosition(0);
+        mLayoutManager.scrollToPositionWithOffset(0,0);
+//        rv_recently.smoothScrollToPosition(0);
         getP().loadRecentlyComic(1,channelFlag,true);
         getP().loadPopShare(channelFlag,true);
         getP().loadData(channelFlag,1, false,true);
