@@ -1,4 +1,4 @@
-package com.jj.comics.ui.mine;
+package com.jj.comics.ui.mine.notify;
 
 import com.jj.base.mvp.IView;
 import com.jj.comics.data.model.NotificationListResponse;

@@ -1,18 +1,21 @@
-package com.jj.comics.ui.mine;
+package com.jj.comics.ui.mine.notify;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.mine.NotificationListAdapter;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.NotificationListResponse;
 
 import java.util.List;
@@ -43,6 +46,15 @@ public class NotificationActivity extends BaseActivity<NotificationPresenter> im
         mNotificationListAdapter.disableLoadMoreIfNotFullPage(mRecyclerView);
         mNotificationListAdapter.setOnLoadMoreListener(this,mRecyclerView);
         getP().getNotificationList(currentPage);
+
+        mNotificationListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                NotificationListResponse.DataBeanX.SimpleNotificationDataBean item =
+                        (NotificationListResponse.DataBeanX.SimpleNotificationDataBean) adapter.getData().get(position);
+                ARouter.getInstance().build(RouterMap.COMIC_MINE_NOTIFICATION_DETAIL).withLong(Constants.IntentKey.ID,item.getId()).navigation();
+            }
+        });
     }
 
     @Override

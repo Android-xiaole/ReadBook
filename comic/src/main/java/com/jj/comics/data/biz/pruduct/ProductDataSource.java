@@ -1,6 +1,7 @@
 package com.jj.comics.data.biz.pruduct;
 
 import com.jj.comics.data.model.NotificationListResponse;
+import com.jj.comics.data.model.NotificationResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
@@ -35,4 +36,7 @@ public interface ProductDataSource {
 
     //获取消息公告
     Observable<NotificationListResponse> getNotificationList(int pageNum);
+
+    //获取公告详情
+    Observable<NotificationResponse> getNotificationDetail(long id);
 }

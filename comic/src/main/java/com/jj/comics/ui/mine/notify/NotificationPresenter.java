@@ -1,4 +1,4 @@
-package com.jj.comics.ui.mine;
+package com.jj.comics.ui.mine.notify;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;

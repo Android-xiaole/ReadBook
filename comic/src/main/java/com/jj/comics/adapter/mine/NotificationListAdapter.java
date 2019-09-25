@@ -1,6 +1,5 @@
 package com.jj.comics.adapter.mine;
 
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;

@@ -9,6 +9,7 @@ import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
 import com.jj.comics.data.model.AppConfigResponse;
 import com.jj.comics.data.model.NotificationListResponse;
+import com.jj.comics.data.model.NotificationResponse;
 import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
@@ -121,6 +122,13 @@ public class ProductRepository implements ProductDataSource {
     @Override
     public Observable<NotificationListResponse> getNotificationList(int pageNum) {
         return ComicApi.getApi().getNotificationList(pageNum)
+                .compose(ComicApiImpl.getApiTransformer2())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<NotificationResponse> getNotificationDetail(long id) {
+        return ComicApi.getApi().getNotificationDetail(id)
                 .compose(ComicApiImpl.getApiTransformer2())
                 .subscribeOn(Schedulers.io());
     }

@@ -19,11 +19,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
-        <activity
-            android:name=".ui.detail.comment.CommentListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
             android:name=".ui.read.ReadComicActivity"
@@ -100,7 +95,7 @@
             android:theme="@style/Comic.AppTheme.Base" />
 
         <activity
-            android:name=".ui.mine.NotificationActivity"
+            android:name=".ui.mine.notify.NotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 
@@ -198,6 +193,11 @@
 
         <activity
             android:name=".ui.mine.apprentice.ApprenticeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Comic.AppTheme.Base" />
+
+        <activity
+            android:name=".ui.mine.notify.NotificationDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Comic.AppTheme.Base" />
 

@@ -804,8 +804,8 @@ public interface ComicService {
      *
      * @return
      */
-    @GET(API_NOTIDICATION_LIST)
-    Observable<NotificationResponse> getNotificationDetail(@Query("noticeid") int id);
+    @GET(API_NOTIDICATION_DETAIL)
+    Observable<NotificationResponse> getNotificationDetail(@Query("noticeid") long id);
 
 /****************************************************** 以上是 product 模块********************************************************************************/
 

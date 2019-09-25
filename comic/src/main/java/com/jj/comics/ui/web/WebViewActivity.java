@@ -30,6 +30,7 @@ import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_WEBVIEW_ACTIVITY)
 public class WebViewActivity extends BaseActivity {
+    public static final String URL_KEY = "url";
 
     @BindView(R2.id.toolBar)
     ComicToolBar toolBar;
@@ -42,7 +43,7 @@ public class WebViewActivity extends BaseActivity {
     protected void initData(Bundle savedInstanceState) {
         initWebView();
 
-        String url = getIntent().getStringExtra("url");
+        String url = getIntent().getStringExtra(URL_KEY);
         webView.loadUrl(url);
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
