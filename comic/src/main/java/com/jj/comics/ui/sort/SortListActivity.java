@@ -46,6 +46,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
         if (title != null) {
             toolBar.setTitleText(title);
         }
+        showProgress();
         getP().loadNoverList(page, length, id);
 
         novel_list_recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -86,6 +87,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
 
     @Override
     public void fillNoverList(List<BookModel> bookModels, long totalSize) {
+        hideProgress();
         if (page == 1) {
             adapter_recently.setNewData(bookModels);
         } else {
@@ -99,6 +101,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
 
     @Override
     public void getListFail(NetError netError) {
+        hideProgress();
         page = 1;
         ToastUtil.showToastShort(netError.getMessage());
     }
