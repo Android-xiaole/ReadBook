@@ -3,7 +3,9 @@ package com.jj.comics.ui.mine;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -31,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import me.jessyan.autosize.utils.ScreenUtils;
 
 /**
  * 我的页面
@@ -57,11 +60,18 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mApprentice;
     @BindView(R2.id.is_vip)
     ImageView mVip;
+    @BindView(R2.id.rootView)
+    RelativeLayout rootView;
 
     private PayInfo mPayInfo;
 
     @Override
     public void initData(Bundle savedInstanceState) {
+        //设置toolbar距离上端的高度
+        int statusBarHeight = ScreenUtils.getStatusBarHeight();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) rootView.getLayoutParams();
+        lp.topMargin = statusBarHeight;
+        rootView.setLayoutParams(lp);
         //上传访问我的界面  key为accessUserCenter
         if (LoginHelper.interruptLogin(getActivity(),null)) {
             getP().getUserInfo();

@@ -127,7 +127,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         if (shareMessageModel == null) {
             isShareUser = true;
             shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle("");
+            shareMessageModel.setShareTitle("金桔小说");
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
