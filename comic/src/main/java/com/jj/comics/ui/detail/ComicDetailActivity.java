@@ -118,11 +118,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     @Override
     public void initData(Bundle savedInstanceState) {
-        ImmersionBar.with(this)
-                .reset()
-                .statusBarDarkFont(true, 0.2f)
-                .statusBarColor(R.color.base_color_ffffff)
-                .init();
         daoHelper = new DaoHelper();
 
         rv_recommendList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
@@ -509,9 +504,14 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     @Override
     protected void initImmersionBar() {
-        ImmersionBar.with(this).init();
+        ImmersionBar.with(context)
+                .reset()
+                .keyboardEnable(true)
+                .fitsSystemWindows(true)
+                .statusBarDarkFont(true, 0.2f)
+                .statusBarColor(com.jj.base.R.color.base_color_ffffff)
+                .init();
     }
-
 
     @Override
     public void onBackPressed() {

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootView"
     android:background="@color/comic_ffffff"
     android:orientation="vertical"
     android:scrollbars="none">
@@ -10,10 +11,9 @@
     <TextView
         android:id="@+id/tv_header"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_45"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/dp_19"
-        android:layout_marginTop="31dp"
         android:text="@string/comic_mine"
         android:textColor="@color/base_333333"
         android:textSize="@dimen/dp_18" />
