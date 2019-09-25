@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.SharedPref;
@@ -38,12 +39,15 @@ import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.sdk.GlideApp;
+import com.umeng.analytics.MobclickAgent;
 import com.youth.banner.loader.ImageLoader;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.constraintlayout.solver.Metrics;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -54,11 +58,15 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
 
     private BaseActivity activity;
     private String mPath;
+    private String mFrom;
+    private String mTitle;
 
-    public ShareImageDialog(BaseActivity context, String path, ShareInfo info) {
+    public ShareImageDialog(BaseActivity context, String path, ShareInfo info,String from) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         mPath = path;
+        mFrom = from;
+        mTitle = info.getTitle();
         Window window = getWindow();
         if (window == null) {
             ToastUtil.showToastShort(context.getString(R.string.comic_window_null));
@@ -156,21 +164,35 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信
                 ShareHelper.getInstance().shareImageToWechat(activity, mPath);
+                umengClick("IMG","WX");
                 break;
             case WECHATMOMENT://分享朋友圈
                 ShareHelper.getInstance().shareImageToWechatMoment(activity, mPath);
+                umengClick("IMG","WX-PYQ");
                 break;
             case QQ://分享QQ
                 ShareHelper.getInstance().shareImageToQQ(activity, mPath);
+                umengClick("IMG","QQ");
                 break;
             case QQZONE://分享QQ空间
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);
+                umengClick("IMG","QZONE");
                 break;
             case SINA://分享新浪微博
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
+                umengClick("IMG","WB");
                 break;
         }
         dismiss();
+    }
+
+    private void umengClick(String type,String way) {
+        Map<String, Object> action_share = new HashMap<String, Object>();
+        action_share.put("from", mFrom);
+        action_share.put("content",mTitle);
+        action_share.put("type", type);
+        action_share.put("way", way);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_share", action_share);
     }
 
     /**

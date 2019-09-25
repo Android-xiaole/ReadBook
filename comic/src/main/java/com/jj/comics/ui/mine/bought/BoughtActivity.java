@@ -19,9 +19,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.mine.BoughtAdapter;
 import com.jj.comics.data.model.BoughtResponse;
-import com.jj.comics.ui.detail.DetailActivityHelper;
-import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 
 import java.util.List;
@@ -53,7 +51,7 @@ public class BoughtActivity extends BaseActivity<BoughtPresenter> implements Bou
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 BoughtResponse.DataBeanX.BoughtModel bookModel = mAdapter.getData().get(position);
                 if (bookModel == null) return;
-                DetailActivityHelper.toDetail(BoughtActivity.this,
+                ComicDetailActivity.toDetail(BoughtActivity.this,
                         bookModel.getArticleid(),
                         "我的购买列表");
             }

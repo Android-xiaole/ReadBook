@@ -3,8 +3,12 @@ package com.jj.comics.ui.sort;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.BaseApplication;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
@@ -13,22 +17,21 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.recommend.RecentlyAdapter;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
-import com.jj.comics.ui.find.NovelListFragment;
+import com.jj.comics.ui.detail.ComicDetailActivity;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
+import com.umeng.analytics.MobclickAgent;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_SORTLIST_ACTIVITY)
 public class SortListActivity extends BaseActivity<SortListPresent> implements SortListContract.ISortView {
     private String title;
+    private String channel;
     private long id;
 
     private int page = 1;//记录最近更新分页请求页数
@@ -42,7 +45,15 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
     protected void initData(Bundle savedInstanceState) {
         ComicToolBar toolBar = findViewById(R.id.bind_phone_bar);
         title = getIntent().getStringExtra("title");
+        channel = getIntent().getStringExtra("channel");
         id = getIntent().getLongExtra("id", 0);
+
+        Map<String, Object> page_classify_list = new HashMap<String, Object>();
+        page_classify_list.put("from", title);
+        page_classify_list.put("channel", "" + channel);
+        page_classify_list.put("login","" + LoginHelper.getOnLineUser() != null);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), "page_classify_list", page_classify_list);
+
         if (title != null) {
             toolBar.setTitleText(title);
         }
@@ -70,7 +81,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 BookModel model = adapter_recently.getData().get(position);
-                DetailActivityHelper.toDetail(SortListActivity.this, model.getId(), title);
+                ComicDetailActivity.toDetail(SortListActivity.this, model.getId(), title);
             }
         });
     }

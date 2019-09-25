@@ -23,7 +23,7 @@ import com.jj.comics.adapter.detail.CommonRecommendAdapter;
 import com.jj.comics.adapter.recommend.RecentlyAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 
 import java.util.List;
 
@@ -86,8 +86,8 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
         adapter_recently.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DetailActivityHelper.toDetail(SearchResultActivity.this,
-                        adapter_recently.getData().get(position).getId()+"", "搜索结果");
+                ComicDetailActivity.toDetail(SearchResultActivity.this,
+                        adapter_recently.getData().get(position).getId(), "搜索结果");
             }
         });
 

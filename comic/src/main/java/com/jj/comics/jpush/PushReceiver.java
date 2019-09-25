@@ -3,15 +3,11 @@ package com.jj.comics.jpush;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.log.LogUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.ui.detail.ComicDetailActivity;
-import com.jj.comics.ui.detail.DetailActivityHelper;
-import com.jj.comics.util.SharedPreManger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +41,7 @@ public class PushReceiver extends JPushMessageReceiver {
                             .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             .withBoolean(Constants.IntentKey.IS_JPUSH,true)
                             .withString(Constants.IntentKey.ID,bookId)
+                            .withString("from", "极光推送")
                             .navigation(context);
                     return;
                 }

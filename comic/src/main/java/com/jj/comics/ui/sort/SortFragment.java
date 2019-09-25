@@ -58,6 +58,7 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
     @BindView(R2.id.male)
     LinearLayout male;
 
+    //男女频 1-男  2-女
     private String name = "1";
 
     @Override
@@ -88,7 +89,16 @@ public class SortFragment extends BaseFragment<SortPresenter> implements SortCon
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 SortListResponse.DataBean dataBean = sortAdapter.getItem(position);
-                ARouter.getInstance().build(RouterMap.COMIC_SORTLIST_ACTIVITY).withLong("id", dataBean.getId()).withString("title", dataBean.getTitle()).navigation(getActivity());
+                String channel = "";
+                if (name.equals("1")) {
+                    channel = "男频";
+                }else {
+                    channel = "女频";
+                }
+                ARouter.getInstance().build(RouterMap.COMIC_SORTLIST_ACTIVITY)
+                        .withString("channel",channel)
+                        .withLong("id", dataBean.getId())
+                        .withString("title", dataBean.getTitle()).navigation(getActivity());
             }
         });
     }

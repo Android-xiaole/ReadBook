@@ -1,5 +1,6 @@
 package com.jj.comics.ui.detail;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gyf.immersionbar.ImmersionBar;
+import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
@@ -40,12 +42,15 @@ import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
@@ -115,10 +120,27 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private long chapterid = 0;
 
     private boolean isJPush = false;//标记是否是极光推送跳转过来的
+    private String mFrom;
+
+    /**
+     * 进入详情页
+     *
+     * @param activity
+     * @param id       漫画id
+     * @param from     来源
+     */
+    public static void toDetail(Activity activity, long id, String from) {
+        ARouter.getInstance().build(RouterMap.COMIC_DETAIL_ACTIVITY)
+                .withLong("id", id)
+                .withString("from", from)
+                .navigation(activity);
+    }
 
     @Override
     public void initData(Bundle savedInstanceState) {
         daoHelper = new DaoHelper();
+
+        mFrom = getIntent().getStringExtra("from");
 
         rv_recommendList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         recommendAdapter = new CommonRecommendAdapter(R.layout.comic_item_search_watchingcomicdata);
@@ -127,7 +149,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (model.getId() != recommendAdapter.getData().get(position).getId()) {
-                    DetailActivityHelper.toDetail(ComicDetailActivity.this, recommendAdapter.getData().get(position).getId(), "详情页_推荐");
+                    ComicDetailActivity.toDetail(ComicDetailActivity.this,
+                            recommendAdapter.getData().get(position).getId(), "详情页_推荐");
                     finish();
                 }
             }
@@ -279,6 +302,12 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
      */
     @Override
     public void onLoadComicDetail(BookModel model) {
+        Map<String, Object> page_detail = new HashMap<String, Object>();
+        page_detail.put("from", mFrom);
+        page_detail.put("to", "" + model.getId());
+        page_detail.put("login","" + LoginHelper.getOnLineUser() != null);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), "page_detail", page_detail);
+
         getP().getCatalogList(model);
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading));
@@ -384,7 +413,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             public void run() {
                 if (model != null) {
                     if (shareDialog == null) {
-                        shareDialog = new ShareDialog(ComicDetailActivity.this);
+                        shareDialog = new ShareDialog(ComicDetailActivity.this,"详情",model.getTitle());
                     }
 
                     if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();

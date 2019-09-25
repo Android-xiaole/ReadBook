@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.BaseApplication;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
@@ -32,6 +33,7 @@ import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.dialog.BottomPayDialog;
 import com.jj.comics.ui.web.WebActivity;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
@@ -42,6 +44,8 @@ import com.umeng.analytics.MobclickAgent;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,9 +67,12 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     private long mBookId = 0;
     private String payType;//充值类型
+    private String mFrom;//充值类型
     private int GET_TL_STATUS_COUNT = 0;
     private String tlTradeNo;
     private TimerTask mTask = null;
+    private String mGoodsName;
+    private String mPayWay;
 
     /**
      * @param activity 上下文
@@ -82,6 +89,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @Override
     public void initData(Bundle savedInstanceState) {
         payType = getIntent().getStringExtra(Constants.IntentKey.PAY_TYPE);
+        mFrom = getIntent().getStringExtra("from");
         mBookId = getIntent().getLongExtra(Constants.IntentKey.BOOK_ID, 0);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
@@ -101,6 +109,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 if (view.getId() == R.id.btn_toPay) {
                     PaySettingResponse.DataBeanX.DataBean dataBean = mShubiAdapter.getData().get(position);
                     showBottomDialog(view, dataBean.getId());
+                    mGoodsName = dataBean.getDescription();
                 }
             }
         });
@@ -142,7 +151,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                     } else {
                         MobclickAgent.onEvent(PayActivity.this, UmEventID.HAS_ALIPAY, "未安装");
                     }
-//                    getP().goPay(ProductPayTypeEnum.AliPay, goodsid, PayActivity.this);
+                    mPayWay = "通联支付宝";
                     getP().payAliTL(PayActivity.this, goodsid, mBookId);
                 }
             }
@@ -152,7 +161,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 bottomPayDialog.dismiss();
                 if (goodsid != -1) {
                     showProgress();
-//                    getP().goPay(ProductPayTypeEnum.WeChat, goodsPriceModel, PayActivity.this);
+                    mPayWay = "微信官方";
                     getP().payWx(PayActivity.this, goodsid, mBookId);
                 }
             }
@@ -164,6 +173,25 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         });
     }
 
+    private void umeng(String result) {
+        String type;
+        String actionId;
+        if (payType.equals("1")) {
+            type = "金币充值";
+            actionId = "action_recharge";
+        }else {
+            type = "会员充值";
+            actionId = "action_vip";
+        }
+        Map<String, Object> pay = new HashMap<String, Object>();
+        pay.put("type",type);
+        pay.put("from",mFrom);
+        pay.put("goods",mGoodsName);
+        pay.put("way", mPayWay);
+        pay.put("result", result);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), actionId, pay);
+    }
+
     /**
      * 支付成功的回调
      * 如果是首冲用户，那就刷新商品列表，去掉首冲角标
@@ -171,6 +199,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
      */
     @Override
     public void onPaySuccess() {
+        umeng("支付成功");
         hideProgress();
         EventBusManager.sendPaySuccessEvent(new PaySuccessEvent());
         showPayDialog(true);
@@ -248,8 +277,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
 
             if (GET_TL_STATUS_COUNT == 3) {
-                showPayProgress(false);
-                showPayDialog(false);
+                payFail("tl fail");
                 if (mTask != null) mTask.cancel();
             }
         }
@@ -275,9 +303,11 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
         @Override
         public void payFail (String msg){
+            umeng("支付失败");
             hideProgress();
             showToastShort(msg);
             showPayDialog(false);
+            showPayProgress(false);
         }
 
         private void showPayProgress ( boolean show){

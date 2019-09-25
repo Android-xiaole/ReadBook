@@ -24,9 +24,8 @@ import com.fm.openinstall.OpenInstall;
 import com.fm.openinstall.listener.AppInstallAdapter;
 import com.fm.openinstall.listener.AppWakeUpAdapter;
 import com.fm.openinstall.model.AppData;
-import com.google.android.material.bottomnavigation.BottomNavigationItemView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.gyf.immersionbar.ImmersionBar;
+import com.jj.base.BaseApplication;
 import com.jj.base.CusNavigationCallback;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
@@ -39,10 +38,8 @@ import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.UpdateModelProxy;
-import com.jj.comics.ui.detail.DetailActivityHelper;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
@@ -254,18 +251,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
                 preIndex = (int) postcard.getTag();
             }
         };
-//        getP().showPopupWindow(mRadioGroup);
-//        mRadioGroup.setOnCheckedChangeListener(this);
 
         int index = savedInstanceState == null ? 0 : savedInstanceState.getInt(Constants.IntentKey.INDEX, 0);
 
         switchPage(index);
         getP().checkUpdate();
-//        ARouter.getInstance().build(RouterMap.COMIC_ABOUT_ACTIVITY).navigation(this);
-        if (getIntent() != null) {
-            umengMessageClick(getIntent().getStringExtra(Constants.IntentKey.ID));
-        }
-
 
     }
 
@@ -321,14 +311,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         super.onNewIntent(intent);
         // 此处要调用，否则App在后台运行时，会无法截获
         OpenInstall.getWakeUp(intent, wakeUpAdapter);
-        if (intent != null) umengMessageClick(intent.getStringExtra(Constants.IntentKey.ID));
     }
 
-    private void umengMessageClick(String id) {
-        if (!TextUtils.isEmpty(id) && RegularUtil.isNumeric(id)) {
-            DetailActivityHelper.toDetail(this, id, "推送");
-        }
-    }
 
     @Override
     public int getLayoutId() {
@@ -356,15 +340,27 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     void onClick(View v) {
         if (v.getId() == R.id.btn_nav_featured) {
             switchPage(0);
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_featured",
+                    null);
         } else if (v.getId() == R.id.btn_nav_classify) {
             switchPage(1);
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_classify",
+                    null);
         } else if (v.getId() == R.id.btn_nav_money) {
             switchPage(2);
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_money",
+                    null);
         } else if (v.getId() == R.id.btn_nav_shelf) {
             switchPage(3);
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_shelf",
+                    null);
         } else if (v.getId() == R.id.btn_nav_mine) {
-            if (LoginHelper.interruptLogin(MainActivity.this,null))
+            if (LoginHelper.interruptLogin(MainActivity.this,null)) {
                 switchPage(4);
+                MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_mine",
+                        null);
+            }
+
         }
     }
 

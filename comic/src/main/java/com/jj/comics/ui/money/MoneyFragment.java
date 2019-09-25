@@ -98,7 +98,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
                         (ShareRecommendResponse.DataBean) adapter.getData().get(position);
 
                 if (mDialog == null) {
-                    mDialog = new ShareDialog(getBaseActivity());
+                    mDialog = new ShareDialog(getBaseActivity(),"赚-内容推荐",model.getTitle());
                 }
 
                 if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
@@ -126,7 +126,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
             @Override
             public void onClick(View v) {
                 if (!LoginHelper.interruptLogin(getBaseActivity(),null)) return;
-                if (mDialog == null) mDialog = new ShareDialog(getBaseActivity());
+                if (mDialog == null) mDialog = new ShareDialog(getBaseActivity(),"赚","");
                 mDialog.show();
             }
         });

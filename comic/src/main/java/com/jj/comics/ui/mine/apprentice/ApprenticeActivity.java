@@ -77,7 +77,7 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
     }
 
     private void share() {
-        ShareDialog shareDialog = new ShareDialog(ApprenticeActivity.this);
+        ShareDialog shareDialog = new ShareDialog(ApprenticeActivity.this,"我的徒弟","");
         shareDialog.show();
     }
 

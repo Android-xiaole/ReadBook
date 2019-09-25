@@ -6,6 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.net.NetError;
@@ -15,14 +19,11 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.bookshelf.CommonBookListAdapter;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_HISTORY_ACTIVITY)
@@ -60,7 +61,7 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
                 if (bookModel == null) return;
 
                 if (view.getId() == R.id.content) {
-                    DetailActivityHelper.toDetail(HistoryActivity.this,
+                    ComicDetailActivity.toDetail(HistoryActivity.this,
                             bookModel.getId(),
                             "历史列表");
                 }else if (view.getId() == R.id.right) {

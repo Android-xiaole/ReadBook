@@ -3,16 +3,12 @@ package com.jj.comics.ui.recommend;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,13 +27,11 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseCommonFragment;
 import com.jj.base.utils.RouterMap;
-import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.recommend.RecentlyAdapter;
@@ -49,17 +43,12 @@ import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.data.model.PayActionResponse;
-import com.jj.comics.data.model.Push;
 import com.jj.comics.data.model.SectionModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
-import com.jj.comics.ui.dialog.DialogUtilForComic;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.widget.RecommendLoadMoreView;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
+import com.umeng.analytics.MobclickAgent;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -67,7 +56,9 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -164,7 +155,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 String from = "最近更新";
                 BookModel model = adapter_recently.getData().get(position);
                 //点击事件友盟统计
-                DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
+                ComicDetailActivity.toDetail(getActivity(), model.getId(), from);
             }
         });
 
@@ -281,7 +272,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
                 if (data != null) {
                     BookModel model = (BookModel) data.get(position);
                     if (model != null) {
-                        DetailActivityHelper.toDetail(getActivity(), model.getId(), "popShare");
+                        ComicDetailActivity.toDetail(getActivity(), model.getId(), "热门分享");
                     }
                 }
 
@@ -328,15 +319,19 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         }else if (view.getId()  == R.id.recommend_search) {
             ARouter.getInstance().build(RouterMap.COMIC_SEARCH_ACTIVITY).navigation();
         }else if (view.getId()  == R.id.recommend_featured && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL) {
-            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL, 0);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL, 0,"推荐");
         }else if (view.getId()  == R.id.recommend_man && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN) {
-            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN, 1);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_MAN, 1,"男频");
         }else if (view.getId()  == R.id.recommend_woman && recentChannelFlag != Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN) {
-            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN, 2);
+            switchChannel(Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_WOMAN, 2,"女频");
         }
     }
 
-    private void switchChannel(int channelFlag, int index) {
+    private void switchChannel(int channelFlag, int index,String name) {
+        Map<String, Object> click_home_channel = new HashMap<String, Object>();
+        click_home_channel.put("channel", name);
+        MobclickAgent.onEventObject(getContext(), "click_home_channel", click_home_channel);
+
         recentChannelFlag = channelFlag;
         switchTvs(index);
         mLayoutManager.scrollToPositionWithOffset(0,0);
@@ -442,8 +437,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onItemClick(BookModel model, String from) {
-        //点击事件友盟统计
-        DetailActivityHelper.toDetail(getActivity(), model.getId(), from);
+        ComicDetailActivity.toDetail(getActivity(), model.getId(), from);
     }
 
 

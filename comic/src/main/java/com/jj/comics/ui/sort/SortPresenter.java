@@ -6,13 +6,7 @@ import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.data.biz.content.ContentRepository;
-import com.jj.comics.data.model.BookListDataResponse;
-import com.jj.comics.data.model.CategoryResponse;
 import com.jj.comics.data.model.SortListResponse;
-import com.jj.comics.ui.find.FindBookContract;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;

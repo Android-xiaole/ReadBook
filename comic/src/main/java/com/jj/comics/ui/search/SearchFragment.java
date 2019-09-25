@@ -10,6 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -18,21 +23,17 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
 import com.jj.comics.R;
 import com.jj.comics.R2;
-import com.jj.comics.adapter.mine.SearchRecentAdapter;
 import com.jj.comics.adapter.detail.CommonRecommendAdapter;
+import com.jj.comics.adapter.mine.SearchRecentAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.SearchModel;
-import com.jj.comics.ui.detail.DetailActivityHelper;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.library.flowlayout.FlowLayoutManager;
 import com.library.flowlayout.SpaceItemDecoration;
 
 import java.util.List;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import me.jessyan.autosize.utils.ScreenUtils;
 
@@ -109,7 +110,7 @@ public class SearchFragment extends BaseFragment<SearchPresenter> implements Sea
         mAapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                DetailActivityHelper.toDetail(getActivity(), mAapter.getData().get(position).getId()+"",
+                ComicDetailActivity.toDetail(getActivity(), mAapter.getData().get(position).getId(),
                         "大家都在看");
             }
         });

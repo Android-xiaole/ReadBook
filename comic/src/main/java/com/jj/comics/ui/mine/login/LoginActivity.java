@@ -14,14 +14,20 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.immersionbar.ImmersionBar;
+import com.jj.base.BaseApplication;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LoginEvent;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -53,6 +59,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     void onClick(View view) {
         int i = view.getId();
         if (i == R.id.comic_login_btn) {//手机号登录
+            umengAction("PHONE");
             getP().loginByVerifyCode(mCheckBox.isChecked(), mPhoneNumber.getText().toString().trim(), mPassWord.getText().toString().trim(), SharedPreManger.getInstance().getInvitecode());
         } else if (i == R.id.comic_login_code) {//验证码
             String phoneNum = mPhoneNumber.getText().toString().trim();
@@ -69,14 +76,23 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             getP().getVerifyCode(phoneNum);
         } else if (i == R.id.iv_qqLogin) {//QQ登录
             getP().qqLogin(mCheckBox.isChecked(), LoginActivity.this);
+            umengAction("QQ");
         } else if (i == R.id.iv_wxLogin) {//微信登录
             getP().wxLogin(mCheckBox.isChecked());
+            umengAction("WX");
         } else if (i == R.id.iv_wbLogin) {//微博登录
             getP().wbLogin(mCheckBox.isChecked(), LoginActivity.this);
+            umengAction("WB");
         } else if (i == R.id.comic_login_agreement) {//用户协议
             //服务协议
             ARouter.getInstance().build(RouterMap.COMIC_AGREEMENT_ACTIVITY).navigation();
         }
+    }
+
+    private void umengAction(String type) {
+        Map<String, Object> action_login = new HashMap<String, Object>();
+        action_login.put("type", type);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_login", action_login);
     }
 
 

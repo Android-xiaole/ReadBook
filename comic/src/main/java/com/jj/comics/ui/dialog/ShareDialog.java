@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jj.base.BaseApplication;
 import com.jj.base.dialog.GenerateImgProgressDialog;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.toast.ToastUtil;
@@ -25,10 +26,13 @@ import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.ShareUserPicture;
+import com.umeng.analytics.MobclickAgent;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,10 +44,14 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
 
     private Dialog dialog;
     private boolean isShareUser = true;
-    public ShareDialog(BaseActivity context) {
+    private String from;
+    private String title;
+    public ShareDialog(BaseActivity context,String from,String content) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         isShareUser = true;
+        this.from = from;
+        this.title = content;
         Window window = getWindow();
         if (window == null) {
             ToastUtil.showToastShort(context.getString(R.string.comic_window_null));
@@ -80,9 +88,12 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         });
     }
 
-    public ShareDialog(BaseActivity context, OnDismissListener onDismissListener) {
+    public ShareDialog(BaseActivity context, String from,
+                       String content,OnDismissListener onDismissListener) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
+        this.from = from;
+        this.title = content;
         setOnDismissListener(onDismissListener);
 
         Window window = getWindow();
@@ -145,18 +156,23 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信
                 ShareHelper.getInstance().shareToWechat(activity, shareMessageModel);
+                umengClick("URL","WX");
                 break;
             case WECHATMOMENT://分享朋友圈
                 ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
+                umengClick("URL","WX-PYQ");
                 break;
             case QQ://分享QQ
                 ShareHelper.getInstance().shareToQQ(activity, shareMessageModel);
+                umengClick("URL","QQ");
                 break;
             case QQZONE://分享QQ空间
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);
+                umengClick("URL","QQ-QZONE");
                 break;
             case SINA://分享新浪微博
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
+                umengClick("URL","WB");
                 break;
             case PHOTO://分享图片
                 if (dialog == null) dialog = new GenerateImgProgressDialog(activity);
@@ -187,6 +203,15 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         dismiss();
     }
 
+    private void umengClick(String type,String way) {
+        Map<String, Object> action_share = new HashMap<String, Object>();
+        action_share.put("from", from);
+        action_share.put("content",shareMessageModel.getBookTitle());
+        action_share.put("type", type);
+        action_share.put("way", way);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_share", action_share);
+    }
+
     private void shareContentImage(ShareInfo shareInfo) {
         SharePicture sharePicture = new SharePicture(activity);
         sharePicture.setData(shareInfo);
@@ -197,7 +222,8 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path, shareInfo);
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path,
+                                shareInfo,from);
                         shareImageDialog.show();
                     }
                 });
@@ -226,7 +252,8 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path, null);
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path,
+                                null,from);
                         shareImageDialog.show();
                     }
                 });

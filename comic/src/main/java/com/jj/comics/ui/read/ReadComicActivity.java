@@ -483,7 +483,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             public void run() {
                 if (bookModel == null) return;
                 if (shareDialog == null) {
-                    shareDialog = new ShareDialog(ReadComicActivity.this, ReadComicActivity.this);
+                    shareDialog = new ShareDialog(ReadComicActivity.this, "阅读",bookModel.getTitle());
                 }
                 if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
                 shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));

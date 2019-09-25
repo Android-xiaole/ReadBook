@@ -62,7 +62,7 @@ public class HomeFragment extends BaseCommonFragment implements HomeContract.IHo
         int id = view.getId();
         if (id == R.id.home_share) {
             if (shareDialog == null) {
-                shareDialog = new ShareDialog(getBaseActivity());
+                shareDialog = new ShareDialog(getBaseActivity(),"主页","");
             }
             shareDialog.show();
         } else{
