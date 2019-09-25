@@ -644,7 +644,7 @@ public class UserRepository implements UserDataSource {
                 .addProperty("opener", opener )
                 .addProperty("opening_bank", opening_bank )
                 .build();
-        return ComicApi.getApi().addCashOutAli(body)
+        return ComicApi.getApi().addCashOutUnion(body)
                 .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
