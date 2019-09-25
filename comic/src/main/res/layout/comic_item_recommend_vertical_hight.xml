@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/container_img"
-            android:background="@drawable/bg_shadow"
+        <ImageView
+            android:id="@+id/item_recommend_img"
             android:layout_width="@dimen/dp_100"
-            android:layout_height="@dimen/dp_130">
-
-            <ImageView
-                android:layout_centerInParent="true"
-                android:id="@+id/item_recommend_img"
-                android:layout_width="@dimen/dp_90"
-                android:background="@color/comic_ffffff"
-                android:layout_height="@dimen/dp_120"
-                android:scaleType="centerCrop" />
-        </RelativeLayout>
+            android:layout_height="@dimen/dp_130"
+            android:background="@drawable/bg_shadow"
+            android:padding="@dimen/dp_5"
+            android:scaleType="centerCrop" />
 
         <TextView
-            android:layout_below="@id/container_img"
             android:id="@+id/item_recommend_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/item_recommend_img"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_marginRight="@dimen/dp_10"
-            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:textColor="@color/comic_353a40"
-            android:textSize="@dimen/dp_14" />
+            android:textSize="@dimen/dp_14"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
     <View
         android:id="@+id/view_fgt"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:visibility="visible" />
 </LinearLayout>
