@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import androidx.annotation.Nullable;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseActivity;
+import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.Utils;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.widget.comic.toolbar.ComicToolBar;
@@ -84,6 +87,13 @@ public class WebViewActivity extends BaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith("alipays://")) {
+                    if (PackageUtil.isAliPayInstalled(WebViewActivity.this)) {
+                        startActivity(new Intent("android.intent.action.VIEW", Uri.parse(url)));
+                        finish();
+                    } else {
+                        ToastUtil.showToastShort("请安装支付宝");
+                    }
+                }else if (url.endsWith(".apk")) {
                     startActivity(new Intent("android.intent.action.VIEW", Uri.parse(url)));
                     finish();
                 }
