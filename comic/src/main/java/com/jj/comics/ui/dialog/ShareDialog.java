@@ -168,7 +168,6 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 shareInfo.setKeywords(shareMessageModel.getKeys());
                 shareInfo.setContent(shareMessageModel.getShareContent());
                 shareInfo.setCover(shareMessageModel.getShareImgUrl());
-                shareInfo.setKeywords("key1");
                 shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
 
                 if (isShareUser) {
@@ -197,7 +196,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path, shareInfo);
                         shareImageDialog.show();
                     }
                 });
@@ -226,7 +225,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path);
+                        ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path, null);
                         shareImageDialog.show();
                     }
                 });

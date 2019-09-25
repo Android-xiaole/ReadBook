@@ -13,8 +13,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.imageloader.ILFactory;
@@ -37,6 +40,8 @@ import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.sdk.GlideApp;
 import com.youth.banner.loader.ImageLoader;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +55,7 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
     private BaseActivity activity;
     private String mPath;
 
-    public ShareImageDialog(BaseActivity context, String path) {
+    public ShareImageDialog(BaseActivity context, String path, ShareInfo info) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         mPath = path;
@@ -66,14 +71,56 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
         View contentView = View.inflate(context, R.layout.comic_share_image_dialog, null);
         setContentView(contentView);
         ImageView shareImg = contentView.findViewById(R.id.share_image);
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
-        Matrix matrix = new Matrix();
-        float width = ScreenUtils.getDisplayMetrics().density * 343;
-        float width2 = ScreenUtils.getDisplayMetrics().widthPixels;
-        float size = 0.9f;
-        matrix.setScale(size, size);
-        shareImg.setImageMatrix(matrix);
-        shareImg.setImageBitmap(bitmap);
+        ImageView bookIcon = contentView.findViewById(R.id.iv_bookIcon);
+        LinearLayout bookll = contentView.findViewById(R.id.book_ll);
+        TextView title = contentView.findViewById(R.id.tv_title);
+        TextView tv_author = contentView.findViewById(R.id.tv_author);
+        TextView tv_type = contentView.findViewById(R.id.tv_type);
+        TextView book_content = contentView.findViewById(R.id.book_content);
+        TextView keyword1 = contentView.findViewById(R.id.keyword1);
+        TextView keyword2 = contentView.findViewById(R.id.keyword2);
+        if (info == null) {
+            shareImg.setVisibility(View.VISIBLE);
+            bookll.setVisibility(View.GONE);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            Matrix matrix = new Matrix();
+            float size = 0.9f;
+            matrix.setScale(size, size);
+            shareImg.setImageMatrix(matrix);
+            shareImg.setImageBitmap(bitmap);
+        } else {
+            bookll.setVisibility(View.VISIBLE);
+            shareImg.setVisibility(View.GONE);
+            ILFactory.getLoader().loadNet(bookIcon, info.getCover(),
+                    new RequestOptions().error(R.drawable.img_loading).placeholder(R.drawable.img_loading));
+            if (info.getTitle() != null) {
+                title.setText(info.getTitle());
+            }
+
+            if (info.getAuthor() != null) {
+                tv_author.setText(info.getAuthor());
+            }
+            if (info.getType() != null) {
+                tv_type.setText(info.getType());
+            }
+
+            if (info.getContent() != null) {
+                book_content.setText(info.getContent());
+            }
+            if (info.getKeywords() != null) {
+                String[] keys = info.getKeywords().split(",");
+                if (keys.length == 1) {
+                    keyword1.setVisibility(View.VISIBLE);
+                    keyword1.setText(keys[0]);
+                } else {
+                    keyword1.setVisibility(View.VISIBLE);
+                    keyword2.setVisibility(View.VISIBLE);
+                    keyword1.setText(keys[0]);
+                    keyword2.setText(keys[1]);
+                }
+            }
+        }
+
         RecyclerView rv_shareMenu = contentView.findViewById(R.id.rv_shareMenu);
         ShareMenuAdapter shareMenuAdapter = new ShareMenuAdapter(R.layout.comic_share_dialog_item);
         List<ShareMenuModel> list = new ArrayList<>();

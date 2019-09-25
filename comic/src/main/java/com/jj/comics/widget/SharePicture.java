@@ -239,7 +239,7 @@ public class SharePicture extends LinearLayout {
             bitmapAll = Bitmap.createBitmap(picWidth, allBitmapHeight, config);
         }
         Canvas canvas = new Canvas(bitmapAll);
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.parseColor("#F5F5F5"));
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);

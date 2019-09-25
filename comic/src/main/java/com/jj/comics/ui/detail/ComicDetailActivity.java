@@ -114,6 +114,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     private ShareDialog shareDialog;//分享弹窗
     private NormalNotifyDialog removeCollectDialog;//移除收藏提示弹窗
+    private long chapterid = 0;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -226,7 +227,10 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 }
             }
         } else if (id == R.id.iv_share || id == R.id.lin_share) {//分享
-            long chapterid = 0;
+            if (catalogAdapter.getData() == null || catalogAdapter.getData().size() <= 0) {
+                ToastUtil.showToastShort("未获取到章节目录，无法分享");
+                return;
+            }
             if (tv_sort.isSelected()) {
                 chapterid = catalogAdapter.getData().get(catalogAdapter.getData().size() - 1).getId();
             } else {
@@ -405,10 +409,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                         return;
                     }
                     String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                    long chapterid = 0;
-                    if (catalogAdapter.getData() != null && catalogAdapter.getData().size() > 0) {
-                        chapterid = catalogAdapter.getData().get(0).getId();
-                    }
                     String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
                     shareMessageModel.setShareUrl(shareUrl);
                     shareMessageModel.setBoolId(model.getId());

@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_marginTop="@dimen/dp_20"
     android:background="@color/comic_f4f6f9"
     android:orientation="vertical">
 
@@ -11,7 +10,8 @@
         android:id="@+id/top_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/comic_36">
+        android:paddingTop="@dimen/comic_36"
+        android:paddingBottom="@dimen/comic_36">
 
         <FrameLayout
             android:layout_width="@dimen/dp_85"
@@ -123,6 +123,7 @@
             android:id="@+id/article_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/comic_626262"
             android:text="
                               一个身着红绿色相间锦缎罗裙的女孩站在凉亭边，可笑之极。有些呆滞的双眼惊慌的偷看了一眼亭内一身黑色暗纹绣蟒衣衫的男人。
 
