@@ -44,6 +44,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 SharedPreManger.getInstance().saveAutoBuyStatus(isChecked);
             }
         });
+        switchButton.setChecked(SharedPreManger.getInstance().getAutoBuyStatus());
     }
 
     private void updateLoginStatus() {
