@@ -26,6 +26,7 @@ import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.ShareUserPicture;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
             shareMessageModel.setShareImgUrl(loginUser.getAvatar());
-            String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&invite_code=" + loginUser.getInvite_code() + "&name=" + loginUser.getNickname() + "&pic=" + loginUser.getAvatar();
+            String shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + URLEncoder.encode(uid) + "&cid=" + URLEncoder.encode(Constants.CHANNEL_ID) + "&pid=" + URLEncoder.encode(Constants.PRODUCT_CODE) + "&invite_code=" + URLEncoder.encode(loginUser.getInvite_code()) + "&name=" + URLEncoder.encode(loginUser.getNickname()) + "&pic=" + URLEncoder.encode(loginUser.getAvatar());
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
