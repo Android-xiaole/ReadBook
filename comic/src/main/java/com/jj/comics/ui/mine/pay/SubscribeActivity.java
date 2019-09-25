@@ -112,7 +112,7 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
         }
         Intent intent = new Intent();
         //这里统一传递章节id处理就行了
-        intent.putExtra(Constants.IntentKey.ID, bookModel.getId());
+        intent.putExtra(Constants.IntentKey.ID, chapterId);
         setResult(RESULT_OK, intent);
         finish();
     }
