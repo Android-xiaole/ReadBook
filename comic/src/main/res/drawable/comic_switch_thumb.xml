@@ -4,5 +4,6 @@
     <size
         android:width="@dimen/dp_25"
         android:height="@dimen/dp_25"></size>
-    <solid android:color="@color/comic_4d87ff"></solid>
+    <solid android:color="@color/comic_ffffff"></solid>
+    <stroke android:color="@color/comic_cbd1db" android:width="@dimen/dp_1"/>
 </shape>

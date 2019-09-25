@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:shape="rectangle"
     tools:ignore="ResourceName">
-    <solid android:color="@color/comic_e8ebf0"></solid>
+    <solid android:color="@color/comic_4d87ff"></solid>
 
     <size
-        android:width="@dimen/dp_60"
+        android:width="@dimen/dp_55"
         android:height="@dimen/dp_25" />
-    <corners android:radius="@dimen/dp_20"></corners>
+    <corners android:radius="@dimen/dp_13"></corners>
 </shape>
