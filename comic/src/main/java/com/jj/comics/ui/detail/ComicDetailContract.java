@@ -20,9 +20,6 @@ public interface ComicDetailContract {
 
         //获取目录列表的回调
         void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum);
-
-        //分享截图
-        void shareImage(String content);
     }
 
     interface IDetailPresenter {

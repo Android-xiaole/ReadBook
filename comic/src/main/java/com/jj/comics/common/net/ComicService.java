@@ -908,7 +908,15 @@ public interface ComicService {
     @GET
     @Streaming
     Flowable<ResponseBody> downloadFile(@Url String url);
-
+    /**
+     * 通用的下载文件
+     *
+     * @param url
+     * @return
+     */
+    @GET
+    @Streaming
+    Observable<ResponseBody> downloadChapter(@Url String url);
     /**
      * 获取oss 上传配置
      *

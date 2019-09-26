@@ -132,9 +132,10 @@ public class ShareUserPicture extends LinearLayout {
     }
 
     public void setData(ShareInfo info) {
+        UserInfo userInfo = LoginHelper.getOnLineUser();
         this.shareInfo = info;
-        if (shareInfo.getTitle() != null) {
-            String title = shareInfo.getTitle();
+        if (userInfo.getNickname() != null) {
+            String title = userInfo.getNickname();
             if (title.length() > 5) {
                 title = title.substring(0, 5) + "...";
             }
@@ -144,12 +145,10 @@ public class ShareUserPicture extends LinearLayout {
             reminder.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff8124)), 5, 5 + title.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             nickName.setText(reminder);
         }
-
-        ILFactory.getLoader().loadNet(head_img, info.getCover(),
+        ILFactory.getLoader().loadNet(head_img, userInfo.getAvatar(),
                 new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
                         .placeholder(R.drawable.img_loading));
 
-        UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo.getAvatar() == null) {
             Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher);
             Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
@@ -237,7 +236,7 @@ public class ShareUserPicture extends LinearLayout {
             try {
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(80)    // 默认压缩质量为80
+                        .setQuality(10)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(
@@ -252,7 +251,7 @@ public class ShareUserPicture extends LinearLayout {
                 finalCompressLongPictureWidth = finalCompressLongPictureWidth / 2;
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(50)    // 默认压缩质量为80
+                        .setQuality(10)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(

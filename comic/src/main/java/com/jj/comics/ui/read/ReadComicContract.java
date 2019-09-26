@@ -24,8 +24,6 @@ public interface ReadComicContract {
         void onAddOrRemoveShelfSuccess(boolean collectByCurrUser, boolean needFinish);
 
         void fillCollectStatus(CommonStatusResponse response);
-
-        void shareImage(String content);
     }
 
     interface IReadComicPresenter {

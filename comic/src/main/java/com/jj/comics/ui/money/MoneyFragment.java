@@ -23,6 +23,7 @@ import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.money.ShareRecommendAdapter;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.PayInfo;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.ShareRecommendResponse;
@@ -118,7 +119,12 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
                 String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
                 shareMessageModel.setShareUrl(shareUrl);
                 shareMessageModel.setBoolId(model.getId());
-                mDialog.show(shareMessageModel);
+                BookModel bookModel = new BookModel();
+                bookModel.setId(model.getId());
+                bookModel.setTitle(model.getTitle());
+                bookModel.setCover(model.getCover());
+                bookModel.setAuthor(model.getAuthor());
+                mDialog.show(bookModel);
             }
         });
 
@@ -194,5 +200,10 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
     @Override
     public void onGetShareRecommend(List<ShareRecommendResponse.DataBean> list) {
         mAdapter.setNewData(list);
+    }
+
+    @Override
+    public void shareImage(String content) {
+
     }
 }

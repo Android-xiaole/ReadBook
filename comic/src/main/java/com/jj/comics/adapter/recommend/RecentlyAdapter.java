@@ -39,13 +39,9 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
                             .placeholder(R.drawable.img_loading));
             helper.<TextView>getView(R.id.tv_recently_name).setText(item.getTitle());
             helper.<TextView>getView(R.id.tv_recently_author).setText(item.getAuthor());
+            helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             if (mType == 1) {
                 helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
-                String content = item.getIntro();
-                if (content != null && content.length() > 30) {
-                    content = content.substring(0, 30) + "......";
-                }
-                helper.<TextView>getView(R.id.tv_recently_desc).setText(content);
                 if (item.getFullflag() == 0) {
                     helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#FE4C68"));
                     helper.<TextView>getView(R.id.tv_update_status).setText("连载中");
@@ -55,7 +51,6 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
                 }
             } else {
                 helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.GONE);
-                helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             }
         }
 

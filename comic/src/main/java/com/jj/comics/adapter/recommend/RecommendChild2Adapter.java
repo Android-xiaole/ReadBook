@@ -1,5 +1,6 @@
 package com.jj.comics.adapter.recommend;
 
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,12 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                 header.<TextView>findViewById(R.id.item_recommend_name).setText(mainContent.getTitle());
                 header.<TextView>findViewById(R.id.item_recommend_desc).setText(mainContent.getIntro());
                 header.<TextView>findViewById(R.id.item_recommend_author).setText(mainContent.getAuthor());
+                header.<TextView>findViewById(R.id.item_recommend_status).setText(mainContent.getAuthor());
+                if (contentListBean.getFullflag() == 0) {
+                    header.<TextView>findViewById(R.id.item_recommend_status).setText("连载中");
+                } else {
+                    header.<TextView>findViewById(R.id.item_recommend_status).setText("已完结");
+                }
                 //旧接口返回int数字的格式化代码
 //                header.<TextView>findViewById(R.id.comic_recommend_hot).setText(Utils.convertUnit(Integer.parseInt(mainContent.getHot_const())));
             } else {
@@ -108,9 +115,9 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                     new RequestOptions().transforms(new CenterCrop()));
         }
         helper.setText(R.id.item_recommend_name, mainContent.getTitle());
-        if (helper.getLayoutPosition() == getData().size()){
+        if (helper.getLayoutPosition() == getData().size()) {
             helper.getView(R.id.view_fgt).setVisibility(View.GONE);
-        }else{
+        } else {
             helper.getView(R.id.view_fgt).setVisibility(View.VISIBLE);
         }
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

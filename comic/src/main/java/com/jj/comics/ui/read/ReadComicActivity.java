@@ -52,6 +52,7 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
@@ -401,7 +402,14 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 }
             }
         } else if (i == R.id.iv_share || i == R.id.lin_makeMoney) {//分享按钮&赚钱按钮
-            getP().getFirstChapterContent(bookModel, catalogAdapter.getData().get(0).getId());
+            if (bookModel != null) {
+                if (shareDialog == null) {
+                    shareDialog = new ShareDialog(ReadComicActivity.this, "详情", bookModel.getTitle());
+                }
+                shareDialog.show(bookModel);
+            } else {
+                ToastUtil.showToastShort("书籍异常");
+            }
         } else if (i == R.id.lin_catalogBtn) {//目录
             if (!mCatalogMenu.isDrawerOpen(GravityCompat.START))
                 mCatalogMenu.openDrawer(GravityCompat.START);
@@ -474,49 +482,6 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             }
         }
 
-    }
-
-    @Override
-    public void shareImage(final String content) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (bookModel == null) return;
-                if (shareDialog == null) {
-                    shareDialog = new ShareDialog(ReadComicActivity.this, "阅读",bookModel.getTitle());
-                }
-                if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
-                shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), bookModel.getTitle()));
-                String shareContent = bookModel.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(bookModel.getIntro()));
-                shareMessageModel.setShareContent(content);
-                if (content.length() > 500) {
-                    shareMessageModel.setShareContent(content.substring(0, 500) + "...");
-                }
-                shareMessageModel.setShareImgUrl(bookModel.getCover());
-
-                UserInfo loginUser = LoginHelper.getOnLineUser();
-                if (loginUser == null) {
-                    ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(ReadComicActivity.this);
-                    return;
-                }
-                String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                long chapterid = 0;
-                if (catalogAdapter.getData() != null && catalogAdapter.getData().size() > 0) {
-                    chapterid = catalogAdapter.getData().get(0).getId();
-                }
-                String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + bookModel.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
-                shareMessageModel.setShareUrl(shareUrl);
-                shareMessageModel.setBoolId(bookModel.getId());
-                shareMessageModel.setBookTitle(bookModel.getTitle());
-                shareMessageModel.setAuthor(bookModel.getAuthor());
-                shareMessageModel.setKeys(bookModel.getKeywords());
-                if (bookModel.getTag() != null && bookModel.getTag().size() > 0) {
-                    String type = bookModel.getTag().get(0);
-                    shareMessageModel.setType(type);
-                }
-                shareDialog.show(shareMessageModel);
-            }
-        });
     }
 
     @Override
@@ -629,7 +594,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         super.onDestroy();
         //上传阅读记录(只有已经下载之后的章节才会保存阅读记录)
         if (bookModel != null && catalogModel != null && BookManager.isChapterCached(catalogModel.getBook_id() + "", catalogModel.getChaptername())) {
-            getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder(),catalogModel.getChaptername());
+            getP().uploadReadRecord(bookModel, catalogModel.getId(), catalogModel.getChapterorder(), catalogModel.getChaptername());
         }
     }
 

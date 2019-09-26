@@ -291,7 +291,7 @@ public class SharePicture extends LinearLayout {
             try {
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(80)    // 默认压缩质量为80
+                        .setQuality(10)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(
@@ -306,7 +306,7 @@ public class SharePicture extends LinearLayout {
                 finalCompressLongPictureWidth = finalCompressLongPictureWidth / 2;
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(50)    // 默认压缩质量为80
+                        .setQuality(10)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(

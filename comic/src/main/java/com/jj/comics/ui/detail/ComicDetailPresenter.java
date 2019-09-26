@@ -1,6 +1,7 @@
 package com.jj.comics.ui.detail;
 
 import android.app.Activity;
+import android.net.Network;
 import android.util.Log;
 
 import com.jj.base.mvp.BasePresenter;
@@ -35,7 +36,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -43,6 +46,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -51,87 +55,12 @@ import io.rx_cache2.EvictDynamicKey;
 import okhttp3.ResponseBody;
 
 
-class ComicDetailPresenter extends BasePresenter<BaseRepository,ComicDetailContract.IDetailView> implements ComicDetailContract.IDetailPresenter {
-    /**
-     * 获取首章节内容
-     *
-     * @param bookModel
-     * @param chapterId
-     */
-    public void getFirstChapterContent(BookModel bookModel, long chapterId) {
-        ContentRepository.getInstance().getCatalogContent(bookModel.getId(), chapterId)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new ApiSubscriber2<BookCatalogContentResponse>() {
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(BookCatalogContentResponse bookCatalogContentResponse) {
-                        if (bookCatalogContentResponse != null && bookCatalogContentResponse.getData().getNow() != null) {
-                            ComicApi.getApi().downloadFile(bookCatalogContentResponse.getData().getNow().getContent() + Constants.IDENTIFICATION_IGNORE)
-                                    .subscribeOn(Schedulers.io())
-                                    .flatMap(new Function<ResponseBody, Publisher<File>>() {
-                                        @Override
-                                        public Publisher<File> apply(ResponseBody responseBody) throws Exception {
-                                            try {
-                                                File file = BookRepository.getInstance().saveChapterFile(bookCatalogContentResponse.getData().getNow().getBook_id() + "", bookCatalogContentResponse.getData().getNow().getChaptername() + "", responseBody.byteStream());
-                                                return Flowable.just(file);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                                return Flowable.error(new NetError("IOException", NetError.OtherError));
-                                            }
-                                        }
-                                    })
-                                    .subscribe(new ApiSubscriber<File>() {
-                                        @Override
-                                        public void onNext(File file) {
-                                            String content = "";
-                                            try {
-                                                InputStream instream = new FileInputStream(file);
-                                                if (instream != null) {
-                                                    InputStreamReader inputreader
-                                                            = new InputStreamReader(instream, "UTF-8");
-                                                    BufferedReader buffreader = new BufferedReader(inputreader);
-                                                    String line = "";
-                                                    //分行读取
-                                                    while ((line = buffreader.readLine()) != null) {
-                                                        content += line + "\n";
-                                                    }
-                                                    instream.close();//关闭输入流
-                                                }
-                                                getV().shareImage(content);
-                                            } catch (java.io.FileNotFoundException e) {
-                                                Log.d("TestFile", "The File doesn't not exist.");
-                                            } catch (IOException e) {
-                                                Log.d("TestFile", e.getMessage());
-                                            }
-                                        }
-
-
-                                        @Override
-                                        protected void onFail(NetError error) {
-                                            ToastUtil.showToastShort(error.getMessage());
-                                        }
-
-                                        @Override
-                                        protected void onEnd() {
-                                            super.onEnd();
-                                            getV().hideProgress();
-                                        }
-                                    });
-                        } else {
-                            ToastUtil.showToastShort(bookCatalogContentResponse.getMessage());
-                        }
-                    }
-                });
-    }
+class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailContract.IDetailView> implements ComicDetailContract.IDetailPresenter {
 
     /**
      * 加载漫画
      *
-     * @param id          漫画id
+     * @param id 漫画id
      */
     @Override
     public void getComicDetail(long id) {
@@ -162,8 +91,8 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,ComicDetailContr
 
     @Override
     public void toRead(final BookModel bookModel, final long chapterid) {
-        if (getV() instanceof Activity){
-            LoadingActivity.toLoading((Activity)getV(),bookModel,chapterid);
+        if (getV() instanceof Activity) {
+            LoadingActivity.toLoading((Activity) getV(), bookModel, chapterid);
         }
 //        getV().showProgress();
 //        Observable.just(chapterid)
@@ -300,15 +229,15 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository,ComicDetailContr
     }
 
     public void getCatalogList(BookModel bookModel) {
-        if (getV() == null)return;
+        if (getV() == null) return;
         getV().showProgress();
-        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
+        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(), bookModel.getUpdate_chapter_time())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData(),response.getData().getTotal_num());
+                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num());
                     }
 
                     @Override

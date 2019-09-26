@@ -1,25 +1,39 @@
 package com.jj.comics.util;
 
+import android.net.Network;
+import android.util.Log;
+
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.BookCatalogContentResponse;
+import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
-import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
+import com.jj.comics.widget.bookreadview.utils.BookRepository;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class ReadComicHelper {
     private static ReadComicHelper mComicHelper;
@@ -36,98 +50,190 @@ public class ReadComicHelper {
         return mComicHelper;
     }
 
-    public Observable<BookCatalogModel> getBookCatalogContent(final BaseActivity activity,final BookModel bookModel, final long chapterid){
-        return ContentRepository.getInstance().getCatalogContent(bookModel.getId(),chapterid)
+    public Observable<BookCatalogModel> getBookCatalogContent(final BaseActivity activity, final BookModel bookModel, final long chapterid) {
+        return ContentRepository.getInstance().getCatalogContent(bookModel.getId(), chapterid)
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Function<BookCatalogContentResponse, ObservableSource<BookCatalogModel>>() {
                     @Override
                     public ObservableSource<BookCatalogModel> apply(final BookCatalogContentResponse response) throws Exception {
-                        if (response.getCode() == 1000){//可以直接阅读
+                        if (response.getCode() == 1000) {//可以直接阅读
                             BookCatalogModel catalogModelNow = response.getData().getNow();
-                            if (response.getData().getNow()!=null){
-                                if (response.getData().getLast()!=null){//有上一话
+                            if (response.getData().getNow() != null) {
+                                if (response.getData().getLast() != null) {//有上一话
                                     catalogModelNow.setHasLast(true);
                                     catalogModelNow.setLastChapterid(response.getData().getLast().getId());
                                 }
-                                if (response.getData().getNext()!=null){//有下一话
+                                if (response.getData().getNext() != null) {//有下一话
                                     catalogModelNow.setHasNext(true);
                                     catalogModelNow.setNextChapterid(response.getData().getNext().getId());
                                 }
                                 return Observable.just(catalogModelNow);
-                            }else {
+                            } else {
                                 ToastUtil.showToastShort(response.getMessage());
                                 return Observable.empty();
                             }
-                        }else if (response.getCode() == 1002){//未购买
+                        } else if (response.getCode() == 1002) {//未购买
                             UserInfo onLineUser = LoginHelper.getOnLineUser();
                             /**
                              * 可以自动购分以下几种情况
                              * 1.vip用户（后台需要做分成统计）
                              * 2.非vip用户开启了自动购买并且支持分章节购买
                              */
-                            if ((onLineUser.getIs_vip()==1)||(SharedPreManger.getInstance().getAutoBuyStatus()&&bookModel.getBatchbuy() == 1)) {
-                                return UserRepository.getInstance().subscribe(bookModel.getId(),chapterid)
+                            if ((onLineUser.getIs_vip() == 1) || (SharedPreManger.getInstance().getAutoBuyStatus() && bookModel.getBatchbuy() == 1)) {
+                                return UserRepository.getInstance().subscribe(bookModel.getId(), chapterid)
                                         .flatMap(new Function<CommonStatusResponse, ObservableSource<BookCatalogModel>>() {
                                             @Override
                                             public ObservableSource<BookCatalogModel> apply(CommonStatusResponse subResponse) throws Exception {
-                                                if (subResponse.getCode() == 1000&&subResponse.getData().getStatus()){//订阅成功
-                                                    if (onLineUser.getIs_vip()!=1){
+                                                if (subResponse.getCode() == 1000 && subResponse.getData().getStatus()) {//订阅成功
+                                                    if (onLineUser.getIs_vip() != 1) {
                                                         ToastUtil.showToastShort("订阅成功");
                                                     }
                                                     //发送刷新目录列表的通知
 //                                                    EventBusManager.sendRefreshCatalogListBySubscribeEvent(new RefreshCatalogListBySubscribeEvent());
                                                     //再次请求章节内容接口
-                                                    return ContentRepository.getInstance().getCatalogContent(bookModel.getId(),chapterid)
+                                                    return ContentRepository.getInstance().getCatalogContent(bookModel.getId(), chapterid)
                                                             .flatMap(new Function<BookCatalogContentResponse, ObservableSource<BookCatalogModel>>() {
                                                                 @Override
                                                                 public ObservableSource<BookCatalogModel> apply(BookCatalogContentResponse response) throws Exception {
-                                                                    if (response.getCode() == 1000){//可以直接阅读
+                                                                    if (response.getCode() == 1000) {//可以直接阅读
                                                                         BookCatalogModel catalogModelNow = response.getData().getNow();
-                                                                        if (catalogModelNow!=null){
-                                                                            if (response.getData().getLast()!=null){//有上一话
+                                                                        if (catalogModelNow != null) {
+                                                                            if (response.getData().getLast() != null) {//有上一话
                                                                                 catalogModelNow.setHasLast(true);
                                                                             }
-                                                                            if (response.getData().getNext()!=null){//有下一话
+                                                                            if (response.getData().getNext() != null) {//有下一话
                                                                                 catalogModelNow.setHasNext(true);
                                                                             }
                                                                             return Observable.just(catalogModelNow);
-                                                                        }else {
+                                                                        } else {
                                                                             ToastUtil.showToastShort("没有数据，换个章节试试");
                                                                             return Observable.empty();
                                                                         }
-                                                                    }else{
+                                                                    } else {
                                                                         ToastUtil.showToastShort(response.getMessage());
                                                                         return Observable.empty();
                                                                     }
                                                                 }
                                                             });
-                                                }else if (subResponse.getCode() == 1002){//金币不足，需要充值
+                                                } else if (subResponse.getCode() == 1002) {//金币不足，需要充值
                                                     //跳转到订阅界面
-                                                    if (bookModel.getBatchbuy() == 2){//全本购买
-                                                        SubscribeActivity.toSubscribe(activity, bookModel,bookModel.getBatchprice(),response.getData().getNow().getId());
-                                                    }else{//章节购买
-                                                        SubscribeActivity.toSubscribe(activity, bookModel,response.getData().getNow().getSaleprice(),response.getData().getNow().getId());
+                                                    if (bookModel.getBatchbuy() == 2) {//全本购买
+                                                        SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
+                                                    } else {//章节购买
+                                                        SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
                                                     }
                                                     return Observable.empty();
-                                                }else{
-                                                    ToastUtil.showToastShort("订阅失败："+subResponse.getMessage());
+                                                } else {
+                                                    ToastUtil.showToastShort("订阅失败：" + subResponse.getMessage());
                                                     return Observable.empty();
                                                 }
                                             }
                                         });
-                            }else{
+                            } else {
                                 //如果不是自动购买就跳转到订阅界面
-                                if (bookModel.getBatchbuy() == 2){//全本购买
-                                    SubscribeActivity.toSubscribe(activity, bookModel,bookModel.getBatchprice(),response.getData().getNow().getId());
-                                }else{//章节购买
-                                    SubscribeActivity.toSubscribe(activity, bookModel,response.getData().getNow().getSaleprice(),response.getData().getNow().getId());
+                                if (bookModel.getBatchbuy() == 2) {//全本购买
+                                    SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
+                                } else {//章节购买
+                                    SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
                                 }
                                 return Observable.empty();
                             }
                         }
-                        return Observable.error(new NetError(response.getMessage(),response.getCode()));
+                        return Observable.error(new NetError(response.getMessage(), response.getCode()));
                     }
                 });
+    }
+
+    /**
+     * 获取第一章节信息
+     *
+     * @param bookModel
+     * @return
+     */
+    public Observable<Long> getBookCatalogId(BookModel bookModel) {
+
+        return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(), bookModel.getUpdate_chapter_time())
+                .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
+                    @Override
+                    public ObservableSource<Long> apply(BookCatalogListResponse bookCatalogListResponse) throws Exception {
+                        if (bookCatalogListResponse.getCode() == 200) {
+                            if (bookCatalogListResponse.getData().getData().size() <= 0) {
+                                return Observable.error(new NetError(bookCatalogListResponse.getMessage(), bookCatalogListResponse.getCode()));
+                            }
+                            BookCatalogModel bookCatalogModel = bookCatalogListResponse.getData().getData().get(0);
+                            Map<String, Object> parames = new HashMap<>();
+                            parames.put(Constants.RequestBodyKey.BOOK_ID, bookModel.getId());
+                            parames.put(Constants.RequestBodyKey.CHAPTER_ID, bookCatalogModel.getId());
+                            return Observable.just(bookCatalogModel.getId());
+                        } else {
+                            return Observable.error(new NetError(bookCatalogListResponse.getMessage(), bookCatalogListResponse.getCode()));
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 获取首章节内容
+     *
+     * @param chapterId
+     */
+    public Observable<String> getFirstChapterContent(long bookId, long chapterId) {
+        Map<String, Object> parames = new HashMap<>();
+        parames.put(Constants.RequestBodyKey.BOOK_ID, bookId);
+        parames.put(Constants.RequestBodyKey.CHAPTER_ID, chapterId);
+        return ComicApi.getApi().getCatalogContent(parames).subscribeOn(Schedulers.io())
+                .flatMap(new Function<BookCatalogContentResponse, ObservableSource<ResponseBody>>() {
+                    @Override
+                    public ObservableSource<ResponseBody> apply(BookCatalogContentResponse bookCatalogContentResponse) throws Exception {
+                        if (bookCatalogContentResponse.getCode() == 1000) {
+                            return ComicApi.getApi().downloadChapter(bookCatalogContentResponse.getData().getNow().getContent() + Constants.IDENTIFICATION_IGNORE);
+                        } else {
+                            return Observable.error(new NetError(bookCatalogContentResponse.getMessage(), bookCatalogContentResponse.getCode()));
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Function<ResponseBody, ObservableSource<File>>() {
+                    @Override
+                    public ObservableSource<File> apply(ResponseBody responseBody) throws Exception {
+                        try {
+                            File file = BookRepository.getInstance().saveChapterFile(bookId + "", chapterId + "", responseBody.byteStream());
+                            return Observable.just(file);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            return Observable.error(new NetError("IOException", NetError.OtherError));
+                        }
+                    }
+                }).map(new Function<File, String>() {
+                    @Override
+                    public String apply(File file) throws Exception {
+                        String content = "";
+                        try {
+                            InputStream instream = new FileInputStream(file);
+                            if (instream != null) {
+                                InputStreamReader inputreader
+                                        = new InputStreamReader(instream, "UTF-8");
+                                BufferedReader buffreader = new BufferedReader(inputreader);
+                                String line = "";
+                                //分行读取
+                                while ((line = buffreader.readLine()) != null) {
+                                    content += line + "\n";
+                                }
+                                instream.close();//关闭输入流
+                            }
+                        } catch (java.io.FileNotFoundException e) {
+                            Log.d("TestFile", "The File doesn't not exist.");
+                            return "IOException:" + e.getMessage();
+                        } catch (IOException e) {
+                            Log.d("TestFile", e.getMessage());
+                            return "IOException:" + e.getMessage();
+                        }
+                        return content;
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io());
     }
 
 //    public Flowable<CatalogModel> getComicData(final BaseActivity activity, final long contentId, boolean isFinishActivity) {
