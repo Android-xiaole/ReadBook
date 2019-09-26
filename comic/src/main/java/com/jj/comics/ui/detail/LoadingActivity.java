@@ -17,6 +17,8 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
+import com.jj.comics.ui.dialog.DialogUtilForComic;
+import com.jj.comics.ui.dialog.LoginNotifyDialog;
 import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
@@ -24,6 +26,7 @@ import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 import net.frakbot.jumpingbeans.JumpingBeans;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import butterknife.BindView;
 
 /**
@@ -82,8 +85,34 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
 
     @Override
     public void loadFail(NetError error) {
-        ToastUtil.showToastShort(error.getMessage());
-        finish();
+        if (error.getType() == NetError.AuthError){
+            //用户未登录，弹出登录弹窗
+            createLoginDialog();
+        }else{
+            ToastUtil.showToastShort(error.getMessage());
+            finish();
+        }
+    }
+
+    private LoginNotifyDialog loginNotifyDialog;
+    public void createLoginDialog() {
+        if (loginNotifyDialog == null) loginNotifyDialog = new LoginNotifyDialog();
+        loginNotifyDialog.show(getSupportFragmentManager(), new DialogUtilForComic.OnDialogClick() {
+            @Override
+            public void onConfirm() {
+                loginNotifyDialog.dismiss();
+                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY)
+                        .navigation(LoadingActivity.this, RequestCode.LOGIN_REQUEST_CODE);
+            }
+
+            @Override
+            public void onRefused() {
+                loginNotifyDialog.dismiss();
+                finish();
+            }
+
+
+        });
     }
 
     @Override
@@ -120,7 +149,7 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                     break;
             }
         }else if (resultCode == RESULT_CANCELED) {
-            if (requestCode == RequestCode.SUBSCRIBE_REQUEST_CODE) {
+            if (requestCode == RequestCode.SUBSCRIBE_REQUEST_CODE||requestCode == RequestCode.LOGIN_REQUEST_CODE) {
                 finish();
             }
         }

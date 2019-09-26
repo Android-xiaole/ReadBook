@@ -2,6 +2,7 @@ package com.jj.comics.ui.detail;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
+import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.comics.common.net.ComicSubscriber;
@@ -51,7 +52,7 @@ public class LoadingPresenter extends BasePresenter<BaseRepository,LoadingContra
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogModel>bindLifecycle())
-                .subscribe(new ComicSubscriber<BookCatalogModel>() {
+                .subscribe(new ApiSubscriber2<BookCatalogModel>() {
                     @Override
                     public void onNext(BookCatalogModel catalogModel) {
                         getV().loadSuccess(catalogModel);

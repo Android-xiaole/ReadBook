@@ -292,7 +292,9 @@ public class PageView extends View {
     }
 
     private RectF getRectF(View view){
-        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(65),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(65));
+        //这里Y轴区域特意扩大了，因为测试发现小米9设置全面屏的时候会出现点击错位，无法触发点击事件的问题
+        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(85),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(10));
+//        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(65),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(65));
     }
 
     /**
