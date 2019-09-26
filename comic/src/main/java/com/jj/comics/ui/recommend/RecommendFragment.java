@@ -168,7 +168,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             }
         });
 
-        mRefresh.setRefreshing(true);
         getP().getBanner();
         getP().loadData(recentChannelFlag,1, false,false);
         getP().loadPopShare(recentChannelFlag,false);
