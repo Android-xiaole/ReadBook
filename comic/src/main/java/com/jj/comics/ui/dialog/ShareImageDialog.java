@@ -110,7 +110,7 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
                 nickname.setText(reminder);
             }
             //加载头像
-            ILFactory.getLoader().loadNet(head_img, info.getCover(),
+            ILFactory.getLoader().loadNet(head_img, userInfo.getAvatar(),
                     new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
             //加载二维码

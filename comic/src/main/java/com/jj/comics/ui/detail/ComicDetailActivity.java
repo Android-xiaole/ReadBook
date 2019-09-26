@@ -224,7 +224,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             if (model == null) return;
             SubscribeActivity.toSubscribe(this, model, model.getBatchprice(), 0);
         } else if (id == R.id.lin_addBook || id == R.id.iv_addBookTop) {//加入书架
-            if (model == null)return;
+            if (model == null) return;
             if (LoginHelper.interruptLogin(this, null)) {
                 if (isCollect) {
                     if (removeCollectDialog == null)
@@ -245,16 +245,14 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 }
             }
         } else if (id == R.id.iv_share || id == R.id.lin_share) {//分享
-            if (catalogAdapter.getData() == null || catalogAdapter.getData().size() <= 0) {
-                ToastUtil.showToastShort("未获取到章节目录，无法分享");
-                return;
-            }
-            if (tv_sort.isSelected()) {
-                chapterid = catalogAdapter.getData().get(catalogAdapter.getData().size() - 1).getId();
+            if (model != null) {
+                if (shareDialog == null) {
+                    shareDialog = new ShareDialog(ComicDetailActivity.this, "详情", model.getTitle());
+                }
+                shareDialog.show(model);
             } else {
-                chapterid = catalogAdapter.getData().get(0).getId();
+                ToastUtil.showToastShort("书籍异常");
             }
-            getP().getFirstChapterContent(model, chapterid);
         } else if (id == R.id.tv_read) {//去阅读
             if (model == null) return;
             getP().toRead(model, model.getChapterid());
@@ -329,7 +327,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         tv_shareNum.setText(model.getTotal_share() + "次");
         tv_wordsNum.setText(model.getSize() + "字");
         tv_info.setText(model.getIntro());
-        tv_catalogTitle.setText("更新至："+model.getLastvolume_name());
+        tv_catalogTitle.setText("更新至：" + model.getLastvolume_name());
 
         if (model.getTag() != null && model.getTag().size() > 0) {
             tv_type.setText(model.getTag().get(0));
@@ -406,42 +404,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         }
     }
 
-    @Override
-    public void shareImage(String content) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (model != null) {
-                    if (shareDialog == null) {
-                        shareDialog = new ShareDialog(ComicDetailActivity.this,"详情",model.getTitle());
-                    }
-
-                    if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
-                    shareMessageModel.setShareTitle(String.format(getString(R.string.comic_share_title), model.getTitle()));
-                    String shareContent = model.getIntro().trim().length() == 0 ? getString(R.string.comic_null_abstract) : String.format(getString(R.string.comic_comic_desc) + Html.fromHtml(model.getIntro()));
-                    shareMessageModel.setShareContent(content);
-                    if (content.length() > 500) {
-                        shareMessageModel.setShareContent(content.substring(0, 500) + "...");
-                    }
-                    shareMessageModel.setBookTitle(model.getTitle());
-                    shareMessageModel.setAuthor(model.getAuthor());
-                    shareMessageModel.setShareImgUrl(model.getCover());
-                    shareMessageModel.setKeys(model.getKeywords());
-                    UserInfo loginUser = LoginHelper.getOnLineUser();
-                    if (loginUser == null) {
-                        ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(ComicDetailActivity.this);
-                        return;
-                    }
-                    String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                    String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
-                    shareMessageModel.setShareUrl(shareUrl);
-                    shareMessageModel.setBoolId(model.getId());
-                    shareDialog.show(shareMessageModel);
-                }
-            }
-        });
-    }
-
     public void toRead(BookModel bookModel, long chapterId) {
         getP().toRead(bookModel, chapterId);
     }
@@ -497,11 +459,12 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     /**
      * 来自loading界面登录成功的通知，需要去刷新改页面数据
+     *
      * @return
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshDetailActivityDataEvent(RefreshDetailActivityDataEvent event) {
-        if (model==null)return;
+        if (model == null) return;
         showProgress();
         getP().getComicDetail(model.getId());
         getP().getCollectStatus(model.getId());
