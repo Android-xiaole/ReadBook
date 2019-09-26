@@ -120,7 +120,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private NormalNotifyDialog removeCollectDialog;//移除收藏提示弹窗
     private long chapterid = 0;
 
-    private boolean isJPush = false;//标记是否是极光推送跳转过来的
     private String mFrom;
 
     /**
@@ -516,7 +515,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     long getId() {
         long id = 0;
-        isJPush = getIntent().getBooleanExtra(Constants.IntentKey.IS_JPUSH,false);
         if (getIntent().getLongExtra(Constants.IntentKey.ID, 0) != 0) {
             id = getIntent().getLongExtra(Constants.IntentKey.ID, 0);
         } else {
@@ -552,11 +550,4 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         super.onBackPressed();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isJPush&&!Constants.ISLIVE_MAIN){
-            ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
-        }
-    }
 }

@@ -182,6 +182,8 @@ public class Constants {
         public static final String AD_PUSH_ID = "ad_push_id";
         public static final String MAIN_PUSH = "main_push";
         public static final String INVITE_CODE = "invite_code";//通过openinstall传过来的邀请码
+        public static final String ISLIVE_MAIN = "islive_main";
+
     }
 
     public static class RequestBodyKey {

@@ -19,6 +19,7 @@ import com.jj.comics.R2;
 import com.jj.comics.adapter.bookshelf.CommonBookListAdapter;
 import com.jj.comics.common.callback.GlideOnScrollListener;
 import com.jj.comics.data.model.BookModel;
+import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.LoginHelper;
@@ -103,8 +104,8 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
                     List<BookModel> list = new ArrayList<>();
                     list.add(mAdapter.getData().get(position));
                     showCollectionDialog(list,position);
-                }else if (view.getId() == R.id.content){//去阅读
-                    getP().toRead(mAdapter.getData().get(position), mAdapter.getData().get(position).getChapterid());
+                }else if (view.getId() == R.id.content){//去详情页
+                    ComicDetailActivity.toDetail(getActivity(),mAdapter.getData().get(position).getId(),"书架页面");
                 }
             }
         });

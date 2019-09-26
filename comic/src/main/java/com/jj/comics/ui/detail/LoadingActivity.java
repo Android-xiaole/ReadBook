@@ -119,6 +119,10 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                     }
                     break;
             }
+        }else if (resultCode == RESULT_CANCELED) {
+            if (requestCode == RequestCode.SUBSCRIBE_REQUEST_CODE) {
+                finish();
+            }
         }
     }
 }

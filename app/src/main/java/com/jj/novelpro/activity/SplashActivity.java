@@ -1,5 +1,6 @@
 package com.jj.novelpro.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,12 +60,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
             mSplashChannel.setText("c:" + Constants.CHANNEL_ID);
         }
         getP().sendDelayedMessage(2);
-
-//        UserInfo userInfo = new UserInfo();
-//        userInfo.setNickname("GGGG");
-//        SharedPreManger.getInstance().saveToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNTY4MjU0NDE4LCJleHAiOjE1OTk3OTA0MTgsIm5iZiI6MTU2ODI1NDQxOCwianRpIjoibTBwdnNXQkxzbXRlSkNqeiIsInN1YiI6Mjg1MzEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJ1aWQiOjI4NTMxLCJvcGVuaWQiOiIxNTcyMTQ3NTMzNyIsInVuaW9uaWQiOiIxNTcyMTQ3NTMzNyIsIm5pY2tuYW1lIjoiMTU3MjE0NzUzMzciLCJhdmF0YXIiOm51bGwsImFnZW50aWQiOjB9.dVGyp7R13rVpthOO85-3CSW11nm7vKgyMHkdqV57JQ8");
-//        LoginHelper.updateUser(userInfo);
-
     }
 
     @Override
@@ -82,7 +77,17 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
         if (SharedPref.getInstance(getApplicationContext()).getBoolean(Constants.SharedPrefKey.FIRST_OPEN, true)) {
             initViewPager();
         } else {
-            ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
+            Intent intent = getIntent();
+            boolean isJPush = intent.getBooleanExtra(Constants.IntentKey.IS_JPUSH,false);
+            if (isJPush){
+                ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY)
+                        .withBoolean(Constants.IntentKey.IS_JPUSH,true)
+                        .withString(Constants.IntentKey.ID,intent.getStringExtra(Constants.IntentKey.ID))
+                        .withString("from","极光推送")
+                        .navigation(this);
+            }else{
+                ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
+            }
             finish();
         }
     }

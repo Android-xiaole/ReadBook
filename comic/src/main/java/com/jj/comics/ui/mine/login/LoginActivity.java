@@ -24,8 +24,12 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.BindPhoneSuccessEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -126,6 +130,20 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         finish();
     }
 
+    /**
+     * 来自绑定手机号成功的通知
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onBindPhoneSuccessEvent(BindPhoneSuccessEvent event){
+        //绑定手机号成功之后设置setResult，关闭页面
+        setResultAndFinish();
+    }
+
+    @Override
+    public boolean useEventBus() {
+        return true;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
