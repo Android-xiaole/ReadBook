@@ -34,11 +34,12 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
 
     @Override
     public void setNewData(@Nullable List<BookModel> data) {
-        ArrayList<BookModel> realData = new ArrayList<>();
-        for (int i = 0; i < Math.min(data.size(), mSize); i++) {
-            realData.add(data.get(i));
-        }
-        super.setNewData(realData);
+        //2019-9-26 不对输入数据长度做处理
+//        ArrayList<BookModel> realData = new ArrayList<>();
+//        for (int i = 0; i < Math.min(data.size(), mSize); i++) {
+//            realData.add(data.get(i));
+//        }
+        super.setNewData(data);
     }
 
     public RecommendChildAdapter(int layoutResId) {

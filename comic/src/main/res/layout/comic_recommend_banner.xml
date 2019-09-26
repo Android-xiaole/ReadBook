@@ -5,6 +5,16 @@
     android:layout_height="wrap_content"
     android:background="@color/comic_f4f6f9">
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        app:indicatorColor="@color/comic_ff8124"
+        app:indicatorName="BallPulseIndicator" />
+
 
     <com.youth.banner.Banner
         android:id="@+id/recommend_banner"

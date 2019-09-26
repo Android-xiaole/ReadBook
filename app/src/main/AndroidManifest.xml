@@ -57,6 +57,76 @@
             </intent-filter>
         </activity>
 
+        <activity-alias
+            android:name="i01"
+            android:exported="true"
+            android:icon="@mipmap/i01"
+            android:label="金桔小说"
+            android:screenOrientation="landscape"
+            android:targetActivity="com.jj.novelpro.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="i02"
+            android:exported="true"
+            android:icon="@mipmap/i02"
+            android:label="金桔小说"
+            android:screenOrientation="landscape"
+            android:targetActivity="com.jj.novelpro.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="i03"
+            android:exported="true"
+            android:icon="@mipmap/i03"
+            android:label="金桔小说"
+            android:screenOrientation="landscape"
+            android:targetActivity="com.jj.novelpro.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="i04"
+            android:exported="true"
+            android:icon="@mipmap/i04"
+            android:label="金桔小说"
+            android:screenOrientation="landscape"
+            android:targetActivity="com.jj.novelpro.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="i05"
+            android:exported="true"
+            android:icon="@mipmap/i05"
+            android:label="金桔小说"
+            android:screenOrientation="landscape"
+            android:targetActivity="com.jj.novelpro.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="375" />

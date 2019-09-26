@@ -50,6 +50,7 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.widget.RecommendLoadMoreView;
 import com.umeng.analytics.MobclickAgent;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerListener;
@@ -94,6 +95,11 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     private int recentChannelFlag = Constants.RequestBodyKey.CONTENT_CHANNEL_FLAG_ALL;//记录最近选择的首页频道
     private Banner mBanner;
     private int moveY = 0;//记录Y轴滑动距离
+    private View mLoadingHeader;
+    private AVLoadingIndicatorView mAviBanner;
+    private AVLoadingIndicatorView mAviContent;
+    private AVLoadingIndicatorView mAviShapre;
+    private AVLoadingIndicatorView mAviRecent;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -113,7 +119,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         rv_recently.setLayoutManager(mLayoutManager);
         rv_recently.setHasFixedSize(true);
         adapter_recently = new RecentlyAdapter(R.layout.comic_item_recommend_recentlyupdate, 2);
-        adapter_recently.bindToRecyclerView(rv_recently,true);
+        adapter_recently.bindToRecyclerView(rv_recently,false);
         adapter_recently.setLoadMoreView(new RecommendLoadMoreView());
         adapter_recently.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
@@ -150,6 +156,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 //        adapter_recently.addHeaderView(getHeaderViewBtns());
         adapter_recently.addHeaderView(getContentHeadView());
         adapter_recently.addHeaderView(getPopShareHeadView());
+        mLoadingHeader = getLoadingHeader();
+        adapter_recently.addHeaderView(mLoadingHeader);
         adapter_recently.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -186,6 +194,21 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 //        }
     }
 
+    private View getLoadingHeader() {
+        View view = getLayoutInflater().inflate(R.layout.comic_header_recommend_loging,
+                (ViewGroup) rv_recently.getParent(), false);
+        mAviRecent = view.findViewById(R.id.avi);
+        showHeaderLoading();
+        return view;
+    }
+
+    public void showHeaderLoading() {
+        if (mAviRecent != null) {
+            mAviRecent.setVisibility(View.VISIBLE);
+            mAviRecent.show();
+        }
+    }
+
 
     /**
      * 横幅广告轮播头布局
@@ -195,6 +218,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     private View getBannerHeadView() {
         View headView = getLayoutInflater().inflate(R.layout.comic_recommend_banner, (ViewGroup) rv_recently.getParent(), false);
         mBanner = headView.findViewById(R.id.recommend_banner);
+        mAviBanner = headView.findViewById(R.id.avi);
+        showBannerLoading();
         //设置banner样式
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置图片加载器
@@ -223,6 +248,13 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         return headView;
     }
 
+    public void showBannerLoading() {
+        if (mAviBanner != null) {
+            mAviBanner.setVisibility(View.VISIBLE);
+            mAviBanner.show();
+        }
+    }
+
 
     /**
      * 获取专区内容头布局
@@ -231,6 +263,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         View headView = getLayoutInflater().inflate(R.layout.comic_header_recommond_content,
                 (ViewGroup) rv_recently.getParent(), false);
         rv_content = headView.findViewById(R.id.rv_content);
+        mAviContent = headView.findViewById(R.id.avi);
+        showContentLoading();
         adapter_content = new RecommendAdapter(R.layout.comic_item_recommend);
         rv_content.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter_content.bindToRecyclerView(rv_content, false);
@@ -254,6 +288,13 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         return headView;
     }
 
+    public void showContentLoading() {
+        if (mAviContent != null) {
+            mAviContent.setVisibility(View.VISIBLE);
+            mAviContent.show();
+        }
+    }
+
     /**
      * 获取热门分享
      */
@@ -261,6 +302,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         View headView = getLayoutInflater().inflate(R.layout.comic_header_pop_share,
                 (ViewGroup) rv_recently.getParent(), false);
         rv_popShare = headView.findViewById(R.id.rv_pop_share);
+        mAviShapre = headView.findViewById(R.id.avi);
+        showShareLoading();
         adapterPopShare = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
                 Integer.MAX_VALUE, false,true);
         rv_popShare.setLayoutManager(new GridLayoutManager(getContext(),2));
@@ -280,6 +323,13 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             }
         });
         return headView;
+    }
+
+    public void showShareLoading() {
+        if (mAviShapre != null) {
+            mAviShapre.setVisibility(View.VISIBLE);
+            mAviShapre.show();
+        }
     }
 
     @Override
@@ -308,6 +358,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
             }
         }
         adapter_content.setNewData(sectionModels);
+        mAviContent.hide();
+        mAviContent.setVisibility(View.GONE);
         if (mRefresh.isRefreshing())
             mRefresh.setRefreshing(false);
     }
@@ -336,6 +388,12 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         recentChannelFlag = channelFlag;
         switchTvs(index);
         mLayoutManager.scrollToPositionWithOffset(0,0);
+        adapter_recently.setNewData(null);
+        adapterPopShare.setNewData(null);
+        adapter_content.setNewData(null);
+        showShareLoading();
+        showContentLoading();
+        showHeaderLoading();
         getP().loadRecentlyComic(1,channelFlag,true);
         getP().loadPopShare(channelFlag,true);
         getP().loadData(channelFlag,1, false,true);
@@ -397,6 +455,9 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onLoadRecentlyComicSuccess(boolean changeChannel,List<BookModel> bookModelList) {
+        mAviRecent.hide();
+        mAviRecent.setVisibility(View.GONE);
+
         if (changeChannel || recentlyPage == 1) {
             adapter_recently.setNewData(bookModelList);
         } else {
@@ -407,6 +468,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onLoadRecentlyComicFail(NetError error) {
+        showContentLoading();
         if (error.getType() == NetError.NoDataError) {
             adapter_recently.loadMoreEnd(false);
         } else {
@@ -423,12 +485,14 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onLoadPopShareSucc(boolean changeChannel,List<BookModel> bookModelList) {
+        mAviShapre.hide();
+        mAviShapre.setVisibility(View.GONE);
         adapterPopShare.setNewData(bookModelList);
     }
 
     @Override
     public void onLoadPopShareFail(NetError error) {
-
+       showShareLoading();
     }
 
     @Override
@@ -491,6 +555,8 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     public void refreshBanner(BannerResponse bannerResponse) {
         final List<BannerResponse.DataBean> bannerResponseData = bannerResponse.getData();
         if (bannerResponseData != null) {
+            mAviBanner.hide();
+            mAviBanner.setVisibility(View.GONE);
             mBanner.setOnBannerListener(new OnBannerListener() {
                 @Override
                 public void OnBannerClick(int position) {
