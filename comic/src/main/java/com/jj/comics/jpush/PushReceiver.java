@@ -37,12 +37,23 @@ public class PushReceiver extends JPushMessageReceiver {
                 JSONObject object = new JSONObject(notificationMessage.notificationExtras);
                 String bookId = object.optString("id");
                 if (!TextUtils.isEmpty(bookId)) {
-                    ARouter.getInstance().build(RouterMap.COMIC_DETAIL_ACTIVITY)
-                            .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .withBoolean(Constants.IntentKey.IS_JPUSH,true)
-                            .withString(Constants.IntentKey.ID,bookId)
-                            .withString("from", "极光推送")
-                            .navigation(context);
+                    if (!Constants.ISLIVE_MAIN){
+                        //首页不存活就跳转到闪屏页
+                        ARouter.getInstance().build(RouterMap.COMIC_SPLASH_ACTIVITY)
+                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .withBoolean(Constants.IntentKey.IS_JPUSH,true)
+                                .withString(Constants.IntentKey.ID,bookId)
+                                .withString("from", "极光推送")
+                                .navigation(context);
+                    }else{
+                        //首页存活就直接跳转到详情页
+                        ARouter.getInstance().build(RouterMap.COMIC_DETAIL_ACTIVITY)
+                                .withFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .withBoolean(Constants.IntentKey.IS_JPUSH,true)
+                                .withString(Constants.IntentKey.ID,bookId)
+                                .withString("from", "极光推送")
+                                .navigation(context);
+                    }
                     return;
                 }
             } catch (JSONException e) {

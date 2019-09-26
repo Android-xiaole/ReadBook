@@ -227,8 +227,7 @@
         <receiver
             android:name="com.jj.comics.jpush.PushReceiver"
             android:enabled="true"
-            android:exported="false"
-            android:process=":remote">
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />

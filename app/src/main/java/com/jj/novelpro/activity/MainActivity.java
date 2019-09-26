@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.fm.openinstall.OpenInstall;
 import com.fm.openinstall.listener.AppInstallAdapter;
 import com.fm.openinstall.listener.AppWakeUpAdapter;
@@ -161,6 +162,16 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void initData(Bundle savedInstanceState) {
         Constants.ISLIVE_MAIN = true;
+        //先判断是否是JPush跳转过来的
+        Intent intent = getIntent();
+        boolean isJPush = intent.getBooleanExtra(Constants.IntentKey.IS_JPUSH,false);
+        if (isJPush){
+            ARouter.getInstance().build(RouterMap.COMIC_DETAIL_ACTIVITY)
+                    .withBoolean(Constants.IntentKey.IS_JPUSH,true)
+                    .withString(Constants.IntentKey.ID,intent.getStringExtra(Constants.IntentKey.ID))
+                    .withString("from","极光推送")
+                    .navigation(this);
+        }
         //获取唤醒参数
         OpenInstall.getWakeUp(getIntent(), wakeUpAdapter);
         //获取OpenInstall安装数据
