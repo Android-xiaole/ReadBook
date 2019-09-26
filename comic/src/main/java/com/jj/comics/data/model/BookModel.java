@@ -79,6 +79,7 @@ public class BookModel implements Serializable {
     private int has_batch_buy;//是否已全本购买1是2否
     private int update_chapter_time;//章节目录更新时间（可以用来判断是否需要去刷新章节目录缓存）
 
+
     //设置以下两个属性不写入表中
     @Transient
     private List<Integer> category_id;

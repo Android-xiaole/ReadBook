@@ -62,7 +62,7 @@ public class RecommendChildAdapter extends SimpleBaseAdapter<BookModel> {
                     new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(mContext,5))));
         }
         helper.setText(R.id.item_recommend_name, mainContent.getTitle());
-//        helper.setText(R.id.item_recommend_share_times, "100万次");
+        helper.setText(R.id.item_recommend_share_times, mainContent.getTotal_share());
 //        try {
 //            helper.setText(R.id.item_recommend_des, Html.fromHtml(mainContent.getIntro().replace("%",
 //                    "%%")));

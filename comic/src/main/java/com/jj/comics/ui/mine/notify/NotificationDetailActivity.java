@@ -13,10 +13,12 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
+import com.jj.base.utils.SharedPref;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.ui.web.WebViewActivity;
+import com.jj.comics.util.SharedPreManger;
 
 
 import butterknife.BindView;
@@ -31,21 +33,26 @@ public class NotificationDetailActivity extends BaseActivity<NotificationDetailP
     WebView mWebView;
     @Override
     protected void initData(Bundle savedInstanceState) {
-        long longExtra = getIntent().getLongExtra(Constants.IntentKey.ID, -1);
-        if (longExtra >= 0) {
-            getP().getNotificationDetail(longExtra);
-        }else {
-            mTvTitle.setText("详情不存在!");
-        }
+        long id = getIntent().getLongExtra(Constants.IntentKey.ID, -1);
+//        if (longExtra >= 0) {
+//            getP().getNotificationDetail(longExtra);
+//        }else {
+//            mTvTitle.setText("详情不存在!");
+//        }
 
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return true;
-            }
-        });
+        String msg =
+                "http://share.sou89.cn/notice.html?id="+id+"&token=" + SharedPreManger.getInstance().getToken();
+        ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY).withString(WebViewActivity.URL_KEY,msg).navigation();
+        finish();
 
-        initWebView(mWebView);
+//        mWebView.setWebViewClient(new WebViewClient() {
+//            @Override
+//            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+//                return true;
+//            }
+//        });
+//
+//        initWebView(mWebView);
     }
 
     private void initWebView(WebView webView) {

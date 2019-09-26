@@ -33,12 +33,10 @@ public class NotificationDetailPresenter extends BasePresenter<BaseRepository,
                         NotificationResponse.DataBean data = notificationResponse.getData();
                         if (data != null) {
                             String content = data.getContent();
-                            if (content.startsWith("http")) {
+                            if (content.startsWith("<p>http")) {
                                 getV().showHtml(content);
-                            }else if (content.startsWith("<")) {
-                                getV().showHtmlLocal(data.getTitle(),content);
                             }else {
-                                getV().showText(data.getTitle(), content);
+                                getV().showHtmlLocal(data.getTitle(),content);
                             }
                         }else {
                             getV().showErr("无数据");
