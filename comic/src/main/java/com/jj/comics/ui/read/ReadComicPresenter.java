@@ -209,9 +209,9 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
                         Map<String, Object> err_load_book = new HashMap<String, Object>();
-                        err_load_book.put("chapter_name", "-" + catalogModel.getChaptername());
-                        err_load_book.put("chapter_id","-" + catalogModel.getId());
-                        err_load_book.put("book_id","-" + catalogModel.getBook_id());
+                        err_load_book.put("chapter_name", "" + catalogModel.getChaptername());
+                        err_load_book.put("chapter_id","" + catalogModel.getId());
+                        err_load_book.put("book_id","" + catalogModel.getBook_id());
                         err_load_book.put("err","-" + error.getMessage());
                         MobclickAgent.onEventObject(BaseApplication.getApplication(), "err_load_book", err_load_book);
                     }

@@ -208,10 +208,10 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
 
     private void umengClick(String type, String way) {
         Map<String, Object> action_share = new HashMap<String, Object>();
-        action_share.put("from", "-" + from);
-        action_share.put("content", "-" + shareMessageModel.getBookTitle());
-        action_share.put("type", "-" + type);
-        action_share.put("way", "-" + way);
+        action_share.put("from", "" + from);
+        action_share.put("content", "" + shareMessageModel.getBookTitle());
+        action_share.put("type", "" + type);
+        action_share.put("way", "" + way);
         MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.ACTION_SHARE, action_share);
     }
 

@@ -67,7 +67,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
 
     private long mBookId = 0;
     private String payType;//充值类型
-    private String mFrom;//充值类型
     private int GET_TL_STATUS_COUNT = 0;
     private String tlTradeNo;
     private TimerTask mTask = null;
@@ -89,7 +88,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     @Override
     public void initData(Bundle savedInstanceState) {
         payType = getIntent().getStringExtra(Constants.IntentKey.PAY_TYPE);
-        mFrom = getIntent().getStringExtra("from");
         mBookId = getIntent().getLongExtra(Constants.IntentKey.BOOK_ID, 0);
 
         mRefresh.setColorSchemeColors(getResources().getColor(R.color.comic_yellow_ffd850));
@@ -169,8 +167,8 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
     }
 
     private void umeng(String result) {
-        String type;
-        String actionId;
+        String type="-";
+        String actionId="-";
         if (payType.equals("1")) {
             type = "金币充值";
             actionId = UmEventID.ACTION_RECHARGE;
@@ -180,7 +178,7 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         }
         Map<String, String> pay = new HashMap<String, String>();
         pay.put("type",type);
-        pay.put("from",mFrom);
+        pay.put("book","" + mBookId);
         pay.put("goods",mGoodsName);
         pay.put("way", mPayWay);
         pay.put("result", result);
