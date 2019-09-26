@@ -303,9 +303,9 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     @Override
     public void onLoadComicDetail(BookModel model) {
         Map<String, Object> page_detail = new HashMap<String, Object>();
-        page_detail.put("from", mFrom);
-        page_detail.put("to", "" + model.getTitle());
-        page_detail.put("to_id", "" + model.getId());
+        page_detail.put("from", "-" + mFrom);
+        page_detail.put("to", "-" + model.getTitle());
+        page_detail.put("to_id", "-" + model.getId());
         MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.PAGE_DETAIL, page_detail);
 
         getP().getCatalogList(model);

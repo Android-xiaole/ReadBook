@@ -6,12 +6,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.text.BoringLayout;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +16,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -29,11 +31,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
-import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
-import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.model.ShareInfo;
 import com.jj.comics.data.model.ShareMenuModel;
@@ -42,26 +42,15 @@ import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.QRCodeUtil;
 import com.jj.comics.util.ShareHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
-import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.sdk.GlideApp;
 import com.umeng.analytics.MobclickAgent;
-import com.youth.banner.loader.ImageLoader;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.solver.Metrics;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemClickListener {
