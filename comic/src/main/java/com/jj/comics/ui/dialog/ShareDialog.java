@@ -17,6 +17,7 @@ import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.model.ShareInfo;
 import com.jj.comics.data.model.ShareMenuModel;
 import com.jj.comics.data.model.ShareMessageModel;
@@ -209,7 +210,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         action_share.put("content",shareMessageModel.getBookTitle());
         action_share.put("type", type);
         action_share.put("way", way);
-        MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_share", action_share);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.ACTION_SHARE, action_share);
     }
 
     private void shareContentImage(ShareInfo shareInfo) {

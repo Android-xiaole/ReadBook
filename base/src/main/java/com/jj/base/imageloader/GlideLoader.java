@@ -44,7 +44,7 @@ public class GlideLoader implements ILoader {
         load(getRequestManager(target.getContext()).load(model).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> t, boolean isFirstResource) {
-                MobclickAgent.onEvent(target.getContext(),"img_download_fail",url);
+                MobclickAgent.onEvent(target.getContext(), "img_download_fail",url);
                 return false;
             }
 

@@ -26,6 +26,7 @@ import com.jj.comics.adapter.detail.CommonRecommendAdapter;
 import com.jj.comics.adapter.detail.ReadComicCatalogAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookListDataResponse;
@@ -306,7 +307,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         page_detail.put("from", mFrom);
         page_detail.put("to", "" + model.getId());
         page_detail.put("login","" + LoginHelper.getOnLineUser() != null);
-        MobclickAgent.onEventObject(BaseApplication.getApplication(), "page_detail", page_detail);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.PAGE_DETAIL, page_detail);
 
         getP().getCatalogList(model);
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)

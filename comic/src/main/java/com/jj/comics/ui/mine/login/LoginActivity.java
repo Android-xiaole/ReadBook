@@ -19,6 +19,7 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
@@ -92,7 +93,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     private void umengAction(String type) {
         Map<String, Object> action_login = new HashMap<String, Object>();
         action_login.put("type", type);
-        MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_login", action_login);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.ACTION_LOGIN, action_login);
     }
 
 
