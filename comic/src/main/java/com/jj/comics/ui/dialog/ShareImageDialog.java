@@ -5,8 +5,12 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.text.BoringLayout;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,6 +23,8 @@ import android.widget.TextView;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
@@ -33,6 +39,7 @@ import com.jj.comics.data.model.ShareMenuModel;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.QRCodeUtil;
 import com.jj.comics.util.ShareHelper;
 import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.reporter.ActionReporter;
@@ -49,6 +56,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.solver.Metrics;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,7 +70,7 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
     private String mFrom;
     private String mTitle;
 
-    public ShareImageDialog(BaseActivity context, String path, ShareInfo info,String from) {
+    public ShareImageDialog(BaseActivity context, String path, ShareInfo info, String from, boolean isShareUser) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         mPath = path;
@@ -78,27 +87,61 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
         lp.gravity = Gravity.BOTTOM;
         View contentView = View.inflate(context, R.layout.comic_share_image_dialog, null);
         setContentView(contentView);
-        ImageView shareImg = contentView.findViewById(R.id.share_image);
+        LinearLayout share_user = contentView.findViewById(R.id.share_user);
         ImageView bookIcon = contentView.findViewById(R.id.iv_bookIcon);
         LinearLayout bookll = contentView.findViewById(R.id.book_ll);
+        //分享内容布局
         TextView title = contentView.findViewById(R.id.tv_title);
         TextView tv_author = contentView.findViewById(R.id.tv_author);
         TextView tv_type = contentView.findViewById(R.id.tv_type);
         TextView book_content = contentView.findViewById(R.id.book_content);
         TextView keyword1 = contentView.findViewById(R.id.keyword1);
         TextView keyword2 = contentView.findViewById(R.id.keyword2);
-        if (info == null) {
-            shareImg.setVisibility(View.VISIBLE);
+        //分享用户布局信息
+        //头像
+        ImageView head_img = contentView.findViewById(R.id.head_img);
+        //二维码
+        ImageView qrcode_img = contentView.findViewById(R.id.qrcode_img);
+        //昵称
+        TextView nickname = contentView.findViewById(R.id.nickname);
+        if (isShareUser) {
+            UserInfo userInfo = LoginHelper.getOnLineUser();
+            share_user.setVisibility(View.VISIBLE);
             bookll.setVisibility(View.GONE);
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
-            Matrix matrix = new Matrix();
-            float size = 0.9f;
-            matrix.setScale(size, size);
-            shareImg.setImageMatrix(matrix);
-            shareImg.setImageBitmap(bitmap);
+            if (userInfo.getNickname() != null) {
+                String author = userInfo.getNickname();
+                if (author.length() > 5) {
+                    author = author.substring(0, 5) + "...";
+                }
+                //设置昵称
+                String nickName = "您的好友 " + author + " 邀请";
+                SpannableString reminder = new SpannableString(nickName);
+                reminder.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff8124)), 5, 5 + author.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                nickname.setText(reminder);
+            }
+            //加载头像
+            ILFactory.getLoader().loadNet(head_img, info.getCover(),
+                    new RequestOptions().transforms(new CenterCrop(), new CircleCrop()).error(R.drawable.img_loading)
+                            .placeholder(R.drawable.img_loading));
+            //加载二维码
+            if (userInfo.getAvatar() == null) {
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+                Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
+                        "H", "1", Color.BLACK, Color.WHITE, bitmap, 0.2F, null);
+                qrcode_img.setImageBitmap(qrcode_bitmap);
+            } else {
+                GlideApp.with(context).asBitmap().load(userInfo.getAvatar()).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Bitmap qrcode_bitmap = QRCodeUtil.createQRCodeBitmap(info.getQrcodeImg(), ScreenUtils.dpToPx(128), ScreenUtils.dpToPx(128), "UTF-8",
+                                "H", "1", Color.BLACK, Color.WHITE, resource, 0.2F, null);
+                        qrcode_img.setImageBitmap(qrcode_bitmap);
+                    }
+                });
+            }
         } else {
             bookll.setVisibility(View.VISIBLE);
-            shareImg.setVisibility(View.GONE);
+            share_user.setVisibility(View.GONE);
             ILFactory.getLoader().loadNet(bookIcon, info.getCover(),
                     new RequestOptions().error(R.drawable.img_loading).placeholder(R.drawable.img_loading));
             if (info.getTitle() != null) {
@@ -164,32 +207,32 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信
                 ShareHelper.getInstance().shareImageToWechat(activity, mPath);
-                umengClick("IMG","WX");
+                umengClick("IMG", "WX");
                 break;
             case WECHATMOMENT://分享朋友圈
                 ShareHelper.getInstance().shareImageToWechatMoment(activity, mPath);
-                umengClick("IMG","WX-PYQ");
+                umengClick("IMG", "WX-PYQ");
                 break;
             case QQ://分享QQ
                 ShareHelper.getInstance().shareImageToQQ(activity, mPath);
-                umengClick("IMG","QQ");
+                umengClick("IMG", "QQ");
                 break;
             case QQZONE://分享QQ空间
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);
-                umengClick("IMG","QZONE");
+                umengClick("IMG", "QZONE");
                 break;
             case SINA://分享新浪微博
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
-                umengClick("IMG","WB");
+                umengClick("IMG", "WB");
                 break;
         }
         dismiss();
     }
 
-    private void umengClick(String type,String way) {
+    private void umengClick(String type, String way) {
         Map<String, Object> action_share = new HashMap<String, Object>();
         action_share.put("from", mFrom);
-        action_share.put("content",mTitle);
+        action_share.put("content", mTitle);
         action_share.put("type", type);
         action_share.put("way", way);
         MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_share", action_share);

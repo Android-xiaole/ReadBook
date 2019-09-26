@@ -46,7 +46,8 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     private boolean isShareUser = true;
     private String from;
     private String title;
-    public ShareDialog(BaseActivity context,String from,String content) {
+
+    public ShareDialog(BaseActivity context, String from, String content) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         isShareUser = true;
@@ -89,7 +90,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     }
 
     public ShareDialog(BaseActivity context, String from,
-                       String content,OnDismissListener onDismissListener) {
+                       String content, OnDismissListener onDismissListener) {
         super(context, R.style.comic_Dialog_no_title);
         activity = context;
         this.from = from;
@@ -156,30 +157,29 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         switch (shareMenuModel.getType()) {
             case WECHAT://分享微信
                 ShareHelper.getInstance().shareToWechat(activity, shareMessageModel);
-                umengClick("URL","WX");
+                umengClick("URL", "WX");
                 break;
             case WECHATMOMENT://分享朋友圈
                 ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
-                umengClick("URL","WX-PYQ");
+                umengClick("URL", "WX-PYQ");
                 break;
             case QQ://分享QQ
                 ShareHelper.getInstance().shareToQQ(activity, shareMessageModel);
-                umengClick("URL","QQ");
+                umengClick("URL", "QQ");
                 break;
             case QQZONE://分享QQ空间
                 ShareHelper.getInstance().shareToQQzone(activity, shareMessageModel);
-                umengClick("URL","QQ-QZONE");
+                umengClick("URL", "QQ-QZONE");
                 break;
             case SINA://分享新浪微博
                 ShareHelper.getInstance().shareToSina(activity, shareMessageModel);
-                umengClick("URL","WB");
+                umengClick("URL", "WB");
                 break;
             case PHOTO://分享图片
                 if (dialog == null) dialog = new GenerateImgProgressDialog(activity);
                 if (!dialog.isShowing()) dialog.show();
 
                 ShareInfo shareInfo = new ShareInfo();
-                shareInfo.setTitle(shareMessageModel.getBookTitle());
                 shareInfo.setAuthor(shareMessageModel.getAuthor());
                 shareInfo.setType(shareMessageModel.getType());
                 shareInfo.setKeywords(shareMessageModel.getKeys());
@@ -188,8 +188,10 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
 
                 if (isShareUser) {
+                    shareInfo.setTitle("分享用户");
                     shareUserImg(shareInfo);
                 } else {
+                    shareInfo.setTitle(shareMessageModel.getBookTitle());
                     shareContentImage(shareInfo);
                 }
                 break;
@@ -203,10 +205,10 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         dismiss();
     }
 
-    private void umengClick(String type,String way) {
+    private void umengClick(String type, String way) {
         Map<String, Object> action_share = new HashMap<String, Object>();
         action_share.put("from", from);
-        action_share.put("content",shareMessageModel.getBookTitle());
+        action_share.put("content", shareMessageModel.getBookTitle());
         action_share.put("type", type);
         action_share.put("way", way);
         MobclickAgent.onEventObject(BaseApplication.getApplication(), "action_share", action_share);
@@ -223,7 +225,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     public void run() {
                         dialog.dismiss();
                         ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path,
-                                shareInfo,from);
+                                shareInfo, from, false);
                         shareImageDialog.show();
                     }
                 });
@@ -253,7 +255,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     public void run() {
                         dialog.dismiss();
                         ShareImageDialog shareImageDialog = new ShareImageDialog(activity, path,
-                                null,from);
+                                shareInfo, from, true);
                         shareImageDialog.show();
                     }
                 });
