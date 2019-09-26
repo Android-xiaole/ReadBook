@@ -11,7 +11,6 @@ public class UmEventID {
     public static final String CLICK_TAB_MINE = "click_tab_mine";
     public static final String PAGE_DETAIL = "page_detail";
     public static final String ACTION_SHARE = "action_share";
-    public static final String ACTION_SHARE = "action_share";
     public static final String ACTION_LOGIN = "action_login";
     public static final String ACTION_RECHARGE = "action_recharge";
     public static final String ACTION_VIP = "action_vip";
