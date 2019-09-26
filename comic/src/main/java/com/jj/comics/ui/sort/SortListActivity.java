@@ -16,6 +16,7 @@ import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.recommend.RecentlyAdapter;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.util.LoginHelper;
@@ -52,7 +53,7 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
         page_classify_list.put("from", title);
         page_classify_list.put("channel", "" + channel);
         page_classify_list.put("login","" + LoginHelper.getOnLineUser() != null);
-        MobclickAgent.onEventObject(BaseApplication.getApplication(), "page_classify_list", page_classify_list);
+        MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.PAGE_CLASSIFY_LIST, page_classify_list);
 
         if (title != null) {
             toolBar.setTitleText(title);

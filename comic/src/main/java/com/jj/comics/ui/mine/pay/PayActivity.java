@@ -146,11 +146,6 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
                 bottomPayDialog.dismiss();
                 if (goodsid != -1) {
                     showProgress();
-                    if (PackageUtil.isAliPayInstalled(PayActivity.this)) {
-                        MobclickAgent.onEvent(PayActivity.this, UmEventID.HAS_ALIPAY, "已安装");
-                    } else {
-                        MobclickAgent.onEvent(PayActivity.this, UmEventID.HAS_ALIPAY, "未安装");
-                    }
                     mPayWay = "通联支付宝";
                     getP().payAliTL(PayActivity.this, goodsid, mBookId);
                 }
@@ -178,10 +173,10 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
         String actionId;
         if (payType.equals("1")) {
             type = "金币充值";
-            actionId = "action_recharge";
+            actionId = UmEventID.ACTION_RECHARGE;
         }else {
             type = "会员充值";
-            actionId = "action_vip";
+            actionId = UmEventID.ACTION_VIP;
         }
         Map<String, Object> pay = new HashMap<String, Object>();
         pay.put("type",type);

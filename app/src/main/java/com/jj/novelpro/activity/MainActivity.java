@@ -340,24 +340,24 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     void onClick(View v) {
         if (v.getId() == R.id.btn_nav_featured) {
             switchPage(0);
-            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_featured",
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.CLICK_TAB_FEATURED,
                     null);
         } else if (v.getId() == R.id.btn_nav_classify) {
             switchPage(1);
-            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_classify",
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.CLICK_TAB_CLASSIFY,
                     null);
         } else if (v.getId() == R.id.btn_nav_money) {
             switchPage(2);
-            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_money",
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.CLICK_TAB_MONEY,
                     null);
         } else if (v.getId() == R.id.btn_nav_shelf) {
             switchPage(3);
-            MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_shelf",
+            MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.CLICK_TAB_SHELF,
                     null);
         } else if (v.getId() == R.id.btn_nav_mine) {
             if (LoginHelper.interruptLogin(MainActivity.this,null)) {
                 switchPage(4);
-                MobclickAgent.onEventObject(BaseApplication.getApplication(), "click_tab_mine",
+                MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.CLICK_TAB_MINE,
                         null);
             }
 

@@ -39,6 +39,7 @@ import com.jj.comics.adapter.recommend.RecommendAdapter;
 import com.jj.comics.adapter.recommend.RecommendChildAdapter;
 import com.jj.comics.common.callback.OnScrollListenerWithButton;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.BannerResponse;
 import com.jj.comics.data.model.BookListRecommondResponse;
@@ -330,7 +331,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     private void switchChannel(int channelFlag, int index,String name) {
         Map<String, Object> click_home_channel = new HashMap<String, Object>();
         click_home_channel.put("channel", name);
-        MobclickAgent.onEventObject(getContext(), "click_home_channel", click_home_channel);
+        MobclickAgent.onEventObject(getContext(), UmEventID.CLICK_HOME_CHANNEL, click_home_channel);
 
         recentChannelFlag = channelFlag;
         switchTvs(index);
