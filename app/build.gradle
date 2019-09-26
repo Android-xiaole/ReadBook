@@ -94,7 +94,7 @@ android {
                         //App_release_chile
 //                        def fileName = "App_${defaultConfig.versionName}_${releaseTime()} " +
 //                                "_release_" + variant.productFlavors.get(0).getName() + ".apk"
-                        def fileName = "App_" + buildType + "_" + variant.productFlavors.get(0).getName() + "_${releaseTime()}" + "_${defaultConfig.versionName}" + ".apk"
+                        def fileName = "App_" + buildType + "_" + variant.productFlavors.get(0).getName() + "_${releaseTime()}" + "_v${defaultConfig.versionName}" + ".apk"
                         // 将名字打印出来查看效果
                         output.outputFileName = fileName
                     }
@@ -149,7 +149,7 @@ android {
 }
 
 def releaseTime() {
-    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+    return new Date().format("yyyy-MM-dd-HH.mm", TimeZone.getTimeZone("GMT+08:00"))
 }
 
 dependencies {
