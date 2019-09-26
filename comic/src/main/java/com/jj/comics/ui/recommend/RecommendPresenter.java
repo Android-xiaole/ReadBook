@@ -59,7 +59,6 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
 
     @Override
     public void loadRecentlyComic(int pageNum,int channelFlag,boolean changeChannel) {
-        getV().showProgress();
         ContentRepository.getInstance()
                 .getRecentUpdate(channelFlag,pageNum, 10, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())
@@ -90,7 +89,6 @@ public class RecommendPresenter extends BasePresenter<BaseRepository, RecommendC
 
     @Override
     public void loadPopShare(int channelFlag,boolean changeChannel) {
-        getV().showProgress();
         ContentRepository.getInstance()
                 .getPopShare(channelFlag, getV().getClass().getName())
                 .subscribeOn(Schedulers.io())

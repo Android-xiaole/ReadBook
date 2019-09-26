@@ -392,15 +392,11 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     public void getDataFail(NetError error) {
         if (mRefresh.isRefreshing())
             mRefresh.setRefreshing(false);
-        //设置不显示无数据的布局
-//        adapter_content.setEmptyText(error.getMessage());
         adapter_content.setNewData(null);
-//        hideProgress();
     }
 
     @Override
     public void onLoadRecentlyComicSuccess(boolean changeChannel,List<BookModel> bookModelList) {
-        hideProgress();
         if (changeChannel || recentlyPage == 1) {
             adapter_recently.setNewData(bookModelList);
         } else {
@@ -411,7 +407,6 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
 
     @Override
     public void onLoadRecentlyComicFail(NetError error) {
-        hideProgress();
         if (error.getType() == NetError.NoDataError) {
             adapter_recently.loadMoreEnd(false);
         } else {
