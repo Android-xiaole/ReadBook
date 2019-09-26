@@ -127,4 +127,12 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
         ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
         finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null){
+            countDownTimer.cancel();
+        }
+    }
 }
