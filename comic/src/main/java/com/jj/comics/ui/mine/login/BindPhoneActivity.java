@@ -22,6 +22,7 @@ import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
+import com.jj.comics.util.eventbus.events.BindPhoneSuccessEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 
@@ -123,8 +124,10 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
 
     @Override
     public void onBindPhone(UserInfo userInfo) {
+        //发送登录成功的通知
         EventBusManager.sendLoginEvent(new LoginEvent());
-        ARouter.getInstance().build(RouterMap.COMIC_MAIN_ACTIVITY).navigation(this);
+        //发送绑定手机号成功的通知
+        EventBusManager.sendBindPhoneSuccessEvent(new BindPhoneSuccessEvent());
         finish();
     }
 
