@@ -52,7 +52,6 @@ public class SortListActivity extends BaseActivity<SortListPresent> implements S
         Map<String, Object> page_classify_list = new HashMap<String, Object>();
         page_classify_list.put("from", title);
         page_classify_list.put("channel", "" + channel);
-        page_classify_list.put("login","" + LoginHelper.getOnLineUser() != null);
         MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.PAGE_CLASSIFY_LIST, page_classify_list);
 
         if (title != null) {

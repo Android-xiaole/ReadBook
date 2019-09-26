@@ -2,6 +2,7 @@ package com.jj.comics.ui.read;
 
 import android.util.Log;
 
+import com.jj.base.BaseApplication;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber;
@@ -26,6 +27,7 @@ import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
+import com.umeng.analytics.MobclickAgent;
 
 import org.reactivestreams.Publisher;
 
@@ -36,7 +38,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -204,6 +208,12 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                     @Override
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
+                        Map<String, Object> err_load_book = new HashMap<String, Object>();
+                        err_load_book.put("chapter_name", "" + catalogModel.getChaptername());
+                        err_load_book.put("chapter_id","" + catalogModel.getId());
+                        err_load_book.put("book_id","" + catalogModel.getBook_id());
+                        err_load_book.put("err","" + error.getMessage());
+                        MobclickAgent.onEventObject(BaseApplication.getApplication(), "err_load_book", err_load_book);
                     }
 
                     @Override

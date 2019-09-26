@@ -178,13 +178,13 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
             type = "会员充值";
             actionId = UmEventID.ACTION_VIP;
         }
-        Map<String, Object> pay = new HashMap<String, Object>();
+        Map<String, String> pay = new HashMap<String, String>();
         pay.put("type",type);
         pay.put("from",mFrom);
         pay.put("goods",mGoodsName);
         pay.put("way", mPayWay);
         pay.put("result", result);
-        MobclickAgent.onEventObject(BaseApplication.getApplication(), actionId, pay);
+        MobclickAgent.onEvent(BaseApplication.getApplication(), actionId, pay);
     }
 
     /**

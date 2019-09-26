@@ -380,9 +380,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
     }
 
     private void switchChannel(int channelFlag, int index,String name) {
-        Map<String, Object> click_home_channel = new HashMap<String, Object>();
-        click_home_channel.put("channel", name);
-        MobclickAgent.onEventObject(getContext(), UmEventID.CLICK_HOME_CHANNEL, click_home_channel);
+        MobclickAgent.onEvent(getContext(), UmEventID.CLICK_HOME_CHANNEL, name);
 
         recentChannelFlag = channelFlag;
         switchTvs(index);
