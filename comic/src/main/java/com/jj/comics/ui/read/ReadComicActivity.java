@@ -326,6 +326,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void clickNextChapter() {
+                //todo 此处需要增加用户登录校验
                 mPageLoader.skipNextChapter();
             }
 

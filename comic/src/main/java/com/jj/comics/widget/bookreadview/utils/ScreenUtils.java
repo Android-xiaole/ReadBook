@@ -1,9 +1,11 @@
 package com.jj.comics.widget.bookreadview.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.jj.base.BaseApplication;
 
@@ -61,6 +63,19 @@ public class ScreenUtils {
         size[0] = decorView.getWidth();
         size[1] = decorView.getHeight();
         return size;
+    }
+
+    /**
+     * 在非avtivity的环境下获取屏幕宽度
+     * @param view
+     * @return
+     */
+    public static int getScreenWidthPixels(View view) {
+        WindowManager manager =
+                (WindowManager) view.getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.widthPixels;
     }
 
     /**

@@ -29,6 +29,10 @@ public class PageView extends View {
 
     private final static String TAG = "BookPageWidget";
 
+    private static final int BUTTON_LEFT = 1;
+    private static final int BUTTON_RIGHT = 2;
+
+
     private int mViewWidth = 0; // 当前View的宽
     private int mViewHeight = 0; // 当前View的高
 
@@ -251,7 +255,7 @@ public class PageView extends View {
                       */
                     //只能点击上一章
                     if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_LAST){
-                        RectF rectF = getRectF(mPageLoader.tv_last_chapter);
+                        RectF rectF = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
                         if (rectF.contains(x,y)){
                             if (mTouchListener != null) {
                                 mTouchListener.clickLastChapter();
@@ -260,7 +264,7 @@ public class PageView extends View {
                         }
                     }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT){
                         //只能点击下一章
-                        RectF rectF = getRectF(mPageLoader.tv_next_chapter);
+                        RectF rectF = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
                         if (rectF.contains(x,y)){
                             if (mTouchListener != null) {
                                 mTouchListener.clickNextChapter();
@@ -269,14 +273,14 @@ public class PageView extends View {
                         }
                     }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT_LAST){
                         //两个按钮都可以点击
-                        RectF rectF_last = getRectF(mPageLoader.tv_last_chapter);
+                        RectF rectF_last = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
                         if (rectF_last.contains(x,y)){
                             if (mTouchListener != null) {
                                 mTouchListener.clickLastChapter();
                             }
                             return true;
                         }
-                        RectF rectF_next = getRectF(mPageLoader.tv_next_chapter);
+                        RectF rectF_next = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
                         if (rectF_next.contains(x,y)){
                             if (mTouchListener != null) {
                                 mTouchListener.clickNextChapter();
@@ -291,10 +295,28 @@ public class PageView extends View {
         return true;
     }
 
-    private RectF getRectF(View view){
+    private RectF getRectF(View view,int buttonPosition){
         //这里Y轴区域特意扩大了，因为测试发现小米9设置全面屏的时候会出现点击错位，无法触发点击事件的问题
-        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(85),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(10));
+        RectF rectF = null;
+        if (view == null) {//后台有个view空指针异常
+            if (buttonPosition == BUTTON_LEFT) {
+                rectF = new RectF(ScreenUtils.dpToPx(30),
+                        ScreenUtils.getDisplayMetrics().heightPixels - view.getMeasuredHeight() - ScreenUtils.dpToPx(85),
+                        ScreenUtils.dpToPx(ScreenUtils.getScreenWidthPixels(PageView.this) / 2),
+                        ScreenUtils.getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(10));
+            }else if (buttonPosition == BUTTON_RIGHT) {
+                rectF = new RectF(ScreenUtils.dpToPx(ScreenUtils.getScreenWidthPixels(PageView.this) / 2),
+                        ScreenUtils.getDisplayMetrics().heightPixels - view.getMeasuredHeight() - ScreenUtils.dpToPx(85),
+                        ScreenUtils.getScreenWidthPixels(PageView.this) - ScreenUtils.dpToPx(30),
+                        ScreenUtils.getDisplayMetrics().heightPixels - ScreenUtils.dpToPx(10));
+            }
+
+        }else {
+            rectF = new RectF(view.getLeft(),
+                ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(85),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(10));
 //        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(65),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(65));
+        }
+        return rectF;
     }
 
     /**
