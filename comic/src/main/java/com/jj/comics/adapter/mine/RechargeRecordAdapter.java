@@ -21,11 +21,11 @@ public class RechargeRecordAdapter extends SimpleBaseAdapter<RechargeRecordModel
     protected void convert(BaseViewHolder helper, RechargeRecordModel item) {
         helper.setText(R.id.item_recharge_time, item.getCreated_at());
 
-        String value = item.getJinbi() + "书币";
-        SpannableString descSpan = new SpannableString(value);
-        descSpan.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),value.indexOf("书币"),
-                value.indexOf("书币") + 2,SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
-        helper.setText(R.id.item_recharge_coin, descSpan);
+//        String value = item.getJinbi() + "书币";
+//        SpannableString descSpan = new SpannableString(value);
+//        descSpan.setSpan(new StyleSpan(android.graphics.Typeface.BOLD),value.indexOf("书币"),
+//                value.indexOf("书币") + 2,SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        helper.setText(R.id.item_recharge_coin, item.getTitle());
 
         String money = item.getMoney();
         if (!money.contains(".")) money = money + ".00";

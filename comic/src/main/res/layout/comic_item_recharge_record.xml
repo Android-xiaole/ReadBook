@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_17"
-        android:layout_marginTop="@dimen/dp_17"
         android:textColor="@color/comic_333333"
         android:textSize="@dimen/dp_18"
         android:textStyle="bold"
