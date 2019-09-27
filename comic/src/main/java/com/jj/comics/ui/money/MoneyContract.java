@@ -11,9 +11,6 @@ public interface MoneyContract {
         void onGetUserPayInfo(PayInfo payInfo);
 
         void onGetShareRecommend(List<ShareRecommendResponse.DataBean> list);
-
-        //分享截图
-        void shareImage(String content);
     }
 
     interface IMoneyPresenter {

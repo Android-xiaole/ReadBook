@@ -115,10 +115,11 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            shareMessageModel.setShareImgUrl(loginUser.getAvatar());
+            shareMessageModel.setShareImgUrl("http://ossmh.jj1699.cn/novel/炼器狂神一寸废土/cover_1566980111.jpg");
             shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + URLEncoder.encode(uid) + "&cid=" + URLEncoder.encode(Constants.CHANNEL_ID) + "&pid=" + URLEncoder.encode(Constants.PRODUCT_CODE) + "&invite_code=" + URLEncoder.encode(loginUser.getInvite_code()) + "&name=" + URLEncoder.encode(loginUser.getNickname()) + "&pic=" + URLEncoder.encode(loginUser.getAvatar());
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
+            shareMessageModel.setContent("好看的小说");
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -293,6 +294,11 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         shareMessageModel.setShareImgUrl(mBookModel.getCover());
         shareMessageModel.setKeys(mBookModel.getKeywords());
         shareMessageModel.setBoolId(mBookModel.getId());
+        if (mBookModel.getTag() != null && mBookModel.getTag().size()>0) {
+            shareMessageModel.setType(mBookModel.getTag().get(0));
+        } else {
+            shareMessageModel.setType("");
+        }
         UserInfo loginUser = LoginHelper.getOnLineUser();
         if (loginUser == null) {
             ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY).navigation(activity);

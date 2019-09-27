@@ -308,7 +308,7 @@ public class ShareHelper {
                         params.putString(QQShare.SHARE_TO_QQ_SUMMARY, shareMessageModel.getShareContent());
                         //这条分享消息被好友点击后的跳转URL。
                         params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, shareMessageModel.getShareUrl());
-                        //分享的图片URL
+                            //分享的图片URL
                         params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, url2path(file, shareMessageModel));
                         //手Q客户端顶部，替换“返回”按钮文字，如果为空，用返回代替
                         params.putString(QQShare.SHARE_TO_QQ_APP_NAME, PackageUtil.getAppName(activity));

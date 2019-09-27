@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ShareRecommendResponse extends ResponseModel {
 
+
     private List<DataBean> data;
 
     public List<DataBean> getData() {
@@ -16,16 +17,14 @@ public class ShareRecommendResponse extends ResponseModel {
 
     public static class DataBean {
         /**
-         * id : 7011
-         * cover : http://ossmh.jj1699.cn/novel/万界登陆之全知全能天要下雨/cover_1566295657.jpg
-         * title : 万界登陆之全知全能
-         * intro : 一觉醒来，穿越了？这个世界的人竟然拥有登录万界的能力？但是文化断层，海贼、火影、死神之类的统统不知道？
-         　　“纳尼？《火影忍者》世界中最强的势力是水之国雾忍村？”
-         　　“最强忍术叫做三身术？”
-         　　“已知最强水遁忍术是大瀑布之术？世界的最后大BOSS叫做山椒鱼半藏，是雨忍村的首领，被称作‘忍界半神’？”
-         　　望着一个个所谓的价值连城的情报，火影迷雷洛风中凌乱……
-         * author : 天要下雨
-         * chapterid : 3129025
+         * id : 6140
+         * cover : http://ossmh.jj1699.cn/novel/诡娇娘墨白秋/cover_1566979086.jpg
+         * title : 诡娇娘11
+         * intro : 一次去见丈母娘的经历，让我陷入了一个个谜题之中，从此，无限的迷云将我笼罩。
+         * author : 墨白秋
+         * keywords : 凡人流,恐怖,惊悚,鬼夫,机智,鬼怪,现代
+         * tag : ["灵异鬼事"]
+         * chapterid : 1957235
          */
 
         private int id;
@@ -33,7 +32,9 @@ public class ShareRecommendResponse extends ResponseModel {
         private String title;
         private String intro;
         private String author;
+        private String keywords;
         private int chapterid;
+        private List<String> tag;
 
         public int getId() {
             return id;
@@ -75,12 +76,28 @@ public class ShareRecommendResponse extends ResponseModel {
             this.author = author;
         }
 
+        public String getKeywords() {
+            return keywords;
+        }
+
+        public void setKeywords(String keywords) {
+            this.keywords = keywords;
+        }
+
         public int getChapterid() {
             return chapterid;
         }
 
         public void setChapterid(int chapterid) {
             this.chapterid = chapterid;
+        }
+
+        public List<String> getTag() {
+            return tag;
+        }
+
+        public void setTag(List<String> tag) {
+            this.tag = tag;
         }
     }
 }

@@ -37,7 +37,7 @@ import butterknife.BindView;
 
 
 @Route(path = RouterMap.COMIC_MONEY_FRAGMENT)
-public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements MoneyContract.IMoneyView{
+public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements MoneyContract.IMoneyView {
 //    @BindView(R2.id.vf_apprentice_now)
 //    AdapterViewFlipper mViewFlipper;
 //
@@ -84,22 +84,22 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ShareRecommendAdapter(R.layout.comic_item_share_recommend);
-        mAdapter.bindToRecyclerView(mRecyclerView,false);
+        mAdapter.bindToRecyclerView(mRecyclerView, false);
 
-        
+
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             private ShareMessageModel shareMessageModel;
 
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
 
-                if (!LoginHelper.interruptLogin(getBaseActivity(),null)) return;
+                if (!LoginHelper.interruptLogin(getBaseActivity(), null)) return;
 
                 ShareRecommendResponse.DataBean model =
                         (ShareRecommendResponse.DataBean) adapter.getData().get(position);
 
                 if (mDialog == null) {
-                    mDialog = new ShareDialog(getBaseActivity(),"赚-内容推荐",model.getTitle());
+                    mDialog = new ShareDialog(getBaseActivity(), "赚-内容推荐", model.getTitle());
                 }
 
                 if (shareMessageModel == null) shareMessageModel = new ShareMessageModel();
@@ -124,6 +124,8 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
                 bookModel.setTitle(model.getTitle());
                 bookModel.setCover(model.getCover());
                 bookModel.setAuthor(model.getAuthor());
+                bookModel.setKeywords(model.getKeywords());
+                bookModel.setTag(model.getTag());
                 mDialog.show(bookModel);
             }
         });
@@ -131,8 +133,8 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
         mBtnInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!LoginHelper.interruptLogin(getBaseActivity(),null)) return;
-                if (mDialog == null) mDialog = new ShareDialog(getBaseActivity(),"赚","");
+                if (!LoginHelper.interruptLogin(getBaseActivity(), null)) return;
+                if (mDialog == null) mDialog = new ShareDialog(getBaseActivity(), "赚", "");
                 mDialog.show();
             }
         });
@@ -145,17 +147,17 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
 
             RequestOptions options = new RequestOptions();
             options.circleCrop();
-            ILFactory.getLoader().loadNet(mIvAvatar,userInfo.getAvatar(),
+            ILFactory.getLoader().loadNet(mIvAvatar, userInfo.getAvatar(),
                     options);
             mTvName.setText(userInfo.getNickname());
 
-        }else {
+        } else {
             mClUserInfo.setVisibility(View.GONE);
         }
 
         RequestOptions options = new RequestOptions();
         options.encodeQuality(100);
-        ILFactory.getLoader().loadNet(mIvDetail,"http://fanli.jjmh668.cn/prd/apprentice.png",
+        ILFactory.getLoader().loadNet(mIvDetail, "http://fanli.jjmh668.cn/prd/apprentice.png",
                 options);
 
         getP().getUserPayInfo();
@@ -200,10 +202,5 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
     @Override
     public void onGetShareRecommend(List<ShareRecommendResponse.DataBean> list) {
         mAdapter.setNewData(list);
-    }
-
-    @Override
-    public void shareImage(String content) {
-
     }
 }
