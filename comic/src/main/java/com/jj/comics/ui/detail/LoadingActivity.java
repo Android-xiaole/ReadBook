@@ -26,7 +26,6 @@ import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 import net.frakbot.jumpingbeans.JumpingBeans;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import butterknife.BindView;
 
 /**

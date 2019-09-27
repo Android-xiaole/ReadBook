@@ -69,8 +69,7 @@ public class ReadComicHelper {
                                 }
                                 return Observable.just(catalogModelNow);
                             } else {
-                                ToastUtil.showToastShort(response.getMessage());
-                                return Observable.empty();
+                                return Observable.error(new NetError(response.getMessage(),response.getCode()));
                             }
                         } else if (response.getCode() == 1002) {//未购买
                             UserInfo onLineUser = LoginHelper.getOnLineUser();
@@ -106,12 +105,10 @@ public class ReadComicHelper {
                                                                             }
                                                                             return Observable.just(catalogModelNow);
                                                                         } else {
-                                                                            ToastUtil.showToastShort("没有数据，换个章节试试");
-                                                                            return Observable.empty();
+                                                                            return Observable.error(new NetError("没有数据，换个章节试试",NetError.OtherError));
                                                                         }
                                                                     } else {
-                                                                        ToastUtil.showToastShort(response.getMessage());
-                                                                        return Observable.empty();
+                                                                        return Observable.error(new NetError(response.getMessage(),response.getCode()));
                                                                     }
                                                                 }
                                                             });
@@ -124,8 +121,7 @@ public class ReadComicHelper {
                                                     }
                                                     return Observable.empty();
                                                 } else {
-                                                    ToastUtil.showToastShort("订阅失败：" + subResponse.getMessage());
-                                                    return Observable.empty();
+                                                    return Observable.error(new NetError("订阅失败："+subResponse.getMessage(),subResponse.getCode()));
                                                 }
                                             }
                                         });
