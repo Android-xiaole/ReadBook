@@ -8,6 +8,7 @@ public class ShareInfo {
     private String keywords;
     private String content;
     private String cover;
+    private String desc;
 
     public String getTitle() {
         return title;
@@ -63,5 +64,13 @@ public class ShareInfo {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

@@ -92,6 +92,11 @@ public class SplashPresenter extends BasePresenter<BaseRepository, SplashContrac
 //                    flag = false;
 //                }else {
                 String app_api_url = data.getApp_api_url();
+                String shareTitle1 = data.getTitle1();
+                String shareTitle2 = data.getTitle2();
+                String shareContent = data.getContent();
+                String shareIconUrl = data.getShareIconUrl();
+                String shareBaseUrl = data.getShareBaseUrl();
                 if (TextUtils.isEmpty(app_api_url)) {
                     flag = false;
                 } else {
@@ -121,6 +126,11 @@ public class SplashPresenter extends BasePresenter<BaseRepository, SplashContrac
                                 SharedPref.getInstance().putString("QQ_APPID", qqApp_id);
                                 SharedPref.getInstance().putString("WEIBO_APP_ID", weiboApp_id);
                                 SharedPref.getInstance().putString("WX_APP_ID_LOGIN", wechatApp_id);
+                                SharedPref.getInstance().putString(Constants.ShareCode.SHARE_TITLE1, shareTitle1);
+                                SharedPref.getInstance().putString(Constants.ShareCode.SHARE_TITLE2, shareTitle2);
+                                SharedPref.getInstance().putString(Constants.ShareCode.SHARE_CONTENT, shareContent);
+                                SharedPref.getInstance().putString(Constants.ShareCode.SHARE_ICON_URL, shareIconUrl);
+                                SharedPref.getInstance().putString(Constants.ShareCode.SHARE_BASE_URL, shareBaseUrl);
                                 flag = true;
                             }
                         }

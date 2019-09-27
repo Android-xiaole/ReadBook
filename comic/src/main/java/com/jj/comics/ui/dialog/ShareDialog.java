@@ -18,6 +18,7 @@ import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
+import com.jj.base.utils.SharedPref;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.adapter.ShareMenuAdapter;
@@ -32,6 +33,7 @@ import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.ShareHelper;
+import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.ShareUserPicture;
@@ -111,15 +113,16 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isShareUserImage) {
             shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle("金桔小说");
+            shareMessageModel.setShareTitle(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE1,"金桔小说"));
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            shareMessageModel.setShareImgUrl("http://ossmh.jj1699.cn/novel/炼器狂神一寸废土/cover_1566980111.jpg");
+            shareMessageModel.setShareImgUrl(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_ICON_URL,"https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/test/ic_launcher_round.png"));
             shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + URLEncoder.encode(uid) + "&cid=" + URLEncoder.encode(Constants.CHANNEL_ID) + "&pid=" + URLEncoder.encode(Constants.PRODUCT_CODE) + "&invite_code=" + URLEncoder.encode(loginUser.getInvite_code()) + "&name=" + URLEncoder.encode(loginUser.getNickname()) + "&pic=" + URLEncoder.encode(loginUser.getAvatar());
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
-            shareMessageModel.setContent("好看的小说");
+            shareMessageModel.setContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));
+            shareMessageModel.setShareContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -174,8 +177,8 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                                         if (dialog == null)
                                             dialog = new GenerateImgProgressDialog(activity);
                                         if (!dialog.isShowing()) dialog.show();
-                                        if (content.length() > 500) {
-                                            content = content.substring(0, 500) + "...";
+                                        if (content.length() > 300) {
+                                            content = content.substring(0, 300) + "...";
                                         }
                                         ShareInfo shareInfo = new ShareInfo();
                                         shareInfo.setAuthor(shareMessageModel.getAuthor());
@@ -185,6 +188,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                                         shareInfo.setCover(shareMessageModel.getShareImgUrl());
                                         shareInfo.setQrcodeImg(shareMessageModel.getShareUrl());
                                         shareInfo.setTitle(shareMessageModel.getBookTitle());
+                                        shareInfo.setDesc(shareMessageModel.getShareContent());
                                         shareContentImage(shareInfo);
                                     }
                                 }
@@ -287,13 +291,14 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     public void show(BookModel bookModel) {
         this.mBookModel = bookModel;
         shareMessageModel = new ShareMessageModel();
-        shareMessageModel.setShareTitle(String.format(activity.getString(R.string.comic_share_title), mBookModel.getTitle()));
+        shareMessageModel.setShareTitle(String.format(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE2,"《%1$s》这款小说真的超级棒，好看到爆炸哦！！！"), mBookModel.getTitle()));
 
         shareMessageModel.setBookTitle(mBookModel.getTitle());
         shareMessageModel.setAuthor(mBookModel.getAuthor());
         shareMessageModel.setShareImgUrl(mBookModel.getCover());
         shareMessageModel.setKeys(mBookModel.getKeywords());
         shareMessageModel.setBoolId(mBookModel.getId());
+        shareMessageModel.setShareContent(mBookModel.getIntro());
         if (mBookModel.getTag() != null && mBookModel.getTag().size()>0) {
             shareMessageModel.setType(mBookModel.getTag().get(0));
         } else {
@@ -317,7 +322,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     public void onNext(Long aLong) {
                         chapterId = aLong;
                         String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                        shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
+                        shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
                         show();
                         isShareUserImage = false;
                     }
