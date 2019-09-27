@@ -2,7 +2,6 @@ package com.jj.comics.ui.mine;
 
 import com.jj.base.mvp.IView;
 import com.jj.comics.data.model.PayInfo;
-import com.jj.comics.data.model.SignAutoResponse;
 import com.jj.comics.data.model.UserInfo;
 
 public interface MineContract {
@@ -22,7 +21,7 @@ public interface MineContract {
 //        void onGetTaskInfo(int count);
     }
 
-    interface IMinePresenter  {
+    interface IMinePresenter {
         //获取用户信息
         void getUserInfo();
 

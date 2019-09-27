@@ -1,9 +1,7 @@
 package com.jj.comics.data.biz.pruduct;
 
-import com.jj.base.BaseApplication;
 import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.RetryFunction2;
-import com.jj.base.utils.ResourceUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
@@ -14,7 +12,6 @@ import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.UpdateModelProxy;
 
 import io.reactivex.Observable;
@@ -43,18 +40,6 @@ public class ProductRepository implements ProductDataSource {
         return compose;
     }
 
-    @Override
-    public Observable<ResponseModel> uploadFeedback(String msg) {
-        final RequestBody requestBody = new RequestBodyBuilder()
-                .addProperty(Constants.RequestBodyKey.FEEDBACK_DESC, msg)
-                .build();
-
-        Observable<ResponseModel> compose = ComicApi.getApi()
-                .uploadFeedback(requestBody)
-                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
-                .subscribeOn(Schedulers.io());
-        return compose;
-    }
 
     @Override
     public Observable<UpdateModelProxy> getChannelUpdateInfo(String activityName) {
@@ -68,32 +53,6 @@ public class ProductRepository implements ProductDataSource {
         return compose;
     }
 
-    @Override
-    public Observable<ShareParamModel> getShareParam(String activityName) {
-
-        RequestBody requestBody =
-                new RequestBodyBuilder().addProperty(Constants.RequestBodyKey.PRODUCT_CODE,
-                        Constants.PRODUCT_CODE)
-                .build();
-
-        Observable<ShareParamModel> compose = ComicApi.getApi()
-                .getShareParam(requestBody)
-                .compose(ComicApiImpl.<ShareParamModel>getApiTransformer2())
-                .retryWhen(new RetryFunction2(activityName))
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io());
-        return compose;
-    }
-
-    @Override
-    public Observable<Push> getAdsPush(String activityName,String typeId) {
-        Observable<Push> compose =
-                ComicApi.getApi().getAdsPush(Constants.CHANNEL_ID, typeId)
-                        .compose(ComicApiImpl.<Push>getApiTransformer2())
-                        .retryWhen(new RetryFunction2(activityName))
-                        .subscribeOn(Schedulers.io());
-        return compose;
-    }
 
     @Override
     public Observable<AppConfigResponse> getAppConfig() {
@@ -111,13 +70,6 @@ public class ProductRepository implements ProductDataSource {
                 .subscribeOn(Schedulers.io());
     }
 
-    @Override
-    public Observable<PayActionResponse> getPayAction() {
-        return ComicApi.getApi().getPayAction()
-                .compose(ComicApiImpl.<PayActionResponse>getApiTransformer2())
-                .subscribeOn(Schedulers.io());
-
-    }
 
     @Override
     public Observable<NotificationListResponse> getNotificationList(int pageNum) {

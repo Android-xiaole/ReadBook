@@ -8,7 +8,7 @@ public class Constants {
     public static final int SOURCE_ID = 3;
     public static final String DB_NAME = "comic.db";
     public static final String MCH_ID = "11000";//商户号
-    public static final String PRODUCT_CODE = "norvel";//新产品
+    public static final String PRODUCT_CODE = "jjxs_fanli";//中台产品号
     public static String CHANNEL_ID = ResourceUtil.getAppRes(BaseApplication.getApplication(), "channel_id", "").toString();//老后台渠道号
 
     public static String OPEN_INSTALL_URL = "http://share.sou89.cn/download.html?";

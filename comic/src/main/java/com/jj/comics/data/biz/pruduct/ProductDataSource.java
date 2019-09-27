@@ -16,23 +16,15 @@ public interface ProductDataSource {
     //根据协议code获取用户协议
     Observable<ProtocalModel> getProductProtocalByProtocolCode(String activityName, String agreementKey);
 
-    //提交反馈
-    Observable<ResponseModel> uploadFeedback(String msg);
 
     //产品渠道升级
     Observable<UpdateModelProxy> getChannelUpdateInfo(String activityName);
 
-    //获取分享参数
-    Observable<ShareParamModel> getShareParam(String activityName);
-
-    //获取广告
-    Observable<Push> getAdsPush(String activityName,String typeId);
 
     Observable getAppConfig();
 
     Observable getAppConfigByIP();
 
-    Observable<PayActionResponse> getPayAction();
 
     //获取消息公告
     Observable<NotificationListResponse> getNotificationList(int pageNum);

@@ -6,9 +6,6 @@ import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.data.model.RewardListResponse;
-
-import java.util.List;
 
 public interface SubComicDetailContract {
     interface ISubComicDetailView extends IView {
@@ -21,8 +18,6 @@ public interface SubComicDetailContract {
         //获取评论列表的回调
         void onGetCommentData(CommentListResponse commentListResponse);
 
-        //获取土豪打赏列表的回调
-        void onGetRewardRecordList(List<RewardListResponse.DataBean.RewardRecordBean> rewardRecordBean);
 
         //评论点赞的回调
         void onFavorCommentSuccess(String type);
@@ -36,7 +31,7 @@ public interface SubComicDetailContract {
 
     interface ISubComicDetailPresenter {
         //获取猜你喜欢列表
-        void loadLikeComicList(long id,int pageNum, int sectionId);
+        void loadLikeComicList(long id, int pageNum, int sectionId);
 
         //获取评论列表
         void getCommentData(long id);
@@ -45,7 +40,7 @@ public interface SubComicDetailContract {
         void getRewardRecordList(long id);
 
         //点赞评论
-        void favorComment(long userId,String type);
+        void favorComment(long userId, String type);
 
         //发表评论
         void sendComment(long objectId, String commentDetail);

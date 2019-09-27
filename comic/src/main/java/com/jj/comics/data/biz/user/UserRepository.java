@@ -4,11 +4,9 @@ package com.jj.comics.data.biz.user;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jj.base.BaseApplication;
 import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.NetError;
 import com.jj.base.net.RetryFunction2;
-import com.jj.base.utils.SharedPref;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
@@ -23,30 +21,22 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
-import com.jj.comics.data.model.FeedbackListResponse;
-import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
-import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.RewardHistoryResponse;
-import com.jj.comics.data.model.RichDataResponse;
-import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
-import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.reporter.ActionReporter;
-import com.jj.comics.widget.bookreadview.utils.Constant;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -131,11 +121,11 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<LoginResponse> loginBySecurityCode(String phone, String psw,String inviteCode) {
+    public Observable<LoginResponse> loginBySecurityCode(String phone, String psw, String inviteCode) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, phone)
                 .addProperty(Constants.RequestBodyKey.LOGIN_CODE, psw)
-                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE,inviteCode)
+                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE, inviteCode)
                 .build();
         Observable<LoginResponse> compose = ComicApi.getApi().loginBySecurityCode(requestBody)
                 .retryWhen(new RetryFunction2())
@@ -263,25 +253,6 @@ public class UserRepository implements UserDataSource {
         return compose;
     }
 
-    @Override
-    public Observable<RewardHistoryResponse> getRewardsRecord(String activityName) {
-        Observable<RewardHistoryResponse> compose = ComicApi.getApi().getRewardsRecordByUser()
-                .retryWhen(new RetryFunction2(activityName))
-                .compose(ComicApiImpl.<RewardHistoryResponse>getApiTransformer2())
-                .subscribeOn(Schedulers.io());
-        return compose;
-    }
-
-    @Override
-    public Observable<RichResponse> getRewardRankingListOfUser(String activityName) {
-
-        Observable<RichResponse> compose = ComicApi.getApi().getRewardRankingListOfUser()
-                .retryWhen(new RetryFunction2(activityName))
-                .compose(ComicApiImpl.<RichResponse>getApiTransformer2())
-                .subscribeOn(Schedulers.io());
-        return compose;
-    }
-
 
     @Override
     public Observable<CommonStatusResponse> doReward(long contentId, String type, int giftNums) {
@@ -392,18 +363,6 @@ public class UserRepository implements UserDataSource {
         return observable;
     }
 
-    @Override
-    public Observable<UidLoginResponse> uidLogin(String uid) {
-        RequestBody body = new RequestBodyBuilder()
-                .addProperty("uid", uid)
-                .build();
-
-        return ComicApi.getApi().uidLogin(body)
-                .subscribeOn(Schedulers.io())
-                .compose(ComicApiImpl.<UidLoginResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2())
-                .subscribeOn(Schedulers.io());
-    }
 
     @Override
     public Observable<CommonStatusResponse> favorContent(long id) {
@@ -456,14 +415,6 @@ public class UserRepository implements UserDataSource {
         return compose;
     }
 
-    @Override
-    public Observable<RichDataResponse> rewardRecordByAllUser(String activityName, int pageNum) {
-
-        return ComicApi.getApi().rewardRecordByAllUser(pageNum)
-                .compose(ComicApiImpl.<RichDataResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2(activityName))
-                .subscribeOn(Schedulers.io());
-    }
 
     /**
      * 获取用户阅读历史记录
@@ -503,20 +454,6 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<FeedbackListResponse> getFeedbackList(int pageNum, String tag) {
-        return ComicApi.getApi().getFeedbackList()
-                .compose(ComicApiImpl.<FeedbackListResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2(tag));
-    }
-
-    @Override
-    public Observable<FeedbackStatusModel> getFeedbackStatus() {
-        return ComicApi.getApi().getFeedbackStatus()
-                .compose(ComicApiImpl.<FeedbackStatusModel>getApiTransformer2())
-                .retryWhen(new RetryFunction2());
-    }
-
-    @Override
     public Observable<CommonStatusResponse> getCollectStatus(long id, String retryTag) {
         return ComicApi.getApi().getCollectStatus(id)
                 .compose(ComicApiImpl.<CommonStatusResponse>getApiTransformer2())
@@ -542,7 +479,7 @@ public class UserRepository implements UserDataSource {
 
     @Override
     public Observable<PaySettingResponse> getPayCenterInfo(String type) {
-        return ComicApi.getApi().getPayCenterInfo("android_paysetting",type)
+        return ComicApi.getApi().getPayCenterInfo("android_paysetting", type)
                 .compose(ComicApiImpl.<PaySettingResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
@@ -592,7 +529,7 @@ public class UserRepository implements UserDataSource {
                             SharedPreManger.getInstance().saveToken(loginResponse.getData().getBearer_token());
                             //保存用户信息
                             return UserRepository.getInstance().saveUser(loginResponse.getData().getUser_info());
-                        }else{
+                        } else {
                             return Observable.error(NetError.noDataError());
                         }
                     }
@@ -629,8 +566,8 @@ public class UserRepository implements UserDataSource {
     @Override
     public Observable<AddCashOutWayResponse> addCashOutWayAli(String account_number, String opener) {
         RequestBody body = new RequestBodyBuilder()
-                .addProperty("account_number", account_number )
-                .addProperty("opener", opener )
+                .addProperty("account_number", account_number)
+                .addProperty("opener", opener)
                 .build();
         return ComicApi.getApi().addCashOutAli(body)
                 .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
@@ -640,9 +577,9 @@ public class UserRepository implements UserDataSource {
     @Override
     public Observable<AddCashOutWayResponse> addCashOutWayUnion(String account_number, String opener, String opening_bank) {
         RequestBody body = new RequestBodyBuilder()
-                .addProperty("account_number", account_number )
-                .addProperty("opener", opener )
-                .addProperty("opening_bank", opening_bank )
+                .addProperty("account_number", account_number)
+                .addProperty("opener", opener)
+                .addProperty("opening_bank", opening_bank)
                 .build();
         return ComicApi.getApi().addCashOutUnion(body)
                 .compose(ComicApiImpl.<AddCashOutWayResponse>getApiTransformer2())
@@ -662,7 +599,7 @@ public class UserRepository implements UserDataSource {
 
     @Override
     public Observable<ApprenticeListResponse> getApprenticeList(int page, int type) {
-        return ComicApi.getApi().getApprenticeList(page,type)
+        return ComicApi.getApi().getApprenticeList(page, type)
                 .compose(ComicApiImpl.<ApprenticeListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
@@ -675,7 +612,7 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<TLPayResponse> getTLPay(long goods_id,long book_id) {
+    public Observable<TLPayResponse> getTLPay(long goods_id, long book_id) {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("goods_id", goods_id)
                 .addProperty("book_id", book_id)

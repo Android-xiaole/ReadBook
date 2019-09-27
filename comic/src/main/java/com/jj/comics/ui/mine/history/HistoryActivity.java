@@ -65,7 +65,6 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
                             bookModel.getId(),
                             "历史列表");
                 }else if (view.getId() == R.id.right) {
-                    showToastShort("删除");
                     ArrayList<BookModel> list = new ArrayList<>();
                     list.add(bookModel);
                     getP().deleteHistory(list,position);

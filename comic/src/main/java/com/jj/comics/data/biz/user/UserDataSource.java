@@ -11,24 +11,17 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
-import com.jj.comics.data.model.FeedbackListResponse;
-import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
-import com.jj.comics.data.model.PayCenterInfoResponse;
 import com.jj.comics.data.model.PayInfoResponse;
 import com.jj.comics.data.model.PaySettingResponse;
 import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.RewardHistoryResponse;
-import com.jj.comics.data.model.RichDataResponse;
-import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
-import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
 
@@ -39,7 +32,7 @@ import okhttp3.MultipartBody;
 
 public interface UserDataSource {
     //第三方登录绑定手机号
-    Observable<LoginResponse> bindPhone(String phoneNum, String code,String inviteCode,String openId);
+    Observable<LoginResponse> bindPhone(String phoneNum, String code, String inviteCode, String openId);
 
 
     //第三方登录获取验证码
@@ -52,7 +45,7 @@ public interface UserDataSource {
     Observable<ResponseModel> getPhoneCode(String activityName, String mobile);
 
     //验证码登录
-    Observable<LoginResponse> loginBySecurityCode(String phone, String psw,String inviteCode);
+    Observable<LoginResponse> loginBySecurityCode(String phone, String psw, String inviteCode);
 
     /**
      * 微信登录
@@ -80,7 +73,6 @@ public interface UserDataSource {
      */
     Observable<LoginResponse> wbLogin(String accecc_tokon, String uid);
 
-    Observable<UidLoginResponse> uidLogin(String uid);
 
     Observable<UserInfoResponse> getUserInfo();
 
@@ -112,14 +104,6 @@ public interface UserDataSource {
     //获取充值金币价格列表
     Observable<RechargeCoinResponse> getRechargeCoinList();
 
-    //获取当前用户打赏记录
-    Observable<RewardHistoryResponse> getRewardsRecord(String activityName);
-
-    //获取全站打赏统计的用户排行
-    Observable<RichResponse> getRewardRankingListOfUser(String activityName);
-
-    //获取实时打赏用户的列表
-    Observable<RichDataResponse> rewardRecordByAllUser(String activityName, int pageNum);
 
     //打赏
     Observable<CommonStatusResponse> doReward(long contentId, String type, int giftNums);
@@ -145,11 +129,6 @@ public interface UserDataSource {
     //获取用户阅读历史记录列表
     Observable<CollectionResponse> getHistoryList();
 
-    //获取用户反馈列表
-    Observable<FeedbackListResponse> getFeedbackList(int pageNum, String tag);
-
-    //获取用户反馈信息状态，有没有新的回复信息
-    Observable<FeedbackStatusModel> getFeedbackStatus();
 
     //获取漫画收藏点赞状态
     Observable<CommonStatusResponse> getCollectStatus(long id, String retryTag);
@@ -173,6 +152,7 @@ public interface UserDataSource {
 
     /**
      * 我的返利列表
+     *
      * @param page
      * @return
      */
@@ -180,6 +160,7 @@ public interface UserDataSource {
 
     /**
      * 我的提现列表
+     *
      * @param page
      * @return
      */
@@ -187,20 +168,23 @@ public interface UserDataSource {
 
     /**
      * 绑定体现方式状态
+     *
      * @return
      */
     Observable<CashOutWayResponse> getCashOutWayStatus();
 
     /**
      * 添加支付宝
+     *
      * @param account_number
      * @param opener
      * @return
      */
-    Observable<AddCashOutWayResponse> addCashOutWayAli(String account_number,String opener);
+    Observable<AddCashOutWayResponse> addCashOutWayAli(String account_number, String opener);
 
     /**
      * 添加银行卡
+     *
      * @param account_number
      * @param opener
      * @param opening_bank
@@ -211,6 +195,7 @@ public interface UserDataSource {
 
     /**
      * 提现
+     *
      * @param type
      * @param money
      * @return
@@ -219,6 +204,7 @@ public interface UserDataSource {
 
     /**
      * 徒弟
+     *
      * @param type
      * @param page
      * @return
@@ -227,18 +213,21 @@ public interface UserDataSource {
 
     /**
      * 获取分享推荐列表
+     *
      * @return
      */
     Observable<ShareRecommendResponse> getShareRecommend();
 
     /**
      * 通联支付宝
+     *
      * @return
      */
-    Observable<TLPayResponse> getTLPay(long goods_id,long book_id);
+    Observable<TLPayResponse> getTLPay(long goods_id, long book_id);
 
     /**
      * 获取通联支付宝订单状态
+     *
      * @return
      */
     Observable<TLPayStatusResponse> getTLPayStatus(String tradeNo);

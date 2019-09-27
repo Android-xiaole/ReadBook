@@ -22,8 +22,6 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
-import com.jj.comics.data.model.FeedbackListResponse;
-import com.jj.comics.data.model.FeedbackStatusModel;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.NotificationListResponse;
@@ -41,21 +39,12 @@ import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.RewardGiftsResponse;
-import com.jj.comics.data.model.RewardHistoryResponse;
-import com.jj.comics.data.model.RewardListResponse;
-import com.jj.comics.data.model.RichDataResponse;
-import com.jj.comics.data.model.RichResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.ShareRecommendResponse;
-import com.jj.comics.data.model.SignAutoResponse;
-import com.jj.comics.data.model.SignResponse;
-import com.jj.comics.data.model.SignTaskResponse;
 import com.jj.comics.data.model.SortListResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
-import com.jj.comics.data.model.UidLoginResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.data.model.WxModel;
@@ -334,13 +323,6 @@ public interface ComicService {
     @POST(API_REVIEW)
     Observable<CommonStatusResponse> sendComment(@Body RequestBody body);
 
-    /**
-     * 根据mainContentId获取当前内容的打赏列表
-     *
-     * @return
-     */
-    @GET(API_BOOK_BONUS)
-    Observable<RewardListResponse> getRewardRecordByContent(@QueryMap Map<String, Object> parames);
 
     /**
      * 根据主内容id获取当前内容的评论列表
@@ -486,22 +468,6 @@ public interface ComicService {
     @POST(API_APP_WEIBO_LOGIN)
     Observable<LoginResponse> wbLogin(@Body RequestBody body);
 
-    /**
-     * 获取当前用户的打赏记录
-     *
-     * @return
-     */
-    @POST(API_MYBOOKBONUS)
-    Observable<RewardHistoryResponse> getRewardsRecordByUser();
-
-
-    /**
-     * 获取全站打赏的用户排行
-     *
-     * @return
-     */
-    @GET(API_RICHEST_LIST)
-    Observable<RichResponse> getRewardRankingListOfUser();
 
 
     /**
@@ -584,13 +550,6 @@ public interface ComicService {
     @POST(USER_ALTER_MOBILE)
     Observable<LoginResponse> alterMobile(@Body RequestBody body);
 
-    /**
-     * 获取实时打赏用户的列表
-     *
-     * @return
-     */
-    @GET(API_RICHEST_ROLL)
-    Observable<RichDataResponse> rewardRecordByAllUser(@Query("page") int pageNum);
 
     /**
      * 获取用户阅读历史记录列表
@@ -625,21 +584,6 @@ public interface ComicService {
 
 /*********************************************  Task 模块  ****************************************************************/
 
-    /**
-     * 签到状态和自动订阅
-     *
-     * @return
-     */
-    @POST(API_REST)
-    Observable<SignAutoResponse> signAuto();
-
-    /**
-     * 签到
-     *
-     * @return
-     */
-    @POST(API_CHECK)
-    Observable<SignResponse> doSignIn();
 
     /**
      * 金币大赠送
@@ -649,13 +593,6 @@ public interface ComicService {
     @POST(API_APP_LOGIN_GIVE)
     Observable<CommonStatusResponse> presentGold();
 
-    /**
-     * 获取金币中心任务列表
-     *
-     * @return
-     */
-    @POST(API_FULI)
-    Observable<SignTaskResponse> getSignTasks();
 
     /**
      * 分享上报
@@ -738,21 +675,6 @@ public interface ComicService {
     Observable<ResponseModel> uploadFeedback(@Body RequestBody body);
 
 
-    /**
-     * 获取用户反馈信息列表
-     *
-     * @return
-     */
-    @POST(API_RESPONSELIST)
-    Observable<FeedbackListResponse> getFeedbackList();
-
-    /**
-     * 获取用户反馈未读消息状态，是否有未读消息
-     *
-     * @return
-     */
-    @POST(API_REVERT)
-    Observable<FeedbackStatusModel> getFeedbackStatus();
 
 
     /**
@@ -812,13 +734,6 @@ public interface ComicService {
     /****************************************以下 是Goods 模块 ***************************************************************************/
 
 
-    /**
-     * 获取当前产品带的打赏礼物列表
-     *
-     * @return
-     */
-    @GET(API_GIFT)
-    Observable<RewardGiftsResponse> getRewardGoodsList();
 
     /**
      * 兑换码兑换金币
@@ -891,13 +806,6 @@ public interface ComicService {
     @GET("api/app_pay_setting")
     Observable<PaySettingResponse> getPayCenterInfo(@Query("theme_type") String themeType, @Query("type") String type);
 
-    /**
-     * UID登录接口
-     *
-     * @return
-     */
-    @POST("api/app_id_login")
-    Observable<UidLoginResponse> uidLogin(@Body RequestBody requestBody);
 
     /**
      * 通用的下载文件

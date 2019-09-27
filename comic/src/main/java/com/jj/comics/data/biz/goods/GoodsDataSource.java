@@ -1,20 +1,11 @@
 package com.jj.comics.data.biz.goods;
 
 import com.jj.comics.data.model.PrePayOrderResponseAli;
-import com.jj.comics.data.model.PrePayOrderResponseHuifubao;
 import com.jj.comics.data.model.PrePayOrderResponseWx;
-import com.jj.comics.data.model.ResponseModel;
-import com.jj.comics.data.model.RewardGiftsResponse;
 
 import io.reactivex.Observable;
 
 public interface GoodsDataSource {
-
-    //兑换码兑换金币
-    Observable<ResponseModel> goldExchange(long userId, String code);
-
-    //获取打上礼物列表
-    Observable<RewardGiftsResponse> getRewardGoodsList();
 
     /**
      * 微信支付下单
@@ -34,12 +25,4 @@ public interface GoodsDataSource {
      */
     Observable<PrePayOrderResponseAli> createPreOrderAli(long goosId, long book_id);
 
-    /**
-     * 汇付宝下单
-     *
-     * @param goosId
-     * @param book_id
-     * @return
-     */
-    Observable<PrePayOrderResponseHuifubao> createPreOrderHuifubao(long goosId, long book_id);
 }

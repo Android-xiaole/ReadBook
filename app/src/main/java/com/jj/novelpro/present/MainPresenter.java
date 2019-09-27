@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Environment;
 
+import androidx.annotation.IntRange;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.BaseApplication;
 import com.jj.base.CusNavigationCallback;
@@ -23,11 +27,6 @@ import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.common.net.download.DownLoadManager;
 import com.jj.comics.common.net.download.DownloadProgressListener;
 import com.jj.comics.data.biz.pruduct.ProductRepository;
-import com.jj.comics.data.biz.task.TaskRepository;
-import com.jj.comics.data.biz.user.UserRepository;
-import com.jj.comics.data.model.FeedbackStatusModel;
-import com.jj.comics.data.model.SignAutoResponse;
-import com.jj.comics.data.model.SignTaskResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.util.FRouterHelper;
 import com.jj.comics.util.LoginHelper;
@@ -41,14 +40,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 import java.util.List;
 
-import androidx.annotation.IntRange;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;

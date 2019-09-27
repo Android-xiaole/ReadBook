@@ -94,8 +94,6 @@ public class ComicApplication extends BaseApplication {
         initUmeng();
         configUnits();
 
-        getShareParams();
-
         //处理Rxjava全局捕获异常，防止下游终止订阅之后，上游有未处理的异常导致崩溃
         if (!Constants.DEBUG) {//如果是调试模式就不开启，这样方便排查BUG
             RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
@@ -183,32 +181,6 @@ public class ComicApplication extends BaseApplication {
         });
     }
 
-    public void getShareParams() {
-        ProductRepository.getInstance().getShareParam(getApplication().getClass().getName())
-                .subscribe(new ApiSubscriber2<ShareParamModel>() {
-                    @Override
-                    public void onNext(ShareParamModel shareParamModel) {
-
-                        if (shareParamModel.getShareWays() != null && shareParamModel.getShareWays().size() > 0) {
-                            ShareParamModel.ShareParam shareParam = shareParamModel.getShareWays().get(0);
-                            if (!TextUtils.isEmpty(shareParam.getDefaultImgUrl())) {
-                                img = shareParam.getDefaultImgUrl();
-                            }
-                            if (!TextUtils.isEmpty(shareParam.getDefaultShareLinkHost())) {
-                                host = shareParam.getDefaultShareLinkHost();
-                            }
-                        }
-                        SharedPref.getInstance(getApplicationContext()).putString(Constants.SharedPrefKey.SHARE_IMG_KEY, img);
-                        SharedPref.getInstance(getApplicationContext()).putString(Constants.SharedPrefKey.SHARE_HOST_KEY, host);
-                    }
-
-                    @Override
-                    protected void onFail(NetError error) {
-                        SharedPref.getInstance(getApplicationContext()).putString(Constants.SharedPrefKey.SHARE_IMG_KEY, img);
-                        SharedPref.getInstance(getApplicationContext()).putString(Constants.SharedPrefKey.SHARE_HOST_KEY, host);
-                    }
-                });
-    }
 
 
     private void initUmeng() {

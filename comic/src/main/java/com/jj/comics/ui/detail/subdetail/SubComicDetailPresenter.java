@@ -12,7 +12,6 @@ import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.data.model.RewardListResponse;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -73,29 +72,11 @@ public class SubComicDetailPresenter extends BasePresenter<BaseRepository, SubCo
                 });
     }
 
-    /**
-     * 获取内容打赏排行列表
-     */
     @Override
     public void getRewardRecordList(long id) {
-        ContentRepository.getInstance().getRewardRecordByContent(id , 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<RewardListResponse>bindLifecycle())
-                .subscribe(new ApiSubscriber2<RewardListResponse>() {
-                    @Override
-                    public void onNext(RewardListResponse response) {
-                        if (response.getData()!=null&&response.getData().getData()!=null){
-                            getV().onGetRewardRecordList(response.getData().getData());
-                        }
-                    }
 
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-                });
     }
+
 
     /**
      * 点赞或者取消点赞评论的接口
@@ -110,9 +91,9 @@ public class SubComicDetailPresenter extends BasePresenter<BaseRepository, SubCo
                 .subscribe(new ApiSubscriber2<CommonStatusResponse>() {
                     @Override
                     public void onNext(CommonStatusResponse response) {
-                        if (response.getData().getStatus()){
+                        if (response.getData().getStatus()) {
                             getV().onFavorCommentSuccess(type);
-                        }else{
+                        } else {
                             ToastUtil.showToastShort(response.getMessage());
                         }
                     }

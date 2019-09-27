@@ -21,7 +21,6 @@ import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.OSSResponse;
-import com.jj.comics.data.model.RewardListResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.SortListResponse;
 import com.jj.comics.data.model.UserInfo;
@@ -166,15 +165,6 @@ public class ContentRepository implements ContentDataSource {
                 .compose(ComicApiImpl.<CommonStatusResponse>getApiTransformer2());
     }
 
-    @Override
-    public Observable<RewardListResponse> getRewardRecordByContent(long contentId, int pageNum) {
-        Map<String, Object> parames = new HashMap<>();
-        parames.put(Constants.RequestBodyKey.ID, contentId);
-        parames.put(Constants.RequestBodyKey.PAGE_NUM, pageNum);
-        return ComicApi.getApi().getRewardRecordByContent(parames)
-                .retryWhen(new RetryFunction2())
-                .compose(ComicApiImpl.<RewardListResponse>getApiTransformer2());
-    }
 
     @Override
     public Observable<CommentListResponse> getCommentListByContent(long id, int pageNum, int pageSize) {

@@ -14,7 +14,6 @@ import com.jj.comics.data.model.CollectionResponse;
 import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.OSSResponse;
-import com.jj.comics.data.model.RewardListResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.SortListResponse;
 
@@ -52,8 +51,6 @@ public interface ContentDataSource {
     //提交评论
     Observable<CommonStatusResponse> sendComment(long bookId, String commentDetail);
 
-    //根据主内容id获取打赏用户列表
-    Observable<RewardListResponse> getRewardRecordByContent(long contentId, int pageNum);
 
     //根据主内容id获取当前内容评论列表
     Observable<CommentListResponse> getCommentListByContent(long id, int pageNum, int pageSize);
