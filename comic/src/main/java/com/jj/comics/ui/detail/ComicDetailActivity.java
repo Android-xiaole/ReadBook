@@ -164,10 +164,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (model != null) {
-                    long chapterId = catalogAdapter.getData().get(position).getId();
-                    catalogAdapter.notifyItem(chapterId);
-                    getP().toRead(model, chapterId);
-                    mCatalogMenu.closeDrawers();
+                    BookCatalogModel catalogModel = catalogAdapter.getData().get(position);
+                    catalogAdapter.notifyItem(catalogModel.getId());
+                    getP().toRead(model, catalogModel);
+                    //从目录打开阅读页时不关闭目录，防止闪屏
+//                    mCatalogMenu.closeDrawers();
                 }
             }
         });
@@ -255,7 +256,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             }
         } else if (id == R.id.tv_read) {//去阅读
             if (model == null) return;
-            getP().toRead(model, model.getChapterid());
+            getP().toRead(model, catalogAdapter.getCurrentCatalogModel(model.getChapterid()));
         } else if (id == R.id.tv_moreInfo) {//查看更多
             if (model == null) return;
             ARouter.getInstance().build(RouterMap.COMIC_DETAIL_BOOKINFO_ACTIVITY)
@@ -285,13 +286,17 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 case RequestCode.SUBSCRIBE_REQUEST_CODE:
                     long chapterId = data.getLongExtra(Constants.IntentKey.ID, 0);
                     if (chapterId != 0) {
-                        getP().toRead(model, chapterId);
+                        getP().toRead(model, catalogAdapter.getCurrentCatalogModel(chapterId));
                     }
                     break;
             }
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     /**
      * 填充数据
@@ -404,8 +409,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         }
     }
 
-    public void toRead(BookModel bookModel, long chapterId) {
-        getP().toRead(bookModel, chapterId);
+    public void toRead(BookModel bookModel, BookCatalogModel catalogModel) {
+        getP().toRead(bookModel, catalogModel);
     }
 
     @Override

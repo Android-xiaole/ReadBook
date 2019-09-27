@@ -33,7 +33,7 @@ public interface ComicDetailContract {
 
 
         //跳转到阅读页面
-        void toRead(BookModel bookModel, long chapterid);
+        void toRead(BookModel bookModel, BookCatalogModel catalogModel );
 
         //获取收藏状态
         void getCollectStatus(long id);

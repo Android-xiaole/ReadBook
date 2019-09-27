@@ -237,12 +237,12 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         catalogAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mCatalogMenu.closeDrawers();
                 for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
                     if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
                         mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
                     }
                 }
+                mCatalogMenu.closeDrawers();
             }
         });
 
@@ -273,8 +273,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         mPageLoader.setOnPageChangeListener(new PageLoader.OnPageChangeListener() {
             @Override
             public void onChapterChange(int pos) {
-                BookCatalogModel catalogModel = catalogAdapter.getData().get(pos);
-                ReadComicActivity.this.catalogModel = catalogModel;
+                ReadComicActivity.this.catalogModel = catalogAdapter.getData().get(pos);
                 catalogAdapter.notifyItem(catalogModel.getId());
             }
 
@@ -326,13 +325,31 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void clickNextChapter() {
-                //todo 此处需要增加用户登录校验
-                mPageLoader.skipNextChapter();
+                BookCatalogModel nextCatalogModel = catalogAdapter.getNextCatalogModel(catalogModel);
+                if (nextCatalogModel != null) {
+                    if (nextCatalogModel.getIsvip() == 1) {//收费内容强制登录
+                        if (LoginHelper.interruptLogin(ReadComicActivity.this,null)) {
+                            mPageLoader.skipNextChapter();
+                        }
+                    }else {
+                        mPageLoader.skipNextChapter();
+                    }
+                }
+
             }
 
             @Override
             public void clickLastChapter() {
-                mPageLoader.skipPreChapter();
+                BookCatalogModel preCatalogModel = catalogAdapter.getPreCatalogModel(catalogModel);
+                if (preCatalogModel != null) {
+                    if (preCatalogModel.getIsvip() == 1) {//收费内容强制登录
+                        if (LoginHelper.interruptLogin(ReadComicActivity.this,null)) {
+                            mPageLoader.skipNextChapter();
+                        }
+                    }else {
+                        mPageLoader.skipPreChapter();
+                    }
+                }
             }
         });
         sb_textSetting.setOnProgressChangedListener(new BubbleSeekBar.OnProgressChangedListener() {

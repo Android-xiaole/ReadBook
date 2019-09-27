@@ -29,6 +29,7 @@ public class PageView extends View {
 
     private final static String TAG = "BookPageWidget";
 
+    //阅读页底部上一章下一章按钮的标识
     private static final int BUTTON_LEFT = 1;
     private static final int BUTTON_RIGHT = 2;
 

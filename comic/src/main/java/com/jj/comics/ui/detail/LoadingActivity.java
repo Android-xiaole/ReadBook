@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.net.NetError;
@@ -17,15 +19,12 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.ui.dialog.DialogUtilForComic;
-import com.jj.comics.ui.dialog.LoginNotifyDialog;
 import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 
 import net.frakbot.jumpingbeans.JumpingBeans;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 /**
@@ -38,15 +37,16 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     TextView tv_loading;
 
     private BookModel bookModel;
+    private BookCatalogModel mCatalogModel;
     private long chapterid;
 
     /**
      * 跳转到loading界面
      */
-    public static void toLoading(Activity context, BookModel bookModel, long chapterid) {
+    public static void toLoading(Activity context, BookModel bookModel, BookCatalogModel catalogModel) {
         ARouter.getInstance().build(RouterMap.COMIC_LOADING_ACTIVITY)
                 .withSerializable(Constants.IntentKey.BOOK_MODEL, bookModel)
-                .withLong(Constants.IntentKey.BOOK_CHAPTER_ID, chapterid)
+                .withSerializable(Constants.IntentKey.BOOK_CHAPTER, catalogModel)
                 .navigation(context);
     }
 
@@ -57,7 +57,8 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                 .setLoopDuration(1000)
                 .build();
         bookModel = (BookModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_MODEL);
-        chapterid = getIntent().getLongExtra(Constants.IntentKey.BOOK_CHAPTER_ID, 0);
+        mCatalogModel = (BookCatalogModel) getIntent().getSerializableExtra(Constants.IntentKey.BOOK_CHAPTER);
+        chapterid = mCatalogModel.getId();
         if (bookModel != null) {
             getP().toRead(bookModel, chapterid);
         } else {
@@ -93,25 +94,28 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
         }
     }
 
-    private LoginNotifyDialog loginNotifyDialog;
+//    private LoginNotifyDialog loginNotifyDialog;
     public void createLoginDialog() {
-        if (loginNotifyDialog == null) loginNotifyDialog = new LoginNotifyDialog();
-        loginNotifyDialog.show(getSupportFragmentManager(), new DialogUtilForComic.OnDialogClick() {
-            @Override
-            public void onConfirm() {
-                loginNotifyDialog.dismiss();
-                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY)
-                        .navigation(LoadingActivity.this, RequestCode.LOGIN_REQUEST_CODE);
-            }
-
-            @Override
-            public void onRefused() {
-                loginNotifyDialog.dismiss();
-                finish();
-            }
-
-
-        });
+        ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY)
+                .navigation(LoadingActivity.this, RequestCode.LOGIN_REQUEST_CODE);
+        //取消登录页面之前的弹窗提醒
+//        if (loginNotifyDialog == null) loginNotifyDialog = new LoginNotifyDialog();
+//        loginNotifyDialog.show(getSupportFragmentManager(), new DialogUtilForComic.OnDialogClick() {
+//            @Override
+//            public void onConfirm() {
+//                loginNotifyDialog.dismiss();
+//                ARouter.getInstance().build(RouterMap.COMIC_LOGIN_ACTIVITY)
+//                        .navigation(LoadingActivity.this, RequestCode.LOGIN_REQUEST_CODE);
+//            }
+//
+//            @Override
+//            public void onRefused() {
+//                loginNotifyDialog.dismiss();
+//                finish();
+//            }
+//
+//
+//        });
     }
 
     @Override

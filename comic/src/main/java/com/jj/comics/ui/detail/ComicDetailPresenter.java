@@ -24,6 +24,7 @@ import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.ui.read.ReadComicActivity;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
 
@@ -90,9 +91,18 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailCont
     }
 
     @Override
-    public void toRead(final BookModel bookModel, final long chapterid) {
+    public void toRead(final BookModel bookModel, final BookCatalogModel catalogModel) {
         if (getV() instanceof Activity) {
-            LoadingActivity.toLoading((Activity) getV(), bookModel, chapterid);
+            if (catalogModel != null) {
+                if (catalogModel.getIsvip() == 1) {//收费内容强制登录
+                    if (LoginHelper.interruptLogin((ComicDetailActivity)getV(),
+                            null)) {
+                        LoadingActivity.toLoading((Activity) getV(), bookModel, catalogModel);
+                    }
+                }else {
+                    LoadingActivity.toLoading((Activity) getV(), bookModel, catalogModel);
+                }
+            }
         }
 //        getV().showProgress();
 //        Observable.just(chapterid)

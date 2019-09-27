@@ -68,15 +68,37 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
         scrollMiddle(currentIndex);
     }
 
-    public long getCurrentPosition() {
-        return getIndex(currentContentId);
+    public BookCatalogModel getNextCatalogModel(BookCatalogModel currModel) {
+        int index = getIndex(currModel.getId());
+        if (index == getData().size()-1) {
+            return getData().get(getData().size()-1);
+        }else {
+            return getData().get(index + 1);
+        }
     }
+
+    public BookCatalogModel getPreCatalogModel(BookCatalogModel currModel) {
+        int index = getIndex(currModel.getId());
+        if (index == 0) {
+            return getData().get(0);
+        }else {
+            return getData().get(index - 1);
+        }
+    }
+
+    public BookCatalogModel getCurrentCatalogModel(long chapterId) {
+        int index = getIndex(chapterId);
+        return getData().get(index);
+    }
+
 
     public long getCurrentContentId() {
         return currentContentId;
     }
 
     public int getIndex(long id) {
+        //当点击立即阅读按钮的时候，有可能传过来的章节id为0，此时默认读第一章
+        if (id == 0) return 0;
         for (int i = 0; i < getData().size(); i++) {
             if (getData().get(i).getId() == id) {
                 return i;
