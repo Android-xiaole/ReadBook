@@ -148,7 +148,7 @@ public class ShareImageDialog extends Dialog implements BaseQuickAdapter.OnItemC
             if (info.getContent() != null) {
                 book_content.setText(info.getContent());
             }
-            if (info.getKeywords() != null) {
+            if (info.getKeywords() != null && !"".equals(info.getKeywords())) {
                 String[] keys = info.getKeywords().split(",");
                 if (keys.length == 1) {
                     keyword1.setVisibility(View.VISIBLE);

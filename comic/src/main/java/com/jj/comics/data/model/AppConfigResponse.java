@@ -28,6 +28,51 @@ public class AppConfigResponse extends ResponseModel {
         private String app_api_url;
         private long channelid;
         private String pay_info;
+        private String title1;
+        private String title2;
+        private String content;
+        private String shareIconUrl;
+        private String shareBaseUrl;
+
+        public String getTitle1() {
+            return title1;
+        }
+
+        public void setTitle1(String title1) {
+            this.title1 = title1;
+        }
+
+        public String getTitle2() {
+            return title2;
+        }
+
+        public void setTitle2(String title2) {
+            this.title2 = title2;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getShareIconUrl() {
+            return shareIconUrl;
+        }
+
+        public void setShareIconUrl(String shareIconUrl) {
+            this.shareIconUrl = shareIconUrl;
+        }
+
+        public String getShareBaseUrl() {
+            return shareBaseUrl;
+        }
+
+        public void setShareBaseUrl(String shareBaseUrl) {
+            this.shareBaseUrl = shareBaseUrl;
+        }
 
         public LoginBean getLogin() {
             return login;

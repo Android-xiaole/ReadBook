@@ -167,7 +167,7 @@ public class SharePicture extends LinearLayout {
         if (shareInfo.getType() != null) {
             tv_type.setText(shareInfo.getType());
         }
-        if (info.getKeywords() != null) {
+        if (info.getKeywords() != null && !"".equals(info.getKeywords())) {
             String[] keys = info.getKeywords().split(",");
             if (keys.length == 1) {
                 keyword1.setVisibility(View.VISIBLE);

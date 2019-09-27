@@ -174,9 +174,7 @@ public class SearchActivity extends BaseActivity<SearchPresenter> implements Sea
         if (view.getId() == R.id.search_back) {
             finish();
         } else if (view.getId() == R.id.search_cancel) {
-            et_search.setText("");
-            et_search.setFocusable(true);
-            et_search.setFocusableInTouchMode(true);
+            finish();
         }
     }
 }

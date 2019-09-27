@@ -13,6 +13,7 @@ public class Constants {
 
     public static String OPEN_INSTALL_URL = "http://share.sou89.cn/download.html?";
     public static String CONTENT_URL = "http://share.sou89.cn/?";
+
     public static String CHANNEL_ID_PHP() {
         return SharedPref.getInstance().getString("CHANNEL_ID_PHP", "");
     }//新后台渠道ID（由{#CHANNEL_ID}转换后得到）
@@ -65,8 +66,8 @@ public class Constants {
     public static final String CACHE_PATH = BaseApplication.getApplication().getCacheDir().getAbsolutePath();
 
     //    public static String HOST = "cartoon-novel.jishusaice.cn";
-    public static final String HOST_TEST = "cartoon-novel.ds7j0i.cn";//测试环境域名
-    public static final String HOST_APP_CONFIG = "cartoon_novel.langd88.cn";//获取app配置
+    public static final String HOST_TEST = "cartoon-novel.513a3m.cn";//测试环境域名
+    public static final String HOST_APP_CONFIG = "cartoon_novel.jjmh881.cn";//获取app配置
     //cartoon-novel.txread.net
     // cartoon-novel.jishusaice.cn
     //cartoon-novel.jjmh114.cn
@@ -354,6 +355,15 @@ public class Constants {
         public static final String INVITE = "invite";
         public static final String READING = "reading";
         public static final String TYPE = "type";
+    }
+
+    //分享相关配置
+    public static class ShareCode {
+        public static final String SHARE_TITLE1 = "share_title1";
+        public static final String SHARE_TITLE2 = "share_title2";
+        public static final String SHARE_CONTENT = "share_content";
+        public static final String SHARE_ICON_URL = "share_icon_url";
+        public static final String SHARE_BASE_URL = "share_base_url";
     }
 
     // oss相关配置

@@ -10,12 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:rightTextString="收徒"
+        android:visibility="gone"
         app:rightTextVisibleToolbar="visible"
         app:title="@string/comic_mine_apprentice"></com.jj.comics.widget.comic.toolbar.ComicToolBar>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
+        android:visibility="gone"
         android:background="@color/comic_f4f6f9"></View>
 
     <com.google.android.material.tabs.TabLayout

@@ -131,7 +131,7 @@ public class ShareHelper {
 //                        TencentHelper.getWxApi().sendReq(req);
 
                         //初始化一个 WXTextObject 对象，填写分享的文本内容
-                        String text = "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl() + "复制这段链接，到系统浏览器打开";
+                        String text = "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl();
                         WXTextObject textObj = new WXTextObject();
                         textObj.text = text;
 
@@ -469,7 +469,7 @@ public class ShareHelper {
         req.transaction = buildTransaction("img");
         req.message = msg;
         //调用api接口，发送数据到微信
-        TencentHelper.getWxApi(Constants.WX_APP_ID_LOGIN()).sendReq(req);
+         TencentHelper.getWxApi(Constants.WX_APP_ID_LOGIN()).sendReq(req);
     }
 
     /**
