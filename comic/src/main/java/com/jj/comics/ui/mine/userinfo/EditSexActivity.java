@@ -26,8 +26,8 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
     CheckBox maleCheck;
     @BindView(R2.id.check_female)
     CheckBox femaleCheck;
-    @BindView(R2.id.check_unknown)
-    CheckBox unknown;
+//    @BindView(R2.id.check_unknown)
+//    CheckBox unknown;
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -53,9 +53,9 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
                     getP().updateUserInfo(null, null, 2);
                 }
 
-                if (unknown.isChecked()) {
-                    getP().updateUserInfo(null, null, 0);
-                }
+//                if (unknown.isChecked()) {
+//                    getP().updateUserInfo(null, null, 0);
+//                }
             }
         });
 //        初始化性别
@@ -64,13 +64,13 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
             if (userInfo.getSex() == 1) {
                 maleCheck.setChecked(true);
                 femaleCheck.setChecked(false);
-                unknown.setChecked(false);
+//                unknown.setChecked(false);
             } else if (userInfo.getSex() == 2) {
                 maleCheck.setChecked(false);
                 femaleCheck.setChecked(true);
-                unknown.setChecked(false);
+//                unknown.setChecked(false);
             } else {
-                unknown.setChecked(true);
+//                unknown.setChecked(true);
                 maleCheck.setChecked(false);
                 femaleCheck.setChecked(false);
             }
@@ -93,15 +93,15 @@ public class EditSexActivity extends BaseActivity<EditInfoPresenter> implements 
         if (view.getId() == R.id.check_male) {
             maleCheck.setChecked(true);
             femaleCheck.setChecked(false);
-            unknown.setChecked(false);
+//            unknown.setChecked(false);
         } else if (view.getId() == R.id.check_female) {
             femaleCheck.setChecked(true);
             maleCheck.setChecked(false);
-            unknown.setChecked(false);
+//            unknown.setChecked(false);
         } else if (view.getId() == R.id.check_unknown) {
             femaleCheck.setChecked(false);
             maleCheck.setChecked(false);
-            unknown.setChecked(true);
+//            unknown.setChecked(true);
         }
     }
 

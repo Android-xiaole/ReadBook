@@ -106,9 +106,7 @@ public class SearchResultActivity extends BaseActivity<SearchResultPresenter> im
         if (id == R.id.search_result_back) {
             finish();
         } else if (view.getId() == R.id.search_cancel) {
-            et_search.setText("");
-            et_search.setFocusable(true);
-            et_search.setFocusableInTouchMode(true);
+            finish();
         }
     }
 

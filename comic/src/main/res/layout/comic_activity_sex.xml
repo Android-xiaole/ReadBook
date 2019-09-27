@@ -86,6 +86,7 @@
         android:layout_height="@dimen/dp_62"
         android:background="@color/comic_ffffff"
         android:focusable="false"
+        android:visibility="gone"
         android:focusableInTouchMode="false"
         android:gravity="center_vertical">
 
