@@ -104,7 +104,7 @@ android {
         debug {
             minifyEnabled false
             debuggable true
-            manifestPlaceholders = [value_channel_id: "jjmh2-default",
+            manifestPlaceholders = [value_channel_id: "jjxs-default",
                                     value_isDebug   : true]
             signingConfig signingConfigs.release
         }
@@ -112,7 +112,7 @@ android {
     productFlavors {
 
         "jjmh2-default" {
-            manifestPlaceholders = [value_channel_id: "jjmh2-default",
+            manifestPlaceholders = [value_channel_id: "jjxs-default",
                                     value_isDebug   : false]
         }
 
