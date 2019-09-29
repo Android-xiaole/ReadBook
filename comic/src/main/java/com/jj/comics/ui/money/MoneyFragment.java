@@ -61,6 +61,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
     ConstraintLayout mClUserInfo;
     private ShareRecommendAdapter mAdapter;
     private ShareDialog mDialog;
+    private PayInfo mPayInfo;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -138,6 +139,21 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
                 mDialog.show();
             }
         });
+
+        mTvMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPayInfo != null)
+                    ARouter.getInstance().build(RouterMap.COMIC_MY_REBATE_ACTIVITY).withSerializable(Constants.IntentKey.PAY_INFO, mPayInfo).navigation();
+            }
+        });
+
+        mTvApprentice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ARouter.getInstance().build(RouterMap.COMIC_MINE_APPRENTICE_ACTIVITY).navigation();
+            }
+        });
     }
 
     private void updateInfo() {
@@ -193,6 +209,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
 
     @Override
     public void onGetUserPayInfo(PayInfo payInfo) {
+        mPayInfo = payInfo;
         if (LoginHelper.getOnLineUser() != null) {
             mTvMoney.setText(payInfo.getTotal_rebate_amount() + "");
             mTvApprentice.setText(payInfo.getDisciple_num() + "");
