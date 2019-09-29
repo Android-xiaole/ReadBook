@@ -41,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp_16"
-            android:src="@drawable/qingchu"
             android:textColor="@color/comic_999999" />
     </LinearLayout>
 

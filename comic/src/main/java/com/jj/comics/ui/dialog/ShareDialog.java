@@ -3,12 +3,15 @@ package com.jj.comics.ui.dialog;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -29,11 +32,9 @@ import com.jj.comics.data.model.ShareInfo;
 import com.jj.comics.data.model.ShareMenuModel;
 import com.jj.comics.data.model.ShareMessageModel;
 import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.ShareHelper;
-import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.reporter.ActionReporter;
 import com.jj.comics.widget.SharePicture;
 import com.jj.comics.widget.ShareUserPicture;
@@ -47,11 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickListener {
@@ -118,7 +115,13 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
             shareMessageModel.setShareImgUrl(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_ICON_URL,"https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/test/ic_launcher_round.png"));
-            shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + URLEncoder.encode(uid) + "&cid=" + URLEncoder.encode(Constants.CHANNEL_ID) + "&pid=" + URLEncoder.encode(Constants.PRODUCT_CODE) + "&invite_code=" + URLEncoder.encode(loginUser.getInvite_code()) + "&name=" + URLEncoder.encode(loginUser.getNickname()) + "&pic=" + URLEncoder.encode(loginUser.getAvatar());
+            String uidEncode = URLEncoder.encode(uid);
+            String cidEncode = URLEncoder.encode(Constants.CHANNEL_ID);
+            String pidEncode = URLEncoder.encode(Constants.PRODUCT_CODE);
+            String inviteCodeEncode = URLEncoder.encode(loginUser.getInvite_code());
+            String nickNameEncode = URLEncoder.encode(loginUser.getNickname());
+            String avatarEncode = loginUser.getAvatar();
+            shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uidEncode + "&cid=" + cidEncode + "&pid=" + pidEncode + "&invite_code=" + inviteCodeEncode + "&name=" + nickNameEncode + "&pic=" + URLEncoder.encode(avatarEncode);
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
             shareMessageModel.setContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));
