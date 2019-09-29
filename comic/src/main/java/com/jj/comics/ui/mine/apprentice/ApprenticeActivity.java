@@ -3,6 +3,7 @@ package com.jj.comics.ui.mine.apprentice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -35,6 +36,8 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
     ComicToolBar mToolBar;
     @BindView(R2.id.btn_shoutu)
     TextView mBtnST;
+    @BindView(R2.id.btn_back)
+    ImageView mBtnBack;
     @Override
     protected void initData(Bundle savedInstanceState) {
         ArrayList<BaseFragment> fragments = new ArrayList<>();
@@ -53,6 +56,13 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
                 if (LoginHelper.interruptLogin(ApprenticeActivity.this, null)) {
                     share();
                 }
+            }
+        });
+
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
