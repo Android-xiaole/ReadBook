@@ -3,6 +3,7 @@ package com.jj.comics.ui.mine.apprentice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -34,6 +35,8 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
     ViewPager mViewPager;
     @BindView(R2.id.toolBar)
     ComicToolBar mToolBar;
+    @BindView(R2.id.btn_shoutu)
+    TextView mBtnST;
     @Override
     protected void initData(Bundle savedInstanceState) {
         ArrayList<BaseFragment> fragments = new ArrayList<>();
@@ -45,6 +48,15 @@ public class ApprenticeActivity extends BaseActivity <ApprenticePresenter> imple
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOffscreenPageLimit(0);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mBtnST.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (LoginHelper.interruptLogin(ApprenticeActivity.this, null)) {
+                    share();
+                }
+            }
+        });
 
         mToolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
             @Override
