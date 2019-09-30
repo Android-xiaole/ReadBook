@@ -105,7 +105,7 @@ public class Constants {
     public static final String COMPLETE_ALL_TASKS = "complete_all_tasks";
 
     //bugly appid和debug配置
-    public static final String BUGLY_APPID = "242baaf3a5";
+    public static final String BUGLY_APPID = "db3ecafadd";
     public static final boolean BUGLY_APPID_DEBUG = false;
 
     public static boolean ISLIVE_MAIN = false;//标记MainActivity是否存活
