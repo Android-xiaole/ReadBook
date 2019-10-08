@@ -231,8 +231,6 @@ public class SharePicture extends LinearLayout {
         // 先绘制中间部分的文字，计算出文字所需的高度
         String content = shareInfo.getContent();
         TextPaint contentPaint = article_content.getPaint();
-        //contentPaint.setColor();
-        //contentPaint.setTextSize();
         StaticLayout staticLayout =
                 new StaticLayout(content, contentPaint, (ScreenUtils.getDisplayMetrics().widthPixels - picMargin * 2),
                         Layout.Alignment.ALIGN_NORMAL, 1.2F, 0, false);
@@ -253,12 +251,14 @@ public class SharePicture extends LinearLayout {
             bitmapAll = Bitmap.createBitmap(picWidth, allBitmapHeight, config);
         }
         Canvas canvas = new Canvas(bitmapAll);
-        canvas.drawColor(Color.parseColor("#F5F5F5"));
+//        canvas.drawColor(Color.parseColor("#F5F5F5"));
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
         paint.setFilterBitmap(true);
 
+        Bitmap bgBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share_bg);
+        canvas.drawBitmap(bgBitmap, 0,0, paint);
         // 绘制top view
         canvas.drawBitmap(getLinearLayoutBitmap(top_linear, widthTop, heightTop), 0, 0, paint);
         canvas.save();
@@ -291,7 +291,7 @@ public class SharePicture extends LinearLayout {
             try {
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(10)    // 默认压缩质量为80
+                        .setQuality(60)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(
@@ -306,7 +306,7 @@ public class SharePicture extends LinearLayout {
                 finalCompressLongPictureWidth = finalCompressLongPictureWidth / 2;
                 result = new CompressHelper.Builder(mContext).setMaxWidth(finalCompressLongPictureWidth)
                         .setMaxHeight(Integer.MAX_VALUE) // 默认最大高度为960
-                        .setQuality(10)    // 默认压缩质量为80
+                        .setQuality(60)    // 默认压缩质量为80
                         .setFileName("长图_" + System.currentTimeMillis()) // 设置你需要修改的文件名
                         .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                         .setDestinationDirectoryPath(

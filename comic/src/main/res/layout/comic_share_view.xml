@@ -2,106 +2,114 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/comic_f4f6f9"
+    android:background="@drawable/share_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/top_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/comic_36"
-        android:paddingBottom="@dimen/comic_36">
-
-
-        <ImageView
-            android:id="@+id/iv_bookIcon"
-            android:layout_width="@dimen/dp_85"
-            android:layout_height="@dimen/dp_110"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:background="@drawable/bg_shadow"
-            android:padding="@dimen/dp_5"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher" />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ll_right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_25"
-            android:layout_marginTop="@dimen/dp_10"
-            android:orientation="vertical">
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_26"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_21"
+            android:background="@drawable/comic_shape_share_radius10_bg">
 
-            <TextView
-                android:id="@+id/tv_title"
+
+            <ImageView
+                android:id="@+id/iv_bookIcon"
+                android:layout_width="@dimen/dp_85"
+                android:layout_height="@dimen/dp_110"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:background="@drawable/bg_shadow"
+                android:padding="@dimen/dp_5"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher" />
+
+            <LinearLayout
+                android:id="@+id/ll_right"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="书本名称"
-                android:textColor="@color/comic_333333"
-                android:textSize="@dimen/dp_14" />
-
-            <LinearLayout
-                android:id="@+id/ll_author_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:gravity="center_vertical">
+                android:layout_marginLeft="@dimen/dp_25"
+                android:layout_marginTop="@dimen/dp_10"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_author"
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="书本名称"
+                    android:textColor="@color/comic_333333"
+                    android:textSize="@dimen/dp_14" />
+
+                <LinearLayout
+                    android:id="@+id/ll_author_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我是作者"
-                    android:textColor="@color/comic_a8adb3"
-                    android:textSize="@dimen/dp_12" />
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:gravity="center_vertical">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我是作者"
+                        android:textColor="@color/comic_a8adb3"
+                        android:textSize="@dimen/dp_12" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_5"
+                        android:layout_marginRight="@dimen/dp_5"
+                        android:text="|"
+                        android:textColor="@color/comic_a8adb3"
+                        android:textSize="@dimen/dp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="玄幻奇幻"
+                        android:textColor="@color/comic_a8adb3"
+                        android:textSize="@dimen/dp_12" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:layout_marginRight="@dimen/dp_5"
-                    android:text="|"
-                    android:textColor="@color/comic_a8adb3"
-                    android:textSize="@dimen/dp_12" />
+                    android:layout_marginTop="@dimen/dp_17"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tv_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="玄幻奇幻"
-                    android:textColor="@color/comic_a8adb3"
-                    android:textSize="@dimen/dp_12" />
+                    <TextView
+                        android:id="@+id/keyword1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/comic_share_key_shape"
+                        android:gravity="center"
+                        android:text="都市"
+                        android:textColor="@color/comic_a8adb3"
+                        android:textSize="@dimen/dp_12" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/keyword2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_10"
+                        android:background="@drawable/comic_share_key_shape"
+                        android:gravity="center"
+                        android:text="悬疑"
+                        android:textColor="@color/comic_a8adb3"
+                        android:textSize="@dimen/dp_12" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_17"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/keyword1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/comic_share_key_shape"
-                    android:gravity="center"
-                    android:text="都市"
-                    android:textColor="@color/comic_a8adb3"
-                    android:textSize="@dimen/dp_12" />
-
-                <TextView
-                    android:id="@+id/keyword2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:background="@drawable/comic_share_key_shape"
-                    android:gravity="center"
-                    android:text="悬疑"
-                    android:textColor="@color/comic_a8adb3"
-                    android:textSize="@dimen/dp_12" />
-
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -154,8 +162,8 @@
             android:id="@+id/qrcode_img"
             android:layout_width="152dp"
             android:layout_height="152dp"
-            android:layout_marginTop="@dimen/dp_80"
-            android:background="@drawable/bg_shadow"
+            android:layout_marginTop="@dimen/dp_24"
+            android:background="@drawable/qrcode_bg"
             android:src="@drawable/ic_launcher" />
 
         <TextView
@@ -164,7 +172,7 @@
             android:layout_marginBottom="58dp"
             android:text="识别二维码下载APP"
             android:textColor="@color/comic_000000"
-            android:textSize="@dimen/dp_15"
+            android:textSize="@dimen/dp_24"
             android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>
