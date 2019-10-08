@@ -234,14 +234,14 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
 
     @Override
     public void uploadReadRecord(final BookModel bookModel, final long chapterId, final int chapterorder,String chaptername) {
-        final UserInfo loginUser = LoginHelper.getOnLineUser();
-        //现将model以userId = 0的状态下保存到本地，代表未上传
-        daoHelper.insertOrUpdateRecord(bookModel, 0, chapterId, chapterorder,chaptername);
-        if (loginUser == null) {
-            //未登录直接发送通知，不要去做上传处理，因为没有token
-            EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId, chapterorder));
-            return;
-        }
+//        UserInfo loginUser = LoginHelper.getOnLineUser();
+//        //现将model以userId = 0的状态下保存到本地，代表未上传
+//        daoHelper.insertOrUpdateRecord(bookModel, 0, chapterId, chapterorder,chaptername);
+//        if (loginUser == null) {
+//            //未登录直接发送通知，不要去做上传处理，因为没有token
+//            EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(chapterId, chapterorder));
+//            return;
+//        }
         List<BookModel> bookModels = new ArrayList<>();
         bookModels.add(bookModel);
         UserRepository.getInstance().syncHistory(bookModels)

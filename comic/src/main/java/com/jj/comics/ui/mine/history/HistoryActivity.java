@@ -20,6 +20,10 @@ import com.jj.comics.R2;
 import com.jj.comics.adapter.bookshelf.CommonBookListAdapter;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.detail.ComicDetailActivity;
+import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,11 +126,6 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
         mAdapter.remove(position);
     }
 
-    @Override
-    public boolean useEventBus() {
-        return false;
-    }
-
     private View getEmptyView() {
         View view = LayoutInflater.from(this).inflate(R.layout.comic_empty_view, mRecycler,
                 false);
@@ -136,4 +135,20 @@ public class HistoryActivity extends BaseActivity<HistoryPresenter> implements H
         tvDesc.setText("哦呵~您还没有看过任何书籍\r\n赶快去看书吧~");
         return view;
     }
+
+    /**
+     * 来自阅读页面产生了历史记录刷新当前列表
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateReadHistory(UpdateReadHistoryEvent event) {
+        getP().getHistoryList();
+    }
+
+    @Override
+    public boolean useEventBus() {
+        return true;
+    }
+
 }

@@ -36,6 +36,7 @@ import com.jj.comics.R2;
 import com.jj.comics.adapter.detail.ReadComicCatalogAdapter;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
+import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
@@ -48,6 +49,7 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
+import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 import com.jj.comics.widget.bookreadview.PageLoader;
 import com.jj.comics.widget.bookreadview.PageView;
 import com.jj.comics.widget.bookreadview.TxtChapter;
@@ -131,6 +133,8 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private ShareMessageModel shareMessageModel;
 //    private boolean mShowCollectDialog = false;//记录观看的id  用来推荐收藏
 //    private ComicCollectionDialog comicCollectionDialog;//退出时弹出收藏提示弹窗
+    private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
+
 
     private long mReadStartTime = 0;//开始阅读时间
     private long mTotalLeaveTime = 0;//总共停留时间
@@ -276,6 +280,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             public void onChapterChange(int pos) {
                 ReadComicActivity.this.catalogModel = catalogAdapter.getData().get(pos);
                 catalogAdapter.notifyItem(catalogModel.getId());
+                //如果本地有章节内容的缓存就保存阅读记录到本地，发送通知刷新阅读历史记录
+                if (BookManager.isChapterCached(catalogModel.getBook_id() + "", catalogModel.getChaptername())) {
+                    daoHelper.insertOrUpdateRecord(bookModel, 0, catalogModel.getId(), catalogModel.getChapterorder(),catalogModel.getChaptername());
+                    EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(catalogModel.getId(), catalogModel.getChapterorder()));
+                }
             }
 
             @Override
@@ -516,6 +525,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         if (mPageLoader.getPageStatus() == PageLoader.STATUS_FINISH || mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
             mPageLoader.openChapter();
         }
+        //下载成功也要同步本地阅读历史记录
+        daoHelper.insertOrUpdateRecord(bookModel, 0, catalogModel.getId(), catalogModel.getChapterorder(),catalogModel.getChaptername());
+        EventBusManager.sendUpdateReadRecord(new UpdateReadHistoryEvent(catalogModel.getId(), catalogModel.getChapterorder()));
     }
 
     @Override
