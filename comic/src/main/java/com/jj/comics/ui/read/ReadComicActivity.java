@@ -9,12 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,7 +25,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.dialog.CustomFragmentDialog;
-import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.NetWorkUtil;
 import com.jj.base.utils.RouterMap;
@@ -45,18 +40,13 @@ import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ShareMessageModel;
-import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.ReadComicHelper;
-import com.jj.comics.util.SignUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
-import com.jj.comics.util.eventbus.events.RefreshCatalogListBySubscribeEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.widget.bookreadview.PageLoader;
 import com.jj.comics.widget.bookreadview.PageView;
@@ -67,16 +57,13 @@ import com.jj.comics.widget.bookreadview.utils.BookManager;
 import com.jj.comics.widget.bookreadview.utils.ReadSettingManager;
 import com.jj.comics.widget.bookreadview.utils.ScreenUtils;
 import com.jj.comics.widget.bubbleview.BubbleSeekBar;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -237,9 +224,23 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         catalogAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
-                    if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
-                        mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+                BookCatalogModel bookCatalogModel = catalogAdapter.getData().get(position);
+                if (bookCatalogModel!=null){
+                    //如果是收费章节，并且用户已经登录，就直接去跳转
+                    if (bookCatalogModel.getIsvip() == 1){
+                        if (LoginHelper.interruptLogin(ReadComicActivity.this,null)){
+                            for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
+                                if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
+                                    mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+                                }
+                            }
+                        }
+                    }else{
+                        for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
+                            if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
+                                mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+                            }
+                        }
                     }
                 }
                 mCatalogMenu.closeDrawers();
@@ -558,11 +559,17 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             switch (requestCode) {
                 case RequestCode.LOGIN_REQUEST_CODE:
                     if (bookModel != null) {
-                        getP().getCatalogList(bookModel);
+                        //登录成功之后重新获取小说收藏状态
                         getP().getCollectStatus(bookModel.getId());
-                    }
-                    if (bookModel != null && catalogModel != null && data != null) {
-                        getP().loadData(bookModel, catalogModel.getBook_id());
+                        /*
+                            登录返回之后不需要加载章节目录和获取内容的接口，
+                            因为章节目录没有和用户信息有关的数据，
+                            跳转登录之前不会跳转到下一章，当前的catalogModel并不会变化，不加载内容也没什么问题
+                         */
+//                        getP().getCatalogList(bookModel);
+//                        if (catalogModel != null && data != null) {
+//                            getP().loadData(bookModel, catalogModel.getId());
+//                        }
                     }
                     break;
                 case RequestCode.SUBSCRIBE_REQUEST_CODE:

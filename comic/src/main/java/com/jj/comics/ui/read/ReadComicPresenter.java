@@ -1,7 +1,5 @@
 package com.jj.comics.ui.read;
 
-import android.util.Log;
-
 import com.jj.base.BaseApplication;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
@@ -16,7 +14,6 @@ import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.db.DaoHelper;
-import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
@@ -31,12 +28,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.reactivestreams.Publisher;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +37,6 @@ import java.util.Map;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;

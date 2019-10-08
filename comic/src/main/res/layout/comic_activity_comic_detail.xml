@@ -276,9 +276,16 @@
 
                 <LinearLayout
                     android:id="@+id/lin_catalogMenu"
+                    android:clickable="false"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_44"
                     android:gravity="center_vertical">
+
+                    <ProgressBar
+                        android:id="@+id/pb_loading"
+                        android:layout_marginLeft="@dimen/dp_17"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"/>
 
                     <TextView
                         android:id="@+id/tv_catalogNum"
@@ -287,6 +294,8 @@
                         android:layout_marginLeft="@dimen/dp_17"
                         android:textColor="@color/comic_6e7379"
                         android:textSize="@dimen/dp_14"
+                        android:visibility="gone"
+                        tools:visibility="visible"
                         tools:text="共第206章" />
 
                     <TextView

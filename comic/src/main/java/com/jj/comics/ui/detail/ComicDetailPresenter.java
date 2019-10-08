@@ -1,59 +1,26 @@
 package com.jj.comics.ui.detail;
 
 import android.app.Activity;
-import android.net.Network;
-import android.util.Log;
 
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
-import com.jj.base.net.ApiSubscriber;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.toast.ToastUtil;
-import com.jj.comics.common.constants.Constants;
-import com.jj.comics.common.net.ComicApi;
-import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.biz.user.UserRepository;
-import com.jj.comics.data.model.BookCatalogContentResponse;
 import com.jj.comics.data.model.BookCatalogListResponse;
-import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.BookModelResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.ui.read.ReadComicActivity;
-import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.ReadComicHelper;
-import com.jj.comics.widget.bookreadview.utils.BookRepository;
 
-import org.reactivestreams.Publisher;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.rx_cache2.DynamicKey;
-import io.rx_cache2.EvictDynamicKey;
-import okhttp3.ResponseBody;
 
 
 class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailContract.IDetailView> implements ComicDetailContract.IDetailPresenter {
@@ -91,18 +58,9 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailCont
     }
 
     @Override
-    public void toRead(final BookModel bookModel, final BookCatalogModel catalogModel) {
+    public void toRead(final BookModel bookModel, final long chapterid) {
         if (getV() instanceof Activity) {
-            if (catalogModel != null) {
-                if (catalogModel.getIsvip() == 1) {//收费内容强制登录
-                    if (LoginHelper.interruptLogin((ComicDetailActivity)getV(),
-                            null)) {
-                        LoadingActivity.toLoading((Activity) getV(), bookModel, catalogModel);
-                    }
-                }else {
-                    LoadingActivity.toLoading((Activity) getV(), bookModel, catalogModel);
-                }
-            }
+            LoadingActivity.toLoading((Activity) getV(), bookModel, chapterid);
         }
 //        getV().showProgress();
 //        Observable.just(chapterid)
@@ -253,12 +211,14 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailCont
                     @Override
                     protected void onFail(NetError error) {
                         ToastUtil.showToastShort(error.getMessage());
+                        getV().onGetCatalogListFail();
                     }
 
                     @Override
                     protected void onEnd() {
                         super.onEnd();
                         getV().hideProgress();
+                        getV().onGetCatalogListEnd();
                     }
                 });
 

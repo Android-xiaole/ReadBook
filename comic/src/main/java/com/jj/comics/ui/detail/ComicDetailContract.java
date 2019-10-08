@@ -18,8 +18,14 @@ public interface ComicDetailContract {
 
         void onLoadRecommendList(BookListDataResponse response);
 
-        //获取目录列表的回调
+        //获取目录列表成功的回调
         void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum);
+
+        //获取目录列表失败的回调
+        void onGetCatalogListFail();
+
+        //获取目录列表结束的回调
+        void onGetCatalogListEnd();
     }
 
     interface IDetailPresenter {
@@ -33,7 +39,7 @@ public interface ComicDetailContract {
 
 
         //跳转到阅读页面
-        void toRead(BookModel bookModel, BookCatalogModel catalogModel );
+        void toRead(BookModel bookModel, long chapterid);
 
         //获取收藏状态
         void getCollectStatus(long id);

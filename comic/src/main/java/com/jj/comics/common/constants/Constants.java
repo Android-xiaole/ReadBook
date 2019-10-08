@@ -157,7 +157,6 @@ public class Constants {
         public static final String TL_PAY = "tlpay";
         public static final String IS_JPUSH = "isJpush";
 
-        public static final String BOOK_CHAPTER = "book_chapter";
     }
 
     //SharedPreferences存值key
