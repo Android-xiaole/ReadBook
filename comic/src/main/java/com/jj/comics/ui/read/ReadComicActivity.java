@@ -743,6 +743,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             mBottomMenu.setVisibility(GONE);
             lin_textSetting.setVisibility(View.GONE);
             view_fgx.setVisibility(View.GONE);
+            Utils.fixNotch(this);
         }
     }
 

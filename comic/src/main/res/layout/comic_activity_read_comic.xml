@@ -20,11 +20,11 @@
         <LinearLayout
             android:id="@+id/lin_topMenu"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_64"
+            android:layout_height="@dimen/dp_49"
             android:background="@drawable/comic_select_read_menu_bg_color"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/dp_32"
             android:visibility="gone"
+            android:gravity="center_vertical"
             tools:visibility="visible">
 
             <ImageView
@@ -106,6 +106,7 @@
                     app:bsb_min="14"
                     app:bsb_auto_adjust_section_mark="true"
                     app:bsb_show_section_mark="true"
+                    app:bsb_touch_to_seek = "true"
                     app:bsb_hide_bubble = "true"
                     app:bsb_track_color="@color/comic_e8ebf0"
                     app:bsb_second_track_color="@color/comic_e8ebf0"

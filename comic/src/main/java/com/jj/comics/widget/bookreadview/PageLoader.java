@@ -226,7 +226,6 @@ public abstract class PageLoader {
     private void initPaint() {
         //绘制左上角标题的笔
         mTopTitlePaint = new Paint();
-        mTopTitlePaint.setColor(ReadSettingManager.getInstance().isNightMode()?mContext.getResources().getColor(R.color.comic_353739):mContext.getResources().getColor(R.color.comic_a8adb3));
         mTopTitlePaint.setTextAlign(Paint.Align.LEFT); // 绘制的起始点
         mTopTitlePaint.setTextSize(ScreenUtils.spToPx(DEFAULT_TIP_SIZE)); // Tip默认的字体大小
         mTopTitlePaint.setAntiAlias(true);
@@ -448,9 +447,11 @@ public abstract class PageLoader {
         isNightMode = nightMode;
 
         if (isNightMode) {
+            mTopTitlePaint.setColor(mContext.getResources().getColor(R.color.comic_353739));
             mBatteryPaint.setColor(mContext.getResources().getColor(R.color.comic_353a40));
             setPageStyle(PageStyle.NIGHT);
         } else {
+            mTopTitlePaint.setColor(mContext.getResources().getColor(R.color.comic_a8adb3));
             mBatteryPaint.setColor(mContext.getResources().getColor(R.color.comic_a8adb3));
             setPageStyle(mPageStyle);
         }

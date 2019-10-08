@@ -189,6 +189,7 @@ public class DaoHelper<T> {
         model.setUserId(userId);
         model.setChapterid(chapterid);
         model.setOrder(chapterorder);
+        model.setChaptername(chaptername);
         BookModelDao bookModelDao = manager.getDaoSession().getBookModelDao();
         bookModelDao.insertOrReplace(model);
     }
