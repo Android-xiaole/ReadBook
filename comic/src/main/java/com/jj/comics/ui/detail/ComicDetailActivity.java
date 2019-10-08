@@ -172,6 +172,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 }
             }
         });
+        lin_catalogMenu.setClickable(false);
 
         long id = getId();
         if (id > 0) {
