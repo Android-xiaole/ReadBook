@@ -2,9 +2,12 @@ package com.jj.comics.ui.mine.userinfo;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.callback.TextWatcherWithClear;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -28,9 +32,6 @@ import butterknife.OnClick;
 public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implements EditInfoContract.IEditInfoView {
     @BindView(R2.id.edit_nick_name)
     EditText editText;
-
-    @BindView(R2.id.edit_nick_name_tv)
-    TextView textView;
 
     @BindView(R2.id.alter_nick_name)
     LinearLayout linearLayout;
@@ -57,7 +58,6 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
                 }
             }
         });
-        textView.setVisibility(View.VISIBLE);
         UserInfo userInfo = LoginHelper.getOnLineUser();
         if (userInfo != null) {
             editText.setText(userInfo.getNickname());
@@ -74,10 +74,9 @@ public class EditNickNameActivity extends BaseActivity<EditInfoPresenter> implem
         return new EditInfoPresenter();
     }
 
-    @OnClick({R2.id.alter_nick_name, R2.id.edit_nick_name_tv})
+    @OnClick({R2.id.edit_nick_name_tv})
     void onClick(View view) {
-        if (view.getId() == R.id.alter_nick_name || view.getId() == R.id.edit_nick_name_tv) {
-            textView.setVisibility(View.GONE);
+        if (view.getId() == R.id.edit_nick_name_tv) {
             linearLayout.setFocusable(true);
             linearLayout.setFocusableInTouchMode(true);
             editText.requestFocus();

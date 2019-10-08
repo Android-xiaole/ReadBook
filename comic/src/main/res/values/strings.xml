@@ -385,10 +385,10 @@
     <string name="comic_join_vip_recommend">全站漫画免费看</string>
     <string name="comic_load_fail">数据加载失败</string>
 
-    <string name="comic_user_info_head_img">头像</string>
+    <string name="comic_user_info_head_img">我的头像</string>
     <string name="comic_user_info_nickname">昵称</string>
     <string name="comic_user_info_sex">性别</string>
-    <string name="comic_user_info_iphone">修改手机号</string>
+    <string name="comic_user_info_iphone">手机号</string>
     <string name="comic_user_info_title">个人信息</string>
     <string name="comic_user_info_setting">设置</string>
     <string name="comic_user_info_edit_nickname">修改昵称</string>

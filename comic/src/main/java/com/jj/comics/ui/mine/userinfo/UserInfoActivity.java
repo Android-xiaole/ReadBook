@@ -45,6 +45,7 @@ import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.widget.UserItemView;
+import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -73,8 +74,6 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     UserItemView mSex;
     @BindView(R2.id.user_phone)
     UserItemView phone;
-    @BindView(R2.id.user_setting)
-    UserItemView setting;
     private OSSResponse.DataBean mOssConfig;
 
     @Override
@@ -88,6 +87,24 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         filePath = Environment.getExternalStorageDirectory().getAbsoluteFile().getAbsolutePath()
                 + File.separator + PackageUtil.getAppName(this) + File.separator;
         updateUserinfo();
+        ComicToolBar toolBar = findViewById(R.id.bind_phone_bar);
+        toolBar.setRightTextVisible(View.VISIBLE);
+        toolBar.addChildClickListener(new ComicToolBar.OnComicToolBarListener() {
+            @Override
+            public void onComicToolBarLeftIconClick(View childView) {
+                finish();
+            }
+
+            @Override
+            public void onComicToolBarRightIconClick(View childView) {
+
+            }
+
+            @Override
+            public void onComicToolBarRightTextClick(View childView) {
+                ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
+            }
+        });
     }
 
     private void updateUserinfo() {
@@ -155,7 +172,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
     }
 
 
-    @OnClick({R2.id.user_head, R2.id.user_nickname, R2.id.user_sex, R2.id.user_phone, R2.id.user_setting})
+    @OnClick({R2.id.user_head, R2.id.user_nickname, R2.id.user_sex, R2.id.user_phone})
     void onClick(View view) {
         if (view.getId() == R.id.user_head) {
             AndPermission.with(this)
@@ -179,8 +196,6 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
             ARouter.getInstance().build(RouterMap.COMIC_EDITSEX_ACTIVITY).navigation(UserInfoActivity.this, RequestCode.USERINFO_REQUEST_CODE);
         } else if (view.getId() == R.id.user_phone) {
             ARouter.getInstance().build(RouterMap.COMIC_CHANGE_PHONE_ACTIVITY).navigation(UserInfoActivity.this, RequestCode.USERINFO_REQUEST_CODE);
-        } else if (view.getId() == R.id.user_setting) {
-            ARouter.getInstance().build(RouterMap.COMIC_SETTING_ACTIVITY).navigation(UserInfoActivity.this);
         }
     }
 
