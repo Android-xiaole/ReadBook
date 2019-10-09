@@ -325,7 +325,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     public void onNext(Long aLong) {
                         chapterId = aLong;
                         String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                        shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
+                        shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "?uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
                         show();
                         isShareUserImage = false;
                     }

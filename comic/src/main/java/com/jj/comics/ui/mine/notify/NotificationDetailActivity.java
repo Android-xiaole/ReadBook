@@ -40,7 +40,7 @@ public class NotificationDetailActivity extends BaseActivity<NotificationDetailP
 //            mTvTitle.setText("详情不存在!");
 //        }
 
-        String msg =Constants.BASEURL() + "notice.html?id="+id+"&token=" + SharedPreManger.getInstance().getToken();
+        String msg = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "notice.html?id="+id+"&token=" + SharedPreManger.getInstance().getToken();
         ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY).withString(WebViewActivity.URL_KEY,msg).navigation();
         finish();
 

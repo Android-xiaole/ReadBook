@@ -19,7 +19,7 @@
         android:layout_marginTop="10dp"
         app:bottom_line_visible="visible"
         app:head_img_visible="gone"
-
+        app:title_size="@dimen/dp_18"
         app:user_item_title="@string/comic_about_app" />
 
     <com.jj.comics.widget.UserItemView
@@ -29,6 +29,7 @@
         app:bottom_line_visible="gone"
         app:head_img_visible="gone"
         app:right_text="3M"
+        app:title_size="@dimen/dp_18"
         app:right_title_visible="visible"
         app:user_item_title="@string/comic_clear_cache" />
 
@@ -73,6 +74,7 @@
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/comic_ffffff"
         android:gravity="center"
+        android:textSize="@dimen/dp_18"
         android:text="@string/comic_logout_text"
-        android:textColor="@color/comic_999999" />
+        android:textColor="@color/comic_333333" />
 </LinearLayout>
