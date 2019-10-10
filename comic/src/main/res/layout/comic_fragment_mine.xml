@@ -81,13 +81,13 @@
 
                     <ImageView
                         android:id="@+id/edit_user_info"
-                        android:layout_width="@dimen/dp_8"
-                        android:layout_height="@dimen/dp_15"
+                        android:layout_width="@dimen/dp_26"
+                        android:layout_height="@dimen/dp_25"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="13dp"
+                        android:layout_marginRight="@dimen/dp_26"
                         android:scaleType="fitXY"
-                        android:src="@drawable/icon_comic_mine_navigation" />
+                        android:src="@drawable/mine_edit" />
 
                 </RelativeLayout>
 
@@ -193,8 +193,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_15"
-                    android:background="@color/comic_f4f6f9"></View>
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/comic_e8ebf0"></View>
 
                 <com.jj.comics.widget.comic.MineItemView
                     android:id="@+id/comic_mine_buy"
@@ -237,8 +237,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_15"
-                    android:background="@color/comic_f4f6f9"></View>
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/comic_e8ebf0"></View>
 
                 <com.jj.comics.widget.comic.MineItemView
                     android:id="@+id/comic_mine_coin_pay"
@@ -265,8 +265,8 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_15"
-                    android:background="@color/comic_f4f6f9"></View>
+                    android:layout_height="@dimen/dp_10"
+                    android:background="@color/comic_e8ebf0"></View>
 
                 <com.jj.comics.widget.comic.MineItemView
                     android:id="@+id/comic_mine_help"

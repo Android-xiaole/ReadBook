@@ -3,6 +3,7 @@ package com.jj.comics.ui.mine.pay;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -272,6 +273,8 @@ public class PayActivity extends BaseActivity<PayPresenter> implements PayContra
             if (GET_TL_STATUS_COUNT == 3) {
                 payFail("tl fail");
                 if (mTask != null) mTask.cancel();
+                GET_TL_STATUS_COUNT = 0;
+                mTask = null;
             }
         }
 
