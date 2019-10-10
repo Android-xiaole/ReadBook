@@ -779,7 +779,7 @@ public interface ComicService {
      * cartoon-novel.jishusaice.cn 线上
      * cartoon_novel.langd88.cn 线上唯一,专门用来请求获取app配置
      */
-    @GET("http://" + Constants.HOST_APP_CONFIG + "/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
+    @GET("http://" + Constants.HOST_TEST + "/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfig();
 
     /**
