@@ -53,26 +53,26 @@ public class ConsumeDetailListResponse extends ResponseModel{
              * sale_time : 2019-09-10 15:22:08
              */
 
-            private int id;
-            private int articleid;
+            private long id;
+            private long articleid;
             private String chaptername;
-            private int saleprice;
+            private String saleprice;
             private int chapterorder;
             private String sale_time;
 
-            public int getId() {
+            public long getId() {
                 return id;
             }
 
-            public void setId(int id) {
+            public void setId(long id) {
                 this.id = id;
             }
 
-            public int getArticleid() {
+            public long getArticleid() {
                 return articleid;
             }
 
-            public void setArticleid(int articleid) {
+            public void setArticleid(long articleid) {
                 this.articleid = articleid;
             }
 
@@ -84,11 +84,11 @@ public class ConsumeDetailListResponse extends ResponseModel{
                 this.chaptername = chaptername;
             }
 
-            public int getSaleprice() {
+            public String getSaleprice() {
                 return saleprice;
             }
 
-            public void setSaleprice(int saleprice) {
+            public void setSaleprice(String saleprice) {
                 this.saleprice = saleprice;
             }
 

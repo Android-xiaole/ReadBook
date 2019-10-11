@@ -19,7 +19,7 @@ public class RouterMap {
     public static final String COMIC_SEARCH_ACTIVITY = "/ui/recommend_list/SearchActivity";
     public static final String COMIC_SEARCH_RESULT_ACTIVITY = "/ui/recommend_list/SearchResultActivity";
     public static final String COMIC_RECHARGE_RECORD_ACTIVITY = "/ui/mine/RechargeRecordActivity";
-    public static final String COMIC_CONSUME_RECORD_ACTIVITY = "/ui/mine/PayRecordActivity";
+    public static final String COMIC_CONSUME_RECORD_ACTIVITY = "/ui/mine/ConsumeRecordActivity";
     public static final String COMIC_WEB_ACTIVITY = "/ui/web/WebActivity";
     public static final String COMIC_WEBVIEW_ACTIVITY = "/ui/web/WebViewActivity";
     public static final String COMIC_PAY_ACTIVITY = "/ui/mine/PayActivity";

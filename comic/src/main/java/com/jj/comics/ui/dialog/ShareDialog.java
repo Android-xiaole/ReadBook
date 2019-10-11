@@ -180,8 +180,8 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                                         if (dialog == null)
                                             dialog = new GenerateImgProgressDialog(activity);
                                         if (!dialog.isShowing()) dialog.show();
-                                        if (content.length() > 200) {
-                                            content = content.substring(0, 200) + "......";
+                                        if (content.length() > 300) {
+                                            content = content.substring(0, 300) + "......";
                                         }
                                         ShareInfo shareInfo = new ShareInfo();
                                         shareInfo.setAuthor(shareMessageModel.getAuthor());

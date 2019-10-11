@@ -18,6 +18,6 @@ public class ComsumeDetailAdapter extends SimpleBaseAdapter<ConsumeDetailListRes
     protected void convert(BaseViewHolder helper, ConsumeDetailListResponse.DataBeanX.ConsumeDetail item) {
         helper.setText(R.id.tv_item_consume_detail_title,item.getChaptername());
         helper.setText(R.id.tv_item_consume_detail_time, item.getSale_time());
-        helper.setText(R.id.tv_item_consume_detail_coin, item.getSaleprice() + "");
+        helper.setText(R.id.tv_item_consume_detail_coin, item.getSaleprice() + "书币");
     }
 }

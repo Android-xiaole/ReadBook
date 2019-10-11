@@ -24,7 +24,7 @@ public class ComsumeRecordAdapter extends SimpleBaseAdapter<ExpenseSumRecordMode
     protected void convert(BaseViewHolder helper, ExpenseSumRecordModel item) {
         helper.setText(R.id.tv_item_consume_record_title, item.getArticlename());
         helper.setText(R.id.tv_item_comsume_record_time, item.getUpdate_time());
-        helper.setText(R.id.tv_item_consume_record_coin, item.getTotal_money());
+        helper.setText(R.id.tv_item_consume_record_coin, item.getIs_batchbuy() + " " + item.getTotal_money());
 
         ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_item_consume_record),
                 item.getCover(), new RequestOptions().transforms(new CenterCrop(),

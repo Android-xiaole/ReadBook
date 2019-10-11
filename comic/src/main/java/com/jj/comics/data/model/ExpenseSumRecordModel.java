@@ -17,6 +17,7 @@ public class ExpenseSumRecordModel {
     private String total_money;
     private String articlename;
     private String cover;
+    private String is_batchbuy;
 
     public String getCover() {
         return cover;
@@ -72,5 +73,13 @@ public class ExpenseSumRecordModel {
 
     public void setArticlename(String articlename) {
         this.articlename = articlename;
+    }
+
+    public String getIs_batchbuy() {
+        return is_batchbuy;
+    }
+
+    public void setIs_batchbuy(String is_batchbuy) {
+        this.is_batchbuy = is_batchbuy;
     }
 }

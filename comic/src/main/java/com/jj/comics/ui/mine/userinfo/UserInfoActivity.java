@@ -233,9 +233,9 @@ public class UserInfoActivity extends BaseActivity<UserInfoPresenter> implements
         OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(mOssConfig.getAccessKeyId(), mOssConfig.getAccessKeySecret(), mOssConfig.getSecurityToken());
         OSS oss = new OSSClient(this, Constants.OSS_ENDPOINT, credentialProvider);
         String date = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
-//                        long uid = LoginHelper.getOnLineUser().getUid();
-        long uid = 4864320110116003l;// TODO: 2019/9/10  需要修改id 和 test
-        String OssPath = "test/" + date + "/" + SignUtil.md5("" + uid) + "_" + System.currentTimeMillis() + ".jpg";
+                        long uid = LoginHelper.getOnLineUser().getUid();
+//        long uid = 4864320110116003l;// TODO: 2019/9/10  需要修改id 和 test
+        String OssPath = Constants.OSS_PATH + "/" + date + "/" + SignUtil.md5("" + uid) + "_" + System.currentTimeMillis() + ".jpg";
         PutObjectRequest put = new PutObjectRequest(Constants.BUCKET_NAME, OssPath, path);
         // 异步上传时可以设置进度回调
 //        put.setProgressCallback(new OSSProgressCallback<PutObjectRequest>() {

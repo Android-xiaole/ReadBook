@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.jj.comics.R;
@@ -230,6 +231,9 @@ public class SharePicture extends LinearLayout {
     private void draw() {
         // 先绘制中间部分的文字，计算出文字所需的高度
         String content = shareInfo.getContent();
+        if (content.length() > 200) {
+            content = content.substring(0, 200) + "...";
+        }
         TextPaint contentPaint = article_content.getPaint();
         StaticLayout staticLayout =
                 new StaticLayout(content, contentPaint, (ScreenUtils.getDisplayMetrics().widthPixels - picMargin * 2),
@@ -258,7 +262,7 @@ public class SharePicture extends LinearLayout {
         paint.setFilterBitmap(true);
 
         Bitmap bgBitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.share_bg);
-        canvas.drawBitmap(bgBitmap, 0,0, paint);
+        canvas.drawBitmap(bgBitmap, 0, 0, paint);
         // 绘制top view
         canvas.drawBitmap(getLinearLayoutBitmap(top_linear, widthTop, heightTop), 0, 0, paint);
         canvas.save();
