@@ -111,31 +111,10 @@ android {
     }
     productFlavors {
 
-        "jjmh2-default" {
+        "jjxs-default" {
             manifestPlaceholders = [value_channel_id: "jjxs-default",
                                     value_isDebug   : false]
         }
-
-        "mzmh-default-0005" {
-            manifestPlaceholders = [value_channel_id: "mzmh-default-0005",
-                                    value_isDebug   : false]
-        }
-
-        "mzmh-default-0200" {
-            manifestPlaceholders = [value_channel_id: "mzmh-default-0200",
-                                    value_isDebug   : false]
-        }
-
-        "wap01-android" {
-            manifestPlaceholders = [value_channel_id: "mzmh-default-5957496754970624",
-                                    value_isDebug   : false]
-        }
-
-        "maozhua_testChannel" {
-            manifestPlaceholders = [value_channel_id: "mzmh-default-326154067993800704",
-                                    value_isDebug   : false]
-        }
-
 
     }
 
