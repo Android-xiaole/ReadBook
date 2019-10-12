@@ -56,8 +56,7 @@ public class ProductRepository implements ProductDataSource {
 
     @Override
     public Observable<AppConfigResponse> getAppConfig() {
-        return ComicApi.getApi()
-                .getAppConfig()
+        return (Constants.DEBUG ? ComicApi.getApi().getDebugAppConfig() : ComicApi.getApi().getAppConfig())
                 .compose(ComicApiImpl.<AppConfigResponse>getApiTransformer2())
                 .subscribeOn(Schedulers.io());
     }

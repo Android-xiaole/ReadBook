@@ -68,8 +68,8 @@ public class Constants {
     //    public static String HOST = "cartoon-novel.jishusaice.cn";
     public static final String HOST_TEST = "cartoon-novel.513a3m.cn";//测试环境域名
     public static final String HOST_APP_CONFIG = "cartoon_novel.jjmh881.cn";//获取app配置
-    public static final String OSS_PATH = "test";
-//    public static final String OSS_PATH = "prd";//生产需要更换
+    public static final String OSS_PATH = DEBUG ? "test" : "prd";
+    //    public static final String OSS_PATH = "prd";//生产需要更换
     //cartoon-novel.txread.net
     // cartoon-novel.jishusaice.cn
     //cartoon-novel.jjmh114.cn
