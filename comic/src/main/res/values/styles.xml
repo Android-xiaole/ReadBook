@@ -86,7 +86,7 @@
     </style>
 
     <style name="comic_tab_text_style">
-        <item name="android:textSize">@dimen/dp_16</item>
+        <item name="android:textSize">@dimen/dp_18</item>
     </style>
 
     <style name="comic_tab_text_style_rebate">

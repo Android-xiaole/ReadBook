@@ -88,6 +88,8 @@
     <string name="comic_share_url"><![CDATA[http://share.%1$s/index.html?id=%2$d&cid=%3$s&sign=%4$s]]></string>
     <string name="comic_collect_text">收藏</string>
     <string name="comic_history">历史</string>
+    <string name="comic_book_coin">书币</string>
+    <string name="comic_book_vip">会员</string>
     <string name="comic_confirm_delete">确定从书架中移除《%1$s》吗？</string>
     <string name="comic_no_more_data">没有更多数据了</string>
     <string name="comic_go_read">去阅读</string>
@@ -395,6 +397,7 @@
     <string name="comic_user_info_edit_sex">修改性别</string>
     <string name="comic_user_info_confirm">确认修改</string>
     <string name="comic_user_info_auto_bug">自动购买</string>
+    <string name="comic_user_info_notification">提现消息挂件</string>
     <string name="comic_my_rebate_title">当前可提取返利(元)</string>
     <string name="comic_my_rebate_recently">最新返利</string>
     <string name="comic_my_rebate_total">累积返利</string>

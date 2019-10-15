@@ -19,6 +19,7 @@ import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.RestResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
@@ -231,4 +232,18 @@ public interface UserDataSource {
      * @return
      */
     Observable<TLPayStatusResponse> getTLPayStatus(String tradeNo);
+
+    /**
+     * 获取自动购买和消息挂件配置
+     *
+     * @return
+     */
+    Observable<RestResponse> getRest();
+
+    /**
+     * 设置自动购买和消息挂件配置
+     *
+     * @return
+     */
+    Observable<ResponseModel> setAutoReceive(int auto_buy, int is_receive);
 }

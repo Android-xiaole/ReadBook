@@ -39,6 +39,7 @@ import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.RestResponse;
 import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.ShareRecommendResponse;
@@ -947,4 +948,11 @@ public interface ComicService {
      */
     @POST("api/checkorder")
     Observable<TLPayStatusResponse> getTLPayStatus(@Body RequestBody body);
+
+    /**
+     * 消息挂件和自动购买设置
+     * @return
+     */
+    @POST("api/rest")
+    Observable<RestResponse> getRest();
 }
