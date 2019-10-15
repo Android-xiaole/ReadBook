@@ -178,6 +178,7 @@ public class Constants {
 
         public static final String BRIGHTNESS_MODE_KEY = "brightnessMode";//亮度key  true为日间模式
         public static final String AUTO_BUY = "auto_buy";
+        public static final String RECEIVE = "receive";
         public static final String SWITCH_GPRS_READ_REMIND = "gprs_read_remind";
         public static final String SWITCH_ACCEPT_NOTIFICATION = "accept_notification";
         public static final String SWITCH_VOLUME_PAGE = "volume_page";
