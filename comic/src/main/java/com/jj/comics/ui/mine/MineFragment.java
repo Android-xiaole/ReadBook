@@ -58,8 +58,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mCoins;
     @BindView(R2.id.mine_apprentice)
     TextView mApprentice;
-    @BindView(R2.id.is_vip)
-    ImageView mVip;
+//    @BindView(R2.id.is_vip)
+//    ImageView mVip;
     @BindView(R2.id.rootView)
     RelativeLayout rootView;
 
@@ -114,10 +114,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         //设置昵称
         mNickname.setText(nickName);
 
-        if (userInfo.getIs_vip() == 1) {
-            mVip.setImageResource(R.drawable.mine_vip);
-        } else {
-            mVip.setImageResource(R.drawable.mine_vip_gray);
+        if (userInfo.getIs_vip() != 1) {
+            headImg.setBackgroundResource(R.drawable.header_bg);
         }
     }
 

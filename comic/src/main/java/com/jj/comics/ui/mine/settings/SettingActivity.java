@@ -9,10 +9,13 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.jj.base.dialog.CustomFragmentDialog;
+import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.data.model.RestResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -32,19 +35,54 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     UserItemView mCache;
 
     @BindView(R2.id.switch_autoBuy)
-    Switch switchButton;
+    Switch autoBuy;
+    @BindView(R2.id.switch_notification)
+    Switch receive;
 
     @Override
     public void initData(Bundle savedInstanceState) {
         getP().getCacheSize();
         updateLoginStatus();
-        switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        getP().getRest();
+        autoBuy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreManger.getInstance().saveAutoBuyStatus(isChecked);
+//                if (isChecked) {
+//                    getP().setAuto(1, -1);
+//                } else {
+//                    getP().setAuto(0, -1);
+//                }
             }
         });
-        switchButton.setChecked(SharedPreManger.getInstance().getAutoBuyStatus());
+        autoBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (autoBuy.isChecked() ) {
+                    getP().setAuto(1, -1);
+                } else {
+                    getP().setAuto(0, -1);
+                }
+            }
+        });
+        receive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (receive.isChecked()) {
+                    getP().setAuto(-1, 1);
+                } else {
+                    getP().setAuto(-1, 0);
+                }
+            }
+        });
+        receive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
+        autoBuy.setChecked(SharedPreManger.getInstance().getAutoBuyStatus());
+        receive.setChecked(SharedPreManger.getInstance().getReceiveStatus());
     }
 
     private void updateLoginStatus() {
@@ -118,5 +156,28 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     @Override
     public void setCacheSize(String cacheSize) {
         mCache.setRight_title(cacheSize);
+    }
+
+    @Override
+    public void rest(RestResponse response) {
+        if (response.getData().getIs_autoby() == 0) {
+            SharedPreManger.getInstance().saveAutoBuyStatus(false);
+        } else {
+            SharedPreManger.getInstance().saveAutoBuyStatus(true);
+        }
+
+        if (response.getData().getIs_receive() == 0) {
+            SharedPreManger.getInstance().saveReceiveStatus(false);
+        } else {
+            SharedPreManger.getInstance().saveReceiveStatus(true);
+        }
+
+        autoBuy.setChecked(SharedPreManger.getInstance().getAutoBuyStatus());
+        receive.setChecked(SharedPreManger.getInstance().getReceiveStatus());
+    }
+
+    @Override
+    public void showError(NetError netError) {
+        ToastUtil.showToastShort(netError.getMessage());
     }
 }

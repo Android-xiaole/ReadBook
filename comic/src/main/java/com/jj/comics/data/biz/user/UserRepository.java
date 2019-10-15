@@ -29,6 +29,7 @@ import com.jj.comics.data.model.RebateListResponse;
 import com.jj.comics.data.model.RecharegeRecordsResponse;
 import com.jj.comics.data.model.RechargeCoinResponse;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.RestResponse;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
@@ -629,6 +630,37 @@ public class UserRepository implements UserDataSource {
                 .build();
         return ComicApi.getApi().getTLPayStatus(body)
                 .compose(ComicApiImpl.<TLPayStatusResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    /**
+     * 自动购买和消息挂件设置
+     *
+     * @return
+     */
+    @Override
+    public Observable<RestResponse> getRest() {
+        return ComicApi.getApi().getRest()
+                .compose(ComicApiImpl.<RestResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
+    @Override
+    public Observable<ResponseModel> setAutoReceive(int auto_buy, int is_receive) {
+
+        RequestBodyBuilder body = new RequestBodyBuilder()
+                .addProperty("auto_buy", auto_buy)
+                .addProperty("is_receive", is_receive);
+        if (auto_buy == -1) {
+            body.removeProperty("auto_buy");
+        }
+
+        if (is_receive == -1) {
+            body.removeProperty("is_receive");
+        }
+
+        return ComicApi.getApi().setAutoBuy(body.build())
+                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
     }
 }

@@ -73,5 +73,17 @@ public class SharedPreManger {
     public boolean getAutoBuyStatus(){
         return sharedPref.getBoolean(Constants.SharedPrefKey.AUTO_BUY,false);
     }
+    /**
+     * 保存自动购买状态
+     */
+    public void saveReceiveStatus(boolean isAutoBuy){
+        sharedPref.putBoolean(Constants.SharedPrefKey.RECEIVE,isAutoBuy);
+    }
 
+    /**
+     * 获取自动购买状态
+     */
+    public boolean getReceiveStatus(){
+        return sharedPref.getBoolean(Constants.SharedPrefKey.RECEIVE,false);
+    }
 }

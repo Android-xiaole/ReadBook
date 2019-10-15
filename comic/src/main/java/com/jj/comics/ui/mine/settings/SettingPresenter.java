@@ -6,7 +6,14 @@ import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
+import com.jj.base.net.ApiSubscriber2;
+import com.jj.base.net.NetError;
 import com.jj.base.utils.FileUtil;
+import com.jj.base.utils.toast.ToastUtil;
+import com.jj.comics.data.biz.user.UserRepository;
+import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.RestResponse;
+import com.jj.comics.util.SharedPreManger;
 
 import java.io.File;
 
@@ -98,6 +105,62 @@ public class SettingPresenter extends BasePresenter<BaseRepository, SettingContr
                     @Override
                     public void onComplete() {
 
+                    }
+                });
+    }
+
+    @Override
+    public void getRest() {
+        UserRepository.getInstance().getRest()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(this.bindLifecycle())
+                .subscribe(new ApiSubscriber2<RestResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        getV().showError(error);
+                    }
+
+                    @Override
+                    public void onNext(RestResponse responseModel) {
+                        if (responseModel.getData() != null) {
+                            getV().rest(responseModel);
+                        } else {
+                            getV().showError(new NetError(NetError.noDataError().getException(), NetError.NoDataError));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void setAuto(int autoBuy, int receive) {
+        UserRepository.getInstance().setAutoReceive(autoBuy, receive)
+                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(this.bindLifecycle())
+                .subscribe(new ApiSubscriber2<ResponseModel>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        getV().showError(error);
+                    }
+
+                    @Override
+                    public void onNext(ResponseModel responseModel) {
+                        if (responseModel.getCode() == 200) {
+                            if (autoBuy == 0) {
+                                SharedPreManger.getInstance().saveAutoBuyStatus(false);
+                            } else if (autoBuy == 1) {
+                                SharedPreManger.getInstance().saveAutoBuyStatus(true);
+                            }
+
+                            if (receive == 0) {
+                                SharedPreManger.getInstance().saveReceiveStatus(false);
+                            } else if (receive == 1) {
+                                SharedPreManger.getInstance().saveReceiveStatus(true);
+                            }
+                        } else {
+                            getV().showError(new NetError(responseModel.getMessage(), NetError.NoDataError));
+                        }
                     }
                 });
     }

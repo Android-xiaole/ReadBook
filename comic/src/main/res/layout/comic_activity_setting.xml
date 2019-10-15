@@ -12,28 +12,6 @@
         android:layout_height="wrap_content"
         app:title="@string/comic_setting_text" />
 
-    <com.jj.comics.widget.UserItemView
-        android:id="@+id/setting_about"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
-        android:layout_marginTop="10dp"
-        app:bottom_line_visible="visible"
-        app:head_img_visible="gone"
-        app:title_size="@dimen/dp_18"
-        app:user_item_title="@string/comic_about_app" />
-
-    <com.jj.comics.widget.UserItemView
-        android:id="@+id/setting_clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_60"
-        app:bottom_line_visible="gone"
-        app:head_img_visible="gone"
-        app:right_text="3M"
-        app:title_size="@dimen/dp_18"
-        app:right_title_visible="visible"
-        app:user_item_title="@string/comic_clear_cache" />
-
-
     <LinearLayout
         android:id="@+id/user_info_edit_head"
         android:layout_width="match_parent"
@@ -57,24 +35,103 @@
             android:id="@+id/switch_autoBuy"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
+            android:layout_marginRight="@dimen/dp_17"
             android:checked="false"
             android:switchMinWidth="@dimen/dp_55"
             android:textOff="OFF"
             android:textOn="ON"
             android:thumb="@drawable/comic_switch_thumb"
             android:track="@drawable/comic_switch_track"
-            android:layout_marginRight="@dimen/dp_17"
             android:visibility="visible" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/comic_ffffff">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:background="@color/comic_e8ebf0" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/comic_ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_weight="1"
+            android:text="@string/comic_user_info_notification"
+            android:textColor="@color/comic_333333"
+            android:textSize="@dimen/dp_18" />
+
+        <Switch
+            android:id="@+id/switch_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginRight="@dimen/dp_17"
+            android:checked="false"
+            android:switchMinWidth="@dimen/dp_55"
+            android:textOff="OFF"
+            android:textOn="ON"
+            android:thumb="@drawable/comic_switch_thumb"
+            android:track="@drawable/comic_switch_track"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/comic_ffffff">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:background="@color/comic_e8ebf0" />
+    </LinearLayout>
+
+    <com.jj.comics.widget.UserItemView
+        android:id="@+id/setting_clear_cache"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        app:bottom_line_visible="gone"
+        app:head_img_visible="gone"
+        app:right_text="3M"
+        app:right_title_visible="visible"
+        app:title_size="@dimen/dp_18"
+        app:user_item_title="@string/comic_clear_cache" />
+
+    <com.jj.comics.widget.UserItemView
+        android:id="@+id/setting_about"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        android:layout_marginTop="10dp"
+        app:bottom_line_visible="gone"
+        app:head_img_visible="gone"
+        app:title_size="@dimen/dp_18"
+        app:user_item_title="@string/comic_about_app" />
 
     <TextView
         android:id="@+id/setting_exit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_20"
         android:background="@color/comic_ffffff"
         android:gravity="center"
-        android:textSize="@dimen/dp_18"
         android:text="@string/comic_logout_text"
-        android:textColor="@color/comic_333333" />
+        android:textColor="@color/comic_333333"
+        android:textSize="@dimen/dp_18" />
 </LinearLayout>
