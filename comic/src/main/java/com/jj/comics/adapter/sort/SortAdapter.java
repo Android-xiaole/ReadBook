@@ -26,8 +26,7 @@ public class SortAdapter extends SimpleBaseAdapter<SortListResponse.DataBean> {
                 .loadNet(helper.<ImageView>getView(R.id.iv_recently_icon), item.getIcon(),
                         new RequestOptions()
                                 .placeholder(R.drawable.img_loading)
-                                .error(R.drawable.img_loading)
-                                .transforms(new CenterCrop(), new RoundedCorners(Utils.dip2px(BaseApplication.getApplication(), 5))));
+                                .error(R.drawable.img_loading));
         helper.setText(R.id.title, item.getTitle());
     }
 }
