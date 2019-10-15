@@ -50,7 +50,7 @@
                         android:id="@+id/mine_head_img"
                         android:layout_width="@dimen/dp_80"
                         android:layout_height="@dimen/dp_80"
-                        android:layout_marginLeft="@dimen/dp_7"
+                        android:layout_marginLeft="@dimen/dp_14"
                         android:src="@drawable/bg_avatar"
                         android:padding="@dimen/dp_13"
                         android:scaleType="centerCrop" />
@@ -61,6 +61,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/mine_head_img"
                         android:gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/dp_14"
                         android:orientation="vertical">
 
                         <TextView

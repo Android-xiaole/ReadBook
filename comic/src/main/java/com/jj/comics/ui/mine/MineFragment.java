@@ -114,8 +114,10 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         //设置昵称
         mNickname.setText(nickName);
 
-        if (userInfo.getIs_vip() != 1) {
+        if (userInfo.getIs_vip() == 1) {
             headImg.setBackgroundResource(R.drawable.header_bg);
+        } else {
+            headImg.setBackgroundResource(R.drawable.header_cicle);
         }
     }
 
