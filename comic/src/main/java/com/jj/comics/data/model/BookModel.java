@@ -72,6 +72,7 @@ public class BookModel implements Serializable {
     private String author;//作者
     private String yesterday_share;
     private String allvisit;//阅读人数
+    @SerializedName(value = "total_size", alternate = {"size"})
     private String total_size;//总字数
     private String total_share;//总的分享次数
     private int batchbuy;//''购买方式：1-章节售卖 2-整本售卖
