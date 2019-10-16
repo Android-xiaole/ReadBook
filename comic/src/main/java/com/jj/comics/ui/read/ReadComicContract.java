@@ -1,9 +1,11 @@
 package com.jj.comics.ui.read;
 
 import com.jj.base.mvp.IView;
+import com.jj.base.net.NetError;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.ui.detail.subdetail.CatalogFragment;
 
 import java.util.List;
 
@@ -11,11 +13,17 @@ public interface ReadComicContract {
 
     interface IReadComicView extends IView {
 
+        //获取章节内容没有付费的回调
+        void onLoadChapterContentNoPayError(BookCatalogModel model);
+
+        //加载失败的回调
+        void onLoadCatalogContentError(NetError error);
+
         //加载章节内容结束的回调
         void onLoadCatalogContentEnd();
 
         //文件下载成功，加载资源的回调
-        void onLoadChapterContent();
+        void onLoadChapterContent(long chapterId);
 
         //获取目录列表的回调
         void onGetCatalogList(List<BookCatalogModel> catalogModels,int totalNum);

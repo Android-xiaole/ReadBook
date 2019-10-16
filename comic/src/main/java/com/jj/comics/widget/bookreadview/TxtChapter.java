@@ -8,6 +8,10 @@ public class TxtChapter{
 
     //服务器端的章节id
     String chapterId;
+    //标记当前章节是否付费
+    boolean isPaid = true;//默认已经付费,后续会通过接口获取内容的时候重置状态，查询是否付费
+    //标记当前章节是否需要登录后观看
+    boolean needLogin;//默认不需要登录
     //章节所属的小说(网络)
     String bookId;
     //章节的链接(网络)
@@ -69,10 +73,31 @@ public class TxtChapter{
         this.end = end;
     }
 
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+    public boolean isNeedLogin() {
+        return needLogin;
+    }
+
+    public void setNeedLogin(boolean needLogin) {
+        this.needLogin = needLogin;
+    }
+
     @Override
     public String toString() {
         return "TxtChapter{" +
-                "title='" + title + '\'' +
+                "chapterId='" + chapterId + '\'' +
+                ", isPaid=" + isPaid +
+                ", needLogin=" + needLogin +
+                ", bookId='" + bookId + '\'' +
+                ", link='" + link + '\'' +
+                ", title='" + title + '\'' +
                 ", start=" + start +
                 ", end=" + end +
                 '}';

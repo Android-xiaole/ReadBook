@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/dp_280"
+        android:layout_height="@dimen/dp_160"
+        android:src="@drawable/img_readview"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/comic_353a40"
+        android:textSize="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_28"
+        android:layout_marginBottom="@dimen/dp_19"
+        tools:text = "第3章 章节标题"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/dp_16"
+        android:textColor="@color/comic_6e7379"
+        android:text="本章节需要购买后阅读"/>
+
+    <ImageView
+        android:id="@+id/iv_button"
+        android:layout_width="360dp"
+        android:layout_height="@dimen/dp_68"
+        android:src="@drawable/btn_readview_login"
+        android:layout_marginTop="@dimen/dp_39"
+        android:layout_marginBottom="@dimen/dp_7"/>
+
+    <TextView
+        android:id="@+id/tv_noPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/comic_a8adb3"
+        android:textSize="@dimen/dp_12"
+        android:text="暂不购买"/>
+
+
+</LinearLayout>

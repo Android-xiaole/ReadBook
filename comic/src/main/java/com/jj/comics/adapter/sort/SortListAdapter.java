@@ -38,7 +38,7 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
             helper.<TextView>getView(R.id.tv_recently_author).setText(item.getAuthor());
             helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             helper.<TextView>getView(R.id.tv_share).setText(ShareMoneyUtil.getShareMoney(
-                    item.getTotalSize(), item.getFirst_commission_rate(), item.getSecond_commission_rate(), item.getShare_price()
+                    item.getTotal_size(), item.getFirst_commission_rate(), item.getSecond_commission_rate(), item.getShare_price()
             ));
             helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
             if (item.getFullflag() == 0) {

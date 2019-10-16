@@ -37,6 +37,7 @@ public class NetPageLoader extends PageLoader {
             chapter.title = bean.getTitle();
             chapter.link = bean.getLink();
             chapter.chapterId = bean.getId();
+            chapter.needLogin = bean.isNeedLogin();
             txtChapters.add(chapter);
         }
         return txtChapters;
@@ -55,11 +56,16 @@ public class NetPageLoader extends PageLoader {
             mPageChangeListener.onCategoryFinish(mChapterList);
         }
 
-        // 如果章节未打开
-        if (!isChapterOpen()) {
-            // 打开章节
-            openChapter();
-        }
+        /*
+            下面这块代码先注释掉,源代码加这个是为了默认打开第一章，
+            但在使用的时候我会调用skipToChapter方法，
+            所以以下代码可以不加，加上会导致默认缓存前两个章节
+         */
+//        // 如果章节未打开
+//        if (!isChapterOpen()) {
+//            // 打开章节
+//            openChapter();
+//        }
     }
 
     @Override
@@ -184,38 +190,44 @@ public class NetPageLoader extends PageLoader {
     }
 
     /**
-     * 由于存在章节收费的逻辑，这里就不进行预加载，只加载当前章节
+     * 这里是计算预加载的主要逻辑
      * @param start
      * @param end
      */
     private void requestChapters(int start, int end) {
-        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
-        if (!hasChapterData(txtChapter)){//如果缓存中不存在就去网络加载
-            mPageChangeListener.requestChapters(txtChapter);
+//        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
+//        if (!hasChapterData(txtChapter)){//如果缓存中不存在就去网络加载
+//            mPageChangeListener.requestChapters(txtChapter);
+//        }
+        // 检验输入值
+        if (start < 0) {
+            start = 0;
         }
-//        // 检验输入值
-//        if (start < 0) {
-//            start = 0;
-//        }
-//
-//        if (end >= mChapterList.size()) {
-//            end = mChapterList.size() - 1;
-//        }
-//
-//
-//        List<TxtChapter> chapters = new ArrayList<>();
-//
-//        // 过滤，哪些数据已经加载了
-//        for (int i = start; i <= end; ++i) {
-//            TxtChapter txtChapter = mChapterList.get(i);
-//            if (!hasChapterData(txtChapter)) {
-//                chapters.add(txtChapter);
-//            }
-//        }
-//
-//        if (!chapters.isEmpty()) {
-//            mPageChangeListener.requestChapters(chapters);
-//        }
+
+        if (end >= mChapterList.size()) {
+            end = mChapterList.size() - 1;
+        }
+
+
+        List<TxtChapter> chapters = new ArrayList<>();
+
+        // 过滤，哪些数据已经加载了
+        for (int i = start; i <= end; ++i) {
+            TxtChapter txtChapter = mChapterList.get(i);
+            if (!hasChapterData(txtChapter)) {
+                /*
+                如果isPaid=false,表明当前章节已经请求过了，因为初始值设置为true
+                所以只够为true的时候才去网络请求
+                 */
+                if(txtChapter.isPaid()){
+                    chapters.add(txtChapter);
+                }
+            }
+        }
+
+        if (!chapters.isEmpty()) {
+            mPageChangeListener.requestChapters(chapters);
+        }
     }
 
     @Override

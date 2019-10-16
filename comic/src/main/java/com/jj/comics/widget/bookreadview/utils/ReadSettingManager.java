@@ -97,7 +97,7 @@ public class ReadSettingManager {
     }
 
     public PageMode getPageMode() {
-        int mode = sharedPreUtils.getInt(SHARED_READ_PAGE_MODE, PageMode.SCROLL.ordinal());
+        int mode = sharedPreUtils.getInt(SHARED_READ_PAGE_MODE, PageMode.SIMULATION.ordinal());
         return PageMode.values()[mode];
     }
 

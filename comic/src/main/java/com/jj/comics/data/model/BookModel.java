@@ -231,14 +231,6 @@ public class BookModel implements Serializable {
         this.allvisit = allvisit;
     }
 
-    public String getTotalSize() {
-        return total_size;
-    }
-
-    public void setTotalSize(String size) {
-        this.total_size = size;
-    }
-
     public String getAuthor() {
         return author;
     }

@@ -69,10 +69,13 @@ public class ReadComicHelper {
                                 }
                                 return Observable.just(catalogModelNow);
                             } else {
-                                return Observable.error(new NetError(response.getMessage(),response.getCode()));
+                                return Observable.error(NetError.nullDataError());
                             }
                         } else if (response.getCode() == 1002) {//未购买
                             UserInfo onLineUser = LoginHelper.getOnLineUser();
+                            if (onLineUser == null){
+                                return Observable.error(NetError.authError());
+                            }
                             /**
                              * 可以自动购分以下几种情况
                              * 1.vip用户（后台需要做分成统计）
@@ -114,12 +117,15 @@ public class ReadComicHelper {
                                                             });
                                                 } else if (subResponse.getCode() == 1002) {//金币不足，需要充值
                                                     //跳转到订阅界面
-                                                    if (bookModel.getBatchbuy() == 2) {//全本购买
-                                                        SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
-                                                    } else {//章节购买
-                                                        SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
-                                                    }
-                                                    return Observable.empty();
+//                                                    if (bookModel.getBatchbuy() == 2) {//全本购买
+//                                                        SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
+//                                                    } else {//章节购买
+//                                                        SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
+//                                                    }
+//                                                    return Observable.error(NetError.noPayError());
+                                                    BookCatalogModel now = response.getData().getNow();
+                                                    now.setPaid(false);
+                                                    return Observable.just(now);
                                                 } else {
                                                     return Observable.error(new NetError("订阅失败："+subResponse.getMessage(),subResponse.getCode()));
                                                 }
@@ -127,12 +133,15 @@ public class ReadComicHelper {
                                         });
                             } else {
                                 //如果不是自动购买就跳转到订阅界面
-                                if (bookModel.getBatchbuy() == 2) {//全本购买
-                                    SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
-                                } else {//章节购买
-                                    SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
-                                }
-                                return Observable.empty();
+//                                if (bookModel.getBatchbuy() == 2) {//全本购买
+//                                    SubscribeActivity.toSubscribe(activity, bookModel, bookModel.getBatchprice(), response.getData().getNow().getId());
+//                                } else {//章节购买
+//                                    SubscribeActivity.toSubscribe(activity, bookModel, response.getData().getNow().getSaleprice(), response.getData().getNow().getId());
+//                                }
+//                                return Observable.error(NetError.noPayError());
+                                BookCatalogModel now = response.getData().getNow();
+                                now.setPaid(false);
+                                return Observable.just(now);
                             }
                         }
                         return Observable.error(new NetError(response.getMessage(), response.getCode()));
