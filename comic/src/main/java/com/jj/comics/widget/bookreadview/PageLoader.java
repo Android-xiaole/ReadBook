@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -1012,7 +1013,12 @@ public abstract class PageLoader {
                 bitmap_bottombar = Bitmap.createBitmap(mBottomBar.getMeasuredWidth(),mBottomBar.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
                 canvas_bottombar = new Canvas(bitmap_bottombar);
                 mBottomBar.draw(canvas_bottombar);
-                canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85),null);
+
+                if (mPageMode == PageMode.SCROLL) {
+                    canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85)- ScreenUtils.dpToPx(28),null);
+                } else {
+                    canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85),null);
+                }
             }else{
                 mChapterButtonStatus = CAN_NOTHING;
             }
