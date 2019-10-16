@@ -85,6 +85,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     TextView tv_info;//小说简介
     @BindView(R2.id.tv_title)
     TextView tv_title;//小说名称
+    @BindView(R2.id.iv_addBookBottom)
     ImageView iv_addBookBottom;//底部加入书架icon
     @BindView(R2.id.tv_addBookBottom)
     TextView tv_addBookBottom;//底部加入书架文字显示
