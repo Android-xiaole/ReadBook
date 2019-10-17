@@ -135,7 +135,7 @@ public class SettingPresenter extends BasePresenter<BaseRepository, SettingContr
     @Override
     public void setAuto(int autoBuy, int receive) {
         UserRepository.getInstance().setAutoReceive(autoBuy, receive)
-                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.bindLifecycle())
                 .subscribe(new ApiSubscriber2<ResponseModel>() {
