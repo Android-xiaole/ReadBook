@@ -221,7 +221,7 @@ public class FloatingView implements IFloatingView {
         int statusBarHeight = SystemUtils.getStatusBarHeight(getView().getContext());
 
 
-            if(mContainer.getPaddingTop() >= statusBarHeight) {
+            if(mContainer != null && mContainer.getPaddingTop() >= statusBarHeight) {
                 params.setMargins(0, UIUtils.dip2px(90,getView().getContext()) - statusBarHeight
                         , params.rightMargin,params.bottomMargin);
             }else {
