@@ -1150,7 +1150,7 @@ public abstract class PageLoader {
                  */
                 mChapterPositionStatus = IS_TOP;
                 mCurPage.position = 0;
-                drawBackground(mPageView.getBgBitmap(), false);
+//                drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
