@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jj.base.BaseApplication;
 import com.jj.base.dialog.CustomFragmentDialog;
 import com.jj.base.log.LogUtil;
-import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
@@ -30,7 +34,6 @@ import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.PaySuccessEvent;
 import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
 import com.jj.comics.util.eventbus.events.WxPayEvent;
-import com.jj.comics.widget.comic.toolbar.ComicToolBar;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -41,10 +44,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 
 import static android.app.Activity.RESULT_CANCELED;

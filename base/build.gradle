@@ -43,4 +43,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     annotationProcessor "com.alibaba:arouter-compiler:${AROUTER_COMPLIER_VERSION}"
     implementation project(':sdk')
+    implementation project(path: ':floatingview')
 }

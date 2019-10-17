@@ -9,7 +9,7 @@ import com.jj.base.utils.ResourceUtil;
 public class LogUtil {
     public static boolean LOG = ResourceUtil.getAppBooleanRes(BaseApplication.getApplication(), "is_debug",
             true);
-    public static String TAG_ROOT = "comic";
+    public static String TAG_ROOT = "JJNOVEL";
 
     public static void json(String json) {
         json(Log.DEBUG, null, json);

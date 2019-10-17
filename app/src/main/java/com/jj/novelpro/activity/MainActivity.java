@@ -1,7 +1,9 @@
 package com.jj.novelpro.activity;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.data.model.UpdateModelProxy;
+import com.jj.comics.service.PopShareService;
 import com.jj.comics.util.IntentUtils;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
@@ -153,6 +156,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
             }
         }
     };
+    private Intent service;
 
     @Override
     protected void initImmersionBar() {
@@ -267,6 +271,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
         switchPage(index);
         getP().checkUpdate();
+
+
+        if (!isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
+            service = new Intent(MainActivity.this, PopShareService.class);
+            startService(service);
+        }
 
     }
 
@@ -573,11 +583,30 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         message.sendToTarget();
     }
 
+    public static boolean isServiceRunning(String serviceName, Context context) {
+        //活动管理器
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> runningServices = am.getRunningServices(100); //获取运行的服务,参数表示最多返回的数量
+
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : runningServices) {
+            String className = runningServiceInfo.service.getClassName();
+            if (className.equals(serviceName)) {
+                return true; //判断服务是否运行
+            }
+        }
+
+        return false;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         wakeUpAdapter = null;
         Constants.ISLIVE_MAIN = false;
+        if (isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
+            stopService(service);
+        }
+
     }
 
     AppWakeUpAdapter wakeUpAdapter = new AppWakeUpAdapter() {

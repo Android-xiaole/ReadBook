@@ -222,6 +222,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".service.PopShareService"></service>
+
     </application>
 
 </manifest>

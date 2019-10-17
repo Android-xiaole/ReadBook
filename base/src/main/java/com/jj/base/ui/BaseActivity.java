@@ -11,7 +11,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.gyf.immersionbar.ImmersionBar;
+import com.imuxuan.floatingview.FloatingView;
 import com.jj.base.R;
 import com.jj.base.dialog.CustomProgressDialog;
 import com.jj.base.mvp.BasePresenter;
@@ -23,9 +27,6 @@ import com.tencent.tauth.UiError;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -107,7 +108,18 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (!isStart) {
             initData(savedInstanceState);
         }
+
+        //开启悬浮窗
+        FloatingView.get().attach(this);
         isStart = true;
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        FloatingView.get().detach(this);
     }
 
     @Override
@@ -145,6 +157,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (netReceiver != null) {
             unregisterReceiver(netReceiver);
         }
+
+        FloatingView.get().remove();
     }
 
     @Override
@@ -202,6 +216,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void onPause() {
+        //关闭悬浮窗
+        FloatingView.get().removeNow();
+
         if (!hasFragment()) {
             MobclickAgent.onPageEnd(getClass().getName()); //手动统计页面
         }
