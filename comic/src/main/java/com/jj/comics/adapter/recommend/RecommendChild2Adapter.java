@@ -1,12 +1,13 @@
 package com.jj.comics.adapter.recommend;
 
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
@@ -18,9 +19,6 @@ import com.jj.comics.data.model.BookModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
     private RecommendAdapter.OnClickListener mOnClick;
@@ -63,28 +61,17 @@ public class RecommendChild2Adapter extends SimpleBaseAdapter<BookModel> {
                     });
                     addHeaderView(header);
                 }
-//                String imageUrl = getImageUrl(false, mainContent);
-                String imageUrl = mainContent.getModel_img_url();
-                if (!TextUtils.isEmpty(imageUrl)) {
-                    ILFactory.getLoader().loadNet(header.<ImageView>findViewById(R.id.item_recommend_img),
-                            imageUrl,
-                            new RequestOptions().transforms(new CenterCrop()/*, new RoundedCorners(12)*/)
-                                    .error(R.drawable.img_loading)
-                                    .transforms(new CenterCrop())
-                                    .placeholder(R.drawable.img_loading));
+//
+                ILFactory.getLoader().loadNet(header.<ImageView>findViewById(R.id.item_recommend_img),
+                        mainContent.getCover(),
+                        new RequestOptions().transforms(new CenterCrop()/*, new RoundedCorners(12)*/)
+                                .error(R.drawable.img_loading)
+                                .transforms(new CenterCrop())
+                                .placeholder(R.drawable.img_loading));
 
-                } else {
-                    ILFactory.getLoader().loadNet(header.<ImageView>findViewById(R.id.item_recommend_img),
-                            mainContent.getCover(),
-                            new RequestOptions().transforms(new CenterCrop()/*, new RoundedCorners(12)*/)
-                                    .error(R.drawable.img_loading)
-                                    .transforms(new CenterCrop())
-                                    .placeholder(R.drawable.img_loading));
-                }
                 header.<TextView>findViewById(R.id.item_recommend_name).setText(mainContent.getTitle());
                 header.<TextView>findViewById(R.id.item_recommend_desc).setText(mainContent.getIntro());
                 header.<TextView>findViewById(R.id.item_recommend_author).setText(mainContent.getAuthor());
-                header.<TextView>findViewById(R.id.item_recommend_status).setText(mainContent.getAuthor());
                 if (contentListBean.getFullflag() == 0) {
                     header.<TextView>findViewById(R.id.item_recommend_status).setText("连载中");
                 } else {

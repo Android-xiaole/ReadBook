@@ -58,9 +58,7 @@ import com.youth.banner.loader.ImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -303,8 +301,7 @@ public class RecommendFragment extends BaseCommonFragment<RecommendPresenter> im
         rv_popShare = headView.findViewById(R.id.rv_pop_share);
         mAviShapre = headView.findViewById(R.id.avi);
         showShareLoading();
-        adapterPopShare = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
-                Integer.MAX_VALUE, false,true);
+        adapterPopShare = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical);
         rv_popShare.setLayoutManager(new GridLayoutManager(getContext(),2));
         adapterPopShare.bindToRecyclerView(rv_popShare, false);
         adapterPopShare.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

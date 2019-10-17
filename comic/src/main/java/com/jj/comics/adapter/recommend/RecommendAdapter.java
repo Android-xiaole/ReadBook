@@ -5,6 +5,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -17,11 +22,6 @@ import com.jj.comics.data.model.SectionModel;
 import com.jj.comics.widget.RecycleViewDivider;
 
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
 
@@ -66,17 +66,15 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
         } else if (TextUtils.equals(style, TYPE_3_0)) {
             manager.setSpanCount(3);
             recyclerView.setLayoutManager(manager);
-            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical_hight, Integer.MAX_VALUE, true,false);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical_hight);
         } else if (TextUtils.equals(style, TYPE_3_3)) {
             manager.setSpanCount(3);
             recyclerView.setLayoutManager(manager);
-            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical_hight,
-                    Integer.MAX_VALUE, true,false);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical_hight);
         } else if (TextUtils.equals(style,TYPE_2_2)){
             manager.setSpanCount(2);
             recyclerView.setLayoutManager(manager);
-            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
-                    Integer.MAX_VALUE, false,true);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical);
         } else if (TextUtils.equals(style,X_TYPE_1_3)) {
             manager.setSpanCount(3);
             recyclerView.setLayoutManager(manager);
@@ -85,8 +83,7 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
         } else if (TextUtils.equals(style,X_TYPE_2_2)) {
             manager.setSpanCount(2);
             recyclerView.setLayoutManager(manager);
-            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
-                    Integer.MAX_VALUE, false,true);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical);
         }
 
         if (!TextUtils.equals(style, TYPE_1_3)&&recyclerView.getItemDecorationCount() <= 0) {
@@ -95,8 +92,7 @@ public class RecommendAdapter extends SimpleBaseAdapter<SectionModel> {
             recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, Utils.dip2px(mContext, 10), Color.WHITE));
         }
         if (adapter == null) {
-            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical,
-                    Integer.MAX_VALUE, false,true);
+            adapter = new RecommendChildAdapter(R.layout.comic_item_recommend_vertical);
         }
         adapter.bindToRecyclerView(recyclerView);
         //给每个子item设置监听  另外 由于RecommendChild2Adapter中是以头布局进行排版  所以也要把mOnClick传过去便于监听

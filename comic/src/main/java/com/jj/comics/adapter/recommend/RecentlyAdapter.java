@@ -1,12 +1,9 @@
 package com.jj.comics.adapter.recommend;
 
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,10 +24,7 @@ public class RecentlyAdapter extends SimpleBaseAdapter<BookModel> {
     @Override
     protected void convert(BaseViewHolder helper, BookModel item) {
         if (item != null) {
-            String imgUrl = item.getModel_img_url();
-            if (TextUtils.isEmpty(imgUrl)) {
-                imgUrl = item.getCover();
-            }
+            String  imgUrl = item.getCover();
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_recently_icon),
                     imgUrl,
                     new RequestOptions()
