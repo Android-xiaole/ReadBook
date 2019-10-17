@@ -64,12 +64,12 @@ public class UserInfo implements Serializable {
 
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
-
-
-    @Generated(hash = 1000830217)
+    private String class_name;//用户级别描述
+    @Generated(hash = 1718473549)
     public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
             String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
-            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, boolean isLogin) {
+            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, boolean isLogin,
+            String class_name) {
         this.uid = uid;
         this.openid = openid;
         this.unionid = unionid;
@@ -89,163 +89,131 @@ public class UserInfo implements Serializable {
         this.delete_flag = delete_flag;
         this.is_vip = is_vip;
         this.isLogin = isLogin;
+        this.class_name = class_name;
     }
-
     @Generated(hash = 1279772520)
     public UserInfo() {
     }
-    
-
     public long getUid() {
         return this.uid;
     }
-
     public void setUid(long uid) {
         this.uid = uid;
     }
-
     public String getOpenid() {
         return this.openid;
     }
-
     public void setOpenid(String openid) {
         this.openid = openid;
     }
-
     public String getUnionid() {
         return this.unionid;
     }
-
     public void setUnionid(String unionid) {
         this.unionid = unionid;
     }
-
     public int getSourceid() {
         return this.sourceid;
     }
-
     public void setSourceid(int sourceid) {
         this.sourceid = sourceid;
     }
-
     public String getUsername() {
         return this.username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
     public String getPassword() {
         return this.password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getNickname() {
         return this.nickname;
     }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
     public String getSalt() {
         return this.salt;
     }
-
     public void setSalt(String salt) {
         this.salt = salt;
     }
-
     public String getAvatar() {
         return this.avatar;
     }
-
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
     public long getMobile() {
         return this.mobile;
     }
-
     public void setMobile(long mobile) {
         this.mobile = mobile;
     }
-
     public int getSex() {
         return this.sex;
     }
-
     public void setSex(int sex) {
         this.sex = sex;
     }
-
     public String getPos_city() {
         return this.pos_city;
     }
-
     public void setPos_city(String pos_city) {
         this.pos_city = pos_city;
     }
-
     public int getStatus() {
         return this.status;
     }
-
     public void setStatus(int status) {
         this.status = status;
     }
-
     public String getCreate_time() {
         return this.create_time;
     }
-
     public void setCreate_time(String create_time) {
         this.create_time = create_time;
     }
-
     public String getUpdate_time() {
         return this.update_time;
     }
-
     public void setUpdate_time(String update_time) {
         this.update_time = update_time;
     }
-
     public String getInvite_code() {
-        return invite_code;
+        return this.invite_code;
     }
-
     public void setInvite_code(String invite_code) {
         this.invite_code = invite_code;
     }
-
     public int getDelete_flag() {
         return this.delete_flag;
     }
-
     public void setDelete_flag(int delete_flag) {
         this.delete_flag = delete_flag;
     }
-
-    public boolean getIsLogin() {
-        return this.isLogin;
-    }
-
-    public void setIsLogin(boolean isLogin) {
-        this.isLogin = isLogin;
-    }
-
     public int getIs_vip() {
         return this.is_vip;
     }
-
     public void setIs_vip(int is_vip) {
         this.is_vip = is_vip;
     }
+    public boolean getIsLogin() {
+        return this.isLogin;
+    }
+    public void setIsLogin(boolean isLogin) {
+        this.isLogin = isLogin;
+    }
+    public String getClass_name() {
+        return this.class_name;
+    }
+    public void setClass_name(String class_name) {
+        this.class_name = class_name;
+    }
+
 
 }

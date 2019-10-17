@@ -77,7 +77,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/is_vip"
+                            android:id="@+id/leave_name"
                             android:layout_width="81dp"
                             android:layout_height="@dimen/dp_26"
                             android:layout_below="@id/mine_nickname"

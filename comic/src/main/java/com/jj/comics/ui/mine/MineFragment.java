@@ -58,8 +58,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mCoins;
     @BindView(R2.id.mine_apprentice)
     TextView mApprentice;
-//    @BindView(R2.id.is_vip)
-//    ImageView mVip;
+    @BindView(R2.id.leave_name)
+    TextView mLeaveName;
     @BindView(R2.id.rootView)
     RelativeLayout rootView;
 
@@ -73,7 +73,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         lp.topMargin = statusBarHeight;
         rootView.setLayoutParams(lp);
         //上传访问我的界面  key为accessUserCenter
-        if (LoginHelper.interruptLogin(getActivity(),null)) {
+        if (LoginHelper.interruptLogin(getActivity(), null)) {
             getP().getUserInfo();
             getP().getUserPayInfo();
         }
@@ -113,7 +113,7 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         String nickName = userInfo.getNickname();
         //设置昵称
         mNickname.setText(nickName);
-
+        mLeaveName.setText(userInfo.getClass_name() == null ? "" : userInfo.getClass_name());
         if (userInfo.getIs_vip() == 1) {
             headImg.setBackgroundResource(R.drawable.header_bg);
         } else {

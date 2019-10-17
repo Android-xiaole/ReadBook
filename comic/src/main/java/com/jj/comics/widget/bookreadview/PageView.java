@@ -290,37 +290,45 @@ public class PageView extends View {
                       */
                     //只能点击上一章
                     if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_LAST){
-                        RectF rectF = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
-                        if (rectF.contains(x,y)){
-                            if (mTouchListener != null) {
-                                mTouchListener.clickLastChapter();
+                        if (mPageLoader.tv_last_chapter != null){
+                            RectF rectF = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
+                            if (rectF.contains(x,y)){
+                                if (mTouchListener != null) {
+                                    mTouchListener.clickLastChapter();
+                                }
+                                return true;
                             }
-                            return true;
                         }
                     }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT){
                         //只能点击下一章
-                        RectF rectF = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
-                        if (rectF.contains(x,y)){
-                            if (mTouchListener != null) {
-                                mTouchListener.clickNextChapter();
+                        if (mPageLoader.tv_next_chapter!=null){
+                            RectF rectF = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
+                            if (rectF.contains(x,y)){
+                                if (mTouchListener != null) {
+                                    mTouchListener.clickNextChapter();
+                                }
+                                return true;
                             }
-                            return true;
                         }
                     }else if (mPageLoader.getChapterButtonStatus() == PageLoader.CAN_NEXT_LAST){
                         //两个按钮都可以点击
-                        RectF rectF_last = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
-                        if (rectF_last.contains(x,y)){
-                            if (mTouchListener != null) {
-                                mTouchListener.clickLastChapter();
+                        if (mPageLoader.tv_last_chapter!=null){
+                            RectF rectF_last = getRectF(mPageLoader.tv_last_chapter,BUTTON_LEFT);
+                            if (rectF_last.contains(x,y)){
+                                if (mTouchListener != null) {
+                                    mTouchListener.clickLastChapter();
+                                }
+                                return true;
                             }
-                            return true;
                         }
-                        RectF rectF_next = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
-                        if (rectF_next.contains(x,y)){
-                            if (mTouchListener != null) {
-                                mTouchListener.clickNextChapter();
+                        if (mPageLoader.tv_next_chapter!=null){
+                            RectF rectF_next = getRectF(mPageLoader.tv_next_chapter,BUTTON_RIGHT);
+                            if (rectF_next.contains(x,y)){
+                                if (mTouchListener != null) {
+                                    mTouchListener.clickNextChapter();
+                                }
+                                return true;
                             }
-                            return true;
                         }
                     }
                 }
@@ -356,12 +364,12 @@ public class PageView extends View {
 
     /**
      * 计算登录或者购买单章页面的点击事件view的矩阵
-     * 上边距和下边距+100+28是因为需要把左上角标题的高度和图片距离上面的高度计算进去
+     * 上边距和下边距+100是因为需要把图片距离上面的高度计算进去
      * @param view
      * @return
      */
     private RectF getRectF(View view){
-        return new RectF(view.getLeft(),view.getTop()+ScreenUtils.dpToPx(100)-ScreenUtils.dpToPx(5),view.getRight(),view.getBottom()+ScreenUtils.dpToPx(100)-ScreenUtils.dpToPx(5));
+        return new RectF(view.getLeft(),view.getTop()+ScreenUtils.dpToPx(100),view.getRight(),view.getBottom()+ScreenUtils.dpToPx(100));
     }
 
     /**

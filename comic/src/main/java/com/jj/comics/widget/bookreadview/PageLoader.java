@@ -495,11 +495,30 @@ public abstract class PageLoader {
      * @see PageMode
      */
     public void setPageMode(PageMode pageMode) {
-        mPageMode = pageMode;
+        //如果模式没有变化就不做处理
+        if (mPageMode == pageMode)return;
+        //如果是SCROLL模式切换成别的模式，或者是别的模式切换成SCROLL模式，则需要做特殊处理
+        if (mPageMode == PageMode.SCROLL||pageMode == PageMode.SCROLL){
+            //设置模式之后需要重新计算当前页面内容，因为上下滚动模式需要多绘制底部切换章节按钮，可能会多一页
+            mPageMode = pageMode;
+            //重新生成当前章节数据
+            dealLoadPageList(mCurChapterPos);
+            //如果设置的不是上下滚动模式，并且当前页没有内容，那就转去加载上一页
+            if (pageMode != PageMode.SCROLL&&mCurPage!=null&&mCurPage.lines!=null){
+                if (mCurPage.lines.size() == 0&&mCurPage.position>0){
+//                    mCurPageList.remove(mCurPage.position);
+                    mCurPage = mCurPageList.get(mCurPage.position-1);
+                }
+            }
+        }
 
+        //还需要清除上一章和下一章的缓存，因为需要重新生成（SCROLL模式下底部button的问题）
+        mNextPageList = null;
+        mPrePageList = null;
+
+        mPageMode = pageMode;
         mPageView.setPageMode(mPageMode);
         mSettingManager.setPageMode(mPageMode);
-
         // 重新绘制当前页
         mPageView.drawCurPage(false);
     }
@@ -902,11 +921,12 @@ public abstract class PageLoader {
                         if (txtChapter.isNeedLogin()&& LoginHelper.getOnLineUser()==null){//未登录就提示登录
                             tip = "付费内容，请先登录后阅读（点击登录）";
                             drawSinglePage(canvas,txtChapter);
+                            return;
                         }else if (!txtChapter.isPaid()){//如果该章节没有付费则提示付费
                             tip = "付费内容，请您购买后阅读（点击购买）";
                             drawSinglePage(canvas,txtChapter);
+                            return;
                         }
-                        return;
                     }
                     tip = "正在拼命加载中...";
                     //设置底部切换章节按钮点击事件为不可点击
@@ -987,6 +1007,12 @@ public abstract class PageLoader {
                 }
             }
 
+            if (mPageMode != PageMode.SCROLL){
+                //如果不是上下滚动模式就不绘制底部切换章节按钮
+                tv_next_chapter = null;
+                tv_last_chapter = null;
+                return;
+            }
             //绘制到每个章节的最后一页，开始绘制底部切换章节按钮
             if (mCurPage.position + 1 == mCurPageList.size()) {
                 initBottomBar();
@@ -1047,7 +1073,11 @@ public abstract class PageLoader {
         Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),view.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
         Canvas canvas1 = new Canvas(bitmap);
         view.draw(canvas1);
-        canvas.drawBitmap(bitmap,0,ScreenUtils.dpToPx(100),null);
+        if (mPageMode == PageMode.SCROLL){
+            canvas.drawBitmap(bitmap,0,ScreenUtils.dpToPx(100-28),null);
+        }else{
+            canvas.drawBitmap(bitmap,0,ScreenUtils.dpToPx(100),null);
+        }
     }
 
     /**
@@ -1213,7 +1243,7 @@ public abstract class PageLoader {
                 }
                 mChapterPositionStatus = IS_BOTTOM;
                 mCurPage.position = mCurPageList.size()-1;
-                drawBackground(mPageView.getBgBitmap(), false);
+//                drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
@@ -1253,7 +1283,7 @@ public abstract class PageLoader {
     boolean parseCurChapter() {
         // 解析数据
         dealLoadPageList(mCurChapterPos);
-        // 预加载下一页面（由于存在收费逻辑，这里就不预加载下一章节了）
+        // 预加载下一页面
         preLoadNextChapter();
         return mCurPageList != null ? true : false;
     }
@@ -1392,6 +1422,10 @@ public abstract class PageLoader {
             // 假设加载到下一页，又取消了。那么需要重新装载。
             mCurPage = mCancelPage;
         }
+        //取消翻页之后需要将状态置为完成
+        if(mCurPage!=null&&mCurPage.title!=null){
+            mStatus = PageLoader.STATUS_FINISH;
+        }
     }
 
     private void cancelNextChapter() {
@@ -1529,6 +1563,10 @@ public abstract class PageLoader {
                 pages.add(page);
                 //重置Lines
                 lines.clear();
+            }
+            if (mPageMode != PageMode.SCROLL){
+                //非上下滚动模式不用走下面的逻辑
+                return pages;
             }
             // TODO: 2019-09-20 这里解决底部切换章节按钮和文本内容可能重合的问题
             //读取完文本之后获取最后一页
