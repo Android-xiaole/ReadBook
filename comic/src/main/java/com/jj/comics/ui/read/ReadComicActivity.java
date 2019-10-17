@@ -21,6 +21,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -47,7 +55,6 @@ import com.jj.comics.ui.dialog.NormalNotifyDialog;
 import com.jj.comics.ui.dialog.ShareDialog;
 import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.ShareMoneyUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
@@ -66,13 +73,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -221,7 +221,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         toggleEyeModel(ReadSettingManager.getInstance().isEyeModel());//设置是否护眼模式
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
-        tv_share_money.setText(ShareMoneyUtil.getShareMoney(bookModel.getTotal_size(),bookModel.getFirst_commission_rate(),bookModel.getSecond_commission_rate(),bookModel.getShare_price()));
+        tv_share_money.setText("分享预计赚￥" + bookModel.getShare_will_earnings());
         //加载章节目录列表
         getP().getCatalogList(bookModel);
         if (LoginHelper.getOnLineUser() != null) {

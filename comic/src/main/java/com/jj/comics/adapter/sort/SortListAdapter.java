@@ -1,7 +1,6 @@
 package com.jj.comics.adapter.sort;
 
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.BookModel;
-import com.jj.comics.util.ShareMoneyUtil;
 
 public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
 
@@ -24,10 +22,7 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
     @Override
     protected void convert(BaseViewHolder helper, BookModel item) {
         if (item != null) {
-            String imgUrl = item.getModel_img_url();
-            if (TextUtils.isEmpty(imgUrl)) {
-                imgUrl = item.getCover();
-            }
+            String imgUrl = item.getCover();
             ILFactory.getLoader().loadNet(helper.<ImageView>getView(R.id.iv_recently_icon),
                     imgUrl,
                     new RequestOptions()
@@ -37,9 +32,7 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
             helper.<TextView>getView(R.id.tv_recently_name).setText(item.getTitle());
             helper.<TextView>getView(R.id.tv_recently_author).setText(item.getAuthor());
             helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
-            helper.<TextView>getView(R.id.tv_share).setText(ShareMoneyUtil.getShareMoney(
-                    item.getTotal_size(), item.getFirst_commission_rate(), item.getSecond_commission_rate(), item.getShare_price()
-            ));
+            helper.<TextView>getView(R.id.tv_share).setText("分享预计赚￥" + item.getShare_will_earnings());
             helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
             if (item.getFullflag() == 0) {
                 helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#9975FD"));

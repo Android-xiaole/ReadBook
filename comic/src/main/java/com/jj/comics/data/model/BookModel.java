@@ -5,12 +5,12 @@ import com.jj.comics.common.converter.StringConverter;
 
 import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
 import java.util.List;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 一本书的通用模型
@@ -72,40 +72,23 @@ public class BookModel implements Serializable {
     private String author;//作者
     private String yesterday_share;
     private String allvisit;//阅读人数
-    @SerializedName(value = "total_size", alternate = {"size"})
     private String total_size;//总字数
     private String total_share;//总的分享次数
     private int batchbuy;//''购买方式：1-章节售卖 2-整本售卖
     private int batchprice;//整本购买的价格
     private int has_batch_buy;//是否已全本购买1是2否
     private int update_chapter_time;//章节目录更新时间（可以用来判断是否需要去刷新章节目录缓存）
-    private String first_commission_rate;//徒弟上供率
-    private String second_commission_rate;//徒孙上供率
-    private String share_price;//每个字的单价
+    private String share_will_earnings;//分享获得奖励
 
-    public String getFirst_commission_rate() {
-        return first_commission_rate;
+
+    public String getShare_will_earnings() {
+        return share_will_earnings;
     }
 
-    public void setFirst_commission_rate(String first_commission_rate) {
-        this.first_commission_rate = first_commission_rate;
+    public void setShare_will_earnings(String share_will_earnings) {
+        this.share_will_earnings = share_will_earnings;
     }
 
-    public String getSecond_commission_rate() {
-        return second_commission_rate;
-    }
-
-    public void setSecond_commission_rate(String second_commission_rate) {
-        this.second_commission_rate = second_commission_rate;
-    }
-
-    public String getShare_price() {
-        return share_price;
-    }
-
-    public void setShare_price(String share_price) {
-        this.share_price = share_price;
-    }
 
     //设置以下两个属性不写入表中
     @Transient
@@ -118,10 +101,11 @@ public class BookModel implements Serializable {
     private long create_time;//入库时间
     private long update_time;//更新时间
 
-    @Generated(hash = 2080059058)
+
+    @Generated(hash = 1489710443)
     public BookModel(Long _id, long id, String cover, String title, String coverl, String coverl_index, String cover_index, String model_img_url, String hot_const, String intro, int fullflag, String lastvolume, String lastvolume_name,
             int reviewnum, int goodnum, long chapterid, String chaptername, int order, List<String> tag, String keywords, String author, String yesterday_share, String allvisit, String total_size, String total_share, int batchbuy,
-            int batchprice, int has_batch_buy, int update_chapter_time, String first_commission_rate, String second_commission_rate, String share_price, long userId, long create_time, long update_time) {
+            int batchprice, int has_batch_buy, int update_chapter_time, String share_will_earnings, long userId, long create_time, long update_time) {
         this._id = _id;
         this.id = id;
         this.cover = cover;
@@ -151,9 +135,7 @@ public class BookModel implements Serializable {
         this.batchprice = batchprice;
         this.has_batch_buy = has_batch_buy;
         this.update_chapter_time = update_chapter_time;
-        this.first_commission_rate = first_commission_rate;
-        this.second_commission_rate = second_commission_rate;
-        this.share_price = share_price;
+        this.share_will_earnings = share_will_earnings;
         this.userId = userId;
         this.create_time = create_time;
         this.update_time = update_time;
@@ -162,7 +144,6 @@ public class BookModel implements Serializable {
     @Generated(hash = 1421733684)
     public BookModel() {
     }
-
 
 
     
