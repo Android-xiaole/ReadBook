@@ -1,5 +1,6 @@
 package com.jj.comics.widget.bookreadview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.widget.bookreadview.animation.CoverPageAnim;
 import com.jj.comics.widget.bookreadview.animation.HorizonPageAnim;
 import com.jj.comics.widget.bookreadview.animation.NonePageAnim;
@@ -230,6 +232,22 @@ public class PageView extends View {
 
                 // 如果滑动了，则进行翻页。
                 if (isMove) {
+//                    if (mPageAnim instanceof ScrollPageAnim){
+//                        //如果是上下滚动的动画，需要控制在滑动到章节顶部或者底部时，禁止滑动
+//                        if (y > mStartY && Math.abs(y - mStartY)>25){
+//                            //向下滑动
+//                            if (mPageLoader.getChapterPositionStatus() != PageLoader.IS_TOP){
+//                                mPageAnim.onTouchEvent(event);
+//                            }
+//                        }else if (y < mStartY && Math.abs(y - mStartY)>25){
+//                            //向上滑动
+//                            if (mPageLoader.getChapterPositionStatus() != PageLoader.IS_BOTTOM){
+//                                mPageAnim.onTouchEvent(event);
+//                            }
+//                        }
+//                    }else{
+//                        mPageAnim.onTouchEvent(event);
+//                    }
                     mPageAnim.onTouchEvent(event);
                 }
                 break;
@@ -238,13 +256,29 @@ public class PageView extends View {
                     //设置中间区域范围
                     if (mCenterRect == null) {
                         mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3,
-                                mViewWidth * 4 / 5, mViewHeight * 2 / 3);
+                                mViewWidth * 4 / 5, mViewHeight / 2+ScreenUtils.dpToPx(50));
                     }
 
                     //是否点击了中间
                     if (mCenterRect.contains(x, y)) {
                         if (mTouchListener != null) {
                             mTouchListener.center();
+                        }
+                        return true;
+                    }
+                    //说明是未登录或者未支付的单章页面
+                    if (mPageLoader.iv_button!=null){
+                        RectF rectF = getRectF(mPageLoader.iv_button);
+                        if (rectF.contains(x,y)){
+                            if (mTouchListener != null) {
+                                mTouchListener.clickButton();
+                            }
+                        }
+                        RectF rectF1 = getRectF(mPageLoader.tv_noPay);
+                        if (rectF1.contains(x,y)){
+                            if (getContext() instanceof Activity){
+                                ((Activity) getContext()).finish();
+                            }
                         }
                         return true;
                     }
@@ -318,6 +352,16 @@ public class PageView extends View {
 //        return new RectF(view.getLeft(), ScreenUtils.getDisplayMetrics().heightPixels-view.getMeasuredHeight()-ScreenUtils.dpToPx(65),view.getRight(),ScreenUtils.getDisplayMetrics().heightPixels-ScreenUtils.dpToPx(65));
         }
         return rectF;
+    }
+
+    /**
+     * 计算登录或者购买单章页面的点击事件view的矩阵
+     * 上边距和下边距+100+28是因为需要把左上角标题的高度和图片距离上面的高度计算进去
+     * @param view
+     * @return
+     */
+    private RectF getRectF(View view){
+        return new RectF(view.getLeft(),view.getTop()+ScreenUtils.dpToPx(100)-ScreenUtils.dpToPx(5),view.getRight(),view.getBottom()+ScreenUtils.dpToPx(100)-ScreenUtils.dpToPx(5));
     }
 
     /**
@@ -448,5 +492,8 @@ public class PageView extends View {
         void clickNextChapter();//点击了下一章按钮
 
         void clickLastChapter();//点击了上一章按钮
+
+        void clickButton();//点击了登录或者购买的按钮
+
     }
 }

@@ -4,6 +4,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
 
@@ -44,6 +45,9 @@ public class BookChapterBean implements Serializable {
 
     //在书籍文件中的终止位置
     private long end;
+
+    @Transient
+    private boolean needLogin;//标记当前章节是否需要登录后观看，该字段不存数据库
 
 
     @Generated(hash = 1508543635)
@@ -128,5 +132,11 @@ public class BookChapterBean implements Serializable {
         this.end = end;
     }
 
+    public boolean isNeedLogin() {
+        return needLogin;
+    }
 
+    public void setNeedLogin(boolean needLogin) {
+        this.needLogin = needLogin;
+    }
 }

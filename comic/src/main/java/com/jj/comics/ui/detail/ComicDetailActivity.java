@@ -319,10 +319,10 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         tv_author.setText(model.getAuthor());
         tv_readNum.setText(model.getAllvisit() + "人");
         tv_shareNum.setText(model.getTotal_share() + "次");
-        tv_wordsNum.setText(model.getTotalSize() + "字");
+        tv_wordsNum.setText(model.getTotal_size() + "字");
         tv_info.setText(model.getIntro());
         tv_catalogTitle.setText("更新至：" + model.getLastvolume_name());
-        mTvShareMonry.setText(ShareMoneyUtil.getShareMoney(model.getTotalSize(),model.getFirst_commission_rate(),model.getSecond_commission_rate(),model.getShare_price()));
+        mTvShareMonry.setText(ShareMoneyUtil.getShareMoney(model.getTotal_size(),model.getFirst_commission_rate(),model.getSecond_commission_rate(),model.getShare_price()));
 
         if (model.getTag() != null && model.getTag().size() > 0) {
             tv_type.setText(model.getTag().get(0));

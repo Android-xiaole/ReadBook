@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_selected="true">
+        <shape>
+            <stroke android:color="@color/comic_ffad70"
+                android:width="@dimen/dp_1"></stroke>
+        </shape>
+    </item>
+
+    <item android:state_selected="false">
+        <shape>
+            <stroke android:color="@color/comic_e8ebf0"
+                android:width="@dimen/dp_1"></stroke>
+        </shape>
+    </item>
+</selector>

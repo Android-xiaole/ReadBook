@@ -23,6 +23,7 @@ import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.ReadComicHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
+import com.jj.comics.widget.bookreadview.TxtChapter;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
 import com.umeng.analytics.MobclickAgent;
 
@@ -47,10 +48,10 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
     private ApiSubscriber2<BookCatalogModel> subscriber;
     private DaoHelper<BookModel> daoHelper = new DaoHelper<>();
 
-    public void loadData(BookModel bookModel, long chapterId) {
-        if (getV() instanceof ReadComicActivity) {
-            getV().showProgress((ReadComicActivity) getV());
-        }
+    public void loadData(BookModel bookModel, List<TxtChapter> requestChapters) {
+//        if (getV() instanceof ReadComicActivity) {
+//            getV().showProgress((ReadComicActivity) getV());
+//        }
         /*
         这里加载的内容时候需要取消上一个subscriber事件，保证一时间只有一个章节内容加载
         防止出现同时加载多个章节数据错乱的问题
@@ -58,16 +59,20 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
         if (subscriber != null && !subscriber.isDisposed()) {
             subscriber.dispose();
         }
-        subscriber = new ComicSubscriber<BookCatalogModel>() {
+        subscriber = new ApiSubscriber2<BookCatalogModel>() {
             @Override
             public void onNext(BookCatalogModel model) {
-                //获取章节内容之后去下载txt文件
-                downloadFile(model);
+                if (model.isPaid()){//已经付费就去下载文件
+                    //获取章节内容之后去下载txt文件
+                    downloadFile(model);
+                }else{//未付费的逻辑在这里处理
+                    getV().onLoadChapterContentNoPayError(model);
+                }
             }
 
             @Override
             protected void onFail(NetError error) {
-                ToastUtil.showToastShort(error.getMessage());
+                getV().onLoadCatalogContentError(error);
             }
 
             @Override
@@ -77,20 +82,20 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 getV().onLoadCatalogContentEnd();
             }
         };
-        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, chapterId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .as(this.<BookCatalogModel>bindLifecycle())
-                .subscribe(subscriber);
-
-//        List<Observable<BookCatalogModel>> requests = new ArrayList<>();
-//        for (TxtChapter requestChapter : requestChapters) {
-//            requests.add(ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId())));
-//        }
-//        Observable.concat(requests)
-//        //订阅漫画封装类
+//        ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, chapterId)
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .as(this.<BookCatalogModel>bindLifecycle())
 //                .subscribe(subscriber);
+
+        List<Observable<BookCatalogModel>> requests = new ArrayList<>();
+        for (TxtChapter requestChapter : requestChapters) {
+            requests.add(ReadComicHelper.getComicHelper().getBookCatalogContent((BaseActivity) getV(), bookModel, Long.parseLong(requestChapter.getChapterId())));
+        }
+        Observable.concat(requests)
+        //订阅漫画封装类
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(this.<BookCatalogModel>bindLifecycle())
+                .subscribe(subscriber);
     }
 
     /**
@@ -118,7 +123,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(new ApiSubscriber<File>() {
                     @Override
                     public void onNext(File file) {
-                        getV().onLoadChapterContent();
+                        getV().onLoadChapterContent(catalogModel.getId());
                     }
 
                     @Override

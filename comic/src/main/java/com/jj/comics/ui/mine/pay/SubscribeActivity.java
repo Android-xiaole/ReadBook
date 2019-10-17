@@ -1,5 +1,6 @@
 package com.jj.comics.ui.mine.pay;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -63,7 +64,6 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
         if (buyDialog == null) {
             buyDialog = new CustomFragmentDialog();
         }
-        buyDialog.setCancelable(false);
         buyDialog.show(this, getSupportFragmentManager(), R.layout.comic_detail_pay_dialog);
         TextView tv_buyCoinNum = buyDialog.getDialog().findViewById(R.id.tv_buyCoinNum);
         TextView tv_myCoinNum = buyDialog.getDialog().findViewById(R.id.tv_myCoinNum);
@@ -98,6 +98,13 @@ public class SubscribeActivity extends BaseActivity<SubscribePresenter> implemen
             @Override
             public void onClick(View v) {
                 buyDialog.dismiss();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+        buyDialog.addDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
                 setResult(RESULT_CANCELED);
                 finish();
             }

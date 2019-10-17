@@ -11,6 +11,7 @@ import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.Region;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.view.View;
 
 /**
@@ -489,7 +490,13 @@ public class SimulationPageAnim extends HorizonPageAnim{
         mPath0.close();
 
         canvas.save();
+        //该方法如果在targetsdk=28的时候会提示过期不可用，并会在9.0的手机上崩溃，当前targetsdk=27所以没问题
         canvas.clipPath(path, Region.Op.XOR);
+//        if (Build.VERSION.SDK_INT >= 28){
+//            canvas.clipOutPath(path);
+//        }else{
+//            canvas.clipPath(path, Region.Op.XOR);
+//        }
         canvas.drawBitmap(bitmap, 0, 0, null);
         try {
             canvas.restore();

@@ -14,7 +14,7 @@ public class BookCatalogContentResponse extends ResponseModel{
             if (data != null){//有数据
                 return null;
             }else {//没有数据返回异常
-                return NetError.noDataError();
+                return NetError.nullDataError();
             }
         }else{
             return new NetError(message,code);

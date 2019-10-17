@@ -2,24 +2,21 @@ package com.jj.comics.widget.bookreadview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.text.Spannable;
-import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.style.SuggestionSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.jj.base.utils.toast.ToastUtil;
+import com.jj.base.log.LogUtil;
 import com.jj.comics.R;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.widget.bookreadview.bean.BookRecordBean;
 import com.jj.comics.widget.bookreadview.bean.CollBookBean;
 import com.jj.comics.widget.bookreadview.utils.BookRepository;
@@ -69,6 +66,10 @@ public abstract class PageLoader {
     public static final int CAN_NEXT_LAST = 1;//上一章和下一章都可点击
     public static final int CAN_NEXT= 2;//只能点击下一章
     public static final int CAN_LAST = 3;//只能点击上一章
+    //标记当前是在章节顶部还是在底部还是在中间(暂时这个状态标记没用了)
+    public static final int IS_TOP = 4;
+    public static final int IS_BOTTOM = 5;
+    public static final int IS_MIDDLE = 6;
 
     // 当前章节列表
     protected List<TxtChapter> mChapterList;
@@ -122,8 +123,10 @@ public abstract class PageLoader {
     protected int mStatus = STATUS_LOADING;
     // 判断章节列表是否加载完成
     protected boolean isChapterListPrepare;
-    //标记章节按钮显示状态
+    //标记当前章节按钮显示状态
     private int mChapterButtonStatus = CAN_NOTHING;
+    //标记当前章节位置显示状态
+    private int mChapterPositionStatus = IS_TOP;
 
     // 是否打开过章节
     private boolean isChapterOpen;
@@ -534,7 +537,7 @@ public abstract class PageLoader {
     }
 
     /**
-     * 获取当前页的状态
+     * 获取当前页的加载状态
      *
      * @return
      */
@@ -547,6 +550,13 @@ public abstract class PageLoader {
      */
     public int getChapterButtonStatus(){
         return mChapterButtonStatus;
+    }
+
+    /**
+     * 获取当前章节位置状态
+     */
+    public int getChapterPositionStatus(){
+        return mChapterPositionStatus;
     }
 
     /**
@@ -736,6 +746,13 @@ public abstract class PageLoader {
         }
         // 获取章节的文本流
         BufferedReader reader = getChapterReader(chapter);
+        if (reader.readLine() == null){
+            /*
+                如果第一行就为空，大概率是因为当前文件没有下载完成，也有可能是当前章节没有内容
+                但是暂时无法区分具体是那种情况，先这么处理
+             */
+            return null;
+        }
         List<TxtPage> chapters = loadPages(chapter, reader);
 
         return chapters;
@@ -865,6 +882,9 @@ public abstract class PageLoader {
     }
 
     private void drawContent(Bitmap bitmap) {
+        //先重置两个按钮状态
+        iv_button = null;
+        tv_noPay = null;
         Canvas canvas = new Canvas(bitmap);
 
         if (mPageMode == PageMode.SCROLL) {
@@ -877,10 +897,23 @@ public abstract class PageLoader {
             String tip = "";
             switch (mStatus) {
                 case STATUS_LOADING:
+                    if (mChapterList!=null&&!mChapterList.isEmpty()){
+                        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
+                        if (txtChapter.isNeedLogin()&& LoginHelper.getOnLineUser()==null){//未登录就提示登录
+                            tip = "付费内容，请先登录后阅读（点击登录）";
+                            drawSinglePage(canvas,txtChapter);
+                        }else if (!txtChapter.isPaid()){//如果该章节没有付费则提示付费
+                            tip = "付费内容，请您购买后阅读（点击购买）";
+                            drawSinglePage(canvas,txtChapter);
+                        }
+                        return;
+                    }
                     tip = "正在拼命加载中...";
+                    //设置底部切换章节按钮点击事件为不可点击
+                    mChapterButtonStatus = CAN_NOTHING;
                     break;
                 case STATUS_ERROR:
-                    tip = "加载失败(点击边缘重试)";
+                    tip = "加载失败";
                     break;
                 case STATUS_EMPTY:
                     tip = "文章内容为空";
@@ -976,24 +1009,54 @@ public abstract class PageLoader {
                     tv_next_chapter.setVisibility(View.VISIBLE);
                     view_fgt.setVisibility(View.VISIBLE);
                 }
-                layoutView(mBottomBar);
+                layoutView(mBottomBar,ScreenUtils.getDisplayMetrics().widthPixels,ScreenUtils.dpToPx(44));
                 bitmap_bottombar = Bitmap.createBitmap(mBottomBar.getMeasuredWidth(),mBottomBar.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
                 canvas_bottombar = new Canvas(bitmap_bottombar);
                 mBottomBar.draw(canvas_bottombar);
-                canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85),null);
+
+                if (mPageMode == PageMode.SCROLL) {
+                    canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85)- ScreenUtils.dpToPx(28),null);
+                } else {
+                    canvas.drawBitmap(bitmap_bottombar,0,mDisplayHeight-mBottomBar.getMeasuredHeight()-ScreenUtils.dpToPx(85),null);
+                }
             }else{
                 mChapterButtonStatus = CAN_NOTHING;
             }
         }
     }
 
+    public ImageView iv_button;//登录或者购买的按钮
+    public TextView tv_noPay;//暂不购买的按钮
+    /**
+     * 当改章节需要登录或者未支付的时候画的单独页面
+     * @param canvas
+     * @param txtChapter
+     */
+    private void drawSinglePage(Canvas canvas,TxtChapter txtChapter){
+        View view = LayoutInflater.from(mContext).inflate(R.layout.comic_readview_single_page, null);
+        TextView tv_title = view.findViewById(R.id.tv_title);
+        tv_title.setText(txtChapter.getTitle());
+        tv_noPay = view.findViewById(R.id.tv_noPay);
+        iv_button = view.findViewById(R.id.iv_button);
+        if (txtChapter.isNeedLogin()&& LoginHelper.getOnLineUser()==null){//未登录就提示登录
+            iv_button.setImageResource(R.drawable.btn_readview_login);
+        }else if (!txtChapter.isPaid()){//如果该章节没有付费则提示付费
+            iv_button.setImageResource(R.drawable.btn_readview_buy);
+        }
+        layoutView(view,ScreenUtils.getDisplayMetrics().widthPixels,ScreenUtils.getDisplayMetrics().heightPixels);
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(),view.getMeasuredHeight(),Bitmap.Config.ARGB_8888);
+        Canvas canvas1 = new Canvas(bitmap);
+        view.draw(canvas1);
+        canvas.drawBitmap(bitmap,0,ScreenUtils.dpToPx(100),null);
+    }
+
     /**
      * 手动测量view宽高
      */
-    private void layoutView(View v) {
+    private void layoutView(View v,int wid,int hei) {
         v.layout(0, 0, ScreenUtils.getDisplayMetrics().widthPixels, ScreenUtils.dpToPx(44));
-        int measuredWidth = View.MeasureSpec.makeMeasureSpec(ScreenUtils.getDisplayMetrics().widthPixels, View.MeasureSpec.EXACTLY);
-        int measuredHeight = View.MeasureSpec.makeMeasureSpec(ScreenUtils.dpToPx(44), View.MeasureSpec.AT_MOST);
+        int measuredWidth = View.MeasureSpec.makeMeasureSpec(wid,View.MeasureSpec.EXACTLY);
+        int measuredHeight = View.MeasureSpec.makeMeasureSpec(hei, View.MeasureSpec.AT_MOST);
         v.measure(measuredWidth, measuredHeight);
         v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
     }
@@ -1045,6 +1108,7 @@ public abstract class PageLoader {
             // 先查看是否存在上一页
             TxtPage prevPage = getPrevPage();
             if (prevPage != null) {
+                mChapterPositionStatus = IS_MIDDLE;
                 mCancelPage = mCurPage;
                 mCurPage = prevPage;
                 mPageView.drawNextPage();
@@ -1054,25 +1118,30 @@ public abstract class PageLoader {
                     没有上一页就相当于滑动到章节头部
                     因为这里有个章节页数显示的问题，需要这么设置
                  */
+                mChapterPositionStatus = IS_TOP;
                 mCurPage.position = 0;
                 drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
-        //下面是自动加载上一章的代码，项目暂时不需要
-//        if (!hasPrevChapter()) {
-//            return false;
-//        }
-//
-//        mCancelPage = mCurPage;
-//        if (parsePrevChapter()) {
-//            mCurPage = getPrevLastPage();
-//        } else {
-//            mCurPage = new TxtPage();
-//        }
-//        mPageView.drawNextPage();
-//        return true;
-        return false;
+        if (mPageMode == PageMode.SCROLL){
+            //如果是上下滚动模式就禁止加载上一章
+            return false;
+        }
+        //下面是自动加载上一章的代码
+        if (!hasPrevChapter()) {
+            return false;
+        }
+
+        mCancelPage = mCurPage;
+        if (parsePrevChapter()) {
+            mCurPage = getPrevLastPage();
+        } else {
+            mCurPage = new TxtPage();
+        }
+        mPageView.drawNextPage();
+        return true;
+//        return false;
     }
 
     /**
@@ -1092,6 +1161,8 @@ public abstract class PageLoader {
 
         // 判断是否具有上一章缓存
         if (mPrePageList != null) {
+            //由于上一章有缓存数据，这里需要重置一下页面状态为加载完成（源码没加，会出现状态不同步的BUG）
+            mStatus = PageLoader.STATUS_FINISH;
             mCurPageList = mPrePageList;
             mPrePageList = null;
 
@@ -1126,6 +1197,7 @@ public abstract class PageLoader {
             // 先查看是否存在下一页
             TxtPage nextPage = getNextPage();
             if (nextPage != null) {
+                mChapterPositionStatus = IS_MIDDLE;
                 mCancelPage = mCurPage;
                 mCurPage = nextPage;
                 mPageView.drawNextPage();
@@ -1139,26 +1211,35 @@ public abstract class PageLoader {
                 }else {
                     mChapterButtonStatus = CAN_NEXT_LAST;
                 }
+                mChapterPositionStatus = IS_BOTTOM;
                 mCurPage.position = mCurPageList.size()-1;
                 drawBackground(mPageView.getBgBitmap(), false);
             }
         }
 
-        //下面是自动加载下一章的代码，暂时项目不需要就禁止掉
-//        if (!hasNextChapter()) {
-//            return false;
-//        }
+        if (mPageMode == PageMode.SCROLL){
+            //如果是上下滚动模式就禁止加载下一章
+            return false;
+        }
+        //下面是自动加载下一章的代码
+        if (!hasNextChapter()) {
+            return false;
+        }
+        if (mStatus != STATUS_FINISH){
+            //如果当前页面没有加载完成，就禁止加载下一页
+            return false;
+        }
 
-//        mCancelPage = mCurPage;
-//        // 解析下一章数据
-//        if (parseNextChapter()) {
-//            mCurPage = mCurPageList.get(0);
-//        } else {
-//            mCurPage = new TxtPage();
-//        }
-//        mPageView.drawNextPage();
-//        return true;
-        return false;
+        mCancelPage = mCurPage;
+        // 解析下一章数据
+        if (parseNextChapter()) {
+            mCurPage = mCurPageList.get(0);
+        } else {
+            mCurPage = new TxtPage();
+        }
+        mPageView.drawNextPage();
+        return true;
+//        return false;
     }
 
     private boolean hasNextChapter() {
@@ -1173,7 +1254,7 @@ public abstract class PageLoader {
         // 解析数据
         dealLoadPageList(mCurChapterPos);
         // 预加载下一页面（由于存在收费逻辑，这里就不预加载下一章节了）
-//        preLoadNextChapter();
+        preLoadNextChapter();
         return mCurPageList != null ? true : false;
     }
 
@@ -1193,6 +1274,7 @@ public abstract class PageLoader {
 
         // 是否下一章数据已经预加载了
         if (mNextPageList != null) {
+            mStatus = PageLoader.STATUS_FINISH;
             mCurPageList = mNextPageList;
             mNextPageList = null;
             // 回调
@@ -1245,7 +1327,7 @@ public abstract class PageLoader {
     private void preLoadNextChapter() {
         int nextChapter = mCurChapterPos + 1;
 
-        // 如果不存在下一章，且下一章没有数据，则不进行加载。
+        // 如果不存在下一章，或者下一章没有数据，则不进行加载。
         if (!hasNextChapter()
                 || !hasChapterData(mChapterList.get(nextChapter))) {
             return;
@@ -1448,7 +1530,7 @@ public abstract class PageLoader {
                 //重置Lines
                 lines.clear();
             }
-            // TODO: 2019-09-20 这里解决底部按钮和文本内容可能重合的问题
+            // TODO: 2019-09-20 这里解决底部切换章节按钮和文本内容可能重合的问题
             //读取完文本之后获取最后一页
             showTitle = true;//默认显示标题（方便后期会有不显示标题这种设置）
             TxtPage lastPage = pages.get(pages.size() - 1);
@@ -1475,8 +1557,10 @@ public abstract class PageLoader {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            LogUtil.e("loadTxt error:","加载小说文件失败:"+e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+            LogUtil.e("loadTxt error:","加载小说文件失败:"+e.getMessage());
         } finally {
             IOUtils.close(br);
         }
@@ -1568,10 +1652,10 @@ public abstract class PageLoader {
         /**
          * 作用：请求加载章节内容
          *
-         * @param requestChapter:需要下载的章节列表
+         * @param requestChapters:需要下载的章节列表
          */
-//        void requestChapters(List<TxtChapter> requestChapters);
-        void requestChapters(TxtChapter requestChapter);
+        void requestChapters(List<TxtChapter> requestChapters);
+//        void requestChapters(TxtChapter requestChapter);
 
         /**
          * 作用：章节目录加载完成时候回调
