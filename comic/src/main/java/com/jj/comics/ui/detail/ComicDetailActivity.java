@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -119,6 +121,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private NormalNotifyDialog removeCollectDialog;//移除收藏提示弹窗
 
     private String mFrom;
+    private boolean flag_info;//标记是否需要重新计算查看更多icon显示的标记
 
     /**
      * 进入详情页
@@ -170,6 +173,28 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             }
         });
         lin_catalogMenu.setClickable(false);
+
+        //监听简介textview的绘制，控制是否显示查看更多的icon
+        tv_info.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (tv_info.getText().length()>0&&!flag_info){
+                    flag_info = true;
+                    Layout layout = tv_info.getLayout();
+                    int lineCount = tv_info.getLineCount();
+                    if (lineCount>= 3){
+                        int ellipsisCount = layout.getEllipsisCount(lineCount - 1);
+                        if (ellipsisCount>0){
+                            iv_moreInfo.setVisibility(View.VISIBLE);
+                        }else{
+                            iv_moreInfo.setVisibility(View.GONE);
+                        }
+                    }else{
+                        iv_moreInfo.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
 
         long id = getId();
         if (id > 0) {

@@ -247,6 +247,7 @@
                         android:layout_marginLeft="@dimen/dp_17"
                         android:layout_marginTop="@dimen/dp_15"
                         android:layout_marginRight="@dimen/dp_23"
+                        android:layout_marginBottom="@dimen/dp_10"
                         android:ellipsize="end"
                         android:maxLines="3"
                         android:textColor="@color/comic_6e7379"
@@ -258,7 +259,6 @@
                         android:layout_width="@dimen/dp_16"
                         android:layout_height="@dimen/dp_16"
                         android:layout_gravity="right"
-                        android:layout_marginTop="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_16"
                         android:layout_marginBottom="@dimen/dp_15"
                         android:src="@drawable/comic_select_detail_more_info"/>
