@@ -421,10 +421,10 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     @OnClick({R2.id.tv_mode_scroll, R2.id.tv_mode_slide, R2.id.tv_mode_cover, R2.id.tv_mode_simulation,
-            R2.id.tv_sort, R2.id.iv_back_chapter, R2.id.iv_back, R2.id.iv_share,
+            R2.id.tv_sort, R2.id.iv_back_chapter, R2.id.iv_back, R2.id.iv_share,R2.id.tv_share_money,
             R2.id.lin_catalogBtn, R2.id.lin_textStyle, R2.id.lin_collect,
             R2.id.lin_fanye,R2.id.lin_mode,R2.id.tv_modeEye,R2.id.tv_modeNight,
-            R2.id.lin_fanyeSetting,R2.id.lin_textSetting,R2.id.lin_modeSetting})
+            R2.id.lin_fanyeSetting,R2.id.lin_textSetting,R2.id.lin_modeSetting,R2.id.lin_topMenu})
     public void onClick_ReadActivity(View view) {
         int i = view.getId();
             if (i == R.id.tv_sort) {
@@ -468,7 +468,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                     getP().addOrRemoveShelf(bookModel, isCollect, false);
                 }
             }
-        } else if (i == R.id.iv_share) {//分享按钮&赚钱按钮
+        } else if (i == R.id.iv_share||i == R.id.tv_share_money) {//分享按钮&分享赚钱文字
             if (bookModel != null) {
                 if (shareDialog == null) {
                     shareDialog = new ShareDialog(ReadComicActivity.this, "详情", bookModel.getTitle());
