@@ -324,7 +324,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void onResume() {
         super.onResume();
-        checkPopShareService();
         if (LoginHelper.getOnLineUser() != null) {
 //            getP().getMessageSum();
         }

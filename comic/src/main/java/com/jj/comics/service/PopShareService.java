@@ -15,8 +15,8 @@ import java.util.Random;
 
 public class PopShareService extends Service {
     private float money = 0;
-    private boolean stopService = false;
-    private int bound = 5 * 60 * 1000 - 5000;
+    private boolean stopService;
+    private int bound;
 
     @Nullable
     @Override
@@ -26,6 +26,8 @@ public class PopShareService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        stopService = false;
+        bound = 5 * 60 * 1000 - 5000;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,7 +38,7 @@ public class PopShareService extends Service {
                     int a = new Random().nextInt(100);
                     money = (float) a / (float) 100 + new Random().nextInt(999);
 
-                    SystemClock.sleep(ms);
+                    SystemClock.sleep(bound);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
