@@ -24,7 +24,7 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
     @Override
     protected void convert(BaseViewHolder helper, BookCatalogModel item) {
         TextView tv_title = helper.getView(R.id.tv_title);
-        tv_title.setText("第"+item.getChapterorder()+"章" + "  " + item.getChaptername());
+        tv_title.setText(item.getChapterorder() + "  " + item.getChaptername());
 //        if (currentContentId == -1){//没有阅读记录，默认选中第一章
 //            if ((helper.getLayoutPosition()-getHeaderLayoutCount()) == 0){
 //                tv_title.setSelected(true);
