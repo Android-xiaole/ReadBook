@@ -10,6 +10,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class BottomCashOutDialog {
         mOnClickListener = onClickListener;
 
         TextView cancel = popView.findViewById(R.id.pay_dialog_cancel);
+        ImageView cancelImg = popView.findViewById(R.id.base_pay_dialog_cancel);
         LinearLayout mAlipay = popView.findViewById(R.id.base_pay_dialog_alipay);
         LinearLayout mUnion = popView.findViewById(R.id.base_pay_dialog_union);
 
@@ -58,6 +60,12 @@ public class BottomCashOutDialog {
         if (!bank) mUnion.setVisibility(View.GONE);
 
         cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnClickListener.onCancelClick(v);
+            }
+        });
+        cancelImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnClickListener.onCancelClick(v);

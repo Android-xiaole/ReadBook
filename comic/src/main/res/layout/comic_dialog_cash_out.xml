@@ -8,9 +8,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp_50"
         android:gravity="center_vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,13 +23,17 @@
 
         <ImageView
             android:id="@+id/base_pay_dialog_cancel"
-            android:layout_width="22dp"
-            android:layout_height="@dimen/dp_22"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="11dp"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:padding="@dimen/dp_15"
             android:src="@drawable/base_vip_pay_cancel" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#e3e3e3" />
 
     <LinearLayout
         android:id="@+id/base_pay_dialog_alipay"
@@ -38,12 +42,12 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="43dp"
-            android:layout_height="43dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="30dp"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
             android:src="@drawable/base_vip_pay_alipay"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -51,12 +55,11 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="汇入我的支付宝"
+                android:text="支付宝"
                 android:textColor="@color/comic_6e7379"
                 android:textSize="@dimen/dp_14" />
 
@@ -77,16 +80,16 @@
     <LinearLayout
         android:id="@+id/base_pay_dialog_union"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_45"
+        android:layout_height="@dimen/dp_60"
         android:gravity="center">
 
         <ImageView
-            android:layout_width="43dp"
-            android:layout_height="43dp"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/base_vip_pay_wechat"
-            android:visibility="gone" />
+            android:src="@drawable/icon_band_card"
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -98,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="汇入我的银行卡"
+                android:text="银行卡"
                 android:textColor="@color/comic_6e7379"
                 android:textSize="@dimen/dp_14" />
         </LinearLayout>
@@ -117,6 +120,7 @@
         android:gravity="center"
         android:text="取消"
         android:textColor="@color/comic_a8adb3"
-        android:textSize="@dimen/dp_14"></TextView>
+        android:textSize="@dimen/dp_14"
+        android:visibility="gone"></TextView>
 
 </LinearLayout>
