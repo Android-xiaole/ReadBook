@@ -1,6 +1,7 @@
 package com.jj.comics.adapter.sort;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,7 +31,8 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
                             .error(R.drawable.img_loading)
                             .placeholder(R.drawable.img_loading));
             helper.<TextView>getView(R.id.tv_recently_name).setText(item.getTitle());
-            helper.<TextView>getView(R.id.tv_recently_author).setText(item.getAuthor());
+            String author = item.getAuthor();
+            helper.<TextView>getView(R.id.tv_recently_author).setText(TextUtils.isEmpty(author) ? "佚名":author);
             helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             helper.<TextView>getView(R.id.tv_share).setText("分享预计赚￥" + item.getShare_will_earnings());
             helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
