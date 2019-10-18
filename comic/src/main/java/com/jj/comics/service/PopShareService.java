@@ -16,6 +16,7 @@ import java.util.Random;
 public class PopShareService extends Service {
     private float money = 0;
     private boolean stopService = false;
+    private int bound = 5 * 60 * 1000 - 5000;
 
     @Nullable
     @Override
@@ -30,7 +31,7 @@ public class PopShareService extends Service {
             public void run() {
                 while (!stopService) {
                     //全局随机每5秒~10分钟执行一次显示
-                    int ms = new Random().nextInt(5 * 60 * 1000 - 5000) + 5000;
+                    int ms = new Random().nextInt(bound) + 5000;
 
                     int a = new Random().nextInt(100);
                     money = (float) a / (float) 100 + new Random().nextInt(999);

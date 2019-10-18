@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
         switchPage(index);
         getP().checkUpdate();
-
+        checkPopShareService();
     }
 
     private void checkPopShareService() {
