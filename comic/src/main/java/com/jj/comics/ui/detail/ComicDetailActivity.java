@@ -82,6 +82,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     TextView tv_type;//小说类型
     @BindView(R2.id.tv_info)
     TextView tv_info;//小说简介
+    @BindView(R2.id.iv_moreInfo)
+    ImageView iv_moreInfo;//查看更多详情的按钮
     @BindView(R2.id.tv_title)
     TextView tv_title;//小说名称
     @BindView(R2.id.iv_addBookBottom)
@@ -190,7 +192,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     }
 
     @OnClick({R2.id.lin_catalogMenu, R2.id.iv_back_chapter, R2.id.tv_sort, R2.id.iv_back,  R2.id.iv_share, R2.id.lin_share,
-            R2.id.lin_addBook, R2.id.tv_read, R2.id.tv_moreInfo,R2.id.tv_share_money})
+            R2.id.lin_addBook, R2.id.tv_read, R2.id.iv_moreInfo,R2.id.tv_share_money})
     public void onClick_detail(View view) {
         int id = view.getId();
         if (id == R.id.lin_catalogMenu) {
@@ -260,11 +262,17 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         } else if (id == R.id.tv_read) {//去阅读
             if (model == null) return;
             getP().toRead(model, model.getChapterid());
-        } else if (id == R.id.tv_moreInfo) {//查看更多
+        } else if (id == R.id.iv_moreInfo) {//查看更多
             if (model == null) return;
-            ARouter.getInstance().build(RouterMap.COMIC_DETAIL_BOOKINFO_ACTIVITY)
-                    .withString(Constants.IntentKey.BOOK_INFO, model.getIntro())
-                    .navigation(this);
+            iv_moreInfo.setSelected(!iv_moreInfo.isSelected());
+            if (iv_moreInfo.isSelected()){
+                tv_info.setMaxLines(Integer.MAX_VALUE);
+            }else{
+                tv_info.setMaxLines(3);
+            }
+//            ARouter.getInstance().build(RouterMap.COMIC_DETAIL_BOOKINFO_ACTIVITY)
+//                    .withString(Constants.IntentKey.BOOK_INFO, model.getIntro())
+//                    .navigation(this);
         }
     }
 
