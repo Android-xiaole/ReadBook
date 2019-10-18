@@ -1,5 +1,6 @@
 package com.jj.comics.ui.mine.settings;
 
+import android.content.Intent;
 import android.os.Environment;
 
 import com.jj.base.BaseApplication;
@@ -9,10 +10,11 @@ import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.utils.FileUtil;
-import com.jj.base.utils.toast.ToastUtil;
+import com.jj.base.utils.Utils;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.RestResponse;
+import com.jj.comics.service.PopShareService;
 import com.jj.comics.util.SharedPreManger;
 
 import java.io.File;
@@ -155,8 +157,14 @@ public class SettingPresenter extends BasePresenter<BaseRepository, SettingContr
 
                             if (receive == 0) {
                                 SharedPreManger.getInstance().saveReceiveStatus(false);
+                                if (Utils.isServiceRunning(PopShareService.class.getName(),BaseApplication.getApplication())) {
+                                    BaseApplication.getApplication().stopService(new Intent(BaseApplication.getApplication(),PopShareService.class));
+                                }
                             } else if (receive == 1) {
                                 SharedPreManger.getInstance().saveReceiveStatus(true);
+                                if (!Utils.isServiceRunning(PopShareService.class.getName(),BaseApplication.getApplication())) {
+                                    BaseApplication.getApplication().startService(new Intent(BaseApplication.getApplication(), PopShareService.class));
+                                }
                             }
                         } else {
                             getV().showError(new NetError(responseModel.getMessage(), NetError.NoDataError));

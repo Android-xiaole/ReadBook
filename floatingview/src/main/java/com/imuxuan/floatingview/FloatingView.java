@@ -104,7 +104,7 @@ public class FloatingView implements IFloatingView {
                     remove();
                 }
             };
-            new Timer().schedule(timerTask,2000);
+            if (timerTask != null) new Timer().schedule(timerTask,2000);
 
             if (mEnFloatingView != null) {
                 return;

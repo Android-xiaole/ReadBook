@@ -10,12 +10,13 @@ import android.os.SystemClock;
 import androidx.annotation.Nullable;
 
 import com.imuxuan.floatingview.FloatingView;
-import com.jj.base.log.LogUtil;
 
 import java.util.Random;
 
 public class PopShareService extends Service {
-    private  int i = 0;
+    private float money = 0;
+    private boolean stopService = false;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -24,26 +25,26 @@ public class PopShareService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true) {
+                while (!stopService) {
                     //全局随机每5秒~10分钟执行一次显示
-                    int ms = new Random().nextInt(5*60*1000 - 5000) + 5000;
-                    LogUtil.e("SERVICE " + ms);
-                    SystemClock.sleep(5000);
+                    int ms = new Random().nextInt(5 * 60 * 1000 - 5000) + 5000;
+
+                    int a = new Random().nextInt(100);
+                    money = (float) a / (float) 100 + new Random().nextInt(999);
+
+                    SystemClock.sleep(ms);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            int a = new Random().nextInt(100);
-                            float i = (float)a/ (float)100 + new Random().nextInt(999);
-                            FloatingView floatingView = FloatingView.get();
-//                            String url = "http://static-cdn.ceair.com/resource/images/public/logo_l.png?v=zh_CN_18180";
-                            String url = "http://fanli.jjmh668.cn/prd/avater/";
-                            url = url + new Random().nextInt(1000) + ".jpg";
-                            floatingView.add(i + "",url);
-                            LogUtil.e("SERVICE " + i);
+                            if (!stopService) {
+                                FloatingView floatingView = FloatingView.get();
+                                String url = "http://fanli.jjmh668.cn/prd/avater/";
+                                url = url + new Random().nextInt(1000) + ".jpg";
+                                floatingView.add(money + "", url);
+                            }
                         }
                     });
 
@@ -53,4 +54,9 @@ public class PopShareService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    public void onDestroy() {
+        stopService = true;
+        super.onDestroy();
+    }
 }

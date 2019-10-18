@@ -76,8 +76,8 @@ public class SharedPreManger {
     /**
      * 保存自动购买状态
      */
-    public void saveReceiveStatus(boolean isAutoBuy){
-        sharedPref.putBoolean(Constants.SharedPrefKey.RECEIVE,isAutoBuy);
+    public void saveReceiveStatus(boolean isAutoReceive){
+        sharedPref.putBoolean(Constants.SharedPrefKey.RECEIVE,isAutoReceive);
     }
 
     /**

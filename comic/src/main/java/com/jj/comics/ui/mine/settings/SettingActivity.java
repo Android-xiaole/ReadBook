@@ -2,7 +2,6 @@ package com.jj.comics.ui.mine.settings;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -21,7 +20,6 @@ import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.widget.UserItemView;
-import com.tencent.wxop.stat.StatService;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,16 +42,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
         getP().getCacheSize();
         updateLoginStatus();
         getP().getRest();
-        autoBuy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    getP().setAuto(1, -1);
-//                } else {
-//                    getP().setAuto(0, -1);
-//                }
-            }
-        });
+
         autoBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,12 +63,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 }
             }
         });
-        receive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            }
-        });
 
         autoBuy.setChecked(SharedPreManger.getInstance().getAutoBuyStatus());
         receive.setChecked(SharedPreManger.getInstance().getReceiveStatus());

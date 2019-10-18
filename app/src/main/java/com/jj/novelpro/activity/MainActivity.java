@@ -1,9 +1,7 @@
 package com.jj.novelpro.activity;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +33,7 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.ui.BaseFragment;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
+import com.jj.base.utils.Utils;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
@@ -272,12 +271,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         switchPage(index);
         getP().checkUpdate();
 
+    }
 
-        if (!isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
-            service = new Intent(MainActivity.this, PopShareService.class);
-            startService(service);
+    private void checkPopShareService() {
+        if (SharedPreManger.getInstance().getReceiveStatus()) {
+            if (!Utils.isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
+                service = new Intent(MainActivity.this, PopShareService.class);
+                startService(service);
+            }
         }
-
     }
 
     private void updateStatusBar(int index) {
@@ -322,6 +324,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void onResume() {
         super.onResume();
+        checkPopShareService();
         if (LoginHelper.getOnLineUser() != null) {
 //            getP().getMessageSum();
         }
@@ -583,27 +586,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         message.sendToTarget();
     }
 
-    public static boolean isServiceRunning(String serviceName, Context context) {
-        //活动管理器
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningServiceInfo> runningServices = am.getRunningServices(100); //获取运行的服务,参数表示最多返回的数量
-
-        for (ActivityManager.RunningServiceInfo runningServiceInfo : runningServices) {
-            String className = runningServiceInfo.service.getClassName();
-            if (className.equals(serviceName)) {
-                return true; //判断服务是否运行
-            }
-        }
-
-        return false;
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         wakeUpAdapter = null;
         Constants.ISLIVE_MAIN = false;
-        if (isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
+        if (Utils.isServiceRunning(PopShareService.class.getName(),getApplicationContext())) {
             stopService(service);
         }
 

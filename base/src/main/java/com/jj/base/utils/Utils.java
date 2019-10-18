@@ -2,6 +2,7 @@ package com.jj.base.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -28,6 +29,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.security.MessageDigest;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.UUID;
 
 import javax.microedition.khronos.egl.EGL10;
@@ -401,6 +403,22 @@ public class Utils {
         egl.eglDestroyContext(dpy, ctx);
         egl.eglTerminate(dpy);
         return maxSize[0];
+    }
+
+
+    public static boolean isServiceRunning(String serviceName, Context context) {
+        //活动管理器
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> runningServices = am.getRunningServices(100); //获取运行的服务,参数表示最多返回的数量
+
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : runningServices) {
+            String className = runningServiceInfo.service.getClassName();
+            if (className.equals(serviceName)) {
+                return true; //判断服务是否运行
+            }
+        }
+
+        return false;
     }
 
 }
