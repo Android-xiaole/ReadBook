@@ -84,6 +84,6 @@ public class SharedPreManger {
      * 获取自动购买状态
      */
     public boolean getReceiveStatus(){
-        return sharedPref.getBoolean(Constants.SharedPrefKey.RECEIVE,false);
+        return sharedPref.getBoolean(Constants.SharedPrefKey.RECEIVE,true);
     }
 }
