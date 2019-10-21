@@ -72,9 +72,10 @@
         <meta-data
             android:name="com.huawei.hms.client.appid"
             android:value="appid=100574595" />
+        <!--service : u5ymrc -->
         <meta-data
             android:name="com.openinstall.APP_KEY"
-            android:value="uhm3lx" />
+            android:value="${value_openinstall}" />
         <!--适配华为（huawei）刘海屏-->
         <meta-data
             android:name="android.notch_support"

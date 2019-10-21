@@ -105,6 +105,7 @@ android {
             minifyEnabled false
             debuggable true
             manifestPlaceholders = [value_channel_id: "jjxs-default",
+                                    value_openinstall: "uhm3lx",
                                     value_isDebug   : true]
             signingConfig signingConfigs.release
         }
@@ -113,6 +114,7 @@ android {
 
         "jjxs-default" {
             manifestPlaceholders = [value_channel_id: "jjxs-default",
+                                    value_openinstall: "u5ymrc",
                                     value_isDebug   : false]
         }
 
