@@ -586,7 +586,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING) {
             TxtChapter txtChapter = mPageLoader.getChapterCategory().get(mPageLoader.getChapterPos());
             if (txtChapter != null && txtChapter.getChapterId().equals(model.getId() + "")) {
-                mPageLoader.skipToChapter(mPageLoader.getChapterPos());
+                mPageLoader.skipToPage(0);
             }
         }
     }

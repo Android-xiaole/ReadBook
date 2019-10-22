@@ -77,17 +77,18 @@ public class ReadComicHelper {
                                 return Observable.error(NetError.authError());
                             }
                             /**
-                             * 可以自动购分以下几种情况
+                             * 可以自动购买分以下几种情况
                              * 1.vip用户（后台需要做分成统计）
-                             * 2.非vip用户开启了自动购买并且支持分章节购买
+                             * 2.is_free=1的用户（限时免费阅读）
+                             * 3.非vip用户开启了自动购买并且支持分章节购买
                              */
-                            if ((onLineUser.getIs_vip() == 1) || (SharedPreManger.getInstance().getAutoBuyStatus() && bookModel.getBatchbuy() == 1)) {
+                            if ((onLineUser.getIs_vip() == 1) || onLineUser.getIs_free() == 1||(SharedPreManger.getInstance().getAutoBuyStatus() && bookModel.getBatchbuy() == 1)) {
                                 return UserRepository.getInstance().subscribe(bookModel.getId(), chapterid)
                                         .flatMap(new Function<CommonStatusResponse, ObservableSource<BookCatalogModel>>() {
                                             @Override
                                             public ObservableSource<BookCatalogModel> apply(CommonStatusResponse subResponse) throws Exception {
                                                 if (subResponse.getCode() == 1000 && subResponse.getData().getStatus()) {//订阅成功
-                                                    if (onLineUser.getIs_vip() != 1) {
+                                                    if (onLineUser.getIs_vip() != 1&&onLineUser.getIs_free() != 1) {
                                                         ToastUtil.showToastShort("订阅成功");
                                                     }
                                                     //发送刷新目录列表的通知

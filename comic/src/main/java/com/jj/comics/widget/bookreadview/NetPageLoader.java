@@ -195,35 +195,37 @@ public class NetPageLoader extends PageLoader {
      * @param end
      */
     private void requestChapters(int start, int end) {
-//        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
-//        if (!hasChapterData(txtChapter)){//如果缓存中不存在就去网络加载
-//            mPageChangeListener.requestChapters(txtChapter);
-//        }
-        // 检验输入值
-        if (start < 0) {
-            start = 0;
-        }
-
-        if (end >= mChapterList.size()) {
-            end = mChapterList.size() - 1;
-        }
-
-
         List<TxtChapter> chapters = new ArrayList<>();
-
-        // 过滤，哪些数据已经加载了
-        for (int i = start; i <= end; ++i) {
-            TxtChapter txtChapter = mChapterList.get(i);
-            if (!hasChapterData(txtChapter)) {
-                /*
-                如果isPaid=false,表明当前章节已经请求过了，因为初始值设置为true
-                所以只够为true的时候才去网络请求
-                 */
-                if(txtChapter.isPaid()){
-                    chapters.add(txtChapter);
-                }
-            }
+        TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
+        if (!hasChapterData(txtChapter)){//如果缓存中不存在就去网络加载
+            chapters.add(txtChapter);
+            mPageChangeListener.requestChapters(chapters);
         }
+//        // 检验输入值
+//        if (start < 0) {
+//            start = 0;
+//        }
+//
+//        if (end >= mChapterList.size()) {
+//            end = mChapterList.size() - 1;
+//        }
+//
+//
+//        List<TxtChapter> chapters = new ArrayList<>();
+//
+//        // 过滤，哪些数据已经加载了
+//        for (int i = start; i <= end; ++i) {
+//            TxtChapter txtChapter = mChapterList.get(i);
+//            if (!hasChapterData(txtChapter)) {
+//                /*
+//                如果isPaid=false,表明当前章节已经请求过了，因为初始值设置为true
+//                所以只够为true的时候才去网络请求
+//                 */
+//                if(txtChapter.isPaid()){
+//                    chapters.add(txtChapter);
+//                }
+//            }
+//        }
 
         if (!chapters.isEmpty()) {
             mPageChangeListener.requestChapters(chapters);
