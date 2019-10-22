@@ -8,6 +8,16 @@ public abstract class BaseApplication extends Application {
     private static BaseApplication instance;
     private Activity topActivity;
 
+    public static boolean isNormalStart() {
+        return NORMAL_START;
+    }
+
+    public static void setNormalStart(boolean normalStart) {
+        NORMAL_START = normalStart;
+    }
+
+    private static boolean NORMAL_START;
+
     @Override
     public void onCreate() {
         super.onCreate();

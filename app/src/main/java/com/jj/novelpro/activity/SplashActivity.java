@@ -7,33 +7,33 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.baidu.mobstat.StatService;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
+import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.DialogUtil;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
-import com.jj.comics.data.model.UserInfo;
-import com.jj.comics.util.LoginHelper;
-import com.jj.comics.util.SharedPreManger;
+import com.jj.comics.adapter.ImagePagerAdapter;
+import com.jj.comics.common.constants.Constants;
 import com.jj.novelpro.R;
 import com.jj.novelpro.R2;
 import com.jj.novelpro.present.SplashContract;
 import com.jj.novelpro.present.SplashPresenter;
-import com.jj.comics.adapter.ImagePagerAdapter;
-import com.jj.comics.common.constants.Constants;
 import com.youth.banner.listener.OnBannerListener;
 
 import net.frakbot.jumpingbeans.JumpingBeans;
 
 import java.util.ArrayList;
 
-import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 
 @Route(path = RouterMap.COMIC_SPLASH_ACTIVITY)
@@ -47,6 +47,13 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     @BindView(R2.id.tv_loading)
     TextView tv_loading;
     private ImagePagerAdapter mPagerAdapter;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //每次application非正常重启后只强制重启一次app
+        BaseApplication.setNormalStart(true);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void initData(Bundle savedInstanceState) {

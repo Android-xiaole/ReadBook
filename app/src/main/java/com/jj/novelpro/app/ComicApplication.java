@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.StrictMode;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import androidx.multidex.MultiDex;
@@ -18,17 +17,12 @@ import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.imageloader.ImageProvider;
 import com.jj.base.log.LogUtil;
-import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.ComicApiImpl;
-import com.jj.base.net.NetError;
 import com.jj.base.net.NetProvider;
 import com.jj.base.net.RequestHandler;
-import com.jj.base.utils.SharedPref;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.HttpUrlInterceptor;
 import com.jj.comics.common.net.gsonconvert.CommonGsonConverterFactory;
-import com.jj.comics.data.biz.pruduct.ProductRepository;
-import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
@@ -53,13 +47,10 @@ import retrofit2.Converter;
 import static com.jj.base.net.ComicApiImpl.STRING;
 
 public class ComicApplication extends BaseApplication {
-    private String img;
-    private String host;
 
     // 友盟推送图标
     @Override
     public void init() {
-//        img = getString(R.string.share_default_img);
         initBugly();
         //openinstall
         if (isMainProcess()) {
