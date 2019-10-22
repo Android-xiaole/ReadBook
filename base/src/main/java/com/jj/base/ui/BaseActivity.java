@@ -14,12 +14,15 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.gyf.immersionbar.ImmersionBar;
 import com.imuxuan.floatingview.FloatingView;
+import com.jj.base.BaseApplication;
 import com.jj.base.R;
 import com.jj.base.dialog.CustomProgressDialog;
 import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.IView;
+import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -50,6 +53,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         this.savedInstanceState = savedInstanceState;
+        //Activity启动时检查application启动状态，如果是被回收后重新启动，则强制应用从新启动，
+        // 保证各个activity全局变量安全
+        if (!BaseApplication.isNormalStart() && !this.getClass().getName().contains("SplashActivity")) {
+            ARouter.getInstance().build(RouterMap.COMIC_SPLASH_ACTIVITY).navigation();
+        }
         if (savedInstanceState != null) {
             if (getIntent() != null)
                 getIntent().putExtras(savedInstanceState);
