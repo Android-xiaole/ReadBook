@@ -256,15 +256,15 @@ public class PageView extends View {
                     //设置中间区域范围
                     if (mCenterRect == null) {
                         mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3,
-                                mViewWidth * 4 / 5, mViewHeight / 2+ScreenUtils.dpToPx(50));
+                                mViewWidth * 4 / 5, mViewHeight * 2 / 3);
                     }
 
                     //是否点击了中间
                     if (mCenterRect.contains(x, y)) {
-                        if (mTouchListener != null) {
+                        if (mTouchListener != null&&mPageLoader.iv_button == null) {
                             mTouchListener.center();
+                            return true;
                         }
-                        return true;
                     }
                     //说明是未登录或者未支付的单章页面
                     if (mPageLoader.iv_button!=null){

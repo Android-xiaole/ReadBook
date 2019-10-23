@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.text.Html;
 
 import com.jj.base.BaseApplication;
+import com.jj.base.log.LogUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -278,25 +279,25 @@ public class FileUtils {
     /**
      * 将流写入文件
      *
-     * @param in
      * @param file
      * @throws IOException
      */
     public static void writeFile(InputStream inputStream, File file) throws IOException {
-        StringBuffer sb = new StringBuffer();
-        byte[] buffer = new byte[1024 * 1024];
+        StringBuilder sb = new StringBuilder(inputStream.available());
         String line;
-        while (inputStream.read(buffer) != -1) {
-            line = new String(buffer);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        while ((line = reader.readLine())!=null){
             sb.append(line);
         }
         //读取完之后进行html转换
         String finalStr;
+        LogUtil.e("writeFile",sb.toString());
         try {
             finalStr = Html.fromHtml(sb.toString()).toString();
         } catch (Exception e) {//出现未知异常就显示原始数据
             finalStr = sb.toString();
         }
+        LogUtil.e("writeFile,finalStr",finalStr);
         //转换之后再写入文件
         Writer writer = null;
         try {

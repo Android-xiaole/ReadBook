@@ -772,7 +772,7 @@ public abstract class PageLoader {
              */
             return null;
         }
-        List<TxtPage> chapters = loadPages(chapter, reader);
+        List<TxtPage> chapters = loadPages(chapter, getChapterReader(chapter));
 
         return chapters;
     }
@@ -1478,7 +1478,7 @@ public abstract class PageLoader {
         String paragraph = chapter.getTitle();//默认展示标题
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
-                paragraph = StringUtils.convertCC(paragraph, mContext);
+//                paragraph = StringUtils.convertCC(paragraph, mContext);
                 // 重置段落
                 if (!showTitle) {
                     paragraph = paragraph.replaceAll("\\s", "");

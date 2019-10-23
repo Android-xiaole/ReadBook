@@ -564,7 +564,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         } else {
             MobclickAgent.onKillProcess(context);
             //参数用作状态码；根据惯例，非 0 的状态码表示异常终止。
-            System.exit(0);
+//            System.exit(0);//使用这个方法会导致退出app不走生命周期
+            finish();
         }
     }
 
