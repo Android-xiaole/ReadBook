@@ -118,6 +118,12 @@ android {
                                     value_isDebug   : false]
         }
 
+        "jjxs-debug" {
+            manifestPlaceholders = [value_channel_id: "jjxs-default",
+                                    value_openinstall: "uhm3lx",
+                                    value_isDebug   : true]
+        }
+
     }
 
 
