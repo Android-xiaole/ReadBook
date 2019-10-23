@@ -470,7 +470,6 @@ public interface ComicService {
     Observable<LoginResponse> wbLogin(@Body RequestBody body);
 
 
-
     /**
      * 打赏
      *
@@ -676,8 +675,6 @@ public interface ComicService {
     Observable<ResponseModel> uploadFeedback(@Body RequestBody body);
 
 
-
-
     /**
      * 产品分渠道升级
      *
@@ -735,7 +732,6 @@ public interface ComicService {
     /****************************************以下 是Goods 模块 ***************************************************************************/
 
 
-
     /**
      * 兑换码兑换金币
      *
@@ -785,12 +781,14 @@ public interface ComicService {
 
     @GET("http://" + Constants.HOST_TEST + "/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getDebugAppConfig();
+
     /**
      * 获取app配置信息,IP形式获取
-     *
+     * 测试ip地址:118.126.73.104
+     * 生产ip地址:118.126.73.104
      * @return
      */
-    @GET("http://129.211.155.99:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
+    @GET("http://118.126.73.104:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfigByIP();
 
     /**
@@ -819,6 +817,7 @@ public interface ComicService {
     @GET
     @Streaming
     Flowable<ResponseBody> downloadFile(@Url String url);
+
     /**
      * 通用的下载文件
      *
@@ -828,6 +827,7 @@ public interface ComicService {
     @GET
     @Streaming
     Observable<ResponseBody> downloadChapter(@Url String url);
+
     /**
      * 获取oss 上传配置
      *
@@ -841,16 +841,19 @@ public interface ComicService {
 
     /**
      * 分享成功上报接口
+     *
      * @param requestBody
      * @return
      */
     @POST("api/share")
     Observable<CommonStatusResponse> reportShare(@Body RequestBody requestBody);
+
     @POST("api/article_details")
     Observable<ConsumeDetailListResponse> getConsumeDetail(@Body RequestBody requestBody);
 
     /**
      * 我的返利列表
+     *
      * @param body
      * @return
      */
@@ -859,6 +862,7 @@ public interface ComicService {
 
     /**
      * 我的提现
+     *
      * @return
      */
     @GET("api/withdraw_list")
@@ -866,6 +870,7 @@ public interface ComicService {
 
     /**
      * 添加支付宝提现方式
+     *
      * @param body
      * @return
      */
@@ -874,6 +879,7 @@ public interface ComicService {
 
     /**
      * 添加银行卡体现方式
+     *
      * @param body
      * @return
      */
@@ -882,6 +888,7 @@ public interface ComicService {
 
     /**
      * 获取添加提现方式状态
+     *
      * @param body
      * @return
      */
@@ -890,6 +897,7 @@ public interface ComicService {
 
     /**
      * 第三方登录的获取验证码(包括验证是否绑定)
+     *
      * @param requestBody
      * @return
      */
@@ -901,8 +909,10 @@ public interface ComicService {
      */
     @POST("api/create_user")
     Observable<LoginResponse> bindPhone(@Body RequestBody requestBody);
+
     /**
      * 申请提现
+     *
      * @param body
      * @return
      */
@@ -911,6 +921,7 @@ public interface ComicService {
 
     /**
      * 我的购买
+     *
      * @param body
      * @return
      */
@@ -935,6 +946,7 @@ public interface ComicService {
 
     /**
      * 通联支付宝
+     *
      * @param body
      * @return
      */
@@ -943,6 +955,7 @@ public interface ComicService {
 
     /**
      * 通联支付宝订单状态
+     *
      * @param body
      * @return
      */
@@ -951,6 +964,7 @@ public interface ComicService {
 
     /**
      * 消息挂件和自动购买设置
+     *
      * @return
      */
     @POST("api/rest")

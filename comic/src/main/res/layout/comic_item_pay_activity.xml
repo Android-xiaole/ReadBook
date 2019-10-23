@@ -12,9 +12,9 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_21"
+        android:layout_marginLeft="@dimen/dp_11"
         android:textSize="@dimen/dp_16"
         android:textColor="@color/comic_6e7379"
         tools:text = "30天VIP"/>

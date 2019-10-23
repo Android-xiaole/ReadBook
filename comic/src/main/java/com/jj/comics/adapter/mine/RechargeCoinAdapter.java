@@ -20,8 +20,10 @@ public class RechargeCoinAdapter extends BaseQuickAdapter<PaySettingResponse.Dat
     protected void convert(BaseViewHolder helper, PaySettingResponse.DataBeanX.DataBean item) {
         if (payType.equals("1")){//书币充值
             helper.setText(R.id.tv_title,item.getGoods_count()+"书币");
+            helper.setText(R.id.btn_toPay, "充值");
         }else if (payType.equals("2")){//会员充值
             helper.setText(R.id.tv_title,item.getGoods_count()+"天VIP");
+            helper.setText(R.id.btn_toPay, "开通");
         }else{//未知就直接显示
             helper.setText(R.id.tv_title,item.getGoods_count()+"");
         }
