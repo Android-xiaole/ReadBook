@@ -35,7 +35,6 @@ public class PopShareService extends Service {
                 while (!stopService) {
                     //全局随机每5秒~5分钟执行一次显示
                     int ms = new Random().nextInt(bound) + 5000;
-                    ToastUtil.showToastLong(ms+"");
 
                     int a = new Random().nextInt(100);
                     money = (float) a / (float) 100 + new Random().nextInt(999);
