@@ -1613,7 +1613,10 @@ public abstract class PageLoader {
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(pos);
         }
-        return mCurPageList.get(pos);
+        if (mCurPageList != null&&mCurPageList.size()!=0){
+            return mCurPageList.get(pos);
+        }
+        return null;
     }
 
     /**

@@ -60,16 +60,17 @@ public class UserInfo implements Serializable {
     private String update_time;
     private String invite_code;
     private int delete_flag;
-    private int is_vip;//表示用户是否是vip
+    private int is_vip;//表示用户是否是vip，1是：0否
+    private int is_free;//表示用户是否可以免费阅读，1是：0否
 
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
     private String class_name;//用户级别描述
-    @Generated(hash = 1718473549)
+    @Generated(hash = 1003253590)
     public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
             String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
-            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, boolean isLogin,
-            String class_name) {
+            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, int is_free,
+            boolean isLogin, String class_name) {
         this.uid = uid;
         this.openid = openid;
         this.unionid = unionid;
@@ -88,6 +89,7 @@ public class UserInfo implements Serializable {
         this.invite_code = invite_code;
         this.delete_flag = delete_flag;
         this.is_vip = is_vip;
+        this.is_free = is_free;
         this.isLogin = isLogin;
         this.class_name = class_name;
     }
@@ -213,6 +215,12 @@ public class UserInfo implements Serializable {
     }
     public void setClass_name(String class_name) {
         this.class_name = class_name;
+    }
+    public int getIs_free() {
+        return this.is_free;
+    }
+    public void setIs_free(int is_free) {
+        this.is_free = is_free;
     }
 
 
