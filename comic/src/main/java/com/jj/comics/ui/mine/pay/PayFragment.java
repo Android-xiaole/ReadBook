@@ -342,7 +342,7 @@ public class PayFragment extends BaseFragment<PayPresenter> implements PayContra
             if (requestCode == 0x1020) {
                 String respCode = data.getExtras().getString("respCode");
                 String respMessage = data.getExtras().getString("respMessage");
-                showToastShort(respCode + ":" + respMessage);
+//                showToastShort(respCode + ":" + respMessage);
 
                 // respCode 值说明
                 // "1"：成功，
