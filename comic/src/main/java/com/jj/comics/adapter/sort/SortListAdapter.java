@@ -35,13 +35,10 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
             helper.<TextView>getView(R.id.tv_recently_author).setText(TextUtils.isEmpty(author) ? "佚名":author);
             helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
             helper.<TextView>getView(R.id.tv_share).setText("分享预计赚￥" + item.getShare_will_earnings());
-            helper.<TextView>getView(R.id.tv_update_status).setVisibility(View.VISIBLE);
             if (item.getFullflag() == 0) {
-                helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#9975FD"));
-                helper.<TextView>getView(R.id.tv_update_status).setText("连载中");
+                helper.<ImageView>getView(R.id.iv_recently_progress).setImageResource(R.drawable.content_over);
             } else {
-                helper.<TextView>getView(R.id.tv_update_status).setTextColor(Color.parseColor("#FFAD70"));
-                helper.<TextView>getView(R.id.tv_update_status).setText("已完结");
+                helper.<ImageView>getView(R.id.iv_recently_progress).setImageResource(R.drawable.content_progress);
             }
         }
 
