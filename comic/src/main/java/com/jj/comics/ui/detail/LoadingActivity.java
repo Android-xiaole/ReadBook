@@ -20,6 +20,7 @@ import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.LoginNotifyDialog;
 import com.jj.comics.ui.read.ReadComicActivity;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.RefreshDetailActivityDataEvent;
 
@@ -86,7 +87,8 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
     public void loadFail(NetError error) {
         if (error.getType() == NetError.AuthError){
             //用户未登录，弹出登录弹窗
-            createLoginDialog();
+//            createLoginDialog();
+            LoginHelper.interruptLogin(this,null);
         }else{
             ToastUtil.showToastShort(error.getMessage());
             finish();
