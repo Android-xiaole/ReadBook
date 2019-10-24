@@ -291,13 +291,13 @@ public class FileUtils {
         }
         //读取完之后进行html转换
         String finalStr;
-        LogUtil.e("writeFile",sb.toString());
+//        LogUtil.e("writeFile",sb.toString());
         try {
             finalStr = Html.fromHtml(sb.toString()).toString();
         } catch (Exception e) {//出现未知异常就显示原始数据
             finalStr = sb.toString();
         }
-        LogUtil.e("writeFile,finalStr",finalStr);
+//        LogUtil.e("writeFile,finalStr",finalStr);
         //转换之后再写入文件
         Writer writer = null;
         try {
