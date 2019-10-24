@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class EnFloatingView extends FloatingMagnetView {
 
         stringBuilder.setSpan(new ForegroundColorSpan(Color.parseColor("#ff0000")
         ),2,stringBuilder.length() - 2, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        stringBuilder.setSpan(new RelativeSizeSpan(1.0f),2,
+                stringBuilder.length() - 2,Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         updateFloatView(url,stringBuilder);
     }
 

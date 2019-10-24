@@ -41,7 +41,7 @@ public class PopShareService extends Service {
                     SystemClock.sleep(ms);
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
-                        public void run() {
+                        public void run() { 
                             if (!stopService) {
                                 FloatingView floatingView = FloatingView.get();
                                 String url = "http://fanli.jjmh668.cn/prd/avater/";
