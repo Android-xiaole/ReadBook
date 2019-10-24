@@ -121,7 +121,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
             String inviteCodeEncode = URLEncoder.encode(loginUser.getInvite_code());
             String nickNameEncode = URLEncoder.encode(loginUser.getNickname());
             String avatarEncode = loginUser.getAvatar();
-            shareUrl = Constants.OPEN_INSTALL_URL + "uid=" + uidEncode + "&cid=" + cidEncode + "&pid=" + pidEncode + "&invite_code=" + inviteCodeEncode + "&name=" + nickNameEncode + "&pic=" + URLEncoder.encode(avatarEncode);
+            shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "download.html?" + "uid=" + uidEncode + "&cid=" + cidEncode + "&pid=" + pidEncode + "&invite_code=" + inviteCodeEncode + "&name=" + nickNameEncode + "&pic=" + URLEncoder.encode(avatarEncode);
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
             shareMessageModel.setContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));

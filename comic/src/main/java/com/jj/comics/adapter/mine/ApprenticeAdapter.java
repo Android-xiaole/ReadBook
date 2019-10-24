@@ -9,6 +9,7 @@ import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
 import com.jj.comics.data.model.ApprenticeModel;
+import com.jj.comics.util.RegularUtil;
 
 public class ApprenticeAdapter extends SimpleBaseAdapter<ApprenticeModel> {
     public ApprenticeAdapter(int layoutResId) {
@@ -21,7 +22,11 @@ public class ApprenticeAdapter extends SimpleBaseAdapter<ApprenticeModel> {
                 item.getAvatar(), new RequestOptions().transforms(new CircleCrop())
                         .error(R.drawable.img_loading)
                         .placeholder(R.drawable.img_loading));
-
-        helper.setText(R.id.tv_name,item.getNickname());
+        String nickName = item.getNickname();
+        if (RegularUtil.isMobile(nickName)) {
+            helper.setText(R.id.tv_name,nickName.substring(0,3) +"****" + nickName.substring(7));
+        } else {
+            helper.setText(R.id.tv_name, nickName);
+        }
     }
 }

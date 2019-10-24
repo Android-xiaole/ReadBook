@@ -19,6 +19,7 @@ import com.jj.base.imageloader.ILFactory;
 import com.jj.base.log.LogUtil;
 import com.jj.base.ui.BaseCommonFragment;
 import com.jj.base.utils.RouterMap;
+import com.jj.base.utils.SharedPref;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.adapter.money.ShareRecommendAdapter;
@@ -117,7 +118,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
                 }
                 String uid = loginUser == null ? "0" : loginUser.getUid() + "";
                 long chapterid = model.getChapterid();
-                String shareUrl = Constants.CONTENT_URL + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
+                String shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "download.html?" + "uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + model.getId() + "&chapter_id=" + chapterid + "&invite_code=" + loginUser.getInvite_code();
                 shareMessageModel.setShareUrl(shareUrl);
                 shareMessageModel.setBoolId(model.getId());
                 BookModel bookModel = new BookModel();

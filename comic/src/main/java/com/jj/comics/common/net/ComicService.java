@@ -785,10 +785,10 @@ public interface ComicService {
     /**
      * 获取app配置信息,IP形式获取
      * 测试ip地址:118.126.73.104
-     * 生产ip地址:118.126.73.104
+     * 生产ip地址:129.211.152.153
      * @return
      */
-    @GET("http://118.126.73.104:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
+    @GET("http://129.211.152.153:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
     Observable<AppConfigResponse> getAppConfigByIP();
 
     /**

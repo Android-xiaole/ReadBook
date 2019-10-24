@@ -40,11 +40,13 @@ public class GlideLoader implements ILoader {
 
     @Override
     public void loadNet(ImageView target, String url, RequestOptions options) {
+        url = url + "?x-oss-process=image/quality,q_50";
         Object model = mImageProvider == null || mImageProvider.configHeader() == null ? url : new GlideUrl(url, mImageProvider.configHeader());
+        String finalUrl = url;
         load(getRequestManager(target.getContext()).load(model).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> t, boolean isFirstResource) {
-                MobclickAgent.onEvent(target.getContext(), "img_download_fail",url);
+                MobclickAgent.onEvent(target.getContext(), "img_download_fail", finalUrl);
                 return false;
             }
 
