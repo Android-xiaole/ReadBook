@@ -150,7 +150,7 @@ public class PayPresenter extends BasePresenter<BaseRepository, PayContract.IPay
                 .subscribe(new ApiSubscriber2<TLPayResponse>() {
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
+                        ToastUtil.showToastShort("支付失败!");
                     }
 
                     @Override
