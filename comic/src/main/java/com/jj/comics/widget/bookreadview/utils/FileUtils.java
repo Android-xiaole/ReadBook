@@ -283,7 +283,7 @@ public class FileUtils {
      * @throws IOException
      */
     public static void writeFile(InputStream inputStream, File file) throws IOException {
-        StringBuilder sb = new StringBuilder(inputStream.available());
+        StringBuilder sb = new StringBuilder();
         String line;
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         while ((line = reader.readLine())!=null){
