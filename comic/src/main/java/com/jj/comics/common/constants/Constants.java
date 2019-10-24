@@ -188,6 +188,7 @@ public class Constants {
         public static final String INVITE_CODE = "invite_code";//通过openinstall传过来的邀请码
         public static final String ISLIVE_MAIN = "islive_main";
 
+        public static final String VISITOR_ID = "visitor_id";
     }
 
     public static class RequestBodyKey {

@@ -1,13 +1,18 @@
 package com.jj.comics.data.db;
 
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchModel;
 import com.jj.comics.data.model.UserCommentFavorData;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.data.visittime.ReadTimeData;
 import com.jj.comics.greendao.gen.BookModelDao;
+import com.jj.comics.greendao.gen.OnlineTimeDataDao;
 import com.jj.comics.greendao.gen.SearchModelDao;
 import com.jj.comics.greendao.gen.UserCommentFavorDataDao;
 import com.jj.comics.greendao.gen.UserInfoDao;
+import com.jj.comics.util.DateHelper;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -276,6 +281,34 @@ public class DaoHelper<T> {
         } else {
             return list.get(0);
         }
+    }
+
+
+    /**
+     * 插入或更新用户在线时长数据
+     */
+    public void insertORupdateOnlineTimeData(OnlineTimeData data){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        onlineTimeDataDao.insertOrReplace(data);
+    }
+
+    /**
+     * 获取该天的当前用户的在线时长数据
+     */
+    public OnlineTimeData getOnlineTimeData(String date,String uid){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        List<OnlineTimeData> list = onlineTimeDataDao.queryBuilder().where(OnlineTimeDataDao.Properties.Date.eq(date),OnlineTimeDataDao.Properties.Uid.eq(uid)).list();
+        if (list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 插入或更新用户阅读时长数据
+     */
+    public void insertORupdateReadTimeData(ReadTimeData data){
+
     }
 
 }

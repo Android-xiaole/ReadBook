@@ -1,9 +1,12 @@
 package com.jj.novelpro.app;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 
 import androidx.multidex.MultiDex;
@@ -23,6 +26,10 @@ import com.jj.base.net.RequestHandler;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.HttpUrlInterceptor;
 import com.jj.comics.common.net.gsonconvert.CommonGsonConverterFactory;
+import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
@@ -32,6 +39,10 @@ import com.tencent.bugly.beta.interfaces.BetaPatchListener;
 import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Consumer;
@@ -104,10 +115,101 @@ public class ComicApplication extends BaseApplication {
 
 //        DoraemonKit.install(getApplication());
 
-        //听云SDK初始化，暂时用不到了
-//        NBSAppAgent.setLicenseKey("63bff81cf51840e194014f59bf50435a").withLocationServiceEnabled(true).start(this.getApplicationContext());
 
+        //这里启动的时候还要做一次本地数据的上报
+
+        DaoHelper daoHelper = new DaoHelper();
+        //默认这是最近一次登录
+        String uid;
+        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
+        String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+        UserInfo onLineUser = LoginHelper.getOnLineUser();
+        if (onLineUser!=null&&onLineUser.getUid()>0){
+            //登录用户统计
+            uid = onLineUser.getUid()+"";
+        }else{
+            //游客登录统计
+            String visitorId = SharedPreManger.getInstance().getVisitorId();
+            if (visitorId!=null){
+                //本地有游客的id，可直接使用
+                uid = visitorId;
+            }else{
+                //没有游客id就去生成
+                String umidString = UMConfigure.getUMIDString(this);
+                if (umidString!=null&&umidString.length()>0){
+                    //友盟id可用
+                    uid = umidString;
+                }else{
+                    //友盟id不可用，就使用UUID
+                    String uuid = UUID.randomUUID().toString();
+                    uid = "j-"+uuid.replace("-","");
+                }
+                SharedPreManger.getInstance().saveVisitorId(uid);
+            }
+        }
+        OnlineTimeData onlineTimeData = daoHelper.getOnlineTimeData(currentDate, uid + "");
+        if (onlineTimeData == null){
+            onlineTimeData = new OnlineTimeData();
+            onlineTimeData.setDate(currentDate);
+            onlineTimeData.setUid(uid+"");
+            onlineTimeData.setIs_visitor(false);
+            onlineTimeData.setLastLoginTime(lastLoginTime);
+        }else{
+            onlineTimeData.setLastLoginTime(lastLoginTime);
+        }
+        daoHelper.insertORupdateOnlineTimeData(onlineTimeData);
+        LogUtil.e(daoHelper.getOnlineTimeData(currentDate,uid).toString());
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                LogUtil.e("lifeCycle","onActivityCreated："+activity.getClass().getName());
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                LogUtil.e("lifeCycle","onActivityStarted："+activity.getClass().getName());
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                LogUtil.e("lifeCycle","onActivityResumed："+activity.getClass().getName());
+                resumeTimeMap.put(activity.getClass().getName(), (int) (SystemClock.currentThreadTimeMillis()/1000));
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+                LogUtil.e("lifeCycle","onActivityPaused："+activity.getClass().getName());
+                int pauseTime = (int) (SystemClock.currentThreadTimeMillis()/1000);
+                pauseTimeMap.put(activity.getClass().getName(), pauseTime);
+                int resumeTime = resumeTimeMap.get(activity.getClass().getName());
+                if (pauseTime - resumeTime>0){
+                    //时间差为该页面在线时长
+
+                }
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                LogUtil.e("lifeCycle","onActivityDestroyed："+activity.getClass().getName());
+            }
+
+        });
     }
+
+    private Map<String,Integer> durationMap = new WeakHashMap<>();
+    private Map<String,Integer> resumeTimeMap = new WeakHashMap<>();//存储页面显示时候的时间戳
+    private Map<String,Integer> pauseTimeMap = new WeakHashMap<>();//存储页面离开时候的时间戳
 
     private void initHttp() {
         final Gson gson = new GsonBuilder()

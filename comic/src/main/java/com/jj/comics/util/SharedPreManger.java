@@ -86,4 +86,18 @@ public class SharedPreManger {
     public boolean getReceiveStatus(){
         return sharedPref.getBoolean(Constants.SharedPrefKey.RECEIVE,true);
     }
+
+    /**
+     * 保存游客登录id
+     */
+    public void saveVisitorId(String visitorId){
+        sharedPref.putString(Constants.SharedPrefKey.VISITOR_ID,visitorId);
+    }
+
+    /**
+     * 获取游客登录id
+     */
+    public String getVisitorId(){
+        return sharedPref.getString(Constants.SharedPrefKey.VISITOR_ID,null);
+    }
 }
