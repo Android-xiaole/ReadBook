@@ -100,4 +100,18 @@ public class SharedPreManger {
     public String getVisitorId(){
         return sharedPref.getString(Constants.SharedPrefKey.VISITOR_ID,null);
     }
+
+    /**
+     * 保存游客token
+     */
+    public void saveVisitorToken(String token){
+        sharedPref.putString(Constants.SharedPrefKey.VISITOR_TOKEN,token);
+    }
+
+    /**
+     * 获取游客token
+     */
+    public String getVisitorToken(){
+        return sharedPref.getString(Constants.SharedPrefKey.VISITOR_TOKEN,null);
+    }
 }

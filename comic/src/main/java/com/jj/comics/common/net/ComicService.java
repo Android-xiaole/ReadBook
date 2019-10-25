@@ -49,8 +49,11 @@ import com.jj.comics.data.model.TLPayStatusResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.data.model.WxModel;
+import com.jj.comics.data.visittime.AccessTokenResponse;
+import com.jj.comics.data.visittime.TimeReportData;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Flowable;
@@ -59,6 +62,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -969,4 +974,26 @@ public interface ComicService {
      */
     @POST("api/rest")
     Observable<RestResponse> getRest();
+
+    /******************************** 下面为用户在线时长上报相关接口 ************************************/
+
+    /**
+     * 获取游客token
+     */
+    @FormUrlEncoded
+    @POST(Constants.REPORT_URL+"api/oauth/token"+Constants.IDENTIFICATION_IGNORE)
+    Observable<AccessTokenResponse> getReportToken(@FieldMap Map<String,String> map);
+
+    /**
+     * 上报注册用户
+     */
+    @POST(Constants.REPORT_URL+"api/account/app/user_duration_report"+Constants.IDENTIFICATION_IGNORE)
+    Observable<ResponseModel> userReport(@Body RequestBody requestBody);
+
+    /**
+     * 上报游客
+     */
+    @POST(Constants.REPORT_URL+"api/account/app/visiotr_duration_report"+Constants.IDENTIFICATION_IGNORE)
+    Observable<ResponseModel> visitorReport(@Body RequestBody requestBody);
+
 }

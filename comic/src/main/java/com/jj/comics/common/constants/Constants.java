@@ -80,6 +80,8 @@ public class Constants {
         return SharedPref.getInstance().getString("BASEURL", "http://cartoon-novel.jishusaice.cn/");
     }
 
+    public static final String REPORT_URL = "http://fanli.fliw.cn/";
+
     public static final String IDENTIFICATION_IGNORE = "#url_ignore";//此标识忽略动态替换baseurl配置
     //    public static final String QCORD_IMG_URL = "http://manhua.dfdy5.com/static/qrcode_for_gh_f19bdc003746_258.jpg";
     public static final String QCORD_IMG_URL = "https://open.weixin.qq.com/qr/code?username=zui_yanqing";
@@ -189,6 +191,7 @@ public class Constants {
         public static final String ISLIVE_MAIN = "islive_main";
 
         public static final String VISITOR_ID = "visitor_id";
+        public static final String VISITOR_TOKEN = "visitor_token";
     }
 
     public static class RequestBodyKey {

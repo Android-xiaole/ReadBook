@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -20,19 +21,26 @@ import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.imageloader.ImageProvider;
 import com.jj.base.log.LogUtil;
+import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.ComicApiImpl;
+import com.jj.base.net.NetError;
 import com.jj.base.net.NetProvider;
 import com.jj.base.net.RequestHandler;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.HttpUrlInterceptor;
 import com.jj.comics.common.net.gsonconvert.CommonGsonConverterFactory;
+import com.jj.comics.data.biz.task.TaskRepository;
 import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.visittime.AccessTokenResponse;
 import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.data.visittime.ReadTimeData;
 import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
+import com.jj.comics.util.reporter.TaskReporter;
+import com.jj.novelpro.activity.MainActivity;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;
@@ -40,6 +48,7 @@ import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -116,76 +125,64 @@ public class ComicApplication extends BaseApplication {
 //        DoraemonKit.install(getApplication());
 
 
-        //这里启动的时候还要做一次本地数据的上报
-
-        DaoHelper daoHelper = new DaoHelper();
-        //默认这是最近一次登录
-        String uid;
-        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
-        String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
-        UserInfo onLineUser = LoginHelper.getOnLineUser();
-        if (onLineUser!=null&&onLineUser.getUid()>0){
-            //登录用户统计
-            uid = onLineUser.getUid()+"";
-        }else{
-            //游客登录统计
-            String visitorId = SharedPreManger.getInstance().getVisitorId();
-            if (visitorId!=null){
-                //本地有游客的id，可直接使用
-                uid = visitorId;
-            }else{
-                //没有游客id就去生成
-                String umidString = UMConfigure.getUMIDString(this);
-                if (umidString!=null&&umidString.length()>0){
-                    //友盟id可用
-                    uid = umidString;
-                }else{
-                    //友盟id不可用，就使用UUID
-                    String uuid = UUID.randomUUID().toString();
-                    uid = "j-"+uuid.replace("-","");
-                }
-                SharedPreManger.getInstance().saveVisitorId(uid);
+        daoHelper = new DaoHelper();
+        TaskRepository.getInstance().getReportToken().subscribe(new ApiSubscriber2<AccessTokenResponse>() {
+            @Override
+            protected void onFail(NetError error) {
+                LogUtil.e("LogTime 获取游客token失败");
             }
-        }
-        OnlineTimeData onlineTimeData = daoHelper.getOnlineTimeData(currentDate, uid + "");
-        if (onlineTimeData == null){
-            onlineTimeData = new OnlineTimeData();
-            onlineTimeData.setDate(currentDate);
-            onlineTimeData.setUid(uid+"");
-            onlineTimeData.setIs_visitor(false);
-            onlineTimeData.setLastLoginTime(lastLoginTime);
-        }else{
-            onlineTimeData.setLastLoginTime(lastLoginTime);
-        }
-        daoHelper.insertORupdateOnlineTimeData(onlineTimeData);
-        LogUtil.e(daoHelper.getOnlineTimeData(currentDate,uid).toString());
 
+            @Override
+            public void onNext(AccessTokenResponse accessTokenResponse) {
+                LogUtil.e("LogTime 获取游客成功");
+                if (accessTokenResponse!=null&&accessTokenResponse.getAccess_token()!=null){
+                    LogUtil.e("LogTime accessToken:"+accessTokenResponse.getAccess_token());
+                    SharedPreManger.getInstance().saveVisitorToken(accessTokenResponse.getAccess_token());
+                }
+            }
+        });
+        //这里启动的时候还要做一次本地数据的上报
+        TaskReporter.reportTimeData(daoHelper);
+
+        //默认这是最近一次登录
+        String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+        daoHelper.insertORupdateOnlineTimeData(0,lastLoginTime,null);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                LogUtil.e("lifeCycle","onActivityCreated："+activity.getClass().getName());
+                LogUtil.e("lifeCycle", "onActivityCreated：" + activity.getClass().getName());
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
-                LogUtil.e("lifeCycle","onActivityStarted："+activity.getClass().getName());
+                LogUtil.e("lifeCycle", "onActivityStarted：" + activity.getClass().getName());
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
-                LogUtil.e("lifeCycle","onActivityResumed："+activity.getClass().getName());
-                resumeTimeMap.put(activity.getClass().getName(), (int) (SystemClock.currentThreadTimeMillis()/1000));
+                LogUtil.e("lifeCycle", "onActivityResumed：" + activity.getClass().getName());
+                int resumeTime = (int) (System.currentTimeMillis() / 1000);
+                String className = activity.getClass().getName();
+                resumeTimeMap.put(className, resumeTime);
+                if (pauseTimeMap.containsKey(className)){
+                    int pauseTime = pauseTimeMap.get(className);
+                    //如果页面离开大于30min，那就计为一次最近登录时间,上次onPaused时间计为最近一次退出时间
+                    if (resumeTime - pauseTime>30*60){
+                        daoHelper.insertORupdateOnlineTimeData(0,DateHelper.formatSecLong((long)resumeTime*1000),DateHelper.formatSecLong((long)pauseTime*1000));
+                    }
+                }
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
-                LogUtil.e("lifeCycle","onActivityPaused："+activity.getClass().getName());
-                int pauseTime = (int) (SystemClock.currentThreadTimeMillis()/1000);
+                LogUtil.e("lifeCycle", "onActivityPaused：" + activity.getClass().getName());
+                int pauseTime = (int) (System.currentTimeMillis() / 1000);
                 pauseTimeMap.put(activity.getClass().getName(), pauseTime);
                 int resumeTime = resumeTimeMap.get(activity.getClass().getName());
-                if (pauseTime - resumeTime>0){
+                int duration = pauseTime - resumeTime;
+                if (duration > 0) {
                     //时间差为该页面在线时长
-
+                    daoHelper.insertORupdateOnlineTimeData(duration,null,null);
                 }
             }
 
@@ -201,15 +198,28 @@ public class ComicApplication extends BaseApplication {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                LogUtil.e("lifeCycle","onActivityDestroyed："+activity.getClass().getName());
+                LogUtil.e("lifeCycle", "onActivityDestroyed：" + activity.getClass().getName());
+                //如果是从首页退出，那就计为一次最近退出时间
+                if (activity.getClass().getName().equals(MainActivity.class.getName())){
+                    daoHelper.insertORupdateOnlineTimeData(0,null,DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
+                }
             }
 
         });
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TaskReporter.reportTimeData(daoHelper);
+                handler.postDelayed(this,10*60*1000);//设置10min上传一次本地记录
+            }
+        },10000);
     }
 
-    private Map<String,Integer> durationMap = new WeakHashMap<>();
-    private Map<String,Integer> resumeTimeMap = new WeakHashMap<>();//存储页面显示时候的时间戳
-    private Map<String,Integer> pauseTimeMap = new WeakHashMap<>();//存储页面离开时候的时间戳
+    private DaoHelper daoHelper;
+    private Handler handler = new Handler();
+    private Map<String, Integer> resumeTimeMap = new WeakHashMap<>();//存储页面显示时候的时间戳
+    private Map<String, Integer> pauseTimeMap = new WeakHashMap<>();//存储页面离开时候的时间戳
 
     private void initHttp() {
         final Gson gson = new GsonBuilder()
@@ -252,6 +262,9 @@ public class ComicApplication extends BaseApplication {
                         if (LoginHelper.getOnLineUser() != null) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
                         }
+                        if (Constants.REPORT_URL.contains(request.url().host())){
+                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getVisitorToken());
+                        }
                         return newRequest.build();
                     }
                 };
@@ -275,7 +288,6 @@ public class ComicApplication extends BaseApplication {
     }
 
 
-
     private void initUmeng() {
         //场景类型设置
         /**
@@ -289,7 +301,7 @@ public class ComicApplication extends BaseApplication {
         UMConfigure.init(this,
                 Constants.UMENG_APPKEY,
                 Constants.CHANNEL_ID,
-                UMConfigure.DEVICE_TYPE_PHONE,null);
+                UMConfigure.DEVICE_TYPE_PHONE, null);
         UMConfigure.setLogEnabled(Constants.DEBUG);
         UMConfigure.setEncryptEnabled(false);
         // 选用LEGACY_AUTO页面采集模式

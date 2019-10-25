@@ -88,4 +88,15 @@ public class ReadTimeData {
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "ReadTimeData{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", uid='" + uid + '\'' +
+                ", is_visitor=" + is_visitor +
+                ", duration=" + duration +
+                ", boodId=" + boodId +
+                '}';
+    }
 }
