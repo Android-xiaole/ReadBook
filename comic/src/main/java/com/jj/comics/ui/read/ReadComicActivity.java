@@ -760,7 +760,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         mTimeRecord = 0;
 
         //本地保存当前阅读时间
-        if (bookModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId());
+        if (bookModel!=null&&catalogModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId(),catalogModel.getId());
         stopTask();
     }
 
@@ -772,7 +772,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         public void run() {
             //本地保存当前阅读时间
             int duration = (int) (System.currentTimeMillis() - mReadStartTime) / 1000;//取秒数
-            if (bookModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId());
+            if (bookModel!=null&&catalogModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId(),catalogModel.getId());
             mReadStartTime = System.currentTimeMillis();
             mHandler.postDelayed(this,10000);
         }

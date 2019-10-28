@@ -25,15 +25,18 @@ public class ReadTimeData {
 
     private long boodId;//小说id
 
-    @Generated(hash = 1584541891)
+    private long chapterId;//小说章节id
+
+    @Generated(hash = 2085108381)
     public ReadTimeData(Long id, String date, String uid, boolean is_visitor,
-            int duration, long boodId) {
+            int duration, long boodId, long chapterId) {
         this.id = id;
         this.date = date;
         this.uid = uid;
         this.is_visitor = is_visitor;
         this.duration = duration;
         this.boodId = boodId;
+        this.chapterId = chapterId;
     }
 
     @Generated(hash = 1239458250)
@@ -97,6 +100,15 @@ public class ReadTimeData {
                 ", is_visitor=" + is_visitor +
                 ", duration=" + duration +
                 ", boodId=" + boodId +
+                ", chapterId=" + chapterId +
                 '}';
+    }
+
+    public long getChapterId() {
+        return this.chapterId;
+    }
+
+    public void setChapterId(long chapterId) {
+        this.chapterId = chapterId;
     }
 }

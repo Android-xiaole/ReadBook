@@ -52,16 +52,19 @@ public class TaskReporter {
             List<TimeReportData> visitorDataList = new ArrayList<>();
             for (OnlineTimeData onlineTimeData : onlineTimeDataAll) {
                 TimeReportData data = new TimeReportData();
+                data.setId(onlineTimeData.getId());
                 data.setLoginTime(onlineTimeData.getLastLoginTime());
                 data.setLogoutTime(onlineTimeData.getLastLogoutTime());
                 data.setOnlineDuration(onlineTimeData.getDuration());
                 data.setDate(onlineTimeData.getDate());
                 if (onlineTimeData.getIs_visitor()) {
                     //访客登录
+                    data.setIs_visitor(true);
                     data.setToken(onlineTimeData.getUid());
                     visitorDataList.add(data);
                 } else {
                     //注册用户登录
+                    data.setIs_visitor(false);
                     data.setUid(Long.parseLong(onlineTimeData.getUid()));
                     userDataList.add(data);
                 }
@@ -77,14 +80,14 @@ public class TaskReporter {
                             @Override
                             public void onNext(ResponseModel responseModel) {
                                 for (TimeReportData data : userDataList) {
-                                    daoHelper.delete(data);
+                                    daoHelper.deleteTimeData(data,true);
                                 }
                                 LogUtil.e("LogTime 用户在线时长上报成功");
                             }
                         });
             }
             if (!visitorDataList.isEmpty()) {
-                TaskRepository.getInstance().visitorReport(userDataList)
+                TaskRepository.getInstance().visitorReport(visitorDataList)
                         .subscribe(new ApiSubscriber2<ResponseModel>() {
                             @Override
                             protected void onFail(NetError error) {
@@ -94,7 +97,7 @@ public class TaskReporter {
                             @Override
                             public void onNext(ResponseModel responseModel) {
                                 for (TimeReportData data : visitorDataList) {
-                                    daoHelper.delete(data);
+                                    daoHelper.deleteTimeData(data,true);
                                 }
                                 LogUtil.e("LogTime 访客在线时长上报成功");
                             }
@@ -106,18 +109,25 @@ public class TaskReporter {
             List<TimeReportData> userDataList = new ArrayList<>();
             List<TimeReportData> visitorDataList = new ArrayList<>();
             for (ReadTimeData readTimeData : readTimeDataAll) {
-                TimeReportData data = new TimeReportData();
-                data.setReadDuration(readTimeData.getDuration());
-                data.setDate(readTimeData.getDate());
-                data.setBookId(readTimeData.getBoodId());
-                if (readTimeData.getIs_visitor()) {
-                    //访客登录
-                    data.setToken(readTimeData.getUid());
-                    visitorDataList.add(data);
-                } else {
-                    //注册用户登录
-                    data.setUid(Long.parseLong(readTimeData.getUid()));
-                    userDataList.add(data);
+                //只有阅读时长大于0才算有效数据
+                if (readTimeData.getDuration()>0){
+                    TimeReportData data = new TimeReportData();
+                    data.setId(readTimeData.getId());
+                    data.setReadDuration(readTimeData.getDuration());
+                    data.setDate(readTimeData.getDate());
+                    data.setBookId(readTimeData.getBoodId());
+                    data.setChapterId(readTimeData.getChapterId());
+                    if (readTimeData.getIs_visitor()) {
+                        //访客登录
+                        data.setIs_visitor(true);
+                        data.setToken(readTimeData.getUid());
+                        visitorDataList.add(data);
+                    } else {
+                        //注册用户登录
+                        data.setIs_visitor(false);
+                        data.setUid(Long.parseLong(readTimeData.getUid()));
+                        userDataList.add(data);
+                    }
                 }
             }
             if (!userDataList.isEmpty()) {
@@ -131,14 +141,14 @@ public class TaskReporter {
                             @Override
                             public void onNext(ResponseModel responseModel) {
                                 for (TimeReportData data : userDataList) {
-                                    daoHelper.delete(data);
+                                    daoHelper.deleteTimeData(data,false);
                                 }
                                 LogUtil.e("LogTime 用户阅读时长上报成功");
                             }
                         });
             }
             if (!visitorDataList.isEmpty()) {
-                TaskRepository.getInstance().visitorReport(userDataList)
+                TaskRepository.getInstance().visitorReport(visitorDataList)
                         .subscribe(new ApiSubscriber2<ResponseModel>() {
                             @Override
                             protected void onFail(NetError error) {
@@ -148,7 +158,7 @@ public class TaskReporter {
                             @Override
                             public void onNext(ResponseModel responseModel) {
                                 for (TimeReportData data : visitorDataList) {
-                                    daoHelper.delete(data);
+                                    daoHelper.deleteTimeData(data,false);
                                 }
                                 LogUtil.e("LogTime 访客阅读时长上报成功");
                             }

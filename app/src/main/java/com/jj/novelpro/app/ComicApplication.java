@@ -134,15 +134,13 @@ public class ComicApplication extends BaseApplication {
 
             @Override
             public void onNext(AccessTokenResponse accessTokenResponse) {
-                LogUtil.e("LogTime 获取游客成功");
+                LogUtil.e("LogTime 获取游客token成功");
                 if (accessTokenResponse!=null&&accessTokenResponse.getAccess_token()!=null){
                     LogUtil.e("LogTime accessToken:"+accessTokenResponse.getAccess_token());
                     SharedPreManger.getInstance().saveVisitorToken(accessTokenResponse.getAccess_token());
                 }
             }
         });
-        //这里启动的时候还要做一次本地数据的上报
-        TaskReporter.reportTimeData(daoHelper);
 
         //默认这是最近一次登录
         String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
@@ -207,6 +205,7 @@ public class ComicApplication extends BaseApplication {
 
         });
 
+        //十秒后进行一次数据上报，而后没10min执行一次数据上报
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

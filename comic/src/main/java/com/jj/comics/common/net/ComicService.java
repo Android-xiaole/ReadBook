@@ -993,7 +993,7 @@ public interface ComicService {
     /**
      * 上报游客
      */
-    @POST(Constants.REPORT_URL+"api/account/app/visiotr_duration_report"+Constants.IDENTIFICATION_IGNORE)
+    @POST(Constants.REPORT_URL+"api/account/app/visitor_duration_report"+Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> visitorReport(@Body RequestBody requestBody);
 
 }
