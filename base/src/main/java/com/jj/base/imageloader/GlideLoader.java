@@ -40,7 +40,9 @@ public class GlideLoader implements ILoader {
 
     @Override
     public void loadNet(ImageView target, String url, RequestOptions options) {
-        url = url + "?x-oss-process=image/quality,q_50";
+        if (url != null && url.contains("ossmh.jj1699.cn")) {
+            url = url + "?x-oss-process=image/quality,q_50";
+        }
         Object model = mImageProvider == null || mImageProvider.configHeader() == null ? url : new GlideUrl(url, mImageProvider.configHeader());
         String finalUrl = url;
         load(getRequestManager(target.getContext()).load(model).listener(new RequestListener<Drawable>() {
