@@ -5,7 +5,6 @@ import com.jj.base.net.NetError;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.ui.detail.subdetail.CatalogFragment;
 
 import java.util.List;
 
