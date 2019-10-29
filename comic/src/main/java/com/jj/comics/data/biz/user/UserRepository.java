@@ -37,8 +37,6 @@ import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.data.model.UserInfoResponse;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
-import com.jj.comics.util.reporter.ActionReporter;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -142,10 +140,6 @@ public class UserRepository implements UserDataSource {
             @Override
             public void subscribe(ObservableEmitter<UserInfo> emitter) throws Exception {
                 LoginHelper.updateUser(user);
-                String userId = user.getUid() + "";
-                //当用户使用自有账号登录时，统计：
-                MobclickAgent.onProfileSignIn(userId);
-                ActionReporter.reportAction(ActionReporter.Event.LOGIN, null, null, null);
                 emitter.onNext(user);
                 emitter.onComplete();
             }

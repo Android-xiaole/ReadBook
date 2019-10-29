@@ -21,6 +21,7 @@ import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
+import com.jj.comics.common.constants.LoginTypeEnum;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
@@ -29,6 +30,7 @@ import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
 import com.jj.comics.util.eventbus.events.WxLoginEvent;
+import com.jj.comics.util.reporter.ActionReporter;
 import com.sina.weibo.sdk.WbSdk;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -80,7 +82,13 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         }
 
         @Override
-        public void onNext(UserInfo UserInfo) {
+        public void onNext(UserInfo userInfo) {
+            if (userInfo != null) {
+                ActionReporter.reportAction(ActionReporter.Event.LOGIN, null, null, null);
+
+                MobclickAgent.onProfileSignIn(userInfo.getLogin_type(),userInfo.getUid() + "");
+            }
+
             if (getV() != null) {
                 getV().hideProgress();
                 getV().setResultAndFinish();
@@ -166,9 +174,13 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                        if (responseModel.getData() != null && responseModel.getData().getUser_info() != null) {
-                            SharedPreManger.getInstance().saveToken(responseModel.getData().getBearer_token());
-                            return UserRepository.getInstance().saveUser(responseModel.getData().getUser_info());
+                        if (responseModel.getData() != null) {
+                            UserInfo user_info = responseModel.getData().getUser_info();
+                            if (user_info != null) {
+                                user_info.setLogin_type(LoginTypeEnum.PHONE.name());
+                                SharedPreManger.getInstance().saveToken(responseModel.getData().getBearer_token());
+                                return UserRepository.getInstance().saveUser(user_info);
+                            }
                         }
                         return Observable.error(NetError.noDataError());
                     }
@@ -226,7 +238,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                                     @Override
                                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                                        return dealLoginResponse(responseModel);
+                                        return dealLoginResponse(responseModel,LoginTypeEnum.QQ);
 //                                        MobclickAgent.onEvent(BaseApplication.getApplication(),
 //                                                Constants.UMEventId.QQ_LOGIN);
                                     }
@@ -286,7 +298,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                         .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                             @Override
                             public ObservableSource<UserInfo> apply(LoginResponse responseModel) {
-                                return dealLoginResponse(responseModel);
+                                return dealLoginResponse(responseModel,LoginTypeEnum.WB);
                             }
                         }).subscribe(new LoginApiSubscriber());
             } else {
@@ -351,7 +363,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                        return dealLoginResponse(responseModel);
+                        return dealLoginResponse(responseModel,LoginTypeEnum.WX);
 //                        MobclickAgent.onEvent(BaseApplication.getApplication(),
 //                                Constants.UMEventId.WX_LOGIN);
                     }
@@ -365,21 +377,20 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
      *
      * @return
      */
-    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse) {
+    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse,LoginTypeEnum loginTypeEnum) {
         LoginResponse.DataBean data = loginResponse.getData();
         if (data != null) {
             if (data.isIs_binding()) {//绑定了手机号
                 UserInfo user_info = loginResponse.getData().getUser_info();
                 if (user_info != null) {
+                    user_info.setLogin_type(loginTypeEnum.name());
                     //保存token
                     SharedPreManger.getInstance().saveToken(data.getBearer_token());
-//                    //UM登录统计
-//                    MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
                     //最后保存用户信息到数据库
                     return UserRepository.getInstance().saveUser(user_info);
                 }
             } else {//未绑定手机号码,跳转到绑定号码的页面
-                BindPhoneActivity.toBindPhoneActivity(data.getType(), data.getOpenid(), (LoginActivity) getV());
+                BindPhoneActivity.toBindPhoneActivity(data.getType(), loginTypeEnum.name(),data.getOpenid(), (LoginActivity) getV());
                 return Observable.empty();
             }
         }

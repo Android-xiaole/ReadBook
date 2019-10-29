@@ -20,6 +20,7 @@ import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.widget.UserItemView;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -119,6 +120,7 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                     updateLoginStatus();
                     //最后发送退出登录的通知
                     EventBusManager.sendLogoutEvent(new LogoutEvent());
+                    MobclickAgent.onProfileSignOff();
                     finish();
                 }
             });

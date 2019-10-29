@@ -5,8 +5,6 @@ import org.greenrobot.greendao.annotation.Id;
 
 import java.io.Serializable;
 
-import org.greenrobot.greendao.annotation.Generated;
-
 @Entity
 public class UserInfo implements Serializable {
 
@@ -63,39 +61,20 @@ public class UserInfo implements Serializable {
     private int is_vip;//表示用户是否是vip，1是：0否
     private int is_free;//表示用户是否可以免费阅读，1是：0否
 
+    public String getLogin_type() {
+        return login_type;
+    }
+
+    public void setLogin_type(String login_type) {
+        this.login_type = login_type;
+    }
+
+    private String login_type;
+
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
     private String class_name;//用户级别描述
-    @Generated(hash = 1003253590)
-    public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
-            String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
-            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, int is_free,
-            boolean isLogin, String class_name) {
-        this.uid = uid;
-        this.openid = openid;
-        this.unionid = unionid;
-        this.sourceid = sourceid;
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.salt = salt;
-        this.avatar = avatar;
-        this.mobile = mobile;
-        this.sex = sex;
-        this.pos_city = pos_city;
-        this.status = status;
-        this.create_time = create_time;
-        this.update_time = update_time;
-        this.invite_code = invite_code;
-        this.delete_flag = delete_flag;
-        this.is_vip = is_vip;
-        this.is_free = is_free;
-        this.isLogin = isLogin;
-        this.class_name = class_name;
-    }
-    @Generated(hash = 1279772520)
-    public UserInfo() {
-    }
+
     public long getUid() {
         return this.uid;
     }

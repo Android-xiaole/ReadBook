@@ -149,6 +149,7 @@ public class Constants {
 
         //login
         public static final String LOGIN_TYPE = "type";
+        public static final String LOGIN_TYPE_LOCAL = "type_local";//自定义的登录方式，和服务器接口参数无关
         public static final String LOGIN_OPENID = "openid";
         //添加提现方式
         public static final String CASH_OUT_ALI = "ali";

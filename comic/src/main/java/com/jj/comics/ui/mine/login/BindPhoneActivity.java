@@ -11,20 +11,18 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.jj.base.mvp.BasePresenter;
 import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
-import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
 import com.jj.comics.util.eventbus.events.BindPhoneSuccessEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
-import com.jj.comics.util.eventbus.events.UpdateUserInfoEvent;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,14 +40,15 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     @BindView(R2.id.tv_code)
     TextView tv_code;//验证码倒计时文字显示
 
-    private String type,openid;
+    private String type,openid,typeLocal;
 
     /**
      * 第三方登录跳转到绑定手机号码的页面
      */
-    public static void toBindPhoneActivity(String type, String openid, Activity context){
+    public static void toBindPhoneActivity(String type,String typeLocal, String openid, Activity context){
         ARouter.getInstance().build(RouterMap.COMIC_LOGIN_BINDPHONE__ACTIVITY)
                 .withString(Constants.IntentKey.LOGIN_TYPE,type)
+                .withString(Constants.IntentKey.LOGIN_TYPE_LOCAL,typeLocal)
                 .withString(Constants.IntentKey.LOGIN_OPENID,openid)
                 .navigation(context);
     }
@@ -57,6 +56,7 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     @Override
     protected void initData(Bundle savedInstanceState) {
         type = getIntent().getStringExtra(Constants.IntentKey.LOGIN_TYPE);
+        typeLocal = getIntent().getStringExtra(Constants.IntentKey.LOGIN_TYPE_LOCAL);
         openid = getIntent().getStringExtra(Constants.IntentKey.LOGIN_OPENID);
     }
 
@@ -128,6 +128,9 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
         EventBusManager.sendLoginEvent(new LoginEvent());
         //发送绑定手机号成功的通知
         EventBusManager.sendBindPhoneSuccessEvent(new BindPhoneSuccessEvent());
+        //友盟账号统计
+        MobclickAgent.onProfileSignIn(typeLocal,userInfo.getUid() + "");
+
         finish();
     }
 
