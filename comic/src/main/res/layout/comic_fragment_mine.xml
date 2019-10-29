@@ -4,18 +4,19 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/comic_ffffff"
+    android:background="@color/comic_f4f6f9"
     android:orientation="vertical"
     android:scrollbars="none">
 
     <TextView
         android:id="@+id/tv_header"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp_45"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="@string/comic_mine"
         android:textColor="@color/base_333333"
+        android:background="@color/comic_ffffff"
         android:textSize="@dimen/dp_18" />
 
 
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_header"
         android:orientation="vertical"
+        android:background="@color/comic_ffffff"
         android:scrollbars="none">
 
 
@@ -212,7 +214,6 @@
                     android:layout_height="@dimen/dp_55"
                     android:gravity="center_vertical"
                     app:iconResource="@drawable/gouwuche"
-
                     app:titleText="@string/comic_mine_buy" />
 
                 <View
@@ -285,17 +286,6 @@
                     android:gravity="center_vertical"
                     app:iconResource="@drawable/mine_help"
                     app:titleText="@string/comic_mine_help" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_65"
-                    android:background="@color/comic_f4f6f9"></View>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"></View>
 
 
             </LinearLayout>
