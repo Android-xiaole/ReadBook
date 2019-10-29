@@ -770,14 +770,17 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
         @Override
         public void run() {
-            //本地保存当前阅读时间
+            //本地保存当前阅读时间，设置每1min保存一次
             int duration = (int) (System.currentTimeMillis() - mReadStartTime) / 1000;//取秒数
             if (bookModel!=null&&catalogModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId(),catalogModel.getId());
             mReadStartTime = System.currentTimeMillis();
-            mHandler.postDelayed(this,10000);
+            mHandler.postDelayed(this,60000);
         }
     }
 
+    /**
+     * 10s后开启定时保存阅读时长任务
+     */
     private void startTask(){
         if (mTaskRunnable == null){
             mTaskRunnable = new TaskRunnable();

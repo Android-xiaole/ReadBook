@@ -307,6 +307,7 @@ public class DaoHelper<T> {
             onlineTimeData.setUid(uid + "");
             onlineTimeData.setDuration(duration);
             if (lastLoginTime == null){
+                //这里如果没有值需要设置一个，因为可能是用户登录或者切换账号之后产生的数据，此时也算一个登录时间
                 onlineTimeData.setLastLoginTime(DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
             }else{
                 onlineTimeData.setLastLoginTime(lastLoginTime);

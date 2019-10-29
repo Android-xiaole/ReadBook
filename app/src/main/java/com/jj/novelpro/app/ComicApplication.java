@@ -71,11 +71,17 @@ public class ComicApplication extends BaseApplication {
     // 友盟推送图标
     @Override
     public void init() {
+        if (!isMainProcess()) {
+            //如果不是主进程，就只做初始化极光推送的操作，因为多余的进程就是JPush的，不确定不初始化会不会出问题
+            //初始化极光推送
+            JPushInterface.init(this);
+            // 设置开启日志
+            JPushInterface.setDebugMode(Constants.DEBUG);
+            return;
+        }
         initBugly();
         //openinstall
-        if (isMainProcess()) {
-            OpenInstall.init(this);
-        }
+        OpenInstall.init(this);
         Beta.autoCheckUpgrade = false;
         if (Constants.DEBUG) {
             ARouter.openLog();     // Print log
@@ -135,8 +141,8 @@ public class ComicApplication extends BaseApplication {
             @Override
             public void onNext(AccessTokenResponse accessTokenResponse) {
                 LogUtil.e("LogTime 获取游客token成功");
-                if (accessTokenResponse!=null&&accessTokenResponse.getAccess_token()!=null){
-                    LogUtil.e("LogTime accessToken:"+accessTokenResponse.getAccess_token());
+                if (accessTokenResponse != null && accessTokenResponse.getAccess_token() != null) {
+                    LogUtil.e("LogTime accessToken:" + accessTokenResponse.getAccess_token());
                     SharedPreManger.getInstance().saveVisitorToken(accessTokenResponse.getAccess_token());
                 }
             }
@@ -144,7 +150,7 @@ public class ComicApplication extends BaseApplication {
 
         //默认这是最近一次登录
         String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
-        daoHelper.insertORupdateOnlineTimeData(0,lastLoginTime,null);
+        daoHelper.insertORupdateOnlineTimeData(0, lastLoginTime, null);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -162,11 +168,11 @@ public class ComicApplication extends BaseApplication {
                 int resumeTime = (int) (System.currentTimeMillis() / 1000);
                 String className = activity.getClass().getName();
                 resumeTimeMap.put(className, resumeTime);
-                if (pauseTimeMap.containsKey(className)){
+                if (pauseTimeMap.containsKey(className)) {
                     int pauseTime = pauseTimeMap.get(className);
                     //如果页面离开大于30min，那就计为一次最近登录时间,上次onPaused时间计为最近一次退出时间
-                    if (resumeTime - pauseTime>30*60){
-                        daoHelper.insertORupdateOnlineTimeData(0,DateHelper.formatSecLong((long)resumeTime*1000),DateHelper.formatSecLong((long)pauseTime*1000));
+                    if (resumeTime - pauseTime > 30 * 60) {
+                        daoHelper.insertORupdateOnlineTimeData(0, DateHelper.formatSecLong((long) resumeTime * 1000), DateHelper.formatSecLong((long) pauseTime * 1000));
                     }
                 }
             }
@@ -180,7 +186,7 @@ public class ComicApplication extends BaseApplication {
                 int duration = pauseTime - resumeTime;
                 if (duration > 0) {
                     //时间差为该页面在线时长
-                    daoHelper.insertORupdateOnlineTimeData(duration,null,null);
+                    daoHelper.insertORupdateOnlineTimeData(duration, null, null);
                 }
             }
 
@@ -198,8 +204,8 @@ public class ComicApplication extends BaseApplication {
             public void onActivityDestroyed(Activity activity) {
                 LogUtil.e("lifeCycle", "onActivityDestroyed：" + activity.getClass().getName());
                 //如果是从首页退出，那就计为一次最近退出时间
-                if (activity.getClass().getName().equals(MainActivity.class.getName())){
-                    daoHelper.insertORupdateOnlineTimeData(0,null,DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
+                if (activity.getClass().getName().equals(MainActivity.class.getName())) {
+                    daoHelper.insertORupdateOnlineTimeData(0, null, DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
                 }
             }
 
@@ -210,9 +216,9 @@ public class ComicApplication extends BaseApplication {
             @Override
             public void run() {
                 TaskReporter.reportTimeData(daoHelper);
-                handler.postDelayed(this,10*60*1000);//设置10min上传一次本地记录
+                handler.postDelayed(this, 5 * 60 * 1000);//设置10min上传一次本地记录
             }
-        },10000);
+        }, 10000);
     }
 
     private DaoHelper daoHelper;
@@ -261,7 +267,7 @@ public class ComicApplication extends BaseApplication {
                         if (LoginHelper.getOnLineUser() != null) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
                         }
-                        if (Constants.REPORT_URL.contains(request.url().host())){
+                        if (Constants.REPORT_URL.contains(request.url().host())) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getVisitorToken());
                         }
                         return newRequest.build();
