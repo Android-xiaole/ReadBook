@@ -93,6 +93,7 @@ public interface ComicService {
     String MH_WXMP_WEBAPI_WX_PARAM = "mh.wxmp.webapi/wx/param";
     String API_SECTION_RECOMMENDED = "api/section_recommended";
     String API_CATALOGUE = "api/catalogue";
+    String API_NEW_CATALOGUE = "api/new_catalogue";
     String API_READ = "api/read";
     String API_CARTOON_INFO = "api/cartoon_info";
     String API_COLLECTION = "api/collection";
@@ -299,6 +300,9 @@ public interface ComicService {
      */
     @GET(API_CATALOGUE)
     Observable<BookCatalogListResponse> getCatalogList(@QueryMap HashMap<String, Object> parames);
+
+    @GET(API_NEW_CATALOGUE)
+    Observable<BookCatalogListResponse> getNewCatalogList(@QueryMap HashMap<String, Object> parames);
 
     @GET(API_READ)
     Observable<BookCatalogContentResponse> getCatalogContent(@QueryMap Map<String, Object> parames);

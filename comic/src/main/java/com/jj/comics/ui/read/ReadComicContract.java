@@ -28,6 +28,9 @@ public interface ReadComicContract {
         //获取目录列表的回调
         void onGetCatalogList(List<BookCatalogModel> catalogModels,int totalNum);
 
+        //获取目录列表失败的回调
+        void onGetCatalogListFail(NetError error);
+
         //收藏成功或者取消收藏成功的回调
         void onAddOrRemoveShelfSuccess(boolean collectByCurrUser, boolean needFinish);
 
@@ -40,7 +43,7 @@ public interface ReadComicContract {
         void addOrRemoveShelf(BookModel model, boolean collectByCurrUser, boolean needFinish);
 
         //获取章节目录列表
-        void getCatalogList(BookModel bookModel);
+        void getCatalogList(BookModel bookModel,int pageNum);
 
         //获取收藏状态
         void getCollectStatus(long id);

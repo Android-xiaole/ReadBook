@@ -65,7 +65,7 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
             if (CommonUtil.checkValid(getData().size(), oldIndex))
                 notifyItemChanged(oldIndex);
         }
-        scrollMiddle(currentIndex);
+//        scrollMiddle(currentIndex);
     }
 
     public BookCatalogModel getNextCatalogModel(BookCatalogModel currModel) {

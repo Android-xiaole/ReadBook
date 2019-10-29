@@ -123,6 +123,10 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private String mFrom;
     private boolean flag_info;//标记是否需要重新计算查看更多icon显示的标记
 
+    private int pageNum = 1;//章节目录分页页码
+    private int initPageNum = 1;//初始页码
+    private String sort = Constants.RequestBodyKey.SORT_ASC;//默认正序
+
     /**
      * 进入详情页
      *
@@ -172,6 +176,15 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 }
             }
         });
+        catalogAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (model == null)return;
+                pageNum++;
+                getP().getCatalogList(model,pageNum,sort);
+            }
+        },rv_catalogList);
+
         lin_catalogMenu.setClickable(false);
 
         //监听简介textview的绘制，控制是否显示查看更多的icon
@@ -231,25 +244,30 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             }else{
                 tv_catalogNum.setVisibility(View.GONE);
                 pb_loading.setVisibility(View.VISIBLE);
-                getP().getCatalogList(model);
+                getP().getCatalogList(model,initPageNum,sort);
             }
         } else if (id == R.id.tv_sort) {
-            if (catalogAdapter.getData() == null || catalogAdapter.getData().size() == 0) return;
+            if (model == null||catalogAdapter.getData().isEmpty()) return;
             tv_sort.setSelected(!tv_sort.isSelected());
             if (tv_sort.isSelected()) {
+                sort = Constants.RequestBodyKey.SORT_DESC;
                 tv_sort.setText("正序");
                 Drawable drawable = getResources().getDrawable(R.drawable.icon_read_catalog_asc);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv_sort.setCompoundDrawables(null, null, drawable, null);
             } else {
+                sort = Constants.RequestBodyKey.SORT_ASC;
                 tv_sort.setText("倒序");
                 Drawable drawable = getResources().getDrawable(R.drawable.icon_read_catalog_desc);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv_sort.setCompoundDrawables(null, null, drawable, null);
             }
-            List<BookCatalogModel> data = catalogAdapter.getData();
-            Collections.reverse(data);
-            catalogAdapter.notifyDataSetChanged();
+//            List<BookCatalogModel> data = catalogAdapter.getData();
+//            Collections.reverse(data);
+//            catalogAdapter.notifyDataSetChanged();
+            catalogAdapter.getData().clear();
+            pageNum = 1;
+            getP().getCatalogList(model,pageNum,sort);
         } else if (id == R.id.iv_back_chapter) {//目录的返回键
             mCatalogMenu.closeDrawers();
         } else if (id == R.id.iv_back) {
@@ -343,7 +361,6 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         page_detail.put("to_id", "" + model.getId());
         MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.PAGE_DETAIL, page_detail);
 
-        getP().getCatalogList(model);
         ILFactory.getLoader().loadNet(iv_bookIcon, model.getCover(), new RequestOptions().error(R.drawable.img_loading)
                 .placeholder(R.drawable.img_loading));
 
@@ -373,13 +390,24 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             model.setChapterid(localBookModel.getChapterid());
             model.setOrder(localBookModel.getOrder());
         }
-        //本地记录处理完之后再给全局变量赋值
+        //本地记录处理完之后再给全局变量赋值，顺便计算当前阅读的章节是第几页
         this.model = model;
         if (model.getChapterid() != 0) {
             tv_read.setText(String.format(getString(R.string.comic_continue_read), model.getOrder()));
+            //有阅读记录的情况
+            if (model.getOrder()% 20 == 0){
+                pageNum = model.getOrder()% 20;
+            }else{
+                pageNum = model.getOrder()/20+1;
+            }
         } else {
             tv_read.setText("免费试读");
+            //没有阅读记录的情况
+            pageNum = 1;
         }
+        initPageNum = pageNum;
+        //计算完当前阅读的章节是第几页之后请求章节列表，默认正序请求
+        getP().getCatalogList(model,pageNum,sort);
 
         //加载完详情后再去加载推荐小说列表
         if (model.getCategory_id() != null && model.getCategory_id().size() > 0) {
@@ -423,18 +451,28 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     @Override
     public void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum) {
         IS_SUCCESS_GETCATALOG = true;
-        catalogAdapter.setNewData(catalogModels);
         tv_catalogNum.setText("共" + totalNum + "章");
+
+        if (!catalogModels.isEmpty()){
+            catalogAdapter.addData(catalogModels);
+            catalogAdapter.loadMoreComplete();
+        }else{
+            catalogAdapter.loadMoreEnd();
+        }
+
         if (model != null) {
             catalogAdapter.notifyItem(model.getChapterid());
         }
     }
 
-    private boolean IS_SUCCESS_GETCATALOG = false;//标记获取章节目录是否成功
+    private boolean IS_SUCCESS_GETCATALOG = false;//标记获取章节目录是否成功过
     @Override
     public void onGetCatalogListFail() {
-        IS_SUCCESS_GETCATALOG = false;
+        if (pageNum != initPageNum){
+            pageNum --;
+        }
         tv_catalogNum.setText("加载失败，点击重试");
+        catalogAdapter.loadMoreFail();
     }
 
     @Override

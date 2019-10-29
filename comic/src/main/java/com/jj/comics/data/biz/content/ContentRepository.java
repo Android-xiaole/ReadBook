@@ -107,6 +107,18 @@ public class ContentRepository implements ContentDataSource {
                 .retryWhen(new RetryFunction2());
     }
 
+    @Override
+    public Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort) {
+        HashMap<String,Object> parames = new HashMap();
+        parames.put(Constants.RequestBodyKey.ID,id);
+        parames.put(Constants.RequestBodyKey.PAGE_NUM,pageNum);
+        parames.put(Constants.RequestBodyKey.SORT,sort);
+        return ComicApi.getApi().getNewCatalogList(parames)
+                .subscribeOn(Schedulers.io())
+                .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
+                .retryWhen(new RetryFunction2());
+    }
+
     /**
      * @param bookId 书籍ID
      * @param updateTime 书籍目录的更新时间

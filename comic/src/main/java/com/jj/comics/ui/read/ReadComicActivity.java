@@ -98,7 +98,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     TextView tv_totalNum;//所有章节数
     @BindView(R2.id.iv_back_chapter)
     ImageView iv_back_chapter;//目录列表返回键
-//    @BindView(R2.id.lin_nightModel)
+    //    @BindView(R2.id.lin_nightModel)
 //    LinearLayout lin_nightModel;//切换夜间模式的点击事件布局
 //    @BindView(R2.id.tv_nightModel)
 //    TextView tv_nightModel;//切换夜间模式的文字
@@ -120,11 +120,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     BubbleSeekBar sb_textSetting;//设置字号的拖动view
     @BindView(R2.id.tv_sort)
     TextView tv_sort;//倒序按钮
-//    @BindView(R2.id.lin_eyeModel)
+    //    @BindView(R2.id.lin_eyeModel)
 //    LinearLayout lin_eyeModel;//护眼模式按钮
     @BindView(R2.id.fl_readView)
     FrameLayout fl_readView;//阅读页面根布局
-//    @BindView(R2.id.iv_eyeModel)
+    //    @BindView(R2.id.iv_eyeModel)
 //    ImageView iv_eyeModel;//护眼模式的icon
 //    @BindView(R2.id.tv_eyeModel)
 //    TextView tv_eyeModel;//护眼模式文字提示
@@ -168,6 +168,9 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private Animation mTopOutAnim;
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
+
+    private int pageNum = 1;//章节目录分页页码
+    private int initPageNum = 1;//初始页码
 
     public boolean isCollect() {
         return isCollect;
@@ -225,8 +228,20 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
         tv_share_money.setText("分享预计赚￥" + bookModel.getShare_will_earnings());
+        if (bookModel.getChapterid() != 0) {
+            //有阅读记录的情况
+            if (bookModel.getOrder() % 20 == 0) {
+                pageNum = bookModel.getOrder() % 20;
+            } else {
+                pageNum = bookModel.getOrder() / 20 + 1;
+            }
+        } else {
+            //没有阅读记录的情况
+            pageNum = 1;
+        }
+        initPageNum = pageNum;
         //加载章节目录列表
-        getP().getCatalogList(bookModel);
+        getP().getCatalogList(bookModel, pageNum);
         if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
@@ -238,6 +253,15 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      * 初始化各个控件的监听器
      */
     private void initClickListener() {
+        //目录列表加载更多监听
+        catalogAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (bookModel == null) return;
+                pageNum++;
+                getP().getCatalogList(bookModel, pageNum);
+            }
+        }, rv_catalogList);
         //侧滑目录控件的item点击事件
         catalogAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -425,14 +449,14 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     @OnClick({R2.id.tv_mode_scroll, R2.id.tv_mode_slide, R2.id.tv_mode_cover, R2.id.tv_mode_simulation,
-            R2.id.tv_sort, R2.id.iv_back_chapter, R2.id.iv_back, R2.id.iv_share,R2.id.tv_share_money,
+            R2.id.tv_sort, R2.id.iv_back_chapter, R2.id.iv_back, R2.id.iv_share, R2.id.tv_share_money,
             R2.id.lin_catalogBtn, R2.id.lin_textStyle, R2.id.lin_collect,
-            R2.id.lin_fanye,R2.id.lin_mode,R2.id.tv_modeEye,R2.id.tv_modeNight,
-            R2.id.lin_fanyeSetting,R2.id.lin_textSetting,R2.id.lin_modeSetting,R2.id.lin_topMenu})
+            R2.id.lin_fanye, R2.id.lin_mode, R2.id.tv_modeEye, R2.id.tv_modeNight,
+            R2.id.lin_fanyeSetting, R2.id.lin_textSetting, R2.id.lin_modeSetting, R2.id.lin_topMenu})
     public void onClick_ReadActivity(View view) {
         int i = view.getId();
-            if (i == R.id.tv_sort) {
-            if (catalogAdapter.getData() == null || catalogAdapter.getData().size() == 0) return;
+        if (i == R.id.tv_sort) {
+            if (bookModel == null || catalogAdapter.getData().isEmpty()) return;
             tv_sort.setSelected(!tv_sort.isSelected());
             if (tv_sort.isSelected()) {
                 tv_sort.setText("正序");
@@ -472,7 +496,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                     getP().addOrRemoveShelf(bookModel, isCollect, false);
                 }
             }
-        } else if (i == R.id.iv_share||i == R.id.tv_share_money) {//分享按钮&分享赚钱文字
+        } else if (i == R.id.iv_share || i == R.id.tv_share_money) {//分享按钮&分享赚钱文字
             if (bookModel != null) {
                 if (shareDialog == null) {
                     shareDialog = new ShareDialog(ReadComicActivity.this, "详情", bookModel.getTitle());
@@ -494,7 +518,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 lin_modeSetting.setVisibility(GONE);
                 view_fgx.setVisibility(View.GONE);
             }
-        } else if (i == R.id.lin_fanye){//翻页设置
+        } else if (i == R.id.lin_fanye) {//翻页设置
             if (lin_fanyeSetting.getVisibility() == View.GONE) {
                 lin_fanyeSetting.setVisibility(View.VISIBLE);
                 view_fgx.setVisibility(View.VISIBLE);
@@ -504,7 +528,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 lin_modeSetting.setVisibility(GONE);
                 view_fgx.setVisibility(View.GONE);
             }
-        } else if (i == R.id.lin_mode){//模式设置
+        } else if (i == R.id.lin_mode) {//模式设置
             if (lin_modeSetting.getVisibility() == View.GONE) {
                 lin_modeSetting.setVisibility(View.VISIBLE);
                 view_fgx.setVisibility(View.VISIBLE);
@@ -514,7 +538,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 lin_modeSetting.setVisibility(GONE);
                 view_fgx.setVisibility(View.GONE);
             }
-        }else if (i == R.id.tv_modeEye) {//护眼
+        } else if (i == R.id.tv_modeEye) {//护眼
             toggleEyeModel(!ReadSettingManager.getInstance().isEyeModel());
         } else if (i == R.id.tv_modeNight) {//夜间模式
             toggleNightModel(!ReadSettingManager.getInstance().isNightMode());
@@ -625,9 +649,17 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     @Override
     public void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum) {
         tv_totalNum.setText("共" + totalNum + "章");
+        if (!catalogModels.isEmpty()){
+            catalogAdapter.addData(catalogModels);
+            catalogAdapter.loadMoreComplete();
+        }else{
+            catalogAdapter.loadMoreEnd();
+        }
+        //如果不是
+        if (initPageNum != pageNum)return;
         List<BookChapterBean> catalogList = new ArrayList<>();
         int skipReadPosition = 0;//需要跳转到的指定章节坐标
-        for (BookCatalogModel model : catalogModels) {
+        for (BookCatalogModel model : catalogAdapter.getData()) {
             //刷新历史记录的章节列表到指定章节位置
             if (catalogModel.getId() == model.getId()) {
                 skipReadPosition = catalogModels.indexOf(model);
@@ -639,9 +671,17 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             catalogList.add(bookChapterBean);
         }
         mPageLoader.getCollBook().setBookChapters(catalogList);
-        catalogAdapter.setNewData(catalogModels);
         mPageLoader.refreshChapterList();
         mPageLoader.skipToChapter(skipReadPosition);
+    }
+
+    @Override
+    public void onGetCatalogListFail(NetError error) {
+        ToastUtil.showToastShort(error.getMessage());
+        if (pageNum != initPageNum){
+            pageNum --;
+        }
+        catalogAdapter.loadMoreFail();
     }
 
 //    /**
@@ -760,36 +800,39 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         mTimeRecord = 0;
 
         //本地保存当前阅读时间
-        if (bookModel!=null&&catalogModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId(),catalogModel.getId());
+        if (bookModel != null && catalogModel != null)
+            daoHelper.insertORupdateReadTimeData(duration, bookModel.getId(), catalogModel.getId());
         stopTask();
     }
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private TaskRunnable mTaskRunnable;
-    private class TaskRunnable implements Runnable{
+
+    private class TaskRunnable implements Runnable {
 
         @Override
         public void run() {
             //本地保存当前阅读时间，设置每1min保存一次
             int duration = (int) (System.currentTimeMillis() - mReadStartTime) / 1000;//取秒数
-            if (bookModel!=null&&catalogModel!=null)daoHelper.insertORupdateReadTimeData(duration,bookModel.getId(),catalogModel.getId());
+            if (bookModel != null && catalogModel != null)
+                daoHelper.insertORupdateReadTimeData(duration, bookModel.getId(), catalogModel.getId());
             mReadStartTime = System.currentTimeMillis();
-            mHandler.postDelayed(this,60000);
+            mHandler.postDelayed(this, 60000);
         }
     }
 
     /**
      * 10s后开启定时保存阅读时长任务
      */
-    private void startTask(){
-        if (mTaskRunnable == null){
+    private void startTask() {
+        if (mTaskRunnable == null) {
             mTaskRunnable = new TaskRunnable();
         }
-        mHandler.postDelayed(mTaskRunnable,10000);
+        mHandler.postDelayed(mTaskRunnable, 10000);
     }
 
-    private void stopTask(){
-        if (mTaskRunnable!=null){
+    private void stopTask() {
+        if (mTaskRunnable != null) {
             mHandler.removeCallbacks(mTaskRunnable);
             mTaskRunnable = null;
         }
@@ -866,22 +909,22 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         tv_modeNight.setSelected(isNightModel);
         tv_modeEye.setSelected(ReadSettingManager.getInstance().isEyeModel());
         iv_collect.setSelected(isCollect);
-        if (ReadSettingManager.getInstance().getPageMode() == PageMode.SIMULATION){
+        if (ReadSettingManager.getInstance().getPageMode() == PageMode.SIMULATION) {
             tv_mode_simulation.setSelected(true);
             tv_mode_cover.setSelected(false);
             tv_mode_slide.setSelected(false);
             tv_mode_scroll.setSelected(false);
-        }else if (ReadSettingManager.getInstance().getPageMode() == PageMode.COVER){
+        } else if (ReadSettingManager.getInstance().getPageMode() == PageMode.COVER) {
             tv_mode_simulation.setSelected(false);
             tv_mode_cover.setSelected(true);
             tv_mode_slide.setSelected(false);
             tv_mode_scroll.setSelected(false);
-        }else if (ReadSettingManager.getInstance().getPageMode() == PageMode.SLIDE){
+        } else if (ReadSettingManager.getInstance().getPageMode() == PageMode.SLIDE) {
             tv_mode_simulation.setSelected(false);
             tv_mode_cover.setSelected(false);
             tv_mode_slide.setSelected(true);
             tv_mode_scroll.setSelected(false);
-        }else if (ReadSettingManager.getInstance().getPageMode() == PageMode.SCROLL){
+        } else if (ReadSettingManager.getInstance().getPageMode() == PageMode.SCROLL) {
             tv_mode_simulation.setSelected(false);
             tv_mode_cover.setSelected(false);
             tv_mode_slide.setSelected(false);

@@ -196,10 +196,10 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailCont
 
     }
 
-    public void getCatalogList(BookModel bookModel) {
+    public void getCatalogList(BookModel bookModel,int pageNum,String sort) {
         if (getV() == null) return;
         getV().showProgress();
-        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(), bookModel.getUpdate_chapter_time())
+        ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),pageNum,sort)
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
