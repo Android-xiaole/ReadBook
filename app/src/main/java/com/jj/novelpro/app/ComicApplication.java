@@ -41,6 +41,7 @@ import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
 import com.jj.comics.util.reporter.TaskReporter;
 import com.jj.novelpro.activity.MainActivity;
+import com.jj.novelpro.activity.SplashActivity;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;
@@ -148,15 +149,16 @@ public class ComicApplication extends BaseApplication {
             }
         });
 
-        //默认这是最近一次登录
-        String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
-        daoHelper.insertORupdateOnlineTimeData(0, lastLoginTime, null);
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 LogUtil.e("lifeCycle", "onActivityCreated：" + activity.getClass().getName());
+                if (activity.getClass().getName().equals(SplashActivity.class.getName())) {
+                    //默认这是最近一次登录
+                    String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+                    daoHelper.insertORupdateOnlineTimeData(0, lastLoginTime, null);
+                }
             }
-
             @Override
             public void onActivityStarted(Activity activity) {
                 LogUtil.e("lifeCycle", "onActivityStarted：" + activity.getClass().getName());

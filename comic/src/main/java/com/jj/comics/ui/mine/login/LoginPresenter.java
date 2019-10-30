@@ -22,9 +22,11 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.biz.user.UserRepository;
+import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
@@ -67,6 +69,8 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     private AuthInfo mAuthInfo;
     private SsoHandler mSsoHandler;
     private MyWbAuthLis mWbAuthListener;
+
+    private DaoHelper daoHelper;
 
 
     private class LoginApiSubscriber extends ApiSubscriber2<UserInfo> {
@@ -371,10 +375,12 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             if (data.isIs_binding()) {//绑定了手机号
                 UserInfo user_info = loginResponse.getData().getUser_info();
                 if (user_info != null) {
+                    //先记录当前本地当前用户登出时间
+                    if (daoHelper == null)daoHelper = new DaoHelper();
+                    String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+                    daoHelper.insertORupdateOnlineTimeData(0,null,currentDate);
                     //保存token
                     SharedPreManger.getInstance().saveToken(data.getBearer_token());
-//                    //UM登录统计
-//                    MobclickAgent.onEvent(BaseApplication.getApplication(), Constants.UMEventId.PHONE_LOGIN);
                     //最后保存用户信息到数据库
                     return UserRepository.getInstance().saveUser(user_info);
                 }

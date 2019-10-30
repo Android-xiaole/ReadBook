@@ -19,7 +19,10 @@ import com.jj.base.ui.BaseActivity;
 import com.jj.base.utils.RouterMap;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.UmEventID;
+import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.SharedPreManger;
@@ -119,9 +122,15 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         }
     }
 
+    private DaoHelper daoHelper;
     @Override
     public void setResultAndFinish() {
+        //发送登录成功的通知
         EventBusManager.sendLoginEvent(new LoginEvent());
+        //这里一定是保存完用户信息到本地之后，记录本地当前用户登录
+        if (daoHelper == null)daoHelper = new DaoHelper();
+        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+        daoHelper.insertORupdateOnlineTimeData(0,currentDate,null);
         Intent intent = new Intent();
         if (getIntent()!=null){
             intent.putExtras(getIntent().getExtras());
