@@ -396,7 +396,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             tv_read.setText(String.format(getString(R.string.comic_continue_read), model.getOrder()));
             //有阅读记录的情况
             if (model.getOrder()% 20 == 0){
-                pageNum = model.getOrder()% 20;
+                pageNum = model.getOrder()/ 20;
             }else{
                 pageNum = model.getOrder()/20+1;
             }

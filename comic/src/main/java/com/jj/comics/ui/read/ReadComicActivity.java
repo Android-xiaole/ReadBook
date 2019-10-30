@@ -169,8 +169,13 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
 
-    private int pageNum = 1;//章节目录分页页码
+    private int lastPageNum = 1;//章节目录向上分页页码
+    private int nextPageNum = 1;//章节目录向下分页页码
     private int initPageNum = 1;//初始页码
+    private int errorPageNum = 1;//请求错误时候的页码，给点击重试用的
+    private int totalNum;//章节总条数
+    private boolean is_error_next_page;//目录请求错误是，是加载的下一页还是上一页
+    private boolean is_scroll_chapterlist = false;//标记当前操作是滑动章节列表请求的接口
 
     public boolean isCollect() {
         return isCollect;
@@ -228,20 +233,15 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
 
         tv_share_money.setText("分享预计赚￥" + bookModel.getShare_will_earnings());
-        if (bookModel.getChapterid() != 0) {
-            //有阅读记录的情况
-            if (bookModel.getOrder() % 20 == 0) {
-                pageNum = bookModel.getOrder() % 20;
-            } else {
-                pageNum = bookModel.getOrder() / 20 + 1;
-            }
+        if (catalogModel.getChapterorder() % 20 == 0) {
+            initPageNum = catalogModel.getChapterorder() / 20;
         } else {
-            //没有阅读记录的情况
-            pageNum = 1;
+            initPageNum = catalogModel.getChapterorder() / 20 + 1;
         }
-        initPageNum = pageNum;
+        lastPageNum = initPageNum;
+        nextPageNum = initPageNum;
         //加载章节目录列表
-        getP().getCatalogList(bookModel, pageNum);
+        getP().getCatalogList(bookModel, initPageNum,false);
         if (LoginHelper.getOnLineUser() != null) {
             //获取内容收藏状态
             getP().getCollectStatus(bookModel.getId());
@@ -253,13 +253,45 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
      * 初始化各个控件的监听器
      */
     private void initClickListener() {
-        //目录列表加载更多监听
+        //目录列表向上加载更多监听
+        catalogAdapter.setUpFetchEnable(true);
+        //这里必须设置为0，防止刚进来的时候多次回调UpFetchListener，设置为0开始的时候只会回调一次，不可避免
+        catalogAdapter.setStartUpFetchPosition(0);
+        catalogAdapter.setUpFetchListener(new BaseQuickAdapter.UpFetchListener() {
+            @Override
+            public void onUpFetch() {
+                if (bookModel == null||totalNum == 0) return;
+                if (lastPageNum<=1){
+                    catalogAdapter.setUpFetchEnable(false);
+                }else{
+                    is_scroll_chapterlist = true;
+                    lastPageNum--;
+                    getP().getCatalogList(bookModel, lastPageNum,false);
+                }
+            }
+        });
+
+        //目录列表向下加载更多监听
+        catalogAdapter.setEnableLoadMore(true);
         catalogAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                if (bookModel == null) return;
-                pageNum++;
-                getP().getCatalogList(bookModel, pageNum);
+                if (bookModel == null||totalNum == 0) return;
+                int totalPageSize;
+                if (totalNum%20 == 0){
+                    totalPageSize = totalNum/20;
+                }else{
+                    totalPageSize = totalNum/20+1;
+                }
+                if (nextPageNum>=totalPageSize){
+                    //最后一页，没有更多章节了
+                    catalogAdapter.loadMoreEnd();
+                    catalogAdapter.setEnableLoadMore(false);
+                }else{
+                    is_scroll_chapterlist = true;
+                    nextPageNum++;
+                    getP().getCatalogList(bookModel, nextPageNum,true);
+                }
             }
         }, rv_catalogList);
         //侧滑目录控件的item点击事件
@@ -271,18 +303,20 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                     //如果是收费章节，并且用户已经登录，就直接去跳转
                     if (bookCatalogModel.getIsvip() == 1) {
                         if (LoginHelper.interruptLogin(ReadComicActivity.this, null)) {
-                            for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
-                                if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
-                                    mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
-                                }
-                            }
+//                            for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
+//                                if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
+//                                    mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+//                                }
+//                            }
+                            mPageLoader.skipToChapter(position);
                         }
                     } else {
-                        for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
-                            if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
-                                mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
-                            }
-                        }
+//                        for (BookChapterBean bookChapterBean : mPageLoader.getCollBook().getBookChapterList()) {
+//                            if ((catalogAdapter.getData().get(position).getId() + "").equals(bookChapterBean.getId())) {
+//                                mPageLoader.skipToChapter(mPageLoader.getCollBook().getBookChapterList().indexOf(bookChapterBean));
+//                            }
+//                        }
+                        mPageLoader.skipToChapter(position);
                     }
                 }
                 mCatalogMenu.closeDrawers();
@@ -330,6 +364,17 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 getP().loadData(bookModel, requestChapters);
             }
 
+            @Override
+            public void requestChapterList(boolean isNextPage) {
+                int requestPageNum;
+                if (isNextPage){
+                    requestPageNum = ++nextPageNum;
+                }else{
+                    requestPageNum = --lastPageNum;
+                }
+                getP().getCatalogList(bookModel,requestPageNum,isNextPage);
+            }
+
 //            @Override
 //            public void requestChapters(TxtChapter requestChapter) {
 //                /*
@@ -360,7 +405,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
 
             @Override
             public void center() {
-                toggleMenuStatus();
+                if (mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR){
+                    getP().getCatalogList(bookModel,errorPageNum,is_error_next_page);
+                }else{
+                    toggleMenuStatus();
+                }
             }
 
             @Override
@@ -397,7 +446,7 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
                 if (preCatalogModel != null) {
                     if (preCatalogModel.getIsvip() == 1) {//收费内容强制登录
                         if (LoginHelper.interruptLogin(ReadComicActivity.this, null)) {
-                            mPageLoader.skipNextChapter();
+                            mPageLoader.skipPreChapter();
                         }
                     } else {
                         mPageLoader.skipPreChapter();
@@ -647,16 +696,37 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
     }
 
     @Override
-    public void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum) {
+    public void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum,int pageNum,boolean isNextPage) {
         tv_totalNum.setText("共" + totalNum + "章");
-        if (!catalogModels.isEmpty()){
-            catalogAdapter.addData(catalogModels);
-            catalogAdapter.loadMoreComplete();
-        }else{
-            catalogAdapter.loadMoreEnd();
+        this.totalNum = totalNum;
+        if (!catalogModels.isEmpty()) {
+            if (initPageNum == pageNum){
+                catalogAdapter.setNewData(catalogModels);
+            }else{
+                if (isNextPage){
+                    catalogAdapter.addData(catalogModels);
+                    //如果是滑动目录列表加载的情况，需要重新计算当前的章节的position
+                    if (is_scroll_chapterlist){
+
+                    }
+                }else{
+                    Collections.reverse(catalogModels);
+                    for (BookCatalogModel model : catalogModels) {
+                        catalogAdapter.addData(0,model);
+                    }
+                    //如果是滑动目录列表加载的情况，需要重新计算当前的章节的position
+                    if (is_scroll_chapterlist){
+                        int chapterPos = mPageLoader.getChapterPos();
+                        mPageLoader.setCurChapterPos(chapterPos+catalogModels.size());
+                        int lastChapterPos = mPageLoader.getLastChapterPos();
+                        mPageLoader.setLastChapterPos(lastChapterPos+catalogModels.size());
+                    }
+                }
+            }
+            if (isNextPage)catalogAdapter.loadMoreComplete();
+        } else {
+            if (isNextPage)catalogAdapter.loadMoreEnd();
         }
-        //如果不是
-        if (initPageNum != pageNum)return;
         List<BookChapterBean> catalogList = new ArrayList<>();
         int skipReadPosition = 0;//需要跳转到的指定章节坐标
         for (BookCatalogModel model : catalogAdapter.getData()) {
@@ -668,20 +738,48 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
             bookChapterBean.setId(model.getId() + "");
             bookChapterBean.setTitle(model.getChaptername() + "");
             bookChapterBean.setNeedLogin(model.getIsvip() == 1);
+            bookChapterBean.setChapterorder(model.getChapterorder());
             catalogList.add(bookChapterBean);
         }
+        //目录请求成功之后打开侧滑菜单可滑动
+        mCatalogMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        mPageLoader.setTotalNum(totalNum);
         mPageLoader.getCollBook().setBookChapters(catalogList);
         mPageLoader.refreshChapterList();
-        mPageLoader.skipToChapter(skipReadPosition);
+        //如果是第一次加载就跳转到指定章节
+        if (initPageNum == pageNum) {
+            mPageLoader.skipToChapter(skipReadPosition);
+            return;
+        }
+        //如果是滑动列表加载章节列表，不需要跳转到指定章节
+        if (!is_scroll_chapterlist){
+            mPageLoader.openChapter();
+        }
+        is_scroll_chapterlist = false;
     }
 
     @Override
-    public void onGetCatalogListFail(NetError error) {
+    public void onGetCatalogListFail(NetError error,int pageNum,boolean isNextPage) {
         ToastUtil.showToastShort(error.getMessage());
-        if (pageNum != initPageNum){
-            pageNum --;
+        //如果是滑动列表加载章节列表，不需要设置页面为error状态和禁止侧滑
+        if (!is_scroll_chapterlist){
+            mPageLoader.chapterError();
+            //目录加载失败就禁止侧滑目录滑动事件
+            mCatalogMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
-        catalogAdapter.loadMoreFail();
+        if (isNextPage){
+            catalogAdapter.loadMoreFail();
+        }
+        errorPageNum = pageNum;
+        is_error_next_page = isNextPage;
+        if (pageNum == initPageNum) {
+            return;
+        }
+        if (isNextPage){
+            nextPageNum--;
+        }else{
+            lastPageNum++;
+        }
     }
 
 //    /**
