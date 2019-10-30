@@ -2,6 +2,7 @@ package com.jj.comics.data.biz.pruduct;
 
 import com.jj.base.net.ComicApiImpl;
 import com.jj.base.net.RetryFunction2;
+import com.jj.base.utils.PackageUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicApi;
 import com.jj.comics.common.net.RequestBodyBuilder;
@@ -12,6 +13,7 @@ import com.jj.comics.data.model.PayActionResponse;
 import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.model.StatusResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 
 import io.reactivex.Observable;
@@ -80,6 +82,13 @@ public class ProductRepository implements ProductDataSource {
     @Override
     public Observable<NotificationResponse> getNotificationDetail(long id) {
         return ComicApi.getApi().getNotificationDetail(id)
+                .compose(ComicApiImpl.getApiTransformer2())
+                .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<StatusResponse> getStatus() {
+        return ComicApi.getApi().getStatus(PackageUtil.getPackageInfo().versionName)
                 .compose(ComicApiImpl.getApiTransformer2())
                 .subscribeOn(Schedulers.io());
     }

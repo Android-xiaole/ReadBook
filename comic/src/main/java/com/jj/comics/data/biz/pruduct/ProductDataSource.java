@@ -7,9 +7,11 @@ import com.jj.comics.data.model.ProtocalModel;
 import com.jj.comics.data.model.Push;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.ShareParamModel;
+import com.jj.comics.data.model.StatusResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 
 import io.reactivex.Observable;
+import retrofit2.http.Query;
 
 public interface ProductDataSource {
 
@@ -31,4 +33,7 @@ public interface ProductDataSource {
 
     //获取公告详情
     Observable<NotificationResponse> getNotificationDetail(long id);
+
+    // App审核开关状态
+    Observable<StatusResponse> getStatus();
 }

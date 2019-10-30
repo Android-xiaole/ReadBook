@@ -271,6 +271,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         switchPage(index);
         getP().checkUpdate();
         checkPopShareService();
+        getP().getShow();
     }
 
     private void checkPopShareService() {
@@ -527,6 +528,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public BaseActivity getActivity() {
         return this;
+    }
+
+    @Override
+    public void setShow(boolean isShow) {
+        if (isShow) {
+            mTvMoney.setText("赚钱");
+            mIvMoney.setImageResource(R.drawable.money);
+        } else {
+            mTvMoney.setText("分享");
+            mIvMoney.setImageResource(R.drawable.share);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

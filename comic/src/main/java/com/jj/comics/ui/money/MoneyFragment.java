@@ -60,9 +60,22 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
     RecyclerView mRecyclerView;
     @BindView(R2.id.cl_user_info)
     ConstraintLayout mClUserInfo;
+    @BindView(R2.id.tv_title_t1)
+    TextView tv_title_t1;
+    @BindView(R2.id.iv_apprentice_help)
+    ImageView iv_apprentice_help;
+    @BindView(R2.id.iv_btn_down)
+    ImageView iv_btn_down;
+    @BindView(R2.id.iv_bg_header)
+    ImageView iv_bg_header;
+    @BindView(R2.id.tv_title_t2)
+    TextView tv_title_t2;
+    @BindView(R2.id.tv_t1)
+    TextView tv_t1;
     private ShareRecommendAdapter mAdapter;
     private ShareDialog mDialog;
     private PayInfo mPayInfo;
+    private boolean isVisible = true;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -82,7 +95,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
 //        //实时打赏滚动
 //        mApprenticeAdapter = new RecentlyApprenticeAdapter(null);
 //        mViewFlipper.setAdapter(mApprenticeAdapter);
-
+        getP().getShow();
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new ShareRecommendAdapter(R.layout.comic_item_share_recommend);
@@ -159,7 +172,7 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
 
     private void updateInfo() {
         UserInfo userInfo = LoginHelper.getOnLineUser();
-        if (userInfo != null) {
+        if (userInfo != null && isVisible) {
             mClUserInfo.setVisibility(View.VISIBLE);
 
             RequestOptions options = new RequestOptions();
@@ -214,6 +227,44 @@ public class MoneyFragment extends BaseCommonFragment<MoneyPresenter> implements
         if (LoginHelper.getOnLineUser() != null) {
             mTvMoney.setText(payInfo.getTotal_rebate_amount() + "");
             mTvApprentice.setText(payInfo.getDisciple_num() + "");
+        }
+    }
+
+    @Override
+    public void setShow(boolean isShow) {
+        isVisible = isShow;
+        if (isShow) {
+            if (LoginHelper.getOnLineUser() != null) {
+                mClUserInfo.setVisibility(View.VISIBLE);
+            } else {
+                mClUserInfo.setVisibility(View.GONE);
+            }
+            tv_title_t1.setText("如何收徒");
+            mBtnInvite.setText("立即邀请赚钱");
+            iv_apprentice_help.setBackgroundResource(R.drawable.img_apprentice_help);
+            iv_bg_header.setBackgroundResource(R.drawable.bg_money_header);
+            iv_apprentice_help.setVisibility(View.VISIBLE);
+            iv_bg_header.setVisibility(View.VISIBLE);
+            tv_title_t1.setVisibility(View.VISIBLE);
+            mBtnInvite.setVisibility(View.VISIBLE);
+            tv_title_t2.setVisibility(View.VISIBLE);
+            tv_t1.setVisibility(View.VISIBLE);
+            iv_btn_down.setVisibility(View.VISIBLE);
+            mIvDetail.setVisibility(View.VISIBLE);
+        } else {
+            mClUserInfo.setVisibility(View.GONE);
+            tv_title_t1.setText("如何邀请");
+            mBtnInvite.setText("立即邀请");
+            iv_apprentice_help.setBackgroundResource(R.drawable.img_apprentice_help_share);
+            iv_bg_header.setBackgroundResource(R.drawable.bg_money_header_share);
+            iv_apprentice_help.setVisibility(View.VISIBLE);
+            iv_bg_header.setVisibility(View.VISIBLE);
+            tv_title_t1.setVisibility(View.VISIBLE);
+            mBtnInvite.setVisibility(View.VISIBLE);
+            tv_title_t2.setVisibility(View.GONE);
+            tv_t1.setVisibility(View.GONE);
+            iv_btn_down.setVisibility(View.GONE);
+            mIvDetail.setVisibility(View.GONE);
         }
     }
 

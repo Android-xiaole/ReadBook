@@ -66,7 +66,7 @@ public class NetStatusReceiver extends BroadcastReceiver {
 
             tv_title.setText("温馨提示");
             tv_msg.setText("请检查网络连接!");
-            btn_dialog_confirm.setText("去设置");
+            btn_dialog_confirm.setText("确定");
 
             btn_dialog_cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,17 +79,17 @@ public class NetStatusReceiver extends BroadcastReceiver {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-                    if (context.getPackageManager().resolveActivity(intent,0) != null){
-                        context.startActivity(intent);
-                    }else {
-                        try {
-                            intent = new Intent(Settings.ACTION_SETTINGS);
-                            context.startActivity(intent);
-                        }catch (ActivityNotFoundException e){
-                            ToastUtil.showToastShort("未找到目标，请手动设置");
-                        }
-                    }
+//                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+//                    if (context.getPackageManager().resolveActivity(intent,0) != null){
+//                        context.startActivity(intent);
+//                    }else {
+//                        try {
+//                            intent = new Intent(Settings.ACTION_SETTINGS);
+//                            context.startActivity(intent);
+//                        }catch (ActivityNotFoundException e){
+//                            ToastUtil.showToastShort("未找到目标，请手动设置");
+//                        }
+//                    }
                 }
             });
         } else {

@@ -9,13 +9,13 @@ import java.util.List;
 public interface MoneyContract {
     interface IMoneyView extends IView {
         void onGetUserPayInfo(PayInfo payInfo);
-
+        void setShow(boolean isShow);
         void onGetShareRecommend(List<ShareRecommendResponse.DataBean> list);
     }
 
     interface IMoneyPresenter {
         void getUserPayInfo();
-
+        void getShow();
         void getShareRecommend();
     }
 }

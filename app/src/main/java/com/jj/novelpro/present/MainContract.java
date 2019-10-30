@@ -19,6 +19,7 @@ public interface MainContract {
         void sendMessage(int what, Object info);
         void updateAlert(UpdateModelProxy.UpdateModel channelUpdate);
         BaseActivity getActivity();
+        void setShow(boolean isShow);
 //        void onGetTaskInfo(int count);
     }
 
@@ -27,6 +28,7 @@ public interface MainContract {
         void switchFragment(@IntRange(from = 0, to = 4) final int index, @IntRange(from = 0, to = 4) final int current, final CusNavigationCallback callback);
         void onActivityResult(List<Fragment> fragments,int requestCode, int resultCode, @Nullable Intent data);
         void checkUpdate();
+        void getShow();
 //        void getMessageSum();
     }
 }

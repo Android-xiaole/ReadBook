@@ -87,6 +87,7 @@ public class Constants {
     public static final String QCORD_IMG_URL = "https://open.weixin.qq.com/qr/code?username=zui_yanqing";
     public static final String MEDIA_TYPE_JSON = "application/json; charset=utf-8";
     public static final String PLATFORM = "android";
+    public static boolean IS_SHOW = false;
 
 
     public static long LAST_READING_BOOK = 0;

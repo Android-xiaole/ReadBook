@@ -20,6 +20,7 @@ import com.jj.base.utils.FileUtil;
 import com.jj.base.utils.PackageUtil;
 import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.SharedPref;
+import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.RequestCode;
 import com.jj.comics.common.interceptor.LoginInterceptor;
@@ -27,6 +28,7 @@ import com.jj.comics.common.net.download.DownInfo;
 import com.jj.comics.common.net.download.DownLoadManager;
 import com.jj.comics.common.net.download.DownloadProgressListener;
 import com.jj.comics.data.biz.pruduct.ProductRepository;
+import com.jj.comics.data.model.StatusResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
 import com.jj.comics.util.FRouterHelper;
 import com.jj.comics.util.LoginHelper;
@@ -176,6 +178,33 @@ public class MainPresenter extends BasePresenter<BaseRepository, MainContract.IM
 //                        }
 //                    }
 //                });
+    }
+
+    @Override
+    public void getShow() {
+        ProductRepository.getInstance().getStatus()
+                .observeOn(AndroidSchedulers.mainThread())
+                .as(bindLifecycle())
+                .subscribe(new ApiSubscriber2<StatusResponse>() {
+                    @Override
+                    protected void onFail(NetError error) {
+                        ToastUtil.showToastShort(error.getMessage());
+                        getV().setShow(true);
+                    }
+
+                    @Override
+                    public void onNext(StatusResponse statusResponse) {
+                        if (statusResponse.getCode() == 200) {
+                            if (statusResponse.getData().getStatus() == 1) {
+                                getV().setShow(true);
+                            } else {
+                                getV().setShow(false);
+                            }
+                        } else {
+                            getV().setShow(false);
+                        }
+                    }
+                });
     }
 
     public void goDown(final String updateAppUrl) {

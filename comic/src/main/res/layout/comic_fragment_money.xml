@@ -2,14 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:descendantFocusability = "blocksDescendants"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +20,7 @@
                 android:id="@+id/iv_bg_header"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 android:background="@drawable/bg_money_header"
                 app:layout_constraintDimensionRatio="13:10"
                 app:layout_constraintTop_toTopOf="parent"></ImageView>
@@ -59,6 +59,7 @@
                 android:layout_height="@dimen/dp_180"
                 android:layout_marginLeft="@dimen/dp_9"
                 android:layout_marginRight="@dimen/dp_9"
+                android:visibility = "gone"
                 android:background="@drawable/bg_money_user_info"
                 app:layout_constraintTop_toBottomOf="@id/space_header_user">
 
@@ -163,6 +164,7 @@
                 android:text="如何收徒"
                 android:textColor="@color/comic_313131"
                 android:textSize="@dimen/dp_18"
+                android:visibility="gone"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_user_info"
@@ -173,6 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/dp_6"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/dp_9"
                 android:layout_marginRight="@dimen/dp_6"
                 android:background="@drawable/img_apprentice_help"
@@ -189,6 +192,7 @@
                 android:layout_marginBottom="@dimen/dp_25"
                 android:background="@drawable/bg_money_btn_share"
                 android:text="立即邀请赚钱"
+                android:visibility="gone"
                 android:textColor="@color/comic_ffffff"
                 android:textSize="@dimen/dp_20"
                 android:textStyle="bold"

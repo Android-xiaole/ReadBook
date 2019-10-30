@@ -44,6 +44,7 @@ import com.jj.comics.data.model.SearchHotKeywordsResponse;
 import com.jj.comics.data.model.ShareParamModel;
 import com.jj.comics.data.model.ShareRecommendResponse;
 import com.jj.comics.data.model.SortListResponse;
+import com.jj.comics.data.model.StatusResponse;
 import com.jj.comics.data.model.TLPayResponse;
 import com.jj.comics.data.model.TLPayStatusResponse;
 import com.jj.comics.data.model.UpdateModelProxy;
@@ -150,6 +151,7 @@ public interface ComicService {
     String API_POP_SHARE = "api/pop_share";
     String API_NOTIDICATION_LIST = "api/message_notice";
     String API_NOTIDICATION_DETAIL = "api/notice_details";
+    String API_GET_STATUS = "api/getstatus";
 
     /**
      * 设置是否自动购买(暂时未被使用，客户端只做本地保存)
@@ -795,6 +797,7 @@ public interface ComicService {
      * 获取app配置信息,IP形式获取
      * 测试ip地址:118.126.73.104
      * 生产ip地址:129.211.152.153
+     *
      * @return
      */
     @GET("http://129.211.152.153:80/api/get_app_config" + Constants.IDENTIFICATION_IGNORE)
@@ -978,26 +981,32 @@ public interface ComicService {
      */
     @POST("api/rest")
     Observable<RestResponse> getRest();
-
     /******************************** 下面为用户在线时长上报相关接口 ************************************/
 
     /**
      * 获取游客token
      */
     @FormUrlEncoded
-    @POST(Constants.REPORT_URL+"api/oauth/token"+Constants.IDENTIFICATION_IGNORE)
-    Observable<AccessTokenResponse> getReportToken(@FieldMap Map<String,String> map);
+    @POST(Constants.REPORT_URL + "api/oauth/token" + Constants.IDENTIFICATION_IGNORE)
+    Observable<AccessTokenResponse> getReportToken(@FieldMap Map<String, String> map);
 
     /**
      * 上报注册用户
      */
-    @POST(Constants.REPORT_URL+"api/account/app/user_duration_report"+Constants.IDENTIFICATION_IGNORE)
+    @POST(Constants.REPORT_URL + "api/account/app/user_duration_report" + Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> userReport(@Body RequestBody requestBody);
 
     /**
      * 上报游客
      */
-    @POST(Constants.REPORT_URL+"api/account/app/visitor_duration_report"+Constants.IDENTIFICATION_IGNORE)
+    @POST(Constants.REPORT_URL + "api/account/app/visitor_duration_report" + Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> visitorReport(@Body RequestBody requestBody);
 
+    /**
+     * 获取徒弟列表
+     *
+     * @return
+     */
+    @GET(API_GET_STATUS)
+    Observable<StatusResponse> getStatus(@Query("appVersion") String appVersion);
 }
