@@ -12,27 +12,38 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jj.comics.R;
 import com.jj.comics.data.model.BookCatalogModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<BookCatalogModel> catalogModels;
+public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+    private OnItemClickListener mOnItemClicklistener;
+    private OnLodemoreFooterListener mOnLoadmoreFooter;
+    private OnLodemoreHeaderListener mOnLoadmoreHeader;
+
+    private List<BookCatalogModel> mCatalogModels = new ArrayList<>();
 
     //view 类型
     private final int TYPE_HEADER = 1;
     private final int TYPE_CONTENT = 2;
     private final int TYPE_FOOTER = 3;
 
+
     //加载状态
+    public static int LOAD_HEADER = 1;
+    public static int LOAD_FOOTER = 2;
     private int mLoadingStatusHeader = 2;
     private int mLoadingStatusFooter = 2;
-    private final int LOADING = 1;
-    private final int LOADING_COMPLETE = 2;
-    private final int LOADING_END = 3;
+    public static final int LOADING = 1;
+    public static final int LOADING_COMPLETE = 2;
+    public static final int LOADING_END = 3;
     private long currentContentId = -1;
 
 
     public CataloglistAdapter(List<BookCatalogModel> catalogModels) {
-        this.catalogModels = catalogModels;
+        if (mCatalogModels != null && catalogModels != null) {
+            mCatalogModels.addAll(catalogModels);
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
@@ -49,6 +60,7 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }else {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.comic_readcomic_cataloglist_item, parent,false);
+            view.setOnClickListener(this);
             return new ContentViewHolder(view);
         }
     }
@@ -63,7 +75,9 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     headerViewHolder.tv_header_more.setVisibility(View.VISIBLE);
                     break;
                 case LOADING_COMPLETE:
-                    headerViewHolder.tv_header_more.setVisibility(View.GONE);
+                    headerViewHolder.tv_header_more.setText("正在加载中...");
+                    mOnLoadmoreHeader.onLodeMoreHeader();
+//                    headerViewHolder.tv_header_more.setVisibility(View.GONE);
                     break;
                 case LOADING_END:
                     headerViewHolder.tv_header_more.setText("没有更多数据");
@@ -79,7 +93,10 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     footerViewHolder.tv_footer_more.setVisibility(View.VISIBLE);
                     break;
                 case LOADING_COMPLETE:
-                    footerViewHolder.tv_footer_more.setVisibility(View.GONE);
+                    footerViewHolder.tv_footer_more.setText("正在加载中...");
+                    footerViewHolder.tv_footer_more.setVisibility(View.VISIBLE);
+                    mOnLoadmoreFooter.onLodeMoreFooter();
+//                    footerViewHolder.tv_footer_more.setVisibility(View.GONE);
                     break;
                 case LOADING_END:
                     footerViewHolder.tv_footer_more.setText("没有更多数据");
@@ -89,8 +106,10 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         }else if (holder instanceof ContentViewHolder) {
             ContentViewHolder contentViewHolder = (ContentViewHolder) holder;
-            if (catalogModels != null) {
-                BookCatalogModel item = catalogModels.get(position);
+            //将当前position设置为tag，后面可以从holder.itemView中获取当前view的posititon
+            holder.itemView.setTag(position);
+            if (mCatalogModels != null) {
+                BookCatalogModel item = mCatalogModels.get(position-1);
                 contentViewHolder.tv_title.setText(item.getChapterorder() + "  " + item.getChaptername());
 
                 if (currentContentId == item.getId()) {
@@ -114,7 +133,7 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return catalogModels == null ? 0 : catalogModels.size() + 2;
+        return mCatalogModels == null ? 0 : mCatalogModels.size() + 2;
     }
 
     @Override
@@ -135,6 +154,27 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setmLoadingStatusFooter(int mLoadingStatusFooter) {
         this.mLoadingStatusFooter = mLoadingStatusFooter;
+    }
+
+    public OnItemClickListener getmOnItemClicklisenter() {
+        return mOnItemClicklistener;
+    }
+
+    public void setmOnItemClicklisenter(OnItemClickListener mOnItemClicklisenter) {
+        this.mOnItemClicklistener = mOnItemClicklisenter;
+    }
+
+    @Override
+    public void onClick(View view) {
+        mOnItemClicklistener.onItemClick(this,view,(int)view.getTag());
+    }
+
+    public void setOnLoadmoreHeader(OnLodemoreHeaderListener onLoadmoreHeader) {
+        this.mOnLoadmoreHeader = onLoadmoreHeader;
+    }
+
+    public void setOnLoadmoreFooter(OnLodemoreFooterListener onLoadmoreFooter) {
+        this.mOnLoadmoreFooter = onLoadmoreFooter;
     }
 
     private class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -162,5 +202,51 @@ public class CataloglistAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_free = itemView.findViewById(R.id.tv_free);
             tv_notFree = itemView.findViewById(R.id.tv_notFree);
         }
+    }
+
+    public List<BookCatalogModel> getData() {
+        return mCatalogModels;
+    }
+
+    public void addData(List<BookCatalogModel> catalogModels) {
+        if (mCatalogModels == null) {
+            mCatalogModels = new ArrayList<>();
+        }
+
+        mCatalogModels.addAll(catalogModels);
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<BookCatalogModel> catalogModels) {
+        this.mCatalogModels.addAll(catalogModels);
+        notifyDataSetChanged();
+    }
+
+    public void addToHeader(List<BookCatalogModel> catalogModels) {
+        this.mCatalogModels.addAll(1,catalogModels);
+        notifyDataSetChanged();
+    }
+
+
+
+    public int getmLoadingStatusHeader() {
+        return mLoadingStatusHeader;
+    }
+
+    public int getmLoadingStatusFooter() {
+        return mLoadingStatusFooter;
+    }
+
+
+    public interface OnItemClickListener {
+        void onItemClick(CataloglistAdapter adapter,View view, int position);
+    }
+
+    public interface OnLodemoreFooterListener {
+        void onLodeMoreFooter();
+    }
+
+    public interface OnLodemoreHeaderListener {
+        void onLodeMoreHeader();
     }
  }
