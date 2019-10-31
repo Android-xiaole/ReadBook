@@ -214,7 +214,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
         }
-        ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),pageNum,Constants.RequestBodyKey.SORT_ASC)
+        ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),pageNum,Constants.RequestBodyKey.SORT_ASC,bookModel.getUpdate_chapter_time())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {

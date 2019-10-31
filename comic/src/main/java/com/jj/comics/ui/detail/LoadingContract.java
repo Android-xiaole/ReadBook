@@ -9,6 +9,7 @@ public interface LoadingContract {
 
     interface View extends IView{
         void loadSuccess(BookCatalogModel catalogModel);
+        void onLoadChapterContentNoPayError(BookCatalogModel catalogModel);
         void loadFail(NetError error);
     }
 

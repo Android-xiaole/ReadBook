@@ -37,7 +37,7 @@ public interface ContentDataSource {
     Observable<BookCatalogListResponse> getCatalogList(long id);
 
     //获取分页章节目录
-    Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort);
+    Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort,int updateTime);
 
     //获取缓存的目录列表
     Observable<BookCatalogListResponse> getCacheCatalogList(long id,int updateTime);

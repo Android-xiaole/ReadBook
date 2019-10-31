@@ -108,12 +108,12 @@ public class ContentRepository implements ContentDataSource {
     }
 
     @Override
-    public Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort) {
+    public Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort,int updateTime) {
         HashMap<String,Object> parames = new HashMap();
         parames.put(Constants.RequestBodyKey.ID,id);
         parames.put(Constants.RequestBodyKey.PAGE_NUM,pageNum);
         parames.put(Constants.RequestBodyKey.SORT,sort);
-        return ComicApi.getApi().getNewCatalogList(parames)
+        return ComicApi.getProviders().getCatalogList(ComicApi.getApi().getNewCatalogList(parames),new DynamicKey(id+""+pageNum+sort+updateTime))
                 .subscribeOn(Schedulers.io())
                 .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
                 .retryWhen(new RetryFunction2());
