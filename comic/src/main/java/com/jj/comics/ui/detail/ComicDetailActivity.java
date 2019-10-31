@@ -173,8 +173,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (model != null) {
-                    long chapterId = catalogAdapter.getData().get(position).getId();
-                    catalogAdapter.notifyItem(chapterId);
+                    BookCatalogModel bookCatalogModel = catalogAdapter.getData().get(position);
+                    long chapterId = bookCatalogModel.getId();
+                    if (bookCatalogModel.getIsvip() != 1) {
+                        catalogAdapter.notifyItem(chapterId);
+                    }
                     getP().toRead(model, chapterId);
                     mCatalogMenu.closeDrawers();
                 }
@@ -238,6 +241,17 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                         iv_moreInfo.setVisibility(View.GONE);
                     }
                 }
+            }
+        });
+
+        mCatalogMenu.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                if (model != null) {
+                    catalogAdapter.scrollToVisiable(model.getChapterid());
+                }
+
             }
         });
 
