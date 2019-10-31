@@ -882,7 +882,12 @@ public abstract class PageLoader {
                     NumberFormat numberFormat = NumberFormat.getInstance();
                     // 设置精确到小数点后2位
                     numberFormat.setMaximumFractionDigits(2);
-                    String percent = numberFormat.format((float)(mCurChapterPos+1)/(float) mChapterList.size()*100)+"%";
+                    String percent;
+                    if (totalNum>0){
+                        percent = numberFormat.format((float)mChapterList.get(mCurChapterPos).chapterorder/(float) totalNum*100)+"%";
+                    }else{
+                        percent = numberFormat.format((float)(mCurChapterPos+1)/(float) mChapterList.size()*100)+"%";
+                    }
                     canvas.drawText(percent, (float) mDisplayWidth/2, y, mTipPaint);
 
                     String curPercent = (mCurPage.position + 1) + "/" + mCurPageList.size();
