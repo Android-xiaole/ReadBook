@@ -131,6 +131,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private int totalNum;//章节总条数
     private String sort = Constants.RequestBodyKey.SORT_ASC;//默认正序
 
+    private long lastClickChapterId = -1;//上一次在目录列表中点击的章节的id
+
     /**
      * 进入详情页
      *
@@ -175,9 +177,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 if (model != null) {
                     BookCatalogModel bookCatalogModel = catalogAdapter.getData().get(position);
                     long chapterId = bookCatalogModel.getId();
-                    if (bookCatalogModel.getIsvip() != 1) {
-                        catalogAdapter.notifyItem(chapterId);
-                    }
+                    lastClickChapterId = chapterId;
+                    catalogAdapter.notifyItem(chapterId);
                     getP().toRead(model, chapterId);
                     mCatalogMenu.closeDrawers();
                 }
@@ -248,10 +249,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                if (model != null) {
-                    catalogAdapter.scrollToVisiable(model.getChapterid());
-                }
-
+                catalogAdapter.scrollToVisiable(lastClickChapterId);
             }
         });
 
@@ -439,6 +437,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         }
         //本地记录处理完之后再给全局变量赋值，顺便计算当前阅读的章节是第几页
         this.model = model;
+        lastClickChapterId = model.getChapterid();
         if (model.getChapterid() != 0) {
             tv_read.setText(String.format(getString(R.string.comic_continue_read), model.getOrder()));
             //有阅读记录的情况
@@ -584,6 +583,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     public void updateReadHistory(UpdateReadHistoryEvent event) {
         if (tv_read != null) {
             model.setChapterid(event.getChapterid());
+            lastClickChapterId = event.getChapterid();
             model.setOrder(event.getChapterorder());
             tv_read.setText(String.format(getString(R.string.comic_continue_read), event.getChapterorder()));
             catalogAdapter.notifyItem(model.getChapterid());
