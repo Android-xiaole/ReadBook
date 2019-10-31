@@ -59,14 +59,14 @@ public class ReadComicHelper {
                         if (response.getCode() == 1000) {//可以直接阅读
                             BookCatalogModel catalogModelNow = response.getData().getNow();
                             if (response.getData().getNow() != null) {
-                                if (response.getData().getLast() != null) {//有上一话
-                                    catalogModelNow.setHasLast(true);
-                                    catalogModelNow.setLastChapterid(response.getData().getLast().getId());
-                                }
-                                if (response.getData().getNext() != null) {//有下一话
-                                    catalogModelNow.setHasNext(true);
-                                    catalogModelNow.setNextChapterid(response.getData().getNext().getId());
-                                }
+//                                if (response.getData().getLast() != null) {//有上一话
+//                                    catalogModelNow.setHasLast(true);
+//                                    catalogModelNow.setLastChapterid(response.getData().getLast().getId());
+//                                }
+//                                if (response.getData().getNext() != null) {//有下一话
+//                                    catalogModelNow.setHasNext(true);
+//                                    catalogModelNow.setNextChapterid(response.getData().getNext().getId());
+//                                }
                                 return Observable.just(catalogModelNow);
                             } else {
                                 return Observable.error(NetError.nullDataError());
@@ -101,12 +101,12 @@ public class ReadComicHelper {
                                                                     if (response.getCode() == 1000) {//可以直接阅读
                                                                         BookCatalogModel catalogModelNow = response.getData().getNow();
                                                                         if (catalogModelNow != null) {
-                                                                            if (response.getData().getLast() != null) {//有上一话
-                                                                                catalogModelNow.setHasLast(true);
-                                                                            }
-                                                                            if (response.getData().getNext() != null) {//有下一话
-                                                                                catalogModelNow.setHasNext(true);
-                                                                            }
+//                                                                            if (response.getData().getLast() != null) {//有上一话
+//                                                                                catalogModelNow.setHasLast(true);
+//                                                                            }
+//                                                                            if (response.getData().getNext() != null) {//有下一话
+//                                                                                catalogModelNow.setHasNext(true);
+//                                                                            }
                                                                             return Observable.just(catalogModelNow);
                                                                         } else {
                                                                             return Observable.error(new NetError("没有数据，换个章节试试",NetError.OtherError));

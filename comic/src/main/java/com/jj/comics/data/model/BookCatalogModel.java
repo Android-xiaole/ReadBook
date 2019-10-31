@@ -40,10 +40,10 @@ public class BookCatalogModel implements Serializable {
     private float vip_discount;//折扣率 0.7
 
     //下面几个字段是获取章节内容接口通过返回值手动设置的
-    private boolean hasLast;//是否有上一话
-    private boolean hasNext;//是否有下一话
-    private long lastChapterid;//上一话章节id
-    private long nextChapterid;//下一话章节id
+//    private boolean hasLast;//是否有上一话
+//    private boolean hasNext;//是否有下一话
+//    private long lastChapterid;//上一话章节id
+//    private long nextChapterid;//下一话章节id
     private boolean isPaid = true;
 
     public String getContent() {
@@ -52,22 +52,6 @@ public class BookCatalogModel implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public long getLastChapterid() {
-        return lastChapterid;
-    }
-
-    public void setLastChapterid(long lastChapterid) {
-        this.lastChapterid = lastChapterid;
-    }
-
-    public long getNextChapterid() {
-        return nextChapterid;
-    }
-
-    public void setNextChapterid(long nextChapterid) {
-        this.nextChapterid = nextChapterid;
     }
 
     public float getVip_discount() {
@@ -156,22 +140,6 @@ public class BookCatalogModel implements Serializable {
 
     public void setIs_buy(boolean is_buy) {
         this.is_buy = is_buy;
-    }
-
-    public boolean isHasLast() {
-        return hasLast;
-    }
-
-    public void setHasLast(boolean hasLast) {
-        this.hasLast = hasLast;
-    }
-
-    public boolean isHasNext() {
-        return hasNext;
-    }
-
-    public void setHasNext(boolean hasNext) {
-        this.hasNext = hasNext;
     }
 
     public boolean isPaid() {

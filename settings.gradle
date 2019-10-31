@@ -1,1 +1,1 @@
-include ':app', ':sdk', ':base', ':comic', ':login', ':pay', ':subsampling', ':floatingview'
+include ':app', ':sdk', ':base', ':comic', ':subsampling', ':floatingview'

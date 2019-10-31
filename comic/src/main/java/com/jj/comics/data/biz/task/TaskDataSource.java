@@ -2,8 +2,14 @@ package com.jj.comics.data.biz.task;
 
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.visittime.AccessTokenResponse;
+import com.jj.comics.data.visittime.TimeReportData;
+
+import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
 
 public interface TaskDataSource {
 
@@ -24,5 +30,12 @@ public interface TaskDataSource {
     Observable<CommonStatusResponse> presentGold();
 
     Observable<CommonStatusResponse> reportShare(long bookId);
+
+    Observable<AccessTokenResponse> getReportToken();
+
+    Observable<ResponseModel> userReport(List<TimeReportData> dataList);
+
+    Observable<ResponseModel> visitorReport(List<TimeReportData> dataList);
+
 
 }

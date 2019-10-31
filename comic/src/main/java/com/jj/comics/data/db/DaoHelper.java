@@ -1,17 +1,30 @@
 package com.jj.comics.data.db;
 
+import com.jj.base.BaseApplication;
+import com.jj.base.log.LogUtil;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.SearchModel;
 import com.jj.comics.data.model.UserCommentFavorData;
 import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.data.visittime.ReadTimeData;
+import com.jj.comics.data.visittime.TimeReportData;
 import com.jj.comics.greendao.gen.BookModelDao;
+import com.jj.comics.greendao.gen.OnlineTimeDataDao;
+import com.jj.comics.greendao.gen.ReadTimeDataDao;
 import com.jj.comics.greendao.gen.SearchModelDao;
 import com.jj.comics.greendao.gen.UserCommentFavorDataDao;
 import com.jj.comics.greendao.gen.UserInfoDao;
+import com.jj.comics.util.DateHelper;
+import com.jj.comics.util.LoginHelper;
+import com.jj.comics.util.SharedPreManger;
+import com.umeng.commonsdk.UMConfigure;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by 皓然 on 2017/8/20.
@@ -278,5 +291,245 @@ public class DaoHelper<T> {
         }
     }
 
+
+    /**
+     * 插入或更新用户在线时长数据
+     */
+    public void insertORupdateOnlineTimeData(int duration,String lastLoginTime,String lastLogoutTime){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
+        String uid = getUid();
+        OnlineTimeData onlineTimeData = getOnlineTimeData(currentDate, uid);
+        if (onlineTimeData ==null){
+            //新增数据
+            onlineTimeData = new OnlineTimeData();
+            onlineTimeData.setDate(currentDate);
+            onlineTimeData.setUid(uid + "");
+            onlineTimeData.setDuration(duration);
+            if (lastLoginTime == null){
+                //这里如果没有值需要设置一个，因为可能是用户登录或者切换账号之后产生的数据，此时也算一个登录时间
+                onlineTimeData.setLastLoginTime(DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
+            }else{
+                onlineTimeData.setLastLoginTime(lastLoginTime);
+            }
+            onlineTimeData.setLastLogoutTime(lastLogoutTime);
+            try {
+                Long.parseLong(uid);
+                onlineTimeData.setIs_visitor(false);
+            }catch (Exception e){
+                //解析异常代表是游客登录
+                onlineTimeData.setIs_visitor(true);
+            }
+            onlineTimeDataDao.insert(onlineTimeData);
+            LogUtil.e("LogTime 插入在线数据:"+getOnlineTimeData(currentDate,uid).toString());
+        }else{
+            //更新数据
+            if (duration >0){
+                //累计在线时长
+                onlineTimeData.setDuration(onlineTimeData.getDuration()+duration);
+            }
+            if (lastLoginTime != null){
+                //最近登录时间
+                onlineTimeData.setLastLoginTime(lastLoginTime);
+            }
+            if (lastLogoutTime !=null){
+                //最近退出时间
+                onlineTimeData.setLastLogoutTime(lastLogoutTime);
+            }
+            onlineTimeDataDao.update(onlineTimeData);
+            LogUtil.e("LogTime 更新在线数据:"+getOnlineTimeData(currentDate,uid).toString());
+        }
+    }
+
+    /**
+     * 获取当前用户id，可能是游客，也可能是登录用户
+     * @return
+     */
+    private String getUid() {
+        String uid;
+        UserInfo onLineUser = LoginHelper.getOnLineUser();
+        if (onLineUser != null && onLineUser.getUid() > 0) {
+            //登录用户统计
+            uid = onLineUser.getUid() + "";
+        } else {
+            //游客登录统计
+            //优先使用UM统计的ID
+            String umidString = UMConfigure.getUMIDString(BaseApplication.getApplication());
+            if (umidString != null && umidString.length() > 0) {
+                //友盟id可用
+                uid = umidString;
+            } else {
+                //没有UM统计id就从本地共享参数里面读取
+                String visitorId = SharedPreManger.getInstance().getVisitorId();
+                if (visitorId != null) {
+                    //本地有游客的id，可直接使用
+                    uid = visitorId;
+                } else {
+                    //本地没有，就使用创建一个UUID
+                    String uuid = UUID.randomUUID().toString();
+                    //这么处理是为了保持长度和UM的id一致
+                    uid = "j-" + uuid.replace("-", "");
+                }
+            }
+            //此时保存游客id到本地
+            SharedPreManger.getInstance().saveVisitorId(uid);
+        }
+        return uid;
+    }
+
+    /**
+     * 获取该天的当前用户的在线时长数据
+     */
+    public OnlineTimeData getOnlineTimeData(String date,String uid){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        List<OnlineTimeData> list = onlineTimeDataDao.queryBuilder().where(OnlineTimeDataDao.Properties.Date.eq(date),OnlineTimeDataDao.Properties.Uid.eq(uid)).list();
+        if (list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 根据主键查询OnlineTimeData
+     * @param id
+     * @return
+     */
+    public OnlineTimeData getOnlineTimeDataBYid(long id){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        List<OnlineTimeData> list = onlineTimeDataDao.queryBuilder().where(OnlineTimeDataDao.Properties.Id.eq(id)).list();
+        if (list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 插入或更新用户阅读时长数据
+     */
+    public void insertORupdateReadTimeData(int duration,long bookId,long chapterId){
+        ReadTimeDataDao readTimeDataDao = manager.getDaoSession().getReadTimeDataDao();
+        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
+        String uid = getUid();
+        ReadTimeData readTimeData = getReadTimeData(currentDate, uid, bookId);
+        if (readTimeData == null){
+            //新增数据
+            readTimeData = new ReadTimeData();
+            readTimeData.setDate(currentDate);
+            readTimeData.setUid(uid + "");
+            readTimeData.setDuration(duration);
+            readTimeData.setBoodId(bookId);
+            readTimeData.setChapterId(chapterId);
+            try {
+                Long.parseLong(uid);
+                readTimeData.setIs_visitor(false);
+            }catch (Exception e){
+                //解析异常代表是游客登录
+                readTimeData.setIs_visitor(true);
+            }
+            readTimeDataDao.insert(readTimeData);
+            LogUtil.e("LogTime 插入阅读数据:"+getReadTimeData(currentDate,uid,bookId).toString());
+        }else{
+            //更新数据
+            if (duration > 0){
+                readTimeData.setDuration(readTimeData.getDuration()+duration);
+            }
+            if (chapterId > 0){
+                readTimeData.setChapterId(chapterId);
+            }
+            readTimeDataDao.update(readTimeData);
+            LogUtil.e("LogTime 更新阅读数据:"+getReadTimeData(currentDate,uid,bookId).toString());
+        }
+
+    }
+
+    /**
+     * 获取该天的当前用户阅读时长数据
+     */
+    public ReadTimeData getReadTimeData(String date,String uid,long bookId){
+        ReadTimeDataDao readTimeDataDao = manager.getDaoSession().getReadTimeDataDao();
+        List<ReadTimeData> list = readTimeDataDao.queryBuilder().where(ReadTimeDataDao.Properties.Date.eq(date), ReadTimeDataDao.Properties.Uid.eq(uid), ReadTimeDataDao.Properties.BoodId.eq(bookId)).list();
+        if (list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 获取主键查询ReadTimeData
+     */
+    public ReadTimeData getReadTimeDataBYid(long id){
+        ReadTimeDataDao readTimeDataDao = manager.getDaoSession().getReadTimeDataDao();
+        List<ReadTimeData> list = readTimeDataDao.queryBuilder().where(ReadTimeDataDao.Properties.Id.eq(id)).list();
+        if (list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    public List<OnlineTimeData> getOnlineTimeDataAll(){
+        OnlineTimeDataDao onlineTimeDataDao = manager.getDaoSession().getOnlineTimeDataDao();
+        return onlineTimeDataDao.loadAll();
+    }
+
+    public List<ReadTimeData> getReadTimeDataAll(){
+        ReadTimeDataDao readTimeDataDao = manager.getDaoSession().getReadTimeDataDao();
+        return readTimeDataDao.loadAll();
+    }
+
+    /**
+     * 删除不是当日的本地时长记录
+     * @param data
+     * @param isOnlineTime
+     */
+    public void deleteTimeData(TimeReportData data,boolean isOnlineTime){
+        String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMD);
+        if (data == null||data.getDate() == null||data.getId()<=0){
+            //无效数据
+            return;
+        }
+        //如果不是当天数据那就删除
+        if (!data.getDate().equals(currentDate)){
+            if (isOnlineTime){
+                //用户在线时长数据表
+                manager.getDaoSession().getOnlineTimeDataDao().deleteByKey(data.getId());
+            }else{
+                //用户阅读时长数据表
+                manager.getDaoSession().getReadTimeDataDao().deleteByKey(data.getId());
+            }
+        }else{//是当天数据并且是当前用户就不删除，清空duration字段，因为该条数据还可以重复利用,否则还是删除
+            //获取当前用户id
+            String uid = getUid();
+            //如果是游客登录，那就用token字段去匹配；如果是登录用户，那就用uid字段去匹配是否为当前用户
+            if (data.isIs_visitor()&&uid.equals(data.getToken())||!data.isIs_visitor()&&uid.equals(data.getUid()+"")){
+                //如果是当前用户，清空duration字段并更新
+                if (isOnlineTime){
+                    //用户在线时长数据表
+                    OnlineTimeData onlineTimeData = getOnlineTimeDataBYid(data.getId());
+                    if (onlineTimeData!=null){
+                        //清空用户在线时长
+                        onlineTimeData.setDuration(0);
+                        manager.getDaoSession().getOnlineTimeDataDao().update(onlineTimeData);
+                    }
+                }else{
+                    //用户阅读时长数据表
+                    ReadTimeData readTimeData = getReadTimeDataBYid(data.getId());
+                    if (readTimeData!=null){
+                        //清空用户阅读时长
+                        readTimeData.setDuration(0);
+                        manager.getDaoSession().getReadTimeDataDao().update(readTimeData);
+                    }
+                }
+            }else{
+                //是当天数据，但不是当前用户也直接删除数据
+                if (isOnlineTime){
+                    //用户在线时长数据表
+                    manager.getDaoSession().getOnlineTimeDataDao().deleteByKey(data.getId());
+                }else{
+                    //用户阅读时长数据表
+                    manager.getDaoSession().getReadTimeDataDao().deleteByKey(data.getId());
+                }
+            }
+        }
+    }
 }
 

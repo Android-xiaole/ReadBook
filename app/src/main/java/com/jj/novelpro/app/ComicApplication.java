@@ -1,9 +1,13 @@
 package com.jj.novelpro.app;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 
 import androidx.multidex.MultiDex;
@@ -17,21 +21,38 @@ import com.jj.base.BaseApplication;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.base.imageloader.ImageProvider;
 import com.jj.base.log.LogUtil;
+import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.ComicApiImpl;
+import com.jj.base.net.NetError;
 import com.jj.base.net.NetProvider;
 import com.jj.base.net.RequestHandler;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.HttpUrlInterceptor;
 import com.jj.comics.common.net.gsonconvert.CommonGsonConverterFactory;
+import com.jj.comics.data.biz.task.TaskRepository;
+import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.data.model.UserInfo;
+import com.jj.comics.data.visittime.AccessTokenResponse;
+import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.data.visittime.ReadTimeData;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusHelper;
+import com.jj.comics.util.reporter.TaskReporter;
+import com.jj.novelpro.activity.MainActivity;
+import com.jj.novelpro.activity.SplashActivity;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;
 import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.functions.Consumer;
@@ -51,11 +72,17 @@ public class ComicApplication extends BaseApplication {
     // 友盟推送图标
     @Override
     public void init() {
+        if (!isMainProcess()) {
+            //如果不是主进程，就只做初始化极光推送的操作，因为多余的进程就是JPush的，不确定不初始化会不会出问题
+            //初始化极光推送
+            JPushInterface.init(this);
+            // 设置开启日志
+            JPushInterface.setDebugMode(Constants.DEBUG);
+            return;
+        }
         initBugly();
         //openinstall
-        if (isMainProcess()) {
-            OpenInstall.init(this);
-        }
+        OpenInstall.init(this);
         Beta.autoCheckUpgrade = false;
         if (Constants.DEBUG) {
             ARouter.openLog();     // Print log
@@ -104,10 +131,102 @@ public class ComicApplication extends BaseApplication {
 
 //        DoraemonKit.install(getApplication());
 
-        //听云SDK初始化，暂时用不到了
-//        NBSAppAgent.setLicenseKey("63bff81cf51840e194014f59bf50435a").withLocationServiceEnabled(true).start(this.getApplicationContext());
 
+        daoHelper = new DaoHelper();
+        TaskRepository.getInstance().getReportToken().subscribe(new ApiSubscriber2<AccessTokenResponse>() {
+            @Override
+            protected void onFail(NetError error) {
+                LogUtil.e("LogTime 获取游客token失败");
+            }
+
+            @Override
+            public void onNext(AccessTokenResponse accessTokenResponse) {
+                LogUtil.e("LogTime 获取游客token成功");
+                if (accessTokenResponse != null && accessTokenResponse.getAccess_token() != null) {
+                    LogUtil.e("LogTime accessToken:" + accessTokenResponse.getAccess_token());
+                    SharedPreManger.getInstance().saveVisitorToken(accessTokenResponse.getAccess_token());
+                }
+            }
+        });
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                LogUtil.e("lifeCycle", "onActivityCreated：" + activity.getClass().getName());
+                if (activity.getClass().getName().equals(SplashActivity.class.getName())) {
+                    //默认这是最近一次登录
+                    String lastLoginTime = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+                    daoHelper.insertORupdateOnlineTimeData(0, lastLoginTime, null);
+                }
+            }
+            @Override
+            public void onActivityStarted(Activity activity) {
+                LogUtil.e("lifeCycle", "onActivityStarted：" + activity.getClass().getName());
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                LogUtil.e("lifeCycle", "onActivityResumed：" + activity.getClass().getName());
+                int resumeTime = (int) (System.currentTimeMillis() / 1000);
+                String className = activity.getClass().getName();
+                resumeTimeMap.put(className, resumeTime);
+                if (pauseTimeMap.containsKey(className)) {
+                    int pauseTime = pauseTimeMap.get(className);
+                    //如果页面离开大于30min，那就计为一次最近登录时间,上次onPaused时间计为最近一次退出时间
+                    if (resumeTime - pauseTime > 30 * 60) {
+                        daoHelper.insertORupdateOnlineTimeData(0, DateHelper.formatSecLong((long) resumeTime * 1000), DateHelper.formatSecLong((long) pauseTime * 1000));
+                    }
+                }
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+                LogUtil.e("lifeCycle", "onActivityPaused：" + activity.getClass().getName());
+                int pauseTime = (int) (System.currentTimeMillis() / 1000);
+                pauseTimeMap.put(activity.getClass().getName(), pauseTime);
+                int resumeTime = resumeTimeMap.get(activity.getClass().getName());
+                int duration = pauseTime - resumeTime;
+                if (duration > 0) {
+                    //时间差为该页面在线时长
+                    daoHelper.insertORupdateOnlineTimeData(duration, null, null);
+                }
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                LogUtil.e("lifeCycle", "onActivityDestroyed：" + activity.getClass().getName());
+                //如果是从首页退出，那就计为一次最近退出时间
+                if (activity.getClass().getName().equals(MainActivity.class.getName())) {
+                    daoHelper.insertORupdateOnlineTimeData(0, null, DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS));
+                }
+            }
+
+        });
+
+        //十秒后进行一次数据上报，而后没10min执行一次数据上报
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TaskReporter.reportTimeData(daoHelper);
+                handler.postDelayed(this, 5 * 60 * 1000);//设置10min上传一次本地记录
+            }
+        }, 10000);
     }
+
+    private DaoHelper daoHelper;
+    private Handler handler = new Handler();
+    private Map<String, Integer> resumeTimeMap = new WeakHashMap<>();//存储页面显示时候的时间戳
+    private Map<String, Integer> pauseTimeMap = new WeakHashMap<>();//存储页面离开时候的时间戳
 
     private void initHttp() {
         final Gson gson = new GsonBuilder()
@@ -150,6 +269,9 @@ public class ComicApplication extends BaseApplication {
                         if (LoginHelper.getOnLineUser() != null) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
                         }
+                        if (Constants.REPORT_URL.contains(request.url().host())) {
+                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getVisitorToken());
+                        }
                         return newRequest.build();
                     }
                 };
@@ -173,7 +295,6 @@ public class ComicApplication extends BaseApplication {
     }
 
 
-
     private void initUmeng() {
         //场景类型设置
         /**
@@ -187,7 +308,7 @@ public class ComicApplication extends BaseApplication {
         UMConfigure.init(this,
                 Constants.UMENG_APPKEY,
                 Constants.CHANNEL_ID,
-                UMConfigure.DEVICE_TYPE_PHONE,null);
+                UMConfigure.DEVICE_TYPE_PHONE, null);
         UMConfigure.setLogEnabled(Constants.DEBUG);
         UMConfigure.setEncryptEnabled(false);
         // 选用LEGACY_AUTO页面采集模式

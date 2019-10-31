@@ -1,9 +1,24 @@
 package com.jj.comics.util.reporter;
 
+import com.jj.base.log.LogUtil;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.comics.data.biz.task.TaskRepository;
+import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.CommonStatusResponse;
+import com.jj.comics.data.model.ResponseModel;
+import com.jj.comics.data.visittime.OnlineTimeData;
+import com.jj.comics.data.visittime.ReadTimeData;
+import com.jj.comics.data.visittime.TimeReportData;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
 
 public class TaskReporter {
 
@@ -26,4 +41,129 @@ public class TaskReporter {
 
     }
 
+    /**
+     * 时间上报
+     */
+    public static void reportTimeData(DaoHelper daoHelper) {
+        List<OnlineTimeData> onlineTimeDataAll = daoHelper.getOnlineTimeDataAll();
+        List<ReadTimeData> readTimeDataAll = daoHelper.getReadTimeDataAll();
+        if (onlineTimeDataAll != null && !onlineTimeDataAll.isEmpty()) {
+            List<TimeReportData> userDataList = new ArrayList<>();
+            List<TimeReportData> visitorDataList = new ArrayList<>();
+            for (OnlineTimeData onlineTimeData : onlineTimeDataAll) {
+                TimeReportData data = new TimeReportData();
+                data.setId(onlineTimeData.getId());
+                data.setLoginTime(onlineTimeData.getLastLoginTime());
+                data.setLogoutTime(onlineTimeData.getLastLogoutTime());
+                data.setOnlineDuration(onlineTimeData.getDuration());
+                data.setDate(onlineTimeData.getDate());
+                if (onlineTimeData.getIs_visitor()) {
+                    //访客登录
+                    data.setIs_visitor(true);
+                    data.setToken(onlineTimeData.getUid());
+                    visitorDataList.add(data);
+                } else {
+                    //注册用户登录
+                    data.setIs_visitor(false);
+                    data.setUid(Long.parseLong(onlineTimeData.getUid()));
+                    userDataList.add(data);
+                }
+            }
+            if (!userDataList.isEmpty()) {
+                TaskRepository.getInstance().userReport(userDataList)
+                        .subscribe(new ApiSubscriber2<ResponseModel>() {
+                            @Override
+                            protected void onFail(NetError error) {
+                                LogUtil.e("LogTime 用户在线时长上报失败："+error.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(ResponseModel responseModel) {
+                                for (TimeReportData data : userDataList) {
+                                    daoHelper.deleteTimeData(data,true);
+                                }
+                                LogUtil.e("LogTime 用户在线时长上报成功");
+                            }
+                        });
+            }
+            if (!visitorDataList.isEmpty()) {
+                TaskRepository.getInstance().visitorReport(visitorDataList)
+                        .subscribe(new ApiSubscriber2<ResponseModel>() {
+                            @Override
+                            protected void onFail(NetError error) {
+                                LogUtil.e("LogTime 访客在线时长上报失败："+error.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(ResponseModel responseModel) {
+                                for (TimeReportData data : visitorDataList) {
+                                    daoHelper.deleteTimeData(data,true);
+                                }
+                                LogUtil.e("LogTime 访客在线时长上报成功");
+                            }
+                        });
+            }
+        }
+
+        if (readTimeDataAll != null && !readTimeDataAll.isEmpty()) {
+            List<TimeReportData> userDataList = new ArrayList<>();
+            List<TimeReportData> visitorDataList = new ArrayList<>();
+            for (ReadTimeData readTimeData : readTimeDataAll) {
+                //只有阅读时长大于0才算有效数据
+                if (readTimeData.getDuration()>0){
+                    TimeReportData data = new TimeReportData();
+                    data.setId(readTimeData.getId());
+                    data.setReadDuration(readTimeData.getDuration());
+                    data.setDate(readTimeData.getDate());
+                    data.setBookId(readTimeData.getBoodId());
+                    data.setChapterId(readTimeData.getChapterId());
+                    if (readTimeData.getIs_visitor()) {
+                        //访客登录
+                        data.setIs_visitor(true);
+                        data.setToken(readTimeData.getUid());
+                        visitorDataList.add(data);
+                    } else {
+                        //注册用户登录
+                        data.setIs_visitor(false);
+                        data.setUid(Long.parseLong(readTimeData.getUid()));
+                        userDataList.add(data);
+                    }
+                }
+            }
+            if (!userDataList.isEmpty()) {
+                TaskRepository.getInstance().userReport(userDataList)
+                        .subscribe(new ApiSubscriber2<ResponseModel>() {
+                            @Override
+                            protected void onFail(NetError error) {
+                                LogUtil.e("LogTime 用户阅读时长上报失败："+error.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(ResponseModel responseModel) {
+                                for (TimeReportData data : userDataList) {
+                                    daoHelper.deleteTimeData(data,false);
+                                }
+                                LogUtil.e("LogTime 用户阅读时长上报成功");
+                            }
+                        });
+            }
+            if (!visitorDataList.isEmpty()) {
+                TaskRepository.getInstance().visitorReport(visitorDataList)
+                        .subscribe(new ApiSubscriber2<ResponseModel>() {
+                            @Override
+                            protected void onFail(NetError error) {
+                                LogUtil.e("LogTime 访客阅读时长上报失败："+error.getMessage());
+                            }
+
+                            @Override
+                            public void onNext(ResponseModel responseModel) {
+                                for (TimeReportData data : visitorDataList) {
+                                    daoHelper.deleteTimeData(data,false);
+                                }
+                                LogUtil.e("LogTime 访客阅读时长上报成功");
+                            }
+                        });
+            }
+        }
+    }
 }

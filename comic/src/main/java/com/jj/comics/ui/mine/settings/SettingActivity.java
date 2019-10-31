@@ -14,7 +14,10 @@ import com.jj.base.utils.RouterMap;
 import com.jj.base.utils.toast.ToastUtil;
 import com.jj.comics.R;
 import com.jj.comics.R2;
+import com.jj.comics.common.constants.Constants;
+import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.data.model.RestResponse;
+import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -37,6 +40,8 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
     Switch autoBuy;
     @BindView(R2.id.switch_notification)
     Switch receive;
+
+    private DaoHelper daoHelper;
 
     @Override
     public void initData(Bundle savedInstanceState) {
@@ -115,8 +120,20 @@ public class SettingActivity extends BaseActivity<SettingPresenter> implements S
                 @Override
                 public void onClick(View v) {
                     customFragmentDialog.dismiss();
+
+                    if (daoHelper == null){
+                        daoHelper = new DaoHelper();
+                    }
+                    //更新当前登录用户退出时间
+                    String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+                    daoHelper.insertORupdateOnlineTimeData(0,null,currentDate);
+
                     //登出所有用户
                     LoginHelper.logOffAllUser();
+
+                    //退出登录后更新当前游客登录时间
+                    daoHelper.insertORupdateOnlineTimeData(0,currentDate,null);
+
                     updateLoginStatus();
                     //最后发送退出登录的通知
                     EventBusManager.sendLogoutEvent(new LogoutEvent());
