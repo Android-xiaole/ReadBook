@@ -37,6 +37,7 @@ public class NetPageLoader extends PageLoader {
             chapter.title = bean.getTitle();
             chapter.link = bean.getLink();
             chapter.chapterId = bean.getId();
+            chapter.chapterorder = bean.getChapterorder();
             chapter.needLogin = bean.isNeedLogin();
             txtChapters.add(chapter);
         }

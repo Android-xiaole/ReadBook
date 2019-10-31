@@ -209,7 +209,7 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
      * 获取目录列表
      */
     @Override
-    public void getCatalogList(BookModel bookModel,int pageNum) {
+    public void getCatalogList(BookModel bookModel,int pageNum,boolean isNextPage) {
         if (getV() == null)return;
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
@@ -220,12 +220,12 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num());
+                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num(),pageNum,isNextPage);
                     }
 
                     @Override
                     protected void onFail(NetError error) {
-                        getV().onGetCatalogListFail(error);
+                        getV().onGetCatalogListFail(error,pageNum,isNextPage);
                     }
 
                     @Override

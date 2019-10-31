@@ -14,6 +14,8 @@ public class TxtChapter{
     boolean needLogin;//默认不需要登录
     //章节所属的小说(网络)
     String bookId;
+    //章节在整个章节目录是第几章（从1开始）
+    int chapterorder;
     //章节的链接(网络)
     String link;
 
@@ -89,6 +91,14 @@ public class TxtChapter{
         this.needLogin = needLogin;
     }
 
+    public int getChapterorder() {
+        return chapterorder;
+    }
+
+    public void setChapterorder(int chapterorder) {
+        this.chapterorder = chapterorder;
+    }
+
     @Override
     public String toString() {
         return "TxtChapter{" +
@@ -96,6 +106,7 @@ public class TxtChapter{
                 ", isPaid=" + isPaid +
                 ", needLogin=" + needLogin +
                 ", bookId='" + bookId + '\'' +
+                ", chapterorder=" + chapterorder +
                 ", link='" + link + '\'' +
                 ", title='" + title + '\'' +
                 ", start=" + start +

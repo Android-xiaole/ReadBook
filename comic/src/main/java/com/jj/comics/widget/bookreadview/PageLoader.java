@@ -169,6 +169,12 @@ public abstract class PageLoader {
     protected int mCurChapterPos = 0;
     //上一章的记录
     private int mLastChapterPos = 0;
+    //该本书的所有章节数
+    private int totalNum;
+
+    public void setTotalNum(int totalNum) {
+        this.totalNum = totalNum;
+    }
 
     /*****************************init params*******************************/
     public PageLoader(PageView pageView, CollBookBean collBook) {
@@ -286,6 +292,19 @@ public abstract class PageLoader {
             return false;
         }
 
+        //如果是分页模式并且是第一章，那就去请求章节列表
+        if (totalNum>0&&mCurChapterPos == 0){
+            mStatus = PageLoader.STATUS_LOADING;
+            isChapterListPrepare = false;
+            mLastChapterPos = 20;
+            mCurChapterPos = 19;
+
+            mCurPage = new TxtPage();
+            mPageView.drawNextPage();
+            if (mPageChangeListener!=null)mPageChangeListener.requestChapterList(false);
+            return true;
+        }
+
         // 载入上一章。
         if (parsePrevChapter()) {
             mCurPage = getCurPage(0);
@@ -304,6 +323,18 @@ public abstract class PageLoader {
     public boolean skipNextChapter() {
         if (!hasNextChapter()) {
             return false;
+        }
+
+        //如果是分页模式，并且是最后一张
+        if (totalNum>0&&mCurChapterPos == mChapterList.size()-1){
+            mLastChapterPos = mCurChapterPos;
+            mCurChapterPos = mCurChapterPos+1;
+            isChapterListPrepare = false;
+            mStatus = PageLoader.STATUS_LOADING;
+            mCurPage = new TxtPage();
+            mPageView.drawNextPage();
+            if (mPageChangeListener!=null)mPageChangeListener.requestChapterList(true);
+            return true;
         }
 
         //判断是否达到章节的终止点
@@ -614,6 +645,18 @@ public abstract class PageLoader {
         return mCurChapterPos;
     }
 
+    public void setCurChapterPos(int mCurChapterPos) {
+        this.mCurChapterPos = mCurChapterPos;
+    }
+
+    public int getLastChapterPos() {
+        return mLastChapterPos;
+    }
+
+    public void setLastChapterPos(int mLastChapterPos) {
+        this.mLastChapterPos = mLastChapterPos;
+    }
+
     /**
      * 获取距离屏幕的高度
      *
@@ -916,7 +959,7 @@ public abstract class PageLoader {
             String tip = "";
             switch (mStatus) {
                 case STATUS_LOADING:
-                    if (mChapterList!=null&&!mChapterList.isEmpty()){
+                    if (isChapterListPrepare&&mChapterList!=null&&!mChapterList.isEmpty()){
                         TxtChapter txtChapter = mChapterList.get(mCurChapterPos);
                         if (txtChapter.isNeedLogin()&& LoginHelper.getOnLineUser()==null){//未登录就提示登录
                             tip = "付费内容，请先登录后阅读（点击登录）";
@@ -933,7 +976,7 @@ public abstract class PageLoader {
                     mChapterButtonStatus = CAN_NOTHING;
                     break;
                 case STATUS_ERROR:
-                    tip = "加载失败";
+                    tip = "加载失败，点击重试";
                     break;
                 case STATUS_EMPTY:
                     tip = "文章内容为空";
@@ -1016,13 +1059,13 @@ public abstract class PageLoader {
             //绘制到每个章节的最后一页，开始绘制底部切换章节按钮
             if (mCurPage.position + 1 == mCurPageList.size()) {
                 initBottomBar();
-                if (mCurChapterPos == 0){
+                if (!hasPrevChapter()){
                     //这是第一章，应该隐藏上一章的按钮
                     mChapterButtonStatus = CAN_NEXT;
                     tv_next_chapter.setVisibility(View.VISIBLE);
                     tv_last_chapter.setVisibility(View.GONE);
                     view_fgt.setVisibility(View.GONE);
-                }else if (mCurChapterPos == mChapterList.size()-1){
+                }else if (!hasNextChapter()){
                     //这是最后一章，应该隐藏下一章
                     mChapterButtonStatus = CAN_LAST;
                     tv_last_chapter.setVisibility(View.VISIBLE);
@@ -1164,6 +1207,18 @@ public abstract class PageLoader {
         }
 
         mCancelPage = mCurPage;
+        //如果是分页模式并且是第一章，那就去请求章节列表
+        if (totalNum>0&&mCurChapterPos == 0){
+            mStatus = PageLoader.STATUS_LOADING;
+            isChapterListPrepare = false;
+            mLastChapterPos = 20;
+            mCurChapterPos = 19;
+
+            mCurPage = new TxtPage();
+            mPageView.drawNextPage();
+            if (mPageChangeListener!=null)mPageChangeListener.requestChapterList(false);
+            return true;
+        }
         if (parsePrevChapter()) {
             mCurPage = getPrevLastPage();
         } else {
@@ -1206,8 +1261,15 @@ public abstract class PageLoader {
 
     private boolean hasPrevChapter() {
         //判断是否上一章节为空
-        if (mCurChapterPos - 1 < 0) {
-            return false;
+        if (totalNum >0 ){
+            //分页
+            if (mChapterList.get(mCurChapterPos).chapterorder <= 1){
+                return false;
+            }
+        }else{
+            if (mCurChapterPos - 1 < 0) {
+                return false;
+            }
         }
         return true;
     }
@@ -1234,9 +1296,9 @@ public abstract class PageLoader {
                 return true;
             }else{
                 //没有下一页就相当于滑动到底部
-                if (mCurChapterPos == 0){
+                if (!hasPrevChapter()){
                     mChapterButtonStatus = CAN_NEXT;
-                }else if (mCurChapterPos == mChapterList.size()-1){
+                }else if (!hasNextChapter()){
                     mChapterButtonStatus = CAN_LAST;
                 }else {
                     mChapterButtonStatus = CAN_NEXT_LAST;
@@ -1251,16 +1313,27 @@ public abstract class PageLoader {
             //如果是上下滚动模式就禁止加载下一章
             return false;
         }
-        //下面是自动加载下一章的代码
-        if (!hasNextChapter()) {
-            return false;
-        }
         if (mStatus != STATUS_FINISH){
             //如果当前页面没有加载完成，就禁止加载下一页
             return false;
         }
+        //下面是自动加载下一章的代码
+        if (!hasNextChapter()) {
+            return false;
+        }
 
         mCancelPage = mCurPage;
+        //如果是分页模式，并且是最后一张
+        if (totalNum>0&&mCurChapterPos == mChapterList.size()-1){
+            mLastChapterPos = mCurChapterPos;
+            mCurChapterPos = mCurChapterPos+1;
+            isChapterListPrepare = false;
+            mStatus = PageLoader.STATUS_LOADING;
+            mCurPage = new TxtPage();
+            mPageView.drawNextPage();
+            if (mPageChangeListener!=null)mPageChangeListener.requestChapterList(true);
+            return true;
+        }
         // 解析下一章数据
         if (parseNextChapter()) {
             mCurPage = mCurPageList.get(0);
@@ -1274,8 +1347,16 @@ public abstract class PageLoader {
 
     private boolean hasNextChapter() {
         // 判断是否到达目录最后一章
-        if (mCurChapterPos + 1 >= mChapterList.size()) {
-            return false;
+        if (totalNum>0){
+            //分页
+            if (mChapterList.get(mCurChapterPos).chapterorder >= totalNum){
+                return false;
+            }
+        }else{
+            //不分页
+            if (mCurChapterPos + 1 >= mChapterList.size()) {
+                return false;
+            }
         }
         return true;
     }
@@ -1359,7 +1440,7 @@ public abstract class PageLoader {
 
         // 如果不存在下一章，或者下一章没有数据，则不进行加载。
         if (!hasNextChapter()
-                || !hasChapterData(mChapterList.get(nextChapter))) {
+                || nextChapter >= mChapterList.size()||!hasChapterData(mChapterList.get(nextChapter))) {
             return;
         }
 
@@ -1697,6 +1778,12 @@ public abstract class PageLoader {
          */
         void requestChapters(List<TxtChapter> requestChapters);
 //        void requestChapters(TxtChapter requestChapter);
+
+        /**
+         * 分页加载章节列表的回调
+         * @param isNextPage:标记是加载上一页还是下一页章节列表
+         */
+        void requestChapterList(boolean isNextPage);
 
         /**
          * 作用：章节目录加载完成时候回调
