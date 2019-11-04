@@ -5,7 +5,6 @@ import com.jj.base.net.NetError;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.data.model.CommonStatusResponse;
-import com.jj.comics.ui.detail.subdetail.CatalogFragment;
 
 import java.util.List;
 
@@ -26,7 +25,10 @@ public interface ReadComicContract {
         void onLoadChapterContent(long chapterId);
 
         //获取目录列表的回调
-        void onGetCatalogList(List<BookCatalogModel> catalogModels,int totalNum);
+        void onGetCatalogList(List<BookCatalogModel> catalogModels,int totalNum,int pageNum,boolean isNextPage);
+
+        //获取目录列表失败的回调
+        void onGetCatalogListFail(NetError error,int pageNum,boolean isNextPage);
 
         //收藏成功或者取消收藏成功的回调
         void onAddOrRemoveShelfSuccess(boolean collectByCurrUser, boolean needFinish);
@@ -40,7 +42,7 @@ public interface ReadComicContract {
         void addOrRemoveShelf(BookModel model, boolean collectByCurrUser, boolean needFinish);
 
         //获取章节目录列表
-        void getCatalogList(BookModel bookModel);
+        void getCatalogList(BookModel bookModel,int pageNum,boolean isScroll);
 
         //获取收藏状态
         void getCollectStatus(long id);

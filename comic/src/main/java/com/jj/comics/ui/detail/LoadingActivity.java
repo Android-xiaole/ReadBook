@@ -19,6 +19,7 @@ import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.LoginNotifyDialog;
+import com.jj.comics.ui.mine.pay.SubscribeActivity;
 import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -83,19 +84,32 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
         finish();
     }
 
+    /**
+     * 内容未付费的回调
+     */
+    @Override
+    public void onLoadChapterContentNoPayError(BookCatalogModel catalogModel) {
+        if (bookModel.getBatchbuy() == 2) {//全本购买
+            SubscribeActivity.toSubscribe(this, bookModel, bookModel.getBatchprice(), catalogModel.getId());
+        } else {//章节购买
+            SubscribeActivity.toSubscribe(this, bookModel, catalogModel.getSaleprice(), catalogModel.getId());
+        }
+    }
+
     @Override
     public void loadFail(NetError error) {
-        if (error.getType() == NetError.AuthError){
+        if (error.getType() == NetError.AuthError) {
             //用户未登录，弹出登录弹窗
 //            createLoginDialog();
-            LoginHelper.interruptLogin(this,null);
-        }else{
+            LoginHelper.interruptLogin(this, null);
+        } else {
             ToastUtil.showToastShort(error.getMessage());
             finish();
         }
     }
 
     private LoginNotifyDialog loginNotifyDialog;
+
     public void createLoginDialog() {
         if (loginNotifyDialog == null) loginNotifyDialog = new LoginNotifyDialog();
         loginNotifyDialog.show(getSupportFragmentManager(), new DialogUtilForComic.OnDialogClick() {
@@ -149,8 +163,8 @@ public class LoadingActivity extends BaseActivity<LoadingPresenter> implements L
                     }
                     break;
             }
-        }else if (resultCode == RESULT_CANCELED) {
-            if (requestCode == RequestCode.SUBSCRIBE_REQUEST_CODE||requestCode == RequestCode.LOGIN_REQUEST_CODE) {
+        } else if (resultCode == RESULT_CANCELED) {
+            if (requestCode == RequestCode.SUBSCRIBE_REQUEST_CODE || requestCode == RequestCode.LOGIN_REQUEST_CODE) {
                 finish();
             }
         }

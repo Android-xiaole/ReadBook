@@ -36,6 +36,9 @@ public interface ContentDataSource {
     //根据内容漫画id获取章节列表
     Observable<BookCatalogListResponse> getCatalogList(long id);
 
+    //获取分页章节目录
+    Observable<BookCatalogListResponse> getNewCatalogList(long id,int pageNum,String sort,int updateTime);
+
     //获取缓存的目录列表
     Observable<BookCatalogListResponse> getCacheCatalogList(long id,int updateTime);
 

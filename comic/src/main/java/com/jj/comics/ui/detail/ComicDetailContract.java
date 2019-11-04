@@ -1,6 +1,7 @@
 package com.jj.comics.ui.detail;
 
 import com.jj.base.mvp.IView;
+import com.jj.base.net.NetError;
 import com.jj.comics.data.model.BookCatalogModel;
 import com.jj.comics.data.model.BookListDataResponse;
 import com.jj.comics.data.model.BookModel;
@@ -19,10 +20,10 @@ public interface ComicDetailContract {
         void onLoadRecommendList(BookListDataResponse response);
 
         //获取目录列表成功的回调
-        void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum);
+        void onGetCatalogList(List<BookCatalogModel> catalogModels, int totalNum,int pageNum,boolean isNextPage);
 
         //获取目录列表失败的回调
-        void onGetCatalogListFail();
+        void onGetCatalogListFail(NetError error,int pageNum,boolean isNextPage);
 
         //获取目录列表结束的回调
         void onGetCatalogListEnd();

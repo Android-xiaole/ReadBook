@@ -55,7 +55,11 @@ public class LoadingPresenter extends BasePresenter<BaseRepository,LoadingContra
                 .subscribe(new ApiSubscriber2<BookCatalogModel>() {
                     @Override
                     public void onNext(BookCatalogModel catalogModel) {
-                        getV().loadSuccess(catalogModel);
+                        if (catalogModel.isPaid()){//已经付费
+                            getV().loadSuccess(catalogModel);
+                        }else{//未付费的逻辑在这里处理
+                            getV().onLoadChapterContentNoPayError(catalogModel);
+                        }
                     }
 
                     @Override

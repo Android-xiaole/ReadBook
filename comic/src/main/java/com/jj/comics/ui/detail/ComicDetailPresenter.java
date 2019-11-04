@@ -196,22 +196,28 @@ class ComicDetailPresenter extends BasePresenter<BaseRepository, ComicDetailCont
 
     }
 
-    public void getCatalogList(BookModel bookModel) {
+    /**
+     *
+     * @param bookModel 小说详情
+     * @param pageNum 页码
+     * @param sort 排序方式
+     * @param isNextPage //标记当前操作是否是向下分页
+     */
+    public void getCatalogList(BookModel bookModel,int pageNum,String sort,boolean isNextPage) {
         if (getV() == null) return;
         getV().showProgress();
-        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(), bookModel.getUpdate_chapter_time())
+        ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),pageNum,sort,bookModel.getUpdate_chapter_time())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num());
+                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num(),pageNum,isNextPage);
                     }
 
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                        getV().onGetCatalogListFail();
+                        getV().onGetCatalogListFail(error,pageNum,isNextPage);
                     }
 
                     @Override

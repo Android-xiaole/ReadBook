@@ -48,6 +48,8 @@ public class BookChapterBean implements Serializable {
 
     @Transient
     private boolean needLogin;//标记当前章节是否需要登录后观看，该字段不存数据库
+    @Transient
+    private int chapterorder;
 
 
     @Generated(hash = 1508543635)
@@ -138,5 +140,13 @@ public class BookChapterBean implements Serializable {
 
     public void setNeedLogin(boolean needLogin) {
         this.needLogin = needLogin;
+    }
+
+    public int getChapterorder() {
+        return chapterorder;
+    }
+
+    public void setChapterorder(int chapterorder) {
+        this.chapterorder = chapterorder;
     }
 }

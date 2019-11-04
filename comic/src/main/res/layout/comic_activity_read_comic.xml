@@ -402,6 +402,7 @@
                 android:id="@+id/tv_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:textColor="@color/comic_a8adb3"
                 android:layout_marginRight="@dimen/dp_16"
                 android:paddingLeft="@dimen/dp_7"
@@ -421,6 +422,7 @@
             android:id="@+id/rv_catalogList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="vertical"
             android:paddingBottom="@dimen/dp_21" />
     </LinearLayout>
 

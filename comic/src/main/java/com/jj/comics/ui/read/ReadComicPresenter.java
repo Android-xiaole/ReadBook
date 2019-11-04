@@ -209,23 +209,23 @@ public class ReadComicPresenter extends BasePresenter<BaseRepository, ReadComicC
      * 获取目录列表
      */
     @Override
-    public void getCatalogList(BookModel bookModel) {
+    public void getCatalogList(BookModel bookModel,int pageNum,boolean isNextPage) {
         if (getV() == null)return;
         if (getV() instanceof ReadComicActivity){
             getV().showProgress((ReadComicActivity)getV());
         }
-        ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
+        ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),pageNum,Constants.RequestBodyKey.SORT_ASC,bookModel.getUpdate_chapter_time())
                 .observeOn(AndroidSchedulers.mainThread())
                 .as(this.<BookCatalogListResponse>bindLifecycle())
                 .subscribe(new ApiSubscriber2<BookCatalogListResponse>() {
                     @Override
                     public void onNext(BookCatalogListResponse response) {
-                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num());
+                        getV().onGetCatalogList(response.getData().getData(), response.getData().getTotal_num(),pageNum,isNextPage);
                     }
 
                     @Override
                     protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
+                        getV().onGetCatalogListFail(error,pageNum,isNextPage);
                     }
 
                     @Override

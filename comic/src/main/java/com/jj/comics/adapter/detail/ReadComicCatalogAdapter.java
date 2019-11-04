@@ -1,17 +1,17 @@
 package com.jj.comics.adapter.detail;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.utils.CommonUtil;
 import com.jj.comics.R;
 import com.jj.comics.data.model.BookCatalogModel;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel> {
 
@@ -65,7 +65,6 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
             if (CommonUtil.checkValid(getData().size(), oldIndex))
                 notifyItemChanged(oldIndex);
         }
-        scrollMiddle(currentIndex);
     }
 
     public BookCatalogModel getNextCatalogModel(BookCatalogModel currModel) {
@@ -129,6 +128,39 @@ public class ReadComicCatalogAdapter extends SimpleBaseAdapter<BookCatalogModel>
             }
         });
 
+    }
+
+    public void scrollToVisiable(long id) {
+        int index = getIndex(id);
+        scrollToVisiable(index);
+    }
+
+    public void scrollToVisiable (int index) {
+        if (getRecyclerView() == null || !(getRecyclerView().getLayoutManager() instanceof LinearLayoutManager))
+            return;
+        getRecyclerView().post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayoutManager layoutManager = (LinearLayoutManager) getRecyclerView().getLayoutManager();
+                int childCount = layoutManager.getChildCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                int firstCompletelyVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition();
+                int lastCompletelyVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition();
+
+                if (firstCompletelyVisibleItemPosition <= index
+                        && lastCompletelyVisibleItemPosition >= index)
+                    return;
+                int targetPosition = 0;
+                if (Math.abs(index - firstCompletelyVisibleItemPosition) <=
+                        Math.abs(index - lastCompletelyVisibleItemPosition)) {
+                    targetPosition = index;
+                }else {
+                    targetPosition = index - (lastCompletelyVisibleItemPosition - firstCompletelyVisibleItemPosition)-1;
+                }
+                Log.i("GGG",targetPosition + "");
+                layoutManager.scrollToPositionWithOffset(targetPosition,0);
+            }
+        });
     }
 
 }
