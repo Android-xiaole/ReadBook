@@ -228,9 +228,9 @@ public class NetPageLoader extends PageLoader {
 //            }
 //        }
 
-        if (!chapters.isEmpty()) {
-            mPageChangeListener.requestChapters(chapters);
-        }
+//        if (!chapters.isEmpty()) {
+//            mPageChangeListener.requestChapters(chapters);
+//        }
     }
 
     @Override

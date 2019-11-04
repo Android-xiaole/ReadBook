@@ -95,6 +95,8 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     TextView tv_addBookBottom;//底部加入书架文字显示
     @BindView(R2.id.tv_catalogNum)
     TextView tv_catalogNum;//总章节数
+    @BindView(R2.id.tv_totalNum)
+    TextView tv_totalNum;//所有章节数，侧滑菜单显示
     @BindView(R2.id.tv_catalogTitle)
     TextView tv_catalogTitle;//当前阅读的章节标题
     @BindView(R2.id.lin_catalogMenu)
@@ -500,6 +502,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         IS_SUCCESS_GETCATALOG = true;
         this.totalNum = totalNum;
         tv_catalogNum.setText("共" + totalNum + "章");
+        tv_totalNum.setText("共" + totalNum + "章");
 
         if (!catalogModels.isEmpty()) {
             if (initPageNum == pageNum){
