@@ -158,7 +158,7 @@ public class ReadComicHelper {
      */
     public Observable<Long> getBookCatalogId(BookModel bookModel) {
 
-        return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(), bookModel.getUpdate_chapter_time())
+        return ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),1,Constants.RequestBodyKey.SORT_ASC,bookModel.getUpdate_chapter_time())
                 .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
                     @Override
                     public ObservableSource<Long> apply(BookCatalogListResponse bookCatalogListResponse) throws Exception {

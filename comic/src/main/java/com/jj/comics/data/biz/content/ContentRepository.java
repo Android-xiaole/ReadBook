@@ -125,13 +125,13 @@ public class ContentRepository implements ContentDataSource {
      * 这里选择将bookId+updateTime作为缓存的key,可以达到如果同一本书的update_chapter_time字段有变动，表示章节目录有刷新，那就不取缓存，重新加载
      * @return
      */
-    @Override
-    public Observable<BookCatalogListResponse> getCacheCatalogList(long bookId,int updateTime) {
-        return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookId),new DynamicKey(bookId+""+updateTime))
-                .subscribeOn(Schedulers.io())
-                .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
-                .retryWhen(new RetryFunction2());
-    }
+//    @Override
+//    public Observable<BookCatalogListResponse> getCacheCatalogList(long bookId,int updateTime) {
+//        return ComicApi.getProviders().getCatalogList(ContentRepository.getInstance().getCatalogList(bookId),new DynamicKey(bookId+""+updateTime))
+//                .subscribeOn(Schedulers.io())
+//                .compose(ComicApiImpl.<BookCatalogListResponse>getApiTransformer2())
+//                .retryWhen(new RetryFunction2());
+//    }
 
     @Override
     public Observable<BookCatalogContentResponse> getCatalogContent(long id, long chapterid) {

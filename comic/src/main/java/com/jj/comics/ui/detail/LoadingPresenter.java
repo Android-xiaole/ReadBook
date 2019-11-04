@@ -5,6 +5,7 @@ import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
 import com.jj.base.ui.BaseActivity;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.net.ComicSubscriber;
 import com.jj.comics.data.biz.content.ContentRepository;
 import com.jj.comics.data.model.BookCatalogListResponse;
@@ -32,7 +33,7 @@ public class LoadingPresenter extends BasePresenter<BaseRepository,LoadingContra
                                 这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
                                 另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
                              */
-                            return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
+                            return ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),1, Constants.RequestBodyKey.SORT_ASC,bookModel.getUpdate_chapter_time())
                                     .subscribeOn(Schedulers.io())
                                     .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
                                         @Override

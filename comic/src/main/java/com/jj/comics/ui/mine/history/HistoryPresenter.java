@@ -188,7 +188,7 @@ public class HistoryPresenter extends BasePresenter<BaseRepository, HistoryContr
                                 这里接口做了缓存处理，针对chapterid字段来说，章节目录数据源一般不会实时变动
                                 另一方面增强用户体验，立即阅读按钮点击频率是比较高了，能少开线程最好
                              */
-                            return ContentRepository.getInstance().getCacheCatalogList(bookModel.getId(),bookModel.getUpdate_chapter_time())
+                            return ContentRepository.getInstance().getNewCatalogList(bookModel.getId(),1,Constants.RequestBodyKey.SORT_ASC,bookModel.getUpdate_chapter_time())
                                     .subscribeOn(Schedulers.io())
                                     .flatMap(new Function<BookCatalogListResponse, ObservableSource<Long>>() {
                                         @Override
