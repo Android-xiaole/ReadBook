@@ -55,7 +55,9 @@ public class NetStatusReceiver extends BroadcastReceiver {
         }
         if (netStatus == NETSTATUS_INAVAILABLE) {
 //            Toast.makeText(context, "网络未连接", Toast.LENGTH_SHORT).show();
-            dialog = new CustomDialog(context, R.style.base_common_CustomDialog, R.layout.base_normal_layout_dialog);
+            if(dialog == null){
+                dialog = new CustomDialog(context, R.style.base_common_CustomDialog, R.layout.base_normal_layout_dialog);
+            }
             dialog.show();
             TextView tv_title = dialog.findViewById(com.jj.base.R.id.tv_title);
             TextView tv_msg = dialog.findViewById(com.jj.base.R.id.tv_msg);

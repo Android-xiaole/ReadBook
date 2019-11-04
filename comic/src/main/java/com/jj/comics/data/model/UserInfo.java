@@ -4,6 +4,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
 import java.io.Serializable;
+import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class UserInfo implements Serializable {
@@ -74,6 +75,39 @@ public class UserInfo implements Serializable {
     //自定义字段，标记当前用户是否登录
     private boolean isLogin = false;
     private String class_name;//用户级别描述
+
+    @Generated(hash = 66031127)
+    public UserInfo(long uid, String openid, String unionid, int sourceid, String username, String password,
+            String nickname, String salt, String avatar, long mobile, int sex, String pos_city, int status,
+            String create_time, String update_time, String invite_code, int delete_flag, int is_vip, int is_free,
+            String login_type, boolean isLogin, String class_name) {
+        this.uid = uid;
+        this.openid = openid;
+        this.unionid = unionid;
+        this.sourceid = sourceid;
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.salt = salt;
+        this.avatar = avatar;
+        this.mobile = mobile;
+        this.sex = sex;
+        this.pos_city = pos_city;
+        this.status = status;
+        this.create_time = create_time;
+        this.update_time = update_time;
+        this.invite_code = invite_code;
+        this.delete_flag = delete_flag;
+        this.is_vip = is_vip;
+        this.is_free = is_free;
+        this.login_type = login_type;
+        this.isLogin = isLogin;
+        this.class_name = class_name;
+    }
+
+    @Generated(hash = 1279772520)
+    public UserInfo() {
+    }
 
     public long getUid() {
         return this.uid;
