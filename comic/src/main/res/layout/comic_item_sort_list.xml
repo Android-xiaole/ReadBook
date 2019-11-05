@@ -85,6 +85,7 @@
         android:layout_marginBottom="@dimen/dp_10"
         android:layout_toLeftOf="@id/iv_share"
         android:text="分享"
+        android:visibility = "gone"
         android:textColor="@color/comic_fe4c68"
         android:textSize="@dimen/dp_12" />
 </RelativeLayout>

@@ -112,8 +112,10 @@
                     android:background="@color/comic_e8ebf0"></View>
 
                 <LinearLayout
+                    android:id="@+id/my_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility = "gone"
                     android:layout_marginTop="@dimen/dp_25"
                     android:layout_marginBottom="@dimen/dp_25">
 

@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.jj.base.adapter.SimpleBaseAdapter;
 import com.jj.base.imageloader.ILFactory;
 import com.jj.comics.R;
+import com.jj.comics.common.constants.Constants;
 import com.jj.comics.data.model.BookModel;
 
 public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
@@ -34,6 +35,11 @@ public class SortListAdapter extends SimpleBaseAdapter<BookModel> {
             String author = item.getAuthor();
             helper.<TextView>getView(R.id.tv_recently_author).setText(TextUtils.isEmpty(author) ? "佚名":author);
             helper.<TextView>getView(R.id.tv_recently_desc).setText(item.getIntro());
+            if (Constants.IS_SHOW) {
+                helper.<TextView>getView(R.id.tv_share).setVisibility(View.VISIBLE);
+            } else {
+                helper.<TextView>getView(R.id.tv_share).setVisibility(View.GONE);
+            }
             helper.<TextView>getView(R.id.tv_share).setText("分享预计赚￥" + item.getShare_will_earnings());
             if (item.getFullflag() == 0) {
                 helper.<ImageView>getView(R.id.iv_recently_progress).setImageResource(R.drawable.content_over);

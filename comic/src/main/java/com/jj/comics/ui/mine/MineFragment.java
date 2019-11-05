@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,8 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
     TextView mLeaveName;
     @BindView(R2.id.rootView)
     RelativeLayout rootView;
+    @BindView(R2.id.my_info)
+    LinearLayout my_info;
 
     private PayInfo mPayInfo;
 
@@ -76,6 +79,11 @@ public class MineFragment extends BaseCommonFragment<MinePresenter> implements M
         if (LoginHelper.interruptLogin(getActivity(), null)) {
             getP().getUserInfo();
             getP().getUserPayInfo();
+        }
+        if (Constants.IS_SHOW) {
+            my_info.setVisibility(View.VISIBLE);
+        } else {
+            my_info.setVisibility(View.GONE);
         }
     }
 

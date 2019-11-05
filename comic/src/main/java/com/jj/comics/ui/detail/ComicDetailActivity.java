@@ -418,6 +418,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         tv_wordsNum.setText(model.getSize() + "字");
         tv_info.setText(model.getIntro());
         tv_catalogTitle.setText("更新至：" + model.getLastvolume_name());
+        if (Constants.IS_SHOW) {
+            mTvShareMonry.setVisibility(View.VISIBLE);
+        } else {
+            mTvShareMonry.setVisibility(View.GONE);
+        }
         mTvShareMonry.setText("分享预计赚￥" + model.getShare_will_earnings());
 
         if (model.getTag() != null && model.getTag().size() > 0) {

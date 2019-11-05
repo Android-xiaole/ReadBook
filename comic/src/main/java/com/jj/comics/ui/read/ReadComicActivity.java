@@ -213,7 +213,11 @@ public class ReadComicActivity extends BaseActivity<ReadComicPresenter> implemen
         toggleNightModel(ReadSettingManager.getInstance().isNightMode());//设置是否夜间模式
         toggleEyeModel(ReadSettingManager.getInstance().isEyeModel());//设置是否护眼模式
         sb_textSetting.setProgress(ScreenUtils.pxToDp(ReadSettingManager.getInstance().getTextSize()));//设置字号大小
-
+        if (Constants.IS_SHOW) {
+            tv_share_money.setVisibility(View.VISIBLE);
+        } else {
+            tv_share_money.setVisibility(GONE);
+        }
         tv_share_money.setText("分享预计赚￥" + bookModel.getShare_will_earnings());
         if (catalogModel.getChapterorder() % 20 == 0) {
             initPageNum = catalogModel.getChapterorder() / 20;

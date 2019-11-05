@@ -532,6 +532,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void setShow(boolean isShow) {
+        Constants.IS_SHOW = isShow;
         if (isShow) {
             mTvMoney.setText("赚钱");
             mIvMoney.setImageResource(R.drawable.money);
