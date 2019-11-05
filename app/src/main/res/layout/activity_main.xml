@@ -12,7 +12,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_71"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -26,10 +26,11 @@
 
 
         <ImageView
+            android:layout_above="@id/bottom_nav"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_22"
+            android:layout_height="@dimen/dp_26"
             android:scaleType="fitXY"
-            android:src="@drawable/bg_navation"></ImageView>
+            android:src="@drawable/bg_navigation"></ImageView>
 
         <RelativeLayout
             android:id="@+id/btn_nav_featured"
