@@ -114,11 +114,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     /**
-     * 来自绑定手机号成功的通知
+     * 来自需要关闭当前页面的通知
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindPhoneSuccessEvent(FinishLoginActivityEvent event){
+    public void onFinishLoginActivity(FinishLoginActivityEvent event){
         //绑定手机号成功之后设置setResult，关闭页面
         setResultAndFinish();
     }
