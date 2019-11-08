@@ -81,6 +81,7 @@ public class Constants {
     }
 
     public static final String REPORT_URL = "http://app.jjmh886.cn/";
+    public static final String REPORT_URL_TEST = "http://fanli.fliw.cn/";
 
     public static final String IDENTIFICATION_IGNORE = "#url_ignore";//此标识忽略动态替换baseurl配置
     //    public static final String QCORD_IMG_URL = "http://manhua.dfdy5.com/static/qrcode_for_gh_f19bdc003746_258.jpg";

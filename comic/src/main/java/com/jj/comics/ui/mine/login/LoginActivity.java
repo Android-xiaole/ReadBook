@@ -67,7 +67,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 showToastShort("请输入正确的手机号");
                 return;
             }
-            view.setEnabled(false);
             showProgress();
             this.phoneNum = phoneNum;
             getP().getVerifyCode(phoneNum);

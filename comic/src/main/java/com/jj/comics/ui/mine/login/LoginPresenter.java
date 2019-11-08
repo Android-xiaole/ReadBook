@@ -106,6 +106,12 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                             getV().onGetCode(false);
                         }
                     }
+
+                    @Override
+                    protected void onEnd() {
+                        super.onEnd();
+                        getV().hideProgress();
+                    }
                 });
     }
 

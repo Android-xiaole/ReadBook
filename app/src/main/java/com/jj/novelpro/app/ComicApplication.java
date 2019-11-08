@@ -269,7 +269,7 @@ public class ComicApplication extends BaseApplication {
                         if (LoginHelper.getOnLineUser() != null) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
                         }
-                        if (Constants.REPORT_URL.contains(request.url().host())) {
+                        if ((Constants.DEBUG?Constants.REPORT_URL_TEST.contains(request.url().host()):Constants.REPORT_URL.contains(request.url().host()))) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getVisitorToken());
                         }
                         return newRequest.build();

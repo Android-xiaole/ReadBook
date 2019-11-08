@@ -992,16 +992,35 @@ public interface ComicService {
     Observable<AccessTokenResponse> getReportToken(@FieldMap Map<String, String> map);
 
     /**
+     * 获取游客token
+     */
+    @FormUrlEncoded
+    @POST(Constants.REPORT_URL_TEST + "api/oauth/token" + Constants.IDENTIFICATION_IGNORE)
+    Observable<AccessTokenResponse> getReportTestToken(@FieldMap Map<String, String> map);
+
+    /**
      * 上报注册用户
      */
     @POST(Constants.REPORT_URL + "api/account/app/user_duration_report" + Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> userReport(@Body RequestBody requestBody);
 
     /**
+     * 上报注册用户
+     */
+    @POST(Constants.REPORT_URL_TEST + "api/account/app/user_duration_report" + Constants.IDENTIFICATION_IGNORE)
+    Observable<ResponseModel> userTestReport(@Body RequestBody requestBody);
+
+    /**
      * 上报游客
      */
     @POST(Constants.REPORT_URL + "api/account/app/visitor_duration_report" + Constants.IDENTIFICATION_IGNORE)
     Observable<ResponseModel> visitorReport(@Body RequestBody requestBody);
+
+    /**
+     * 上报游客
+     */
+    @POST(Constants.REPORT_URL_TEST + "api/account/app/visitor_duration_report" + Constants.IDENTIFICATION_IGNORE)
+    Observable<ResponseModel> visitorTestReport(@Body RequestBody requestBody);
 
     /**
      * 获取徒弟列表
