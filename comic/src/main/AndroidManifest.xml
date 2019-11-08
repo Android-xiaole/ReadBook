@@ -35,13 +35,20 @@
             android:name=".ui.mine.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/Comic.AppTheme.Full" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.mine.login.BindPhoneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".ui.mine.login.GetCodeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".ui.mine.login.GenderSelectActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.mine.pay.SubscribeActivity"

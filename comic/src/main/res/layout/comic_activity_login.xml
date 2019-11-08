@@ -2,14 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/comic_ffffff"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
+    <com.jj.comics.widget.comic.toolbar.ComicToolBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="登录注册"
+        />
+
     <ImageView
         android:layout_width="132dp"
         android:layout_height="132dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="@dimen/dp_28"
         android:src="@drawable/icon_login_logo" />
 
     <LinearLayout
@@ -54,63 +61,64 @@
         android:layout_height="@dimen/dp_1"
         android:background="#33ffad70" />
 
-    <LinearLayout
-        android:id="@+id/comic_login_password"
-        android:layout_width="@dimen/dp_310"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_20"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/dp_5">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/comic_login_password"-->
+<!--        android:layout_width="@dimen/dp_310"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="@dimen/dp_20"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:visibility="gone"-->
+<!--        android:paddingBottom="@dimen/dp_5">-->
 
-        <LinearLayout
-            android:layout_width="188dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="188dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:orientation="vertical">-->
 
-            <EditText
-                android:id="@+id/comic_login_pwd"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_35"
-                android:layout_weight="1"
-                android:background="@null"
-                android:hint="@string/comic_input_code"
-                android:imeOptions="actionDone"
-                android:inputType="number"
-                android:lines="1"
-                android:textColor="@color/comic_333333"
-                android:textColorHint="@color/comic_999999"
-                android:textSize="@dimen/dp_14" />
+<!--            <EditText-->
+<!--                android:id="@+id/comic_login_pwd"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/dp_35"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@null"-->
+<!--                android:hint="@string/comic_input_code"-->
+<!--                android:imeOptions="actionDone"-->
+<!--                android:inputType="number"-->
+<!--                android:lines="1"-->
+<!--                android:textColor="@color/comic_333333"-->
+<!--                android:textColorHint="@color/comic_999999"-->
+<!--                android:textSize="@dimen/dp_14" />-->
 
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1"
-                android:background="#33ffad70" />
-        </LinearLayout>
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/dp_1"-->
+<!--                android:background="#33ffad70" />-->
+<!--        </LinearLayout>-->
 
-        <TextView
-            android:id="@+id/comic_login_code"
-            android:layout_width="@dimen/dp_105"
-            android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_17"
-            android:background="@drawable/comic_login_code"
-            android:gravity="center"
-            android:text="@string/comic_get_code"
-            android:textColor="@drawable/comic_select_login_code_text_color"
-            android:textSize="@dimen/dp_12" />
+<!--        <TextView-->
+<!--            android:id="@+id/comic_login_code"-->
+<!--            android:layout_width="@dimen/dp_105"-->
+<!--            android:layout_height="@dimen/dp_30"-->
+<!--            android:layout_marginLeft="@dimen/dp_17"-->
+<!--            android:background="@drawable/comic_login_code"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/comic_get_code"-->
+<!--            android:textColor="@drawable/comic_select_login_code_text_color"-->
+<!--            android:textSize="@dimen/dp_12" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 
     <ImageButton
-        android:id="@+id/comic_login_btn"
+        android:id="@+id/comic_login_code"
         android:layout_width="331dp"
         android:layout_height="@dimen/dp_71"
-        android:layout_marginTop="@dimen/dp_56"
+        android:layout_marginTop="@dimen/dp_40"
         style="?android:attr/borderlessButtonStyle"
-        android:src="@drawable/btn_login" />
+        android:src="@drawable/btn_login_getcode" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -162,6 +170,7 @@
             android:id="@+id/comic_login_agree"
             android:layout_width="@dimen/dp_22"
             android:layout_height="@dimen/dp_22"
+            android:visibility="gone"
             android:button="@drawable/comic_login_agreement"
             android:checked="true" />
 

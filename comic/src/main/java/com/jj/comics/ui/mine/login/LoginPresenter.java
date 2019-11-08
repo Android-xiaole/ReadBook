@@ -1,16 +1,10 @@
 package com.jj.comics.ui.mine.login;
 
 import android.content.Intent;
-import android.os.SystemClock;
-import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.jj.base.BaseApplication;
 import com.jj.base.log.LogUtil;
@@ -18,17 +12,17 @@ import com.jj.base.mvp.BasePresenter;
 import com.jj.base.mvp.BaseRepository;
 import com.jj.base.net.ApiSubscriber2;
 import com.jj.base.net.NetError;
-import com.jj.base.ui.BaseActivity;
 import com.jj.comics.R;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.LoginTypeEnum;
 import com.jj.comics.data.biz.user.UserRepository;
 import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.data.model.GetCodeResponse;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.ResponseModel;
 import com.jj.comics.data.model.UserInfo;
 import com.jj.comics.util.DateHelper;
-import com.jj.comics.util.RegularUtil;
+import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.TencentHelper;
 import com.jj.comics.util.eventbus.events.WxLoginEvent;
@@ -53,21 +47,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
-
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.ILogoinView> implements LoginContract.ILoginPresenter, TextWatcher {
-    private static final int SECOND = 60;
-    boolean isDown = false;
-    private IUiListener mQQListener;
+public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.ILogoinView> implements LoginContract.ILoginPresenter {
 
+    private IUiListener mQQListener;
     private AuthInfo mAuthInfo;
     private SsoHandler mSsoHandler;
     private MyWbAuthLis mWbAuthListener;
@@ -90,7 +78,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
             if (userInfo != null) {
                 ActionReporter.reportAction(ActionReporter.Event.LOGIN, null, null, null);
 
-                MobclickAgent.onProfileSignIn(userInfo.getLogin_type(),userInfo.getUid() + "");
+                MobclickAgent.onProfileSignIn(userInfo.getLogin_type(), userInfo.getUid() + "");
             }
 
             if (getV() != null) {
@@ -104,101 +92,25 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     public void getVerifyCode(String mobile) {
         UserRepository.getInstance().getSecurityCode(getV().getClass().getName(), mobile)
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<ResponseModel, ObservableSource<Long>>() {
+                .subscribe(new ApiSubscriber2<GetCodeResponse>() {
                     @Override
-                    public ObservableSource<Long> apply(ResponseModel responseModel) throws Exception {
-                        getV().showToastShort("验证码获取成功");
-                        getV().hideProgress();
-                        if (isDown) return Observable.empty();
-                        isDown = true;
-                        return Observable.intervalRange(0, SECOND + 1, 0, 1, TimeUnit.SECONDS)
-                                .observeOn(AndroidSchedulers.mainThread())
-//                                .compose(getV().<Long>bindUntilEvent(ActivityEvent.DESTROY))
-                                ;
+                    protected void onFail(NetError error) {
+                        getV().showToastShort(error.getMessage());
                     }
-                }, new Function<Throwable, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(Throwable throwable) throws Exception {
-                        getV().showToastShort("验证码获取失败");
-                        getV().hideProgress();
-                        if (isDown) return Observable.empty();
-                        isDown = true;
-                        return Observable.intervalRange(0, SECOND + 1, 0, 1, TimeUnit.SECONDS)
-                                .observeOn(AndroidSchedulers.mainThread())
-//                                .compose(getV().<Long>bindUntilEvent(ActivityEvent.DESTROY))
-                                ;
-                    }
-                }, new Callable<ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> call() throws Exception {
-                        return Observable.empty();
-                    }
-                })
-                .doOnNext(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        getV().setCuntDownText(String.format("重发验证码 %ss", String.valueOf(SECOND - aLong)), false);
-                    }
-                })
-                .doOnComplete(new Action() {
-                    @Override
-                    public void run() throws Exception {
-                        isDown = false;
-                        getV().setCuntDownText("获取验证码", true);
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        isDown = false;
-                        LogUtil.e(throwable.getMessage());
-                    }
-                })
-                .as(this.<Long>bindLifecycle())
-                .subscribe();
-    }
 
-    @Override
-    public void loginByVerifyCode(boolean isCheck, String phone, String psw, String inviteCode) {
-        if (!isCheck) {
-            getV().showToastShort("请同意漫画服务协议");
-            return;
-        }
-        if (TextUtils.isEmpty(phone)) {
-            getV().showToastShort("请输入手机号");
-            return;
-        }
-        if (!RegularUtil.isMobile(phone)) {
-            getV().showToastShort("请输入正确的手机号");
-            return;
-        }
-        getV().showProgress();
-        UserRepository.getInstance().loginBySecurityCode(phone, psw, inviteCode)
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
-                    public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                        if (responseModel.getData() != null) {
-                            UserInfo user_info = responseModel.getData().getUser_info();
-                            if (user_info != null) {
-                                user_info.setLogin_type(LoginTypeEnum.PHONE.name());
-                                SharedPreManger.getInstance().saveToken(responseModel.getData().getBearer_token());
-                                return UserRepository.getInstance().saveUser(user_info);
-                            }
+                    public void onNext(GetCodeResponse responseModel) {
+                        if (responseModel.getData()!=null){
+                            getV().onGetCode(responseModel.getData().isIs_first());
+                        }else{
+                            getV().onGetCode(false);
                         }
-                        return Observable.error(NetError.noDataError());
                     }
-                })
-                .as(this.<UserInfo>bindLifecycle())
-                .subscribe(new LoginApiSubscriber());
+                });
     }
 
     @Override
-    public void qqLogin(boolean isCheck, BaseActivity loginActivity) {
-        if (!isCheck) {
-            getV().showToastShort("请同意漫画服务协议");
-            return;
-        }
+    public void qqLogin() {
         Tencent mTencent = TencentHelper.getTencent();
         if (!mTencent.isQQInstalled(BaseApplication.getApplication())) {
             getV().showToastShort("您还未安装QQ客户端");
@@ -206,7 +118,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
         }
         if (!mTencent.isSessionValid()) {
             getV().showProgress();
-            mTencent.login(loginActivity, "all", getQQListener());
+            mTencent.login((LoginActivity) getV(), "all", getQQListener());
         }
     }
 
@@ -232,7 +144,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                      "access_token":"xxxxxxxxxxxxxxxxxxxxx"
                      }
                      */
-                    Log.d("GGGGGGG", "GGGGGGG" + SystemClock.currentThreadTimeMillis() + "---" + Thread.currentThread().getId());
                     JSONObject jsonObject = (JSONObject) o;
                     try {
                         UserRepository.getInstance().qqLogin(jsonObject.getString(
@@ -242,9 +153,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                                     @Override
                                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                                        return dealLoginResponse(responseModel,LoginTypeEnum.QQ);
-//                                        MobclickAgent.onEvent(BaseApplication.getApplication(),
-//                                                Constants.UMEventId.QQ_LOGIN);
+                                        return dealLoginResponse(responseModel, LoginTypeEnum.QQ);
                                     }
                                 }).subscribe(new LoginApiSubscriber());
                     } catch (JSONException e) {
@@ -268,14 +177,10 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     }
 
     @Override
-    public void wbLogin(boolean isCheck, BaseActivity activity) {
-        if (!isCheck) {
-            getV().showToastShort("请同意漫画服务协议");
-            return;
-        }
+    public void wbLogin() {
         getV().showProgress();
         createAuthInfo();
-        if (mSsoHandler == null) mSsoHandler = new SsoHandler(activity);
+        if (mSsoHandler == null) mSsoHandler = new SsoHandler((LoginActivity) getV());
         mSsoHandler.authorize(getWbAuthListener());
     }
 
@@ -302,7 +207,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                         .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                             @Override
                             public ObservableSource<UserInfo> apply(LoginResponse responseModel) {
-                                return dealLoginResponse(responseModel,LoginTypeEnum.WB);
+                                return dealLoginResponse(responseModel, LoginTypeEnum.WB);
                             }
                         }).subscribe(new LoginApiSubscriber());
             } else {
@@ -343,11 +248,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
     }
 
     @Override
-    public void wxLogin(boolean isCheck) {
-        if (!isCheck) {
-            getV().showToastShort("请同意漫画服务协议");
-            return;
-        }
+    public void wxLogin() {
         IWXAPI wxApi = TencentHelper.getWxApi(Constants.WX_APP_ID_LOGIN());
         if (!wxApi.isWXAppInstalled()) {
             getV().showToastShort("您还未安装微信客户端");
@@ -367,7 +268,7 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
                 .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
                     @Override
                     public ObservableSource<UserInfo> apply(LoginResponse responseModel) throws Exception {
-                        return dealLoginResponse(responseModel,LoginTypeEnum.WX);
+                        return dealLoginResponse(responseModel, LoginTypeEnum.WX);
 //                        MobclickAgent.onEvent(BaseApplication.getApplication(),
 //                                Constants.UMEventId.WX_LOGIN);
                     }
@@ -381,24 +282,26 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
      *
      * @return
      */
-    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse,LoginTypeEnum loginTypeEnum) {
+    private ObservableSource<UserInfo> dealLoginResponse(LoginResponse loginResponse, LoginTypeEnum loginTypeEnum) {
         LoginResponse.DataBean data = loginResponse.getData();
-        if (data != null) {
-            if (data.isIs_binding()) {//绑定了手机号
-                UserInfo user_info = loginResponse.getData().getUser_info();
-                if (user_info != null) {
-                    user_info.setLogin_type(loginTypeEnum.name());
-                    //先记录当前本地当前用户登出时间
-                    if (daoHelper == null)daoHelper = new DaoHelper();
-                    String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
-                    daoHelper.insertORupdateOnlineTimeData(0,null,currentDate);
-                    //保存token
-                    SharedPreManger.getInstance().saveToken(data.getBearer_token());
-                    //最后保存用户信息到数据库
-                    return UserRepository.getInstance().saveUser(user_info);
-                }
-            } else {//未绑定手机号码,跳转到绑定号码的页面
-                BindPhoneActivity.toBindPhoneActivity(data.getType(), loginTypeEnum.name(),data.getOpenid(), (LoginActivity) getV());
+        if (data != null && data.getUser_info() != null) {
+            UserInfo user_info = loginResponse.getData().getUser_info();
+            //友盟账号统计
+            MobclickAgent.onProfileSignIn(loginTypeEnum.name(),user_info.getUid() + "");
+            user_info.setLogin_type(loginTypeEnum.name());
+            //先记录当前本地当前用户登出时间
+            if (daoHelper == null) daoHelper = new DaoHelper();
+            String currentDate = DateHelper.getCurrentDate(Constants.DateFormat.YMDHMS);
+            daoHelper.insertORupdateOnlineTimeData(0, null, currentDate);
+            //保存token
+            SharedPreManger.getInstance().saveToken(data.getBearer_token());
+            //保存用户信息
+            LoginHelper.updateUser(user_info);
+            if (!data.isIs_first()) {//不是第一次登录，不需要跳转到绑定手机号的页面
+                //数据向下传递
+                return Observable.just(user_info);
+            } else {//第一次登录，需要跳转到绑定手机号的页面
+                BindPhoneActivity.toBindPhoneActivity(user_info,(LoginActivity) getV());
                 return Observable.empty();
             }
         }
@@ -407,20 +310,10 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
     @Override
     public CharSequence getAgreementText() {
-        String text = "同意《金桔小说服务协议》";
+        String text = "登录注册即表示同意《金桔小说服务协议》";
         SpannableString agreement = new SpannableString(text);
-        agreement.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff6d50)), 2, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        agreement.setSpan(new ForegroundColorSpan(BaseApplication.getApplication().getResources().getColor(R.color.comic_ff6d50)), 9, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return agreement;
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -444,10 +337,6 @@ public class LoginPresenter extends BasePresenter<BaseRepository, LoginContract.
 
     }
 
-    @Override
-    public void afterTextChanged(Editable s) {
-        getV().onTextChanged();
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        Tencent.onActivityResultData(requestCode, resultCode, data, getQQListener());

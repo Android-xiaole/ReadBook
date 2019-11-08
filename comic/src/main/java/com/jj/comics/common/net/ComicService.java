@@ -22,6 +22,7 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
+import com.jj.comics.data.model.GetCodeResponse;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.NotificationListResponse;
@@ -358,7 +359,7 @@ public interface ComicService {
      * @return
      */
     @POST(API_SEND_CODE)
-    Observable<ResponseModel> getSecurityCode(@Body RequestBody body);
+    Observable<GetCodeResponse> getSecurityCode(@Body RequestBody body);
 
     /**
      * 修改手机号获取验证码

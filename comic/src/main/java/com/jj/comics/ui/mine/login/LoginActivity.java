@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,11 +22,9 @@ import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.db.DaoHelper;
 import com.jj.comics.util.DateHelper;
-import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.RegularUtil;
-import com.jj.comics.util.SharedPreManger;
 import com.jj.comics.util.eventbus.EventBusManager;
-import com.jj.comics.util.eventbus.events.BindPhoneSuccessEvent;
+import com.jj.comics.util.eventbus.events.FinishLoginActivityEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.umeng.analytics.MobclickAgent;
 
@@ -45,31 +42,21 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @BindView(R2.id.comic_login_number)
     EditText mPhoneNumber;
-    @BindView(R2.id.comic_login_pwd)
-    EditText mPassWord;
-    @BindView(R2.id.comic_login_code)
-    TextView mCode;
-    @BindView(R2.id.comic_login_agree)
-    CheckBox mCheckBox;
+
+    private String phoneNum;
 
     @Override
     public void initData(Bundle savedInstanceState) {
         ((TextView) findViewById(R.id.comic_login_agreement)).setText(getP().getAgreementText());
         //限制手机号码最多显示11位
         mPhoneNumber.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
-        //限制验证码最大显示长度6位
-        mPassWord.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-        mPhoneNumber.addTextChangedListener(getP());
     }
 
     @OnClick({R2.id.iv_wxLogin, R2.id.iv_qqLogin, R2.id.iv_wbLogin,
-            R2.id.comic_login_btn, R2.id.comic_login_code,R2.id.comic_login_agreement})
+             R2.id.comic_login_code,R2.id.comic_login_agreement})
     void onClick(View view) {
         int i = view.getId();
-        if (i == R.id.comic_login_btn) {//手机号登录
-            umengAction("PHONE");
-            getP().loginByVerifyCode(mCheckBox.isChecked(), mPhoneNumber.getText().toString().trim(), mPassWord.getText().toString().trim(), SharedPreManger.getInstance().getInvitecode());
-        } else if (i == R.id.comic_login_code) {//验证码
+        if (i == R.id.comic_login_code) {//验证码
             String phoneNum = mPhoneNumber.getText().toString().trim();
             if (TextUtils.isEmpty(phoneNum)){
                 showToastShort("请输入手机号");
@@ -81,15 +68,16 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             }
             view.setEnabled(false);
             showProgress();
+            this.phoneNum = phoneNum;
             getP().getVerifyCode(phoneNum);
         } else if (i == R.id.iv_qqLogin) {//QQ登录
-            getP().qqLogin(mCheckBox.isChecked(), LoginActivity.this);
+            getP().qqLogin();
             umengAction("QQ");
         } else if (i == R.id.iv_wxLogin) {//微信登录
-            getP().wxLogin(mCheckBox.isChecked());
+            getP().wxLogin();
             umengAction("WX");
         } else if (i == R.id.iv_wbLogin) {//微博登录
-            getP().wbLogin(mCheckBox.isChecked(), LoginActivity.this);
+            getP().wbLogin();
             umengAction("WB");
         } else if (i == R.id.comic_login_agreement) {//用户协议
             //服务协议
@@ -101,25 +89,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         Map<String, Object> action_login = new HashMap<String, Object>();
         action_login.put("type", type);
         MobclickAgent.onEventObject(BaseApplication.getApplication(), UmEventID.ACTION_LOGIN, action_login);
-    }
-
-
-    @Override
-    public void onTextChanged() {
-        if (!getP().isDown) {
-            mCode.setEnabled(RegularUtil.isMobile(mPhoneNumber.getText().toString().trim()));
-        }
-    }
-
-    @Override
-    public void setCuntDownText(String text, boolean enable) {
-        mCode.setText(text);
-        mCode.setSelected(!enable);
-        if (enable) {
-            onTextChanged();
-        } else {
-            mCode.setEnabled(enable);
-        }
     }
 
     private DaoHelper daoHelper;
@@ -139,12 +108,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         finish();
     }
 
+    @Override
+    public void onGetCode(boolean is_first_login) {
+        GetCodeActivity.toActivity(is_first_login,false,phoneNum,this);
+    }
+
     /**
      * 来自绑定手机号成功的通知
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onBindPhoneSuccessEvent(BindPhoneSuccessEvent event){
+    public void onBindPhoneSuccessEvent(FinishLoginActivityEvent event){
         //绑定手机号成功之后设置setResult，关闭页面
         setResultAndFinish();
     }
@@ -170,15 +144,4 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         return new LoginPresenter();
     }
 
-
-    @Override
-    protected void initImmersionBar() {
-        ImmersionBar.with(this)
-                .fitsSystemWindows(false)
-                .transparentStatusBar()
-                .keyboardEnable(false)
-//                .navigationBarColor(R.color.comic_ffffff)
-                .statusBarDarkFont(false, 0.2f)
-                .init();
-    }
 }

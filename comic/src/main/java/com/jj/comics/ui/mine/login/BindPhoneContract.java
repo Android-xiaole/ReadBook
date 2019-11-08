@@ -8,15 +8,10 @@ public interface BindPhoneContract {
 
     interface Presenter {
         //获取验证码
-        void getCode(String phoneNum,String type);
-
-        //绑定手机号码
-        void bindPhone(String phoneNum,String code,String inviteCode,String openid);
+        void getCode(String phoneNum);
     }
 
     interface View extends IView {
-
-        void onBindPhone(UserInfo userInfo);
-
+        void onGetCode();
     }
 }

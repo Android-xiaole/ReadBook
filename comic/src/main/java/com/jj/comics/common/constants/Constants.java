@@ -150,7 +150,11 @@ public class Constants {
 
         public static final String PAY_TYPE = "type";
 
+        public static final String USER_INFO = "user_info";
         //login
+        public static final String LOGIN_FIRST = "login_first";
+        public static final String LOGIN_PHONE = "login_phone";
+        public static final String LOGIN_THIRD = "login_third";
         public static final String LOGIN_TYPE = "type";
         public static final String LOGIN_TYPE_LOCAL = "type_local";//自定义的登录方式，和服务器接口参数无关
         public static final String LOGIN_OPENID = "openid";

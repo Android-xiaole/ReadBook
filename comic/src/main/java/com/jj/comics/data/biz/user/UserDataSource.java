@@ -11,6 +11,7 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
+import com.jj.comics.data.model.GetCodeResponse;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayInfoResponse;
@@ -33,14 +34,14 @@ import okhttp3.MultipartBody;
 
 public interface UserDataSource {
     //第三方登录绑定手机号
-    Observable<LoginResponse> bindPhone(String phoneNum, String code, String inviteCode, String openId);
+    Observable<LoginResponse> bindPhone(String phoneNum, String code);
 
 
     //第三方登录获取验证码
     Observable<ResponseModel> getThirdLoginCode(String phoneNum, String type);
 
     //获取验证码
-    Observable<ResponseModel> getSecurityCode(String activityName, String mobile);
+    Observable<GetCodeResponse> getSecurityCode(String activityName, String mobile);
 
     //获取验证码
     Observable<ResponseModel> getPhoneCode(String activityName, String mobile);
