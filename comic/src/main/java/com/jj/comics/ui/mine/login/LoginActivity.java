@@ -21,6 +21,7 @@ import com.jj.comics.R2;
 import com.jj.comics.common.constants.Constants;
 import com.jj.comics.common.constants.UmEventID;
 import com.jj.comics.data.db.DaoHelper;
+import com.jj.comics.ui.web.WebViewActivity;
 import com.jj.comics.util.DateHelper;
 import com.jj.comics.util.RegularUtil;
 import com.jj.comics.util.eventbus.EventBusManager;
@@ -81,7 +82,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             umengAction("WB");
         } else if (i == R.id.comic_login_agreement) {//用户协议
             //服务协议
-            ARouter.getInstance().build(RouterMap.COMIC_AGREEMENT_ACTIVITY).navigation();
+            ARouter.getInstance().build(RouterMap.COMIC_WEBVIEW_ACTIVITY)
+                    .withString(WebViewActivity.URL_KEY,"http://share.sou89.cn/privacy.html")
+                    .navigation();
         }
     }
 
