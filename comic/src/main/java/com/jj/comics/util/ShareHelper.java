@@ -184,7 +184,7 @@ public class ShareHelper {
                     public void onNext(File file) {
 
                         //初始化一个 WXTextObject 对象，填写分享的文本内容
-                        String text = "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl() + "复制这段链接，到系统浏览器打开";
+                        String text =shareMessageModel.getContent() +  "【" + shareMessageModel.getShareTitle() + "】" + shareMessageModel.getShareUrl() + "\n复制这段链接，到系统浏览器打开";
                         WXTextObject textObj = new WXTextObject();
                         textObj.text = text;
 
