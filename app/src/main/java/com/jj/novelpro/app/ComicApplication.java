@@ -107,8 +107,6 @@ public class ComicApplication extends BaseApplication {
             }
         });
 
-        initHttp();
-
         initUmeng();
         configUnits();
 
@@ -131,7 +129,7 @@ public class ComicApplication extends BaseApplication {
 
 //        DoraemonKit.install(getApplication());
 
-
+        initHttp();
         daoHelper = new DaoHelper();
         TaskRepository.getInstance().getReportToken().subscribe(new ApiSubscriber2<AccessTokenResponse>() {
             @Override
@@ -266,11 +264,12 @@ public class ComicApplication extends BaseApplication {
                                 .header(Constants.RequestBodyKey.SOURCEID, Constants.SOURCE_ID + "")
                                 .header(Constants.RequestBodyKey.CHANNEL_ID, Constants.CHANNEL_ID)
                                 .header(Constants.RequestBodyKey.DEVICE, "android");
-                        if (LoginHelper.getOnLineUser() != null) {
-                            newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
-                        }
                         if ((Constants.DEBUG?Constants.REPORT_URL_TEST.contains(request.url().host()):Constants.REPORT_URL.contains(request.url().host()))) {
                             newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getVisitorToken());
+                        }else{
+                            if (LoginHelper.getOnLineUser() != null) {
+                                newRequest.header(Constants.RequestBodyKey.TOKEN, "Bearer " + SharedPreManger.getInstance().getToken());
+                            }
                         }
                         return newRequest.build();
                     }
