@@ -7,12 +7,12 @@
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dp_49"
+        android:layout_marginBottom="@dimen/dp_55"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_75"
         android:layout_alignParentBottom="true"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent">
