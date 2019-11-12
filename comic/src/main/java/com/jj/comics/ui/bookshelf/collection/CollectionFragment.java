@@ -22,10 +22,12 @@ import com.jj.comics.data.model.BookModel;
 import com.jj.comics.ui.detail.ComicDetailActivity;
 import com.jj.comics.ui.dialog.DialogUtilForComic;
 import com.jj.comics.ui.dialog.NormalNotifyDialog;
+import com.jj.comics.ui.read.ReadComicActivity;
 import com.jj.comics.util.LoginHelper;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
 import com.jj.comics.util.eventbus.events.RefreshComicCollectionStatusEvent;
+import com.jj.comics.util.eventbus.events.UpdateReadHistoryEvent;
 import com.jj.comics.widget.comic.ComicLinearLayoutManager;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -105,7 +107,9 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
                     list.add(mAdapter.getData().get(position));
                     showCollectionDialog(list,position);
                 }else if (view.getId() == R.id.content){//去详情页
-                    ComicDetailActivity.toDetail(getActivity(),mAdapter.getData().get(position).getId(),"书架页面");
+//                    ComicDetailActivity.toDetail(getActivity(),mAdapter.getData().get(position).getId(),"书架页面");
+                    BookModel bookModel = mAdapter.getData().get(position);
+                    getP().toRead(bookModel,bookModel.getChapterid());
                 }
             }
         });
@@ -200,6 +204,17 @@ public class CollectionFragment extends BaseVPFragment<CollectionPresenter> impl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void addOrRemove(RefreshComicCollectionStatusEvent refreshComicCollectionStatusEvent) {
+        currentPage = 1;
+        getP().getCollectionList(currentPage);
+    }
+
+    /**
+     * 来自阅读页面产生了历史记录刷新当前列表
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateReadHistory(UpdateReadHistoryEvent event) {
         currentPage = 1;
         getP().getCollectionList(currentPage);
     }

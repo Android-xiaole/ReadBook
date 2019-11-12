@@ -20,9 +20,9 @@ public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneC
 
 
     @Override
-    public void getCode(String phoneNum, String type) {
+    public void getCode(String phoneNum) {
         getV().showProgress();
-        UserRepository.getInstance().getThirdLoginCode(phoneNum,type)
+        UserRepository.getInstance().getPhoneCode(getV().getClass().getSimpleName(),phoneNum)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .as(bindLifecycle())
                 .subscribe(new ApiSubscriber2<ResponseModel>() {
@@ -33,7 +33,7 @@ public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneC
 
                     @Override
                     public void onNext(ResponseModel responseModel) {
-
+                        getV().onGetCode();
                     }
 
                     @Override
@@ -44,39 +44,4 @@ public class BindPhonePresenter extends BasePresenter<BaseRepository, BindPhoneC
                 });
     }
 
-    @Override
-    public void bindPhone(String phoneNum, String code,String inviteCode, String openid) {
-        getV().showProgress();
-        UserRepository.getInstance().bindPhone(phoneNum,code,inviteCode,openid)
-                .flatMap(new Function<LoginResponse, ObservableSource<UserInfo>>() {
-                    @Override
-                    public ObservableSource<UserInfo> apply(LoginResponse loginResponse) throws Exception {
-                        if (loginResponse.getData()!=null&&loginResponse.getData().getUser_info()!=null){
-                            SharedPreManger.getInstance().saveToken(loginResponse.getData().getBearer_token());
-                            return UserRepository.getInstance().saveUser(loginResponse.getData().getUser_info());
-                        }else{
-                            return Observable.error(NetError.noDataError());
-                        }
-                    }
-                })
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .as(bindLifecycle())
-                .subscribe(new ApiSubscriber2<UserInfo>() {
-                    @Override
-                    protected void onFail(NetError error) {
-                        ToastUtil.showToastShort(error.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(UserInfo userInfo) {
-                        getV().onBindPhone(userInfo);
-                    }
-
-                    @Override
-                    protected void onEnd() {
-                        super.onEnd();
-                        getV().hideProgress();
-                    }
-                });
-    }
 }

@@ -81,6 +81,7 @@ public class Constants {
     }
 
     public static final String REPORT_URL = "http://app.jjmh886.cn/";
+    public static final String REPORT_URL_TEST = "http://fanli.fliw.cn/";
 
     public static final String IDENTIFICATION_IGNORE = "#url_ignore";//此标识忽略动态替换baseurl配置
     //    public static final String QCORD_IMG_URL = "http://manhua.dfdy5.com/static/qrcode_for_gh_f19bdc003746_258.jpg";
@@ -150,7 +151,11 @@ public class Constants {
 
         public static final String PAY_TYPE = "type";
 
+        public static final String USER_INFO = "user_info";
         //login
+        public static final String LOGIN_FIRST = "login_first";
+        public static final String LOGIN_PHONE = "login_phone";
+        public static final String LOGIN_THIRD = "login_third";
         public static final String LOGIN_TYPE = "type";
         public static final String LOGIN_TYPE_LOCAL = "type_local";//自定义的登录方式，和服务器接口参数无关
         public static final String LOGIN_OPENID = "openid";

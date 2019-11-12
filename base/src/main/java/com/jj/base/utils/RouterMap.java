@@ -13,6 +13,8 @@ public class RouterMap {
     public static final String COMIC_RICHMANRANK_ACTIVITY = "/ui/featured/RichManRankActivity";
     public static final String COMIC_READ_COMIC_ACTIVITY = "/ui/ReadComicActivity";
     public static final String COMIC_LOGIN_ACTIVITY = "/ui/LoginActivity";
+    public static final String COMIC_GETCODE_ACTIVITY = "/ui/login/GetCodeActivity";
+    public static final String COMIC_GENDERSELECT_ACTIVITY = "/ui/login/GenderSelectActivity";
     public static final String COMIC_LOGIN_BINDPHONE__ACTIVITY = "/ui/login/BindPhoneActivity";
     public static final String COMIC_REGISTER_ACTIVITY = "/ui/RegisterActivity";
     public static final String COMIC_SETTING_ACTIVITY = "/ui/SettingActivity";

@@ -112,7 +112,7 @@ public class TaskRepository implements TaskDataSource {
         map.put("grant_type","client_credentials");
         map.put("client_id","client_android");
         map.put("client_secret","77272d5a0ecbe3b06e055dd95ee890c8");
-        return ComicApi.getApi().getReportToken(map)
+        return (Constants.DEBUG ?ComicApi.getApi().getReportTestToken(map):ComicApi.getApi().getReportToken(map))
                 .subscribeOn(Schedulers.io())
                 .retryWhen(new RetryFunction2())
                 .observeOn(Schedulers.io());
@@ -123,7 +123,7 @@ public class TaskRepository implements TaskDataSource {
         Gson gson = new Gson();
         String obj = gson.toJson(dataList);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), obj);
-        return ComicApi.getApi().userReport(body)
+        return (Constants.DEBUG ?ComicApi.getApi().userTestReport(body):ComicApi.getApi().userReport(body))
                 .subscribeOn(Schedulers.io())
                 .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
                 .observeOn(Schedulers.io());
@@ -134,7 +134,7 @@ public class TaskRepository implements TaskDataSource {
         Gson gson = new Gson();
         String obj = gson.toJson(dataList);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), obj);
-        return ComicApi.getApi().visitorReport(body)
+        return (Constants.DEBUG ?ComicApi.getApi().visitorTestReport(body):ComicApi.getApi().visitorReport(body))
                 .subscribeOn(Schedulers.io())
                 .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
                 .observeOn(Schedulers.io());

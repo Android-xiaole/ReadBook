@@ -9,13 +9,11 @@ import io.reactivex.Flowable;
 public interface LoginContract {
 
     interface ILogoinView extends IView {
-        //设置验证码显示倒计时的回调
-        void setCuntDownText(String text, boolean enable);
-
         //跳转的回调
         void setResultAndFinish();
 
-        void onTextChanged();
+        //获取验证码成功的回调
+        void onGetCode(boolean is_first_login);
     }
 
     interface ILoginPresenter {
@@ -23,17 +21,14 @@ public interface LoginContract {
         //获取验证码
         void getVerifyCode(String mobile);
 
-        //验证码登录
-        void loginByVerifyCode(boolean isCheck, String phone, String psw,String inviteCode);
-
         //qq登录
-        void qqLogin(boolean isCheck, BaseActivity loginActivity);
+        void qqLogin();
 
         //微博登录
-        void wbLogin(boolean isCheck, BaseActivity activity);
+        void wbLogin();
 
         //微信登录
-        void wxLogin(boolean isCheck);
+        void wxLogin();
 
         //获取用户协议
         CharSequence getAgreementText();

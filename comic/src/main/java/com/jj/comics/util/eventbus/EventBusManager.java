@@ -6,7 +6,7 @@ import com.jj.base.utils.NetWorkUtil;
 import com.jj.comics.data.model.SearchModel;
 import com.jj.comics.util.eventbus.events.BatchBuyEvent;
 import com.jj.comics.util.eventbus.events.BatteryReceiverEvent;
-import com.jj.comics.util.eventbus.events.BindPhoneSuccessEvent;
+import com.jj.comics.util.eventbus.events.FinishLoginActivityEvent;
 import com.jj.comics.util.eventbus.events.ChangeTabBarEvent;
 import com.jj.comics.util.eventbus.events.LoginEvent;
 import com.jj.comics.util.eventbus.events.LogoutEvent;
@@ -170,7 +170,7 @@ public class EventBusManager {
     /**
      * 发送绑定手机号登录成功的通知
      */
-    public static void sendBindPhoneSuccessEvent(BindPhoneSuccessEvent event){
+    public static void sendFinishLoginActivityEvent(FinishLoginActivityEvent event){
         EventBus.getDefault().post(event);
     }
     /**

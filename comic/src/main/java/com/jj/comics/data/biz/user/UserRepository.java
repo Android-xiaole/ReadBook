@@ -21,6 +21,7 @@ import com.jj.comics.data.model.CommentListResponse;
 import com.jj.comics.data.model.CommonStatusResponse;
 import com.jj.comics.data.model.ConsumeDetailListResponse;
 import com.jj.comics.data.model.ExpenseSumRecordsResponse;
+import com.jj.comics.data.model.GetCodeResponse;
 import com.jj.comics.data.model.HeadImg;
 import com.jj.comics.data.model.LoginResponse;
 import com.jj.comics.data.model.PayInfoResponse;
@@ -65,12 +66,10 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<LoginResponse> bindPhone(String phoneNum, String code, String inviteCode, String openId) {
+    public Observable<LoginResponse> bindPhone(String phoneNum, String code) {
         RequestBody requestBody = new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.PHONE_NUMBER, phoneNum)
                 .addProperty(Constants.RequestBodyKey.LOGIN_CODE, code)
-                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE, inviteCode)
-                .addProperty(Constants.RequestBodyKey.LOGIN_OPENID, openId)
                 .build();
         return ComicApi.getApi().bindPhone(requestBody)
                 .retryWhen(new RetryFunction2())
@@ -91,12 +90,12 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public Observable<ResponseModel> getSecurityCode(String activityName, String mobile) {
-        Observable<ResponseModel> compose = ComicApi.getApi().getSecurityCode(new RequestBodyBuilder()
+    public Observable<GetCodeResponse> getSecurityCode(String activityName, String mobile) {
+        Observable<GetCodeResponse> compose = ComicApi.getApi().getSecurityCode(new RequestBodyBuilder()
                 .addProperty(Constants.RequestBodyKey.LOGIN_PHONE_NUMBER, mobile)
                 .build())
                 .retryWhen(new RetryFunction2(activityName))
-                .compose(ComicApiImpl.<ResponseModel>getApiTransformer2())
+                .compose(ComicApiImpl.<GetCodeResponse>getApiTransformer2())
                 .subscribeOn(Schedulers.io());
         return compose;
     }
@@ -332,6 +331,7 @@ public class UserRepository implements UserDataSource {
         RequestBody body = new RequestBodyBuilder()
                 .addProperty("openid", openid)
                 .addProperty("access_token", access_token)
+                .addProperty(Constants.RequestBodyKey.LOGIN_INVITE_CODE,SharedPreManger.getInstance().getInvitecode())
                 .build();
 
         Observable<LoginResponse> observable = ComicApi.getApi().qqLogin(body)

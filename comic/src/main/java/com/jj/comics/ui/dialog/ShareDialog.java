@@ -110,22 +110,22 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isShareUserImage) {
             shareMessageModel = new ShareMessageModel();
-            shareMessageModel.setShareTitle(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE1,"金桔小说"));
+            shareMessageModel.setShareTitle(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE1, "金桔小说"));
             shareMessageModel.setShareContent(activity.getString(R.string.comic_comic_share_dialog_content));
             UserInfo loginUser = LoginHelper.getOnLineUser();
             String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-            shareMessageModel.setShareImgUrl(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_ICON_URL,"https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/test/ic_launcher_round.png"));
+            shareMessageModel.setShareImgUrl(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_ICON_URL, "https://fanlixiaoshuo.oss-cn-shanghai.aliyuncs.com/test/ic_launcher_round.png"));
             String uidEncode = URLEncoder.encode(uid);
             String cidEncode = URLEncoder.encode(Constants.CHANNEL_ID);
             String pidEncode = URLEncoder.encode(Constants.PRODUCT_CODE);
             String inviteCodeEncode = URLEncoder.encode(loginUser.getInvite_code());
             String nickNameEncode = URLEncoder.encode(loginUser.getNickname());
             String avatarEncode = loginUser.getAvatar();
-            shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "download.html?" + "uid=" + uidEncode + "&cid=" + cidEncode + "&pid=" + pidEncode + "&invite_code=" + inviteCodeEncode + "&name=" + nickNameEncode + "&pic=" + URLEncoder.encode(avatarEncode);
+            shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL, Constants.CONTENT_URL) + "download.html?" + "uid=" + uidEncode + "&cid=" + cidEncode + "&pid=" + pidEncode + "&invite_code=" + inviteCodeEncode + "&name=" + nickNameEncode + "&pic=" + URLEncoder.encode(avatarEncode);
             shareMessageModel.setShareUrl(shareUrl);
             shareMessageModel.setBookTitle(loginUser.getNickname());
-            shareMessageModel.setContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));
-            shareMessageModel.setShareContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT,"好看的小说"));
+            shareMessageModel.setContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT, "好看的小说"));
+            shareMessageModel.setShareContent(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_CONTENT, "好看的小说"));
             ActionReporter.reportAction(ActionReporter.Event.APP_SHARE, null, null, null);
         } else {
             ActionReporter.reportAction(ActionReporter.Event.CONTENT_SHARE, null, null, null);
@@ -139,7 +139,32 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                 umengClick("URL", "WX");
                 break;
             case WECHATMOMENT://分享朋友圈
-                ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
+                if (isShareUserImage) {
+                    ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
+                } else {
+                    ReadComicHelper.getComicHelper().getFirstChapterContent(mBookModel.getId(), chapterId)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(activity, Lifecycle.Event.ON_DESTROY)))
+                            .subscribe(new ApiSubscriber2<String>() {
+                                @Override
+                                protected void onFail(NetError error) {
+                                    ToastUtil.showToastShort(error.getMessage());
+                                }
+
+                                @Override
+                                public void onNext(String content) {
+                                    if (content.startsWith("IOException:")) {
+                                        ToastUtil.showToastShort(content);
+                                    } else {
+                                        if (content.length() > 1500) {
+                                            content = content.substring(0, 1500) + "......";
+                                        }
+                                        shareMessageModel.setContent(content);
+                                        ShareHelper.getInstance().shareToWechatMoment(activity, shareMessageModel);
+                                    }
+                                }
+                            });
+                }
                 umengClick("URL", "WX-PYQ");
                 break;
             case QQ://分享QQ
@@ -294,7 +319,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
     public void show(BookModel bookModel) {
         this.mBookModel = bookModel;
         shareMessageModel = new ShareMessageModel();
-        shareMessageModel.setShareTitle(String.format(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE2,"《%1$s》这款小说真的超级棒，好看到爆炸哦！！！"), mBookModel.getTitle()));
+        shareMessageModel.setShareTitle(String.format(SharedPref.getInstance().getString(Constants.ShareCode.SHARE_TITLE2, "《%1$s》这款小说真的超级棒，好看到爆炸哦！！！"), mBookModel.getTitle()));
 
         shareMessageModel.setBookTitle(mBookModel.getTitle());
         shareMessageModel.setAuthor(mBookModel.getAuthor());
@@ -302,7 +327,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
         shareMessageModel.setKeys(mBookModel.getKeywords());
         shareMessageModel.setBoolId(mBookModel.getId());
         shareMessageModel.setShareContent(mBookModel.getIntro());
-        if (mBookModel.getTag() != null && mBookModel.getTag().size()>0) {
+        if (mBookModel.getTag() != null && mBookModel.getTag().size() > 0) {
             shareMessageModel.setType(mBookModel.getTag().get(0));
         } else {
             shareMessageModel.setType("");
@@ -325,7 +350,7 @@ public class ShareDialog extends Dialog implements BaseQuickAdapter.OnItemClickL
                     public void onNext(Long aLong) {
                         chapterId = aLong;
                         String uid = loginUser == null ? "0" : loginUser.getUid() + "";
-                        shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL,Constants.CONTENT_URL) + "?uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
+                        shareUrl = SharedPref.getInstance().getString(Constants.ShareCode.SHARE_BASE_URL, Constants.CONTENT_URL) + "?uid=" + uid + "&cid=" + Constants.CHANNEL_ID + "&pid=" + Constants.PRODUCT_CODE + "&book_id=" + mBookModel.getId() + "&chapter_id=" + aLong + "&invite_code=" + loginUser.getInvite_code();
                         show();
                         isShareUserImage = false;
                     }
