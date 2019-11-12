@@ -127,6 +127,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
     private boolean flag_info;//标记是否需要重新计算查看更多icon显示的标记
 
     private boolean IS_SUCCESS_GETCATALOG = false;//标记获取章节目录是否成功过
+    private boolean is_loading = false;//标记当前目录是否正在加载
     private int initPageNum = 1;//初始页码
     private int nextPageNum = 1;//向下分页页码
     private int lastPageNum = 1;//向上分页页码
@@ -203,6 +204,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                     catalogAdapter.setEnableLoadMore(false);
                 }else{
                     nextPageNum++;
+                    is_loading = true;
                     getP().getCatalogList(model, nextPageNum,sort,true);
                 }
             }
@@ -218,6 +220,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                     catalogAdapter.setUpFetchEnable(false);
                 }else{
                     lastPageNum--;
+                    is_loading = true;
                     getP().getCatalogList(model, lastPageNum,sort,false);
                 }
             }
@@ -290,10 +293,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
             }else{
                 tv_catalogNum.setVisibility(View.GONE);
                 pb_loading.setVisibility(View.VISIBLE);
+                is_loading = true;
                 getP().getCatalogList(model,initPageNum,sort,false);
             }
         } else if (id == R.id.tv_sort) {
-            if (model == null||catalogAdapter.getData().isEmpty()) return;
+            if (model == null||catalogAdapter.getData().isEmpty()||is_loading) return;
             tv_sort.setSelected(!tv_sort.isSelected());
             if (tv_sort.isSelected()) {
                 sort = Constants.RequestBodyKey.SORT_DESC;
@@ -308,10 +312,11 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 tv_sort.setCompoundDrawables(null, null, drawable, null);
             }
-            //切换排序方式只会需要重置一些值
+            //切换排序方式需要重置一些状态
             lastPageNum = initPageNum;
             nextPageNum = initPageNum;
             catalogAdapter.getData().clear();
+            catalogAdapter.notifyDataSetChanged();
             catalogAdapter.setUpFetchEnable(true);
             catalogAdapter.setEnableLoadMore(true);
             getP().getCatalogList(model,initPageNum,sort,false);
@@ -461,6 +466,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
         nextPageNum = initPageNum;
         lastPageNum = initPageNum;
         //计算完当前阅读的章节是第几页之后请求章节列表，默认正序请求
+        is_loading = true;
         getP().getCatalogList(model,initPageNum,sort,false);
 
         //加载完详情后再去加载推荐小说列表
@@ -548,6 +554,7 @@ public class ComicDetailActivity extends BaseActivity<ComicDetailPresenter> impl
 
     @Override
     public void onGetCatalogListEnd() {
+        is_loading = false;
         lin_catalogMenu.setClickable(true);
         tv_catalogNum.setVisibility(View.VISIBLE);
         pb_loading.setVisibility(View.GONE);
